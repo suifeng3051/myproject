@@ -438,6 +438,18 @@
             </activation>
         </profile>
         <profile>
+            <id>dev-win</id>
+            <properties>
+                <environment>dev-win</environment>
+            </properties>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
             <id>test</id>
             <properties>
                 <environment>test</environment>
