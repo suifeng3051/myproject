@@ -5,6 +5,7 @@ import com.zitech.gateway.gateway.cache.ICacheClear;
 import com.zitech.gateway.gateway.cache.LocalCache;
 import com.zitech.gateway.utils.ClassUtils;
 import com.zitech.gateway.utils.SpringContext;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorWatcher;
 import org.apache.zookeeper.CreateMode;
@@ -16,17 +17,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CacheManager {
 
     private static Logger logger = LoggerFactory.getLogger(CacheManager.class);
 
-    private static CacheManager cacheManager=null;
+    private static CacheManager cacheManager = null;
 
     private String cacheNode = "/cache/api/config";
 
-    private String preCacheNodePrefix="/preCache";
+    private String preCacheNodePrefix = "/preCache";
 
     private Map<String, ICacheClear> cacheMap = new HashMap<>();
 
@@ -34,7 +41,7 @@ public class CacheManager {
 
     private String localCacheBasePath;
 
-    private Map<String,Long> cacheSizeMap=new HashMap<>();
+    private Map<String, Long> cacheSizeMap = new HashMap<>();
 
 
     private CacheManager() {
@@ -50,32 +57,30 @@ public class CacheManager {
             ICacheClear clear = (ICacheClear) SpringContext.getBean(clazz);
 
             cacheMap.put(name, clear);
-            cacheSizeMap.put(name,-1L);
+            cacheSizeMap.put(name, -1L);
         }
 
         this.createNodes();
     }
 
     public static CacheManager getInstance() {
-        if (cacheManager==null){
-            cacheManager=new CacheManager();
+        if (cacheManager == null) {
+            cacheManager = new CacheManager();
         }
         return cacheManager;
     }
 
-    public  void createCacheSizeNode(String cacheNode){
-        this.localCacheBasePath=cacheNode+Constants.LOCAL_CACHE_NODE;
+    public void createCacheSizeNode(String cacheNode) {
+        this.localCacheBasePath = cacheNode + Constants.LOCAL_CACHE_NODE;
         List<String> allCacheNames = getAllCacheNames();
         for (String name : allCacheNames) {
-            String Path=cacheNode+Constants.LOCAL_CACHE_NODE+"/"+name;
+            String Path = cacheNode + Constants.LOCAL_CACHE_NODE + "/" + name;
             this.createNode(Path);
         }
     }
 
-
-
     public void start() {
-        Timer timer=new Timer();
+        Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -83,25 +88,25 @@ public class CacheManager {
                     CuratorFramework client = framework.getClient();
                     for (Map.Entry<String, ICacheClear> entry : cacheMap
                             .entrySet()) {
-                        String key=entry.getKey();
-                        ICacheClear cacheClear=entry.getValue();
-                        long size=cacheClear.cacheSize();
-                        long previous= cacheSizeMap.get(key);
-                        if (previous!=size) {
-                            cacheSizeMap.put(key,size);
+                        String key = entry.getKey();
+                        ICacheClear cacheClear = entry.getValue();
+                        long size = cacheClear.cacheSize();
+                        long previous = cacheSizeMap.get(key);
+                        if (previous != size) {
+                            cacheSizeMap.put(key, size);
                             client.setData()
                                     .inBackground()
                                     .forPath(localCacheBasePath + "/" + key,
-                                             String.valueOf(size).getBytes());
+                                            String.valueOf(size).getBytes());
                         }
 
                     }
 
                 } catch (Exception e) {
-                    logger.error("{}",e);
+                    logger.error("{}", e);
                 }
             }
-        },0,2*1000);
+        }, 0, 2 * 1000);
     }
 
     public void stop() {
@@ -115,7 +120,7 @@ public class CacheManager {
             byte[] bytes = formatter.format(Calendar.getInstance().getTime()).getBytes();
             for (Map.Entry<String, ICacheClear> entry : cacheMap.entrySet()) {
                 String node = cacheNode + "/" + entry.getKey();
-                String preCacheNode=preCacheNodePrefix+"/"+entry.getKey();
+                String preCacheNode = preCacheNodePrefix + "/" + entry.getKey();
                 try {
                     client.create()
                             .creatingParentsIfNeeded()
@@ -190,7 +195,7 @@ public class CacheManager {
         }
     }
 
-    public void updatePreNodes(List<String> names) throws Exception{
+    public void updatePreNodes(List<String> names) throws Exception {
         CuratorFramework client = framework.getClient();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         byte[] bytes = formatter.format(Calendar.getInstance().getTime()).getBytes();
@@ -279,14 +284,14 @@ public class CacheManager {
                     logger.info("cache {} has been cleared.", path);
                 } catch (Exception e) {
                     logger.error("clear cache", e);
-                }finally {
+                } finally {
                     try {
                         framework.getClient()
                                 .getData()
                                 .usingWatcher(new CacheWatcher(cacheManager))
                                 .forPath(path);
                     } catch (Exception e) {
-                        logger.error("clear watcher",e);
+                        logger.error("clear watcher", e);
                     }
                 }
             }
@@ -305,7 +310,7 @@ public class CacheManager {
         @Override
         public void process(WatchedEvent watchedEvent) {
             if (watchedEvent.getType() == Watcher.Event.EventType.NodeDataChanged) {
-               String path=watchedEvent.getPath();
+                String path = watchedEvent.getPath();
                 try {
 
                     String name = path.substring(path.lastIndexOf('/') + 1);
@@ -324,7 +329,7 @@ public class CacheManager {
                                 .usingWatcher(new PreCacheWatcher(cacheManager))
                                 .forPath(path);
                     } catch (Exception e) {
-                        logger.error("preload watch:{}",e);
+                        logger.error("preload watch:{}", e);
                     }
                 }
 

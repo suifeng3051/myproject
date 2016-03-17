@@ -3,6 +3,7 @@ package com.zitech.gateway.console;
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.utils.AppUtils;
 import com.zitech.gateway.utils.SpringContext;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.zookeeper.data.Stat;
@@ -56,7 +57,7 @@ public class InstanceMonitor {
                 CuratorFramework client = framework.getClient();
 
                 String sequence = readData(client, lockNode);
-                int nodeSequence=Integer.valueOf(sequence);
+                int nodeSequence = Integer.valueOf(sequence);
 
                 removeDeadNode(client, node);
 
@@ -152,9 +153,9 @@ public class InstanceMonitor {
                         }
 
                         {// cache size
-                            String cacheSizeNode=childNode+Constants.LOCAL_CACHE_NODE;
+                            String cacheSizeNode = childNode + Constants.LOCAL_CACHE_NODE;
                             for (String cacheName : allCacheNames) {
-                                sb.append(readData(client,cacheSizeNode+"/"+cacheName)).append(";");
+                                sb.append(readData(client, cacheSizeNode + "/" + cacheName)).append(";");
                             }
                         }
 
@@ -276,7 +277,6 @@ public class InstanceMonitor {
     public void stop() {
 
     }
-
 
 
 }
