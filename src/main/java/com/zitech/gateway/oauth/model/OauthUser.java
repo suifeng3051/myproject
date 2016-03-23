@@ -76,4 +76,18 @@ public class OauthUser {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+
+	@Override
+	public String toString() {
+		return "OauthUser{" +
+				"id=" + id +
+				", loginName='" + loginName + '\'' +
+				", loginPhone='" + loginPhone + '\'' +
+				", loginMail='" + loginMail + '\'' +
+				", password='" + password + '\'' +
+				", status=" + status +
+				", insertTime=" + insertTime +
+				", updateTime=" + updateTime +
+				'}';
+	}
 }

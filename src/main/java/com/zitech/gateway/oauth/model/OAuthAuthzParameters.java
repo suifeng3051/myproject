@@ -4,6 +4,7 @@ import com.zitech.gateway.oauth.LoginType;
 import com.zitech.gateway.oauth.oauthex.OAuthClientCredentialRequest;
 import com.zitech.gateway.oauth.oauthex.OAuthPasswordRequest;
 import com.zitech.gateway.utils.LoginType2EnumUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
 import org.apache.oltu.oauth2.as.request.OAuthTokenRequest;
 import org.apache.oltu.oauth2.common.utils.OAuthUtils;
@@ -16,19 +17,20 @@ import java.io.Serializable;
 
 public class OAuthAuthzParameters implements Serializable {
 
-    String responseType;
-    String clientId;
-    String clientSecret;
-    String userName;
-    String password;
-    Integer userId;
-    String redirectUri;
-    String scope;
-    String state;
-    String authorizeCode;
-    String nickname;
-    String profileimg;
-    LoginType type;
+    private String responseType;
+    private String clientId;
+    private String clientSecret;
+    private String userName;
+    private String loginName;
+    private String loginPhone;
+    private String loginMail;
+    private String password;
+    private Integer userId;
+    private String redirectUri;
+    private String scope;
+    private String state;
+    private String authorizeCode;
+    private LoginType type;
 
     public LoginType getType() {
         return type;
@@ -38,21 +40,7 @@ public class OAuthAuthzParameters implements Serializable {
         this.type = type;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getProfileimg() {
-        return profileimg;
-    }
-
-    public void setProfileimg(String profileimg) {
-        this.profileimg = profileimg;
-    }
 
     public OAuthAuthzParameters() {
 
@@ -71,10 +59,24 @@ public class OAuthAuthzParameters implements Serializable {
     public OAuthAuthzParameters(OAuthPasswordRequest oAuthPasswordRequest) {
         this.clientId = oAuthPasswordRequest.getClientId();
         this.clientSecret = oAuthPasswordRequest.getClientSecret();
-        this.userName = oAuthPasswordRequest.getUserName();
         this.password = oAuthPasswordRequest.getPassword();
-        this.nickname = oAuthPasswordRequest.getNickName();
-        this.profileimg = oAuthPasswordRequest.getProfileimg();
+        this.userName = oAuthPasswordRequest.getUserName();
+        if(!StringUtils.isBlank(this.userName))
+        {
+            if(this.userName.contains("@"))
+            {
+                this.loginMail = this.userName;
+            }
+            else if(this.userName.startsWith("1"))
+            {
+                this.loginPhone = this.userName;
+            }
+            else
+            {
+                this.loginName = this.userName;
+            }
+        }
+
         this.type = LoginType2EnumUtils.getLoginTypeByStr(oAuthPasswordRequest.getType());
 
         //this.kdtId = oAuthPasswordRequest.getKdtId();
@@ -141,6 +143,30 @@ public class OAuthAuthzParameters implements Serializable {
         this.userName = userName;
     }
 
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public String getLoginPhone() {
+        return loginPhone;
+    }
+
+    public void setLoginPhone(String loginPhone) {
+        this.loginPhone = loginPhone;
+    }
+
+    public String getLoginMail() {
+        return loginMail;
+    }
+
+    public void setLoginMail(String loginMail) {
+        this.loginMail = loginMail;
+    }
+
     public String getClientSecret() {
         return clientSecret;
     }
@@ -201,7 +227,11 @@ public class OAuthAuthzParameters implements Serializable {
             return false;
         if (clientSecret != null ? !clientSecret.equals(that.clientSecret) : that.clientSecret != null)
             return false;
-        if (userName != null ? !userName.equals(that.userName) : that.userName != null)
+        if (loginMail != null ? !loginMail.equals(that.loginMail) : that.loginMail != null)
+            return false;
+        if (loginName != null ? !loginName.equals(that.loginName) : that.loginName != null)
+            return false;
+        if (loginPhone != null ? !loginPhone.equals(that.loginPhone) : that.loginPhone != null)
             return false;
         if (password != null ? !password.equals(that.password) : that.password != null)
             return false;
@@ -220,7 +250,9 @@ public class OAuthAuthzParameters implements Serializable {
         int result = responseType != null ? responseType.hashCode() : 0;
         result = 31 * result + (clientId != null ? clientId.hashCode() : 0);
         result = 31 * result + (clientSecret != null ? clientSecret.hashCode() : 0);
-        result = 31 * result + (userName != null ? userName.hashCode() : 0);
+        result = 31 * result + (loginName != null ? loginName.hashCode() : 0);
+        result = 31 * result + (loginPhone != null ? loginPhone.hashCode() : 0);
+        result = 31 * result + (loginMail != null ? loginMail.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (userId != null ? userId.hashCode() : 0);
         result = 31 * result + (userId != null ? userId.hashCode() : 0);
@@ -237,9 +269,10 @@ public class OAuthAuthzParameters implements Serializable {
                 "responseType='" + responseType + '\'' +
                 ", clientId='" + clientId + '\'' +
                 ", clientSecret='" + clientSecret + '\'' +
-                ", userName='" + userName + '\'' +
+                ", loginName='" + loginName + '\'' +
+                ", loginPhone='" + loginPhone + '\'' +
+                ", loginMail='" + loginMail + '\'' +
                 ", password='" + password + '\'' +
-                ", userId=" + userId +
                 ", userId=" + userId +
                 ", redirectUri='" + redirectUri + '\'' +
                 ", scope='" + scope + '\'' +

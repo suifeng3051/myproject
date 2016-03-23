@@ -12,29 +12,17 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class PasswordValidatorEx extends AbstractValidator<HttpServletRequest> {
 
-    public PasswordValidatorEx(Integer type) {
+    public PasswordValidatorEx() {
 
+        //添加需要接收的参数名
         requiredParams.add(OAuth.OAUTH_GRANT_TYPE);
         requiredParams.add("client_id");
         requiredParams.add("client_secret");
         requiredParams.add("type");
-//        requiredParams.add("redirect_uri");
-        if(type == 0)   //手机号登录
-        {
-            requiredParams.add("mobile");
-            requiredParams.add("vcode");
+        requiredParams.add("password");
+        requiredParams.add("username");
 
-        }
-        else if(type==4)
-        {
-            requiredParams.add("username");
-            requiredParams.add("password");
-        }
-        else{
-            requiredParams.add("uid");
-            requiredParams.add("profileimg");
-            requiredParams.add("nickname");
-        }
+//        requiredParams.add("redirect_uri");
 //
 //        requiredParams.add(OAuth.OAUTH_USERNAME);
 //        requiredParams.add(OAuth.OAUTH_PASSWORD);
