@@ -1,5 +1,7 @@
 package com.zitech.gateway.utils;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -123,5 +125,16 @@ public class AppUtils {
         } catch (UnknownHostException ignored) {
         }
         return hostName;
+    }
+
+
+    public static String enCodePassword(String password) {
+        if (StringUtils.isBlank(password)) {
+            return null;
+        }
+        String pwd = AppUtils.MD5(password);
+        pwd = StringUtils.reverse(pwd);
+        pwd = AppUtils.MD5(pwd);
+        return pwd;
     }
 }

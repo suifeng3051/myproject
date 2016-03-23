@@ -13,179 +13,28 @@
 
 	</resultMap>
 
-	<resultMap id="BaseResultMap_QQ" type="com.zitech.gateway.oauth.model.OauthUser">
-		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="qq" property="account" jdbcType="VARCHAR" />
-		<result column="password" property="password" jdbcType="VARCHAR" />
-		<result column="imgurl" property="profileimg" jdbcType="VARCHAR"/>
-		<result column="qq_Nick" property="nickname" jdbcType="VARCHAR"/>
-		<result column="login_count" property="login_count" jdbcType="INTEGER"/>
-		<result column="type" property="type" jdbcType="INTEGER"/>
-	</resultMap>
-
-	<resultMap id="BaseResultMap_WeChatOpenId" type="com.zitech.gateway.oauth.model.OauthUser">
-		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="openid" property="account" jdbcType="VARCHAR" />
-		<result column="password" property="password" jdbcType="VARCHAR" />
-		<result column="imgurl" property="profileimg" jdbcType="VARCHAR"/>
-		<result column="wechat_Nick" property="nickname" jdbcType="VARCHAR"/>
-		<result column="login_count" property="login_count" jdbcType="INTEGER"/>
-		<result column="type" property="type" jdbcType="INTEGER"/>
-	</resultMap>
-
-	<resultMap id="BaseResultMap_Weibo" type="com.zitech.gateway.oauth.model.OauthUser">
-		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="weibo" property="account" jdbcType="VARCHAR" />
-		<result column="password" property="password" jdbcType="VARCHAR" />
-		<result column="imgurl" property="profileimg" jdbcType="VARCHAR"/>
-		<result column="weibo_Nick" property="nickname" jdbcType="VARCHAR"/>
-		<result column="login_count" property="login_count" jdbcType="INTEGER"/>
-		<result column="type" property="type" jdbcType="INTEGER"/>
-	</resultMap>
-	
-	
-	<resultMap id="BaseResultMap_WeChatOpenIdBinding" type="com.zitech.gateway.oauth.model.OauthUser">
-		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="openid_binding" property="account" jdbcType="VARCHAR" />
-		<result column="password" property="password" jdbcType="VARCHAR" />
-		<result column="imgurl" property="profileimg" jdbcType="VARCHAR"/>
-		<result column="wechat_Nick" property="nickname" jdbcType="VARCHAR"/>
-		<result column="login_count" property="login_count" jdbcType="INTEGER"/>
-		<result column="type" property="type" jdbcType="INTEGER"/>
-	</resultMap>
-	
 	<sql id="Base_Column_List">
         id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime
     </sql>
 
-	<sql id="Base_Column_List_QQ">
-		id, qq, password,imgurl,qq_Nick,login_count,type
-	</sql>
-
-	<sql id="Base_Column_List_WeChat_openid">
-		id, openid, password,imgurl,wechat_Nick,login_count,type
-	</sql>
-
-	<sql id="Base_Column_List_WeChat_openid_binding">
-		id, openid_binding, password,imgurl,wechat_Nick,login_count,type
-	</sql>
-
-	<sql id="Base_Column_List_Weibo">
-		id, weibo, password,imgurl,weibo_Nick,login_count,type
-	</sql>
-
-	
 	<select id="getUserByUserId" parameterType="com.zitech.gateway.oauth.model.OauthUser" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List"/>
-		from t_user where password=#{password,jdbcType=VARCHAR} and
-		mobile=#{account,jdbcType=VARCHAR}
+		from account where id=#{id,jdbcType=INTEGER}
 	</select>
 
-	<!--手机号登录-->
-	<select id="getUserByMobile" parameterType="com.zitech.gateway.oauth.model.OauthUser" resultMap="BaseResultMap">
+	<!--账号登陆-->
+	<select id="getUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List"/>
-		from account where loginName=#{loginName,jdbcType=VARCHAR}
-	</select>
-
-	<insert id="insertUserByMobile" parameterType="com.zitech.gateway.oauth.model.OauthUser"
-			useGeneratedKeys="true" keyProperty="id">
-		insert into t_user(mobile, login_count,type,gmt_create,gmt_modify,client_id)
-		values(#{account,jdbcType=VARCHAR},1,1,now(),now(),#{client_id,jdbcType=INTEGER})
-	</insert>
-
-	<update id="updateUserLoginCntByMobile" parameterType="com.zitech.gateway.oauth.model.OauthUser">
-		update t_user
-		set login_count=#{login_count,jdbcType=INTEGER}
-		where mobile=#{account,jdbcType=VARCHAR}
-	</update>
-
-	<!--QQ登录-->
-	<select id="getUserByQQ" parameterType="com.zitech.gateway.oauth.model.OauthUser"
-			resultMap="BaseResultMap_QQ">
-		select <include refid="Base_Column_List_QQ"/>
-		from t_user where qq=#{account,jdbcType=VARCHAR}
+		from account where loginName=#{name,jdbcType=VARCHAR} and status=1
+	</select><!--手机号登录-->
+	<select id="getUserByMobile" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from account where loginPhone=#{mobile,jdbcType=VARCHAR} and status=1
+	</select><!--邮箱登陆-->
+	<select id="getUserByMail" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		from account where loginMail=#{mail,jdbcType=VARCHAR} and status=1
 	</select>
 
 
-	<insert id="insertUserByQQ" parameterType="com.zitech.gateway.oauth.model.OauthUser"
-			useGeneratedKeys="true" keyProperty="id">
-		insert into t_user(qq,qq_Nick, login_count,type,gmt_create,gmt_modify,client_id)
-		values(#{account,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},1,1,now(),now(),#{client_id,jdbcType=INTEGER})
-	</insert>
-
-    <update id="updateUserByQQ" parameterType="com.zitech.gateway.oauth.model.OauthUser">
-        update t_user
-        set qq_Nick=#{nickname,jdbcType=VARCHAR},
-         login_count=#{login_count,jdbcType=INTEGER}
-        where qq=#{account,jdbcType=VARCHAR}
-
-    </update>
-
-    <select id="getUserIdByQQ" parameterType="com.zitech.gateway.oauth.model.OauthUser"
-            resultType="java.lang.Integer">
-        select id from t_user
-        where qq=#{account,jdbcType=VARCHAR} and status=1
-    </select>
-
-	<!--微信登录-->
-	<select id="getUserByWeChatOpenId" parameterType="com.zitech.gateway.oauth.model.OauthUser"
-			resultMap="BaseResultMap_WeChatOpenId">
-		select <include refid="Base_Column_List_WeChat_openid"/>
-		from t_user where openid=#{account,jdbcType=VARCHAR}
-	</select>
-	
-	<!--微信登录-->
-	<select id="getUserByWeChatOpenIdBinding" parameterType="com.zitech.gateway.oauth.model.OauthUser"
-			resultMap="BaseResultMap_WeChatOpenIdBinding">
-		select <include refid="Base_Column_List_WeChat_openid_binding"/>
-		from t_user where openid_binding=#{account,jdbcType=VARCHAR}
-	</select>
-
-	<insert id="insertUserByWeChatOpenId" parameterType="com.zitech.gateway.oauth.model.OauthUser"
-			useGeneratedKeys="true" keyProperty="id">
-		insert into t_user(openid,wechat_Nick, login_count,type,gmt_create,gmt_modify,client_id)
-		values(#{account,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},1,1,now(),now(),#{client_id,jdbcType=INTEGER})
-	</insert>
-
-    <update id="updateUserByWeChat" parameterType="com.zitech.gateway.oauth.model.OauthUser">
-        update t_user
-        set wechat_Nick=#{nickname,jdbcType=VARCHAR},
-         login_count=#{login_count,jdbcType=INTEGER}
-        where openid=#{account,jdbcType=VARCHAR}
-
-    </update>
-
-    <select id="getUserIdByWeiBo" parameterType="com.zitech.gateway.oauth.model.OauthUser"
-            resultType="java.lang.Integer">
-        select id from t_user
-        where weibo=#{account,jdbcType=VARCHAR} and status=1
-    </select>
-
-
-	<!--微博登录-->
-	<select id="getUserByWeibo" parameterType="com.zitech.gateway.oauth.model.OauthUser"
-			resultMap="BaseResultMap_Weibo">
-		select <include refid="Base_Column_List_Weibo"/>
-		from t_user where weibo=#{account,jdbcType=VARCHAR}
-	</select>
-
-	<insert id="insertUserByWeibo" parameterType="com.zitech.gateway.oauth.model.OauthUser"
-			useGeneratedKeys="true" keyProperty="id">
-		insert into t_user(weibo,weibo_Nick, login_count,type,gmt_create,gmt_modify,client_id)
-		values(#{account,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},1,1,now(),now(),#{client_id,jdbcType=INTEGER})
-	</insert>
-
-    <update id="updateUserByWeiBo" parameterType="com.zitech.gateway.oauth.model.OauthUser">
-        update t_user
-        set weibo_Nick=#{nickname,jdbcType=VARCHAR},
-         login_count=#{login_count,jdbcType=INTEGER}
-        where weibo=#{account,jdbcType=VARCHAR}
-
-    </update>
-
-    <select id="getUserIdByWeChat" parameterType="com.zitech.gateway.oauth.model.OauthUser"
-            resultType="java.lang.Integer">
-        select id from t_user
-        where openid=#{account,jdbcType=VARCHAR} and status=1
-    </select>
 </mapper>
