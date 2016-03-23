@@ -25,15 +25,15 @@
 	<!--账号登陆-->
 	<select id="getUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List"/>
-		from account where loginName=#{name,jdbcType=VARCHAR}
+		from account where loginName=#{name,jdbcType=VARCHAR} and status=1
 	</select><!--手机号登录-->
 	<select id="getUserByMobile" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List"/>
-		from account where loginPhone=#{mobile,jdbcType=VARCHAR}
+		from account where loginPhone=#{mobile,jdbcType=VARCHAR} and status=1
 	</select><!--邮箱登陆-->
 	<select id="getUserByMail" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List"/>
-		from account where loginMail=#{mail,jdbcType=VARCHAR}
+		from account where loginMail=#{mail,jdbcType=VARCHAR} and status=1
 	</select>
 
 
