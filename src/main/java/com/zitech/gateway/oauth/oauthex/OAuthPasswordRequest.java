@@ -19,41 +19,22 @@ public class OAuthPasswordRequest extends OAuthRequest {
 
     @Override
     protected OAuthValidator<HttpServletRequest> initValidator() throws OAuthProblemException, OAuthSystemException {
-        Integer type = Integer.valueOf(this.request.getParameter("type"));
-        return new PasswordValidatorEx(type);
+        //Integer type = Integer.valueOf(this.request.getParameter("type"));
+        return new PasswordValidatorEx();
     }
 
     public String getUserName() {
-        Integer type = Integer.valueOf(this.request.getParameter("type"));
-        if(type==0) {
-            return getParam("mobile");
-        }
-        else if (type == 4) {
-            return getParam("username");
-        } else {
-            return getParam("uid");
-        }
+        return getParam("username");
     }
 
     public String getPassword() {
-        Integer type = Integer.valueOf(this.request.getParameter("type"));
-        if(type==0) {
-            return getParam("vcode");   //验证码
-        }
-        else if (type==4) {
-            return getParam("password");
-        }
-        else {
-            return "";//return a empty string
-        }
+        return getParam("password");
     }
 
     public String getGrantType() {
         return getParam(OAuth.OAUTH_GRANT_TYPE);
     }
 
-    public String getNickName(){return this.request.getParameter("nickname");}
-    public String getProfileimg(){return this.request.getParameter("profileimg");}
     public String getType(){return this.request.getParameter("type");}
 
 }

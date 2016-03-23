@@ -55,5 +55,8 @@ public final class OAuthConstants {
         public static final int NOT_EXIST_USER = 5130;          //用户名或密码错误
         public static final int COMM_USER_NOT_ALLOWED  = 5131;  //普通用户不允许使用账号密码登录
         public static final int INVALID_OPENID  = 5132;  //该用户未用微信登录过,不可登录
+        public static final int INVALID_USER    = 5133; //用户不存在
+        public static final int INVALID_PASSWORD = 5135;    //密码错误
+        public static final int EXCEPTION_WHEN_QUERY_USER = 5134;   //查询用户出错
     }
 }
