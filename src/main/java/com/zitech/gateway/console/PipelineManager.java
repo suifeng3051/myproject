@@ -3,6 +3,7 @@ package com.zitech.gateway.console;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.gateway.excutor.Pipeline;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
@@ -61,7 +62,7 @@ public class PipelineManager {
     }
 
     public static PipelineManager getInstance(String instanceNode) {
-        if(pipelineManager == null)
+        if (pipelineManager == null)
             pipelineManager = new PipelineManager(instanceNode);
         return pipelineManager;
     }

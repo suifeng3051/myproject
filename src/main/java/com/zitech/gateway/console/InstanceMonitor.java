@@ -3,6 +3,7 @@ package com.zitech.gateway.console;
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.utils.AppUtils;
 import com.zitech.gateway.utils.SpringContext;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.zookeeper.data.Stat;
@@ -21,32 +22,45 @@ import static com.zitech.gateway.utils.AppUtils.executeShellCommand;
 
 
 public class InstanceMonitor {
+
     private static final String instanceNode = "/console/instance";
     private static Logger logger = LoggerFactory.getLogger(InstanceMonitor.class);
     private static String thisNode;
+
     private static InstanceMonitor instanceMonitor;
+
     private static CacheManager cacheManager;
+
     private InstanceMonitor() throws Exception {
 
         AppConfig appConfig = SpringContext.getBean(AppConfig.class);
+
         InetAddress localHost = InetAddress.getLocalHost();
         String hostName = executeShellCommand("hostname");
         //String hostAddress = this.getHostAddress(appConfig.RedisAddress + ":" + appConfig.RedisPort);
         String hostAddress = this.getHostAddress(appConfig.ZookeeperAddress);
         //String hostAddress = localHost.getHostAddress();
+
         String node = String.format(instanceNode + "/%s(%s)", hostName, hostAddress);
         String lockNode = node + "/lock";
+
         ZkFramework framework = ZkFramework.getInstance();
         InterProcessMutex lock = new InterProcessMutex(framework.getClient(), lockNode);
+
         try {
+
             byte[] bytes = new byte[0];
             if (lock.acquire(120, TimeUnit.SECONDS)) {
+
                 // remove dead nodes
                 // and get current active nodes number
                 CuratorFramework client = framework.getClient();
+
                 String sequence = readData(client, lockNode);
-                int nodeSequence=Integer.valueOf(sequence);
+                int nodeSequence = Integer.valueOf(sequence);
+
                 removeDeadNode(client, node);
+
                 nodeSequence = nodeSequence + 1; // increment
 
                 client.setData()
@@ -58,7 +72,6 @@ public class InstanceMonitor {
                 /*Stat instanceState = framework.getClient()
                         .checkExists()
                         .forPath(thisNode);
-
 
                 if(instanceState == null) {
                     // create instance node
@@ -140,9 +153,9 @@ public class InstanceMonitor {
                         }
 
                         {// cache size
-                            String cacheSizeNode=childNode+Constants.LOCAL_CACHE_NODE;
+                            String cacheSizeNode = childNode + Constants.LOCAL_CACHE_NODE;
                             for (String cacheName : allCacheNames) {
-                                sb.append(readData(client,cacheSizeNode+"/"+cacheName)).append(";");
+                                sb.append(readData(client, cacheSizeNode + "/" + cacheName)).append(";");
                             }
                         }
 
@@ -264,7 +277,6 @@ public class InstanceMonitor {
     public void stop() {
 
     }
-
 
 
 }
