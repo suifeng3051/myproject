@@ -121,7 +121,7 @@ public class LoginController extends BaseController {
 
         userId = user.getId();
         session.setAttribute(Constants.USER_ID, userId);
-        session.setAttribute(Constants.USER_ACCOUNT, user.getAccount());
+        session.setAttribute(Constants.USER_ACCOUNT, user.getLoginName());
 
         /**
          * redirect to /oauth/authorize when every thing is ok

@@ -95,7 +95,7 @@ public class CacheManager {
                                              String.valueOf(size).getBytes());
                         }
 
-                    }
+                     }
 
                 } catch (Exception e) {
                     logger.error("{}",e);
@@ -333,3 +333,4 @@ public class CacheManager {
     }
 
 }
+

@@ -217,7 +217,7 @@ public class OAuthService implements IOAuthService {
 	public OauthUser login(String account, String password) {
 		UserService userService = SpringContext.getBean(UserService.class);
 		OauthUser user = new OauthUser();
-		user.setAccount(account);
+		user.setLoginName(account);
 		user.setPassword(password);
 		user = userService.getUserByUserId(user);
 		return user;
@@ -238,7 +238,7 @@ public class OAuthService implements IOAuthService {
 		UserThirdInfoService userThirdInfoService = SpringContext
 				.getBean(UserThirdInfoService.class);
 		OauthUser user = new OauthUser();
-		user.setAccount(oAuthAuthzParameters.getUserName());
+		user.setLoginName(oAuthAuthzParameters.getUserName());
 
 		LoginType loginType = oAuthAuthzParameters.getType();
 		if (loginType == LoginType.MOBILE) {
@@ -249,7 +249,7 @@ public class OAuthService implements IOAuthService {
 			}
 			if (!appConfig.isDevMode()) {
 				String vCode = redis.getStringByKey(String.format(
-						Constants.SMS_SEND_KEY, user.getAccount()));
+						Constants.SMS_SEND_KEY, user.getLoginName()));
 				if (StringUtils.isEmpty(vCode)) {
 					throw new OAuthException(
 							OAuthConstants.OAuthResponse.NO_VCODE, "验证码过期");
@@ -259,14 +259,14 @@ public class OAuthService implements IOAuthService {
 							OAuthConstants.OAuthResponse.WRONG_VCODE, "验证码错误");
 				}
 			}
-			redis.del(String.format(Constants.SMS_SEND_KEY, user.getAccount()));
+			redis.del(String.format(Constants.SMS_SEND_KEY, user.getLoginName()));
 			user = userService.getUserByMobile(user); // 查询是否在数据库中已存在
 
-			if (user == null || user.getAccount() == null) {
+			if (user == null || user.getLoginName() == null) {
 				user = new OauthUser();
-				user.setAccount(oAuthAuthzParameters.getUserName());
-				user.setClient_id(Integer.valueOf(oAuthAuthzParameters.getClientId()));
-				user.setLogin_count(1);
+				user.setLoginName(oAuthAuthzParameters.getUserName());
+				//user.setClient_id(Integer.valueOf(oAuthAuthzParameters.getClientId()));
+				//user.setLogin_count(1);
 				userService.insertUserByMobile(user);
 
 				// 创建账户
@@ -280,14 +280,14 @@ public class OAuthService implements IOAuthService {
 				accountMapper.insert(account);
 
 			} else {
-				if (user.getType() == 2) {
+				/*if (user.getType() == 2) {
 					throw new OAuthException(
 							OAuthConstants.OAuthResponse.WRONG_USERNOTVALID,
 							"企业用户不允许登录");
-				}
-				user.setLogin_count((user.getLogin_count() == null || user
+				}*/
+				/*user.setLogin_count((user.getLogin_count() == null || user
 						.getLogin_count() < 1) ? 2
-						: (user.getLogin_count() + 1));
+						: (user.getLogin_count() + 1));*/
 				userService.updateUserLoginCntByMobile(user);
 			}
 		} else {
@@ -296,12 +296,12 @@ public class OAuthService implements IOAuthService {
 			if (loginType == LoginType.QQ)// QQ
 			{
 				user = userService.getUserByQQ(user);
-				if (user == null || user.getAccount() == null) {
+				if (user == null || user.getLoginName() == null) {
 					user = new OauthUser();
-					user.setAccount(oAuthAuthzParameters.getUserName());
-					user.setNickname(nickname);
-					user.setClient_id(Integer.valueOf(oAuthAuthzParameters.getClientId()));
-					user.setLogin_count(1);
+					user.setLoginName(oAuthAuthzParameters.getUserName());
+					//user.setNickname(nickname);
+					//user.setClient_id(Integer.valueOf(oAuthAuthzParameters.getClientId()));
+					//user.setLogin_count(1);
 					// user.setProfileimg(oAuthAuthzParameters.getProfileimg());
 					userService.insertUserByQQ(user);
 					// 创建账户
@@ -314,20 +314,20 @@ public class OAuthService implements IOAuthService {
 					account.setUserId(Long.valueOf(user.getId()));
 					accountMapper.insert(account);
 				} else {// 更新昵称
-					if (user.getType() == 2) {
+					/*if (user.getType() == 2) {
 						throw new OAuthException(
 								OAuthConstants.OAuthResponse.WRONG_USERNOTVALID,
 								"企业用户不允许登录");
-					}
+					}*/
 					// String nickName = user.getNickname();
 					// if(nickName == null ||
 					// !nickName.equals(oAuthAuthzParameters.getNickname())){
-					user.setNickname(nickname); // 昵称
+					//user.setNickname(nickname); // 昵称
 
 					// user.setProfileimg(oAuthAuthzParameters.getProfileimg());
-					user.setLogin_count((user.getLogin_count() == null || user
+					/*user.setLogin_count((user.getLogin_count() == null || user
 							.getLogin_count() < 1) ? 2
-							: (user.getLogin_count() + 1));
+							: (user.getLogin_count() + 1));*/
 					userService.updateUserByQQ(user);
 					// }
 				}
@@ -338,8 +338,8 @@ public class OAuthService implements IOAuthService {
 					userThirdInfo = new UserThirdInfo();
 					userThirdInfo.setUserId(new Long(String.valueOf(user
 							.getId())));
-					userThirdInfo.setQqUid(user.getAccount());
-					userThirdInfo.setQqScreenName(user.getNickname());
+					userThirdInfo.setQqUid(user.getLoginName());
+					//userThirdInfo.setQqScreenName(user.getNickname());
 					userThirdInfo.setQqProfileImageUrl(oAuthAuthzParameters
 							.getProfileimg()); // imgurl
 					userThirdInfoService.insert(userThirdInfo);
@@ -347,8 +347,8 @@ public class OAuthService implements IOAuthService {
 					// 更新
 					// 昵称是否有变化
 					if (!StrUtils.equals(userThirdInfo.getQqScreenName(),
-							user.getAccount())) {
-						userThirdInfo.setQqScreenName(user.getNickname());
+							user.getLoginName())) {
+						//userThirdInfo.setQqScreenName(user.getNickname());
 					}
 					if (!StrUtils.equals(userThirdInfo.getQqProfileImageUrl(),
 							oAuthAuthzParameters.getProfileimg())) {
@@ -362,12 +362,12 @@ public class OAuthService implements IOAuthService {
 			} else if (loginType == LoginType.WEICHAT)// 微信
 			{
 				user = userService.getUserByWeChatOpenId(user);
-				if (user == null || user.getAccount() == null) {
+				if (user == null || user.getLoginName() == null) {
 					user = new OauthUser();
-					user.setAccount(oAuthAuthzParameters.getUserName());
-					user.setNickname(nickname);
-					user.setClient_id(Integer.valueOf(oAuthAuthzParameters.getClientId()));
-					user.setLogin_count(1);
+					user.setLoginName(oAuthAuthzParameters.getUserName());
+					//user.setNickname(nickname);
+					//user.setClient_id(Integer.valueOf(oAuthAuthzParameters.getClientId()));
+					//user.setLogin_count(1);
 					// user.setProfileimg(oAuthAuthzParameters.getProfileimg());
 					userService.insertUserByWeChatOpenId(user);
 					// 创建账户
@@ -380,18 +380,18 @@ public class OAuthService implements IOAuthService {
 					account.setUserId(Long.valueOf(user.getId()));
 					accountMapper.insert(account);
 				} else {
-					if (user.getType() == 2) {
+					/*if (user.getType() == 2) {
 						throw new OAuthException(
 								OAuthConstants.OAuthResponse.WRONG_USERNOTVALID,
 								"企业用户不允许登录");
-					}
+					}*/
 					// String nickName = user.getNickname();
 					// if(nickName == null ||
 					// !nickName.equals(oAuthAuthzParameters.getNickname())){
-					user.setNickname(nickname);
-					user.setLogin_count((user.getLogin_count() == null || user
+					//user.setNickname(nickname);
+					/*user.setLogin_count((user.getLogin_count() == null || user
 							.getLogin_count() < 1) ? 2
-							: (user.getLogin_count() + 1));
+							: (user.getLogin_count() + 1));*/
 					userService.updateUserByWeChat(user);
 					// }
 				}
@@ -402,8 +402,8 @@ public class OAuthService implements IOAuthService {
 					userThirdInfo = new UserThirdInfo();
 					userThirdInfo.setUserId(new Long(String.valueOf(user
 							.getId())));
-					userThirdInfo.setWeixinOpenid(user.getAccount());
-					userThirdInfo.setWeixinNickname(user.getNickname());
+					userThirdInfo.setWeixinOpenid(user.getLoginName());
+					//userThirdInfo.setWeixinNickname(user.getNickname());
 					userThirdInfo.setWeixinImgurl(oAuthAuthzParameters
 							.getProfileimg());
 					userThirdInfoService.insert(userThirdInfo);
@@ -411,8 +411,8 @@ public class OAuthService implements IOAuthService {
 					// 更新
 					// 昵称是否有变化
 					if (!StrUtils.equals(userThirdInfo.getWeixinNickname(),
-							user.getAccount())) {
-						userThirdInfo.setWeixinNickname(user.getNickname());
+							user.getLoginName())) {
+						//userThirdInfo.setWeixinNickname(user.getNickname());
 					}
 					if (!StrUtils.equals(userThirdInfo.getWeixinImgurl(),
 							oAuthAuthzParameters.getProfileimg())) {
@@ -426,14 +426,14 @@ public class OAuthService implements IOAuthService {
 			} else if (loginType == LoginType.WEBO) // 微博
 			{
 				user = userService.getUserByWeibo(user);
-				if (user == null || user.getAccount() == null) {
+				if (user == null || user.getLoginName() == null) {
 
 					user = new OauthUser();
-					user.setAccount(oAuthAuthzParameters.getUserName());
-					user.setNickname(nickname);
-					user.setClient_id(Integer.valueOf(oAuthAuthzParameters.getClientId()));
-					user.setLogin_count(1);
-					user.setProfileimg(oAuthAuthzParameters.getProfileimg());
+					user.setLoginName(oAuthAuthzParameters.getUserName());
+					//user.setNickname(nickname);
+					//user.setClient_id(Integer.valueOf(oAuthAuthzParameters.getClientId()));
+					//user.setLogin_count(1);
+					//user.setProfileimg(oAuthAuthzParameters.getProfileimg());
 					userService.insertUserByWeibo(user);
 					
 					// 创建账户
@@ -446,18 +446,18 @@ public class OAuthService implements IOAuthService {
 					account.setUserId(Long.valueOf(user.getId()));
 					accountMapper.insert(account);
 				} else {
-					if (user.getType() == 2) {
+					/*if (user.getType() == 2) {
 						throw new OAuthException(
 								OAuthConstants.OAuthResponse.WRONG_USERNOTVALID,
 								"企业用户不允许登录");
-					}
+					}*/
 					// String nickName = user.getNickname();
 					// if(nickName == null ||
 					// !nickName.equals(oAuthAuthzParameters.getNickname())){
-					user.setNickname(nickname);
+					/*user.setNickname(nickname);
 					user.setLogin_count((user.getLogin_count() == null || user
 							.getLogin_count() < 1) ? 2
-							: (user.getLogin_count() + 1));
+							: (user.getLogin_count() + 1));*/
 					userService.updateUserByWeiBo(user);
 					// }
 				}
@@ -468,8 +468,8 @@ public class OAuthService implements IOAuthService {
 					userThirdInfo = new UserThirdInfo();
 					userThirdInfo.setUserId(new Long(String.valueOf(user
 							.getId())));
-					userThirdInfo.setWeiboUid(user.getAccount());
-					userThirdInfo.setWeiboScreenName(user.getNickname());
+					userThirdInfo.setWeiboUid(user.getLoginName());
+					//userThirdInfo.setWeiboScreenName(user.getNickname());
 					userThirdInfo.setWeiboProfileImageUrl(oAuthAuthzParameters
 							.getProfileimg());
 					userThirdInfoService.insert(userThirdInfo);
@@ -477,8 +477,8 @@ public class OAuthService implements IOAuthService {
 					// 更新
 					// 昵称是否有变化
 					if (!StrUtils.equals(userThirdInfo.getWeiboScreenName(),
-							user.getAccount())) {
-						userThirdInfo.setWeiboScreenName(user.getNickname());
+							user.getLoginName())) {
+						//userThirdInfo.setWeiboScreenName(user.getNickname());
 					}
 					if (!StrUtils.equals(
 							userThirdInfo.getWeiboProfileImageUrl(),
@@ -494,22 +494,22 @@ public class OAuthService implements IOAuthService {
 
 			} else if(loginType == LoginType.WEICHAT_IDEN){//新微信登录,只用于登录
 				user = userService.getUserByWeChatOpenIdBinding(user);
-				if (user == null || user.getAccount() == null) {
+				if (user == null || user.getLoginName() == null) {
 					throw new OAuthException( OAuthConstants.OAuthResponse.INVALID_OPENID,"该用户未用微信登录过,不可登录");
 				} else {
-					if (user.getType() == 2) {
+					/*if (user.getType() == 2) {
 						throw new OAuthException( OAuthConstants.OAuthResponse.WRONG_USERNOTVALID,"企业用户不允许登录");
-					}
+					}*/
 				}
 			}else {
 				// 用户名和密码登录
 				user = userService.getUserByMobile(user); // 查询是否在数据库中已存在
 				if (user != null) {
-					if (user.getType() != 2) {
+					/*if (user.getType() != 2) {
 						throw new OAuthException(
 								OAuthConstants.OAuthResponse.COMM_USER_NOT_ALLOWED,
 								"普通用户不允许使用账号密码登录");
-					}
+					}*/
 					String username = oAuthAuthzParameters.getUserName();
 					String password = oAuthAuthzParameters.getPassword();
 					if (username == null || password == null) {
@@ -518,15 +518,17 @@ public class OAuthService implements IOAuthService {
 								"用户名或密码为空");
 					}
 					password = AppUtils.MD5(password);
-					String usernameFromDB = user.getAccount();
+					password = new StringBuilder(password).reverse().toString();
+					password = AppUtils.MD5(password);
+					String usernameFromDB = user.getLoginName();
 					String passwordFromDB = user.getPassword();
 					if (username.equals(usernameFromDB)
-							&& password.equals(passwordFromDB)) {
+							&& password.equalsIgnoreCase(passwordFromDB)) {
 						// 更新用户登录次数
-						user.setLogin_count((user.getLogin_count() == null || user
+						/*user.setLogin_count((user.getLogin_count() == null || user
 								.getLogin_count() < 1) ? 2 : (user
-								.getLogin_count() + 1));
-						userService.updateUserLoginCntByMobile(user);
+								.getLogin_count() + 1));*/
+						//userService.updateUserLoginCntByMobile(user);
 					} else {
 						throw new OAuthException(
 								OAuthConstants.OAuthResponse.WRONG_USERNAME_OR_PASSWORD,

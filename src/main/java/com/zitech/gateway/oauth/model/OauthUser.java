@@ -1,64 +1,48 @@
 package com.zitech.gateway.oauth.model;
 
 
+import java.util.Date;
+
 public class OauthUser {
-    int id;
-    String account;
-	String nickname;
-	String profileimg;
-	String password;
-	Integer login_count;
-	Integer type;
-	Integer client_id;
+    private int id;
+    private String loginName;
+	private String loginPhone;
+	private String loginMail;
+	private String password;
+	private int status;
+	private Date insertTime;
+	private Date updateTime;
 
-	public Integer getClient_id() {
-		return client_id;
+	public int getId() {
+		return id;
 	}
 
-	public void setClient_id(Integer client_id) {
-		this.client_id = client_id;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public Integer getLogin_count() {
-		return login_count;
+	public String getLoginName() {
+		return loginName;
 	}
 
-	public void setLogin_count(Integer login_count) {
-		this.login_count = login_count;
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
 	}
 
-	public Integer getType() {
-		return type;
+	public String getLoginPhone() {
+		return loginPhone;
 	}
 
-	public void setType(Integer type) {
-		this.type = type;
+	public void setLoginPhone(String loginPhone) {
+		this.loginPhone = loginPhone;
 	}
 
-	public String getNickname() {
-		return nickname;
+	public String getLoginMail() {
+		return loginMail;
 	}
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-
-	public String getProfileimg() {
-		return profileimg;
-	}
-
-	public void setProfileimg(String profileimg) {
-		this.profileimg = profileimg;
-	}
-
-
-    
-    public String getAccount() {
-		return account;
-	}
-
-	public void setAccount(String account) {
-		this.account = account;
+	public void setLoginMail(String loginMail) {
+		this.loginMail = loginMail;
 	}
 
 	public String getPassword() {
@@ -69,11 +53,27 @@ public class OauthUser {
 		this.password = password;
 	}
 
-	public int getId() {
-        return id;
-    }
+	public int getStatus() {
+		return status;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public Date getInsertTime() {
+		return insertTime;
+	}
+
+	public void setInsertTime(Date insertTime) {
+		this.insertTime = insertTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
 }
