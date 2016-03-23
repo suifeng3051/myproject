@@ -19,8 +19,7 @@
 
 	<select id="getUserByUserId" parameterType="com.zitech.gateway.oauth.model.OauthUser" resultMap="BaseResultMap">
 		select <include refid="Base_Column_List"/>
-		from t_user where password=#{password,jdbcType=VARCHAR} and
-		mobile=#{account,jdbcType=VARCHAR}
+		from account where id=#{id,jdbcType=INTEGER}
 	</select>
 
 	<!--账号登陆-->

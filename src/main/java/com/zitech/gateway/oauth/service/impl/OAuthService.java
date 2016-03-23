@@ -245,7 +245,7 @@ public class OAuthService implements IOAuthService {
 
         OauthUser oauthUser;
 
-        if(StringUtils.isNotEmpty(oAuthAuthzParameters.getLoginName())) {
+        if (StringUtils.isNotEmpty(oAuthAuthzParameters.getLoginName())) {
             oauthUser = userDAO.getUserByName(oAuthAuthzParameters.getLoginName());
         } else if (StringUtils.isNotEmpty(oAuthAuthzParameters.getLoginPhone())) {
             oauthUser = userDAO.getUserByMobile(oAuthAuthzParameters.getLoginPhone());
@@ -260,7 +260,7 @@ public class OAuthService implements IOAuthService {
 
         String password = AppUtils.enCodePassword(oAuthAuthzParameters.getPassword());
 
-        if (!oauthUser.getPassword().equalsIgnoreCase(password)) {
+        if (!StringUtils.equalsIgnoreCase(oauthUser.getPassword(), password)) {
             throw new OAuthException(
                     OAuthConstants.OAuthResponse.INVALID_PASSWORD, "密码错误");
         }
