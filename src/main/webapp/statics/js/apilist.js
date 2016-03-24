@@ -1017,7 +1017,7 @@ $(document).ready(function(){
         }
     }
 
-    $("#navbarLeft").affix();
+    //$("#navbarLeft").affix();
 
     $("body").on("click", ".affixGroup", function(e){
         e.preventDefault();
