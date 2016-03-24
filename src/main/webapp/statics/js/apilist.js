@@ -380,9 +380,12 @@ $(document).ready(function(){
         var version = $(this).attr("version");
         var apiId = $(this).attr("apiId");
         var uri = namespace + "." + name;
+        var groupname = $(this).attr("groupname");
         $("#resourceCurrentUri").val(uri);
         $("#resourceCurrentVersion").val(version);
         $("#resourceCurrentApiId").val(apiId);
+        $("#currentGroup").val(groupname);
+
         $.post("queryresource", {"uri":uri, "version":version, "apiId":apiId}, function (d) {
 
             var version = $("#resourceCurrentVersion").val();
