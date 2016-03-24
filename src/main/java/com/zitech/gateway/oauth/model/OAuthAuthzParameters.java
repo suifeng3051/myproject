@@ -67,7 +67,7 @@ public class OAuthAuthzParameters implements Serializable {
             {
                 this.loginMail = this.userName;
             }
-            else if(this.userName.startsWith("1"))
+            else if(StringUtils.isNumeric(this.userName)&&this.userName.startsWith("1"))
             {
                 this.loginPhone = this.userName;
             }
