@@ -27,10 +27,11 @@
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <result column="is_delete" property="isDelete" jdbcType="CHAR"/>
         <result column="env" property="env" jdbcType="TINYINT"/>
+        <result column="result_demo" property="resultDemo" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, namespace, name, version, app_name,api_group,api_desc,api_scenarios, address_url, enable_log, enable_freq, enable_inner_outer,valid_flag,test_flag,migrate_flag,
-    api_type, request_type,session_flag, creator, create_time, modifier, modify_time, is_delete, env
+    api_type, request_type,session_flag, creator, create_time, modifier, modify_time, is_delete, env,result_demo
    </sql>
 
     <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Long">
@@ -162,6 +163,9 @@
             <if test="env != null">
                 env,
             </if>
+            <if test="resultDemo != null">
+                resultDemo,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -242,6 +246,9 @@
             <if test="env != null">
                 #{env,jdbcType=TINYINT},
             </if>
+            <if test="resultDemo != null">
+                #{resultDemo,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <update id="update" parameterType="com.zitech.gateway.apiconfig.model.CarmenApi">
@@ -321,6 +328,9 @@
             </if>
             <if test="env != null">
                 env = #{env,jdbcType=TINYINT},
+            </if>
+            <if test="resultDemo != null">
+                result_demo=#{resultDemo,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
