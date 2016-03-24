@@ -491,22 +491,23 @@ public class TokenController {
     public Object password(HttpServletRequest request)
             throws URISyntaxException, OAuthSystemException {
         try {
-            String type = request.getParameter("type");
-            LoginType loginType = LoginType2EnumUtils.getLoginTypeByStr(type);
-
-            if (loginType == null) //登录类型不正确
-            {
-                OAuthResponse response = OAuthASResponseEx
-                        .errorResponse(HttpServletResponse.SC_OK)
-                        .setError(String.valueOf(OAuthConstants.OAuthResponse.INVALID_TYPE))
-                        .setErrorDescription(OAuthConstants.OAuthDescription.INVALID_GRANT_TYPE)
-                        .buildJSONMessage();
-                logger.info("invalid type, context: {}", type);
-                return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
-            }
+//            String type = request.getParameter("type");
+//            LoginType loginType = LoginType2EnumUtils.getLoginTypeByStr(type);
+//
+//            if (loginType == null) //登录类型不正确
+//            {
+//                OAuthResponse response = OAuthASResponseEx
+//                        .errorResponse(HttpServletResponse.SC_OK)
+//                        .setError(String.valueOf(OAuthConstants.OAuthResponse.INVALID_TYPE))
+//                        .setErrorDescription(OAuthConstants.OAuthDescription.INVALID_GRANT_TYPE)
+//                        .buildJSONMessage();
+//                logger.info("invalid type, context: {}", type);
+//                return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
+//            }
 
             OAuthPasswordRequest oauthRequest = new OAuthPasswordRequest(request);
-            OAuthAuthzParameters oAuthAuthzParameters = new OAuthAuthzParameters(oauthRequest);
+            //OAuthAuthzParameters参数对象
+            OAuthAuthzParameters oAuthAuthzParameters = new OAuthAuthzParameters(oauthRequest);//参数类型决定构造函数的调用
 
             //验证GRANT_TYPE
             if (!oauthRequest.getGrantType().equals(OAuth.OAUTH_PASSWORD)) {

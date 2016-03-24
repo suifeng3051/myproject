@@ -433,12 +433,18 @@ public class ApiListController {
             openResource.setIsInner((byte) 0);
             openResource.setIsWrite((byte) 0);
             openResource.setUpdateTime(new Date());
-            if (0 != openResource.getId()) {
-                iOpenResourceService.update(openResource);
-            } else {
+
+            OpenResource openResourceTemp = iOpenResourceService.getByUriVersion(openResource.getUri(), openResource.getVersion());
+            if(openResourceTemp == null) {
                 openResource.setCreateTime(new Date());
                 iOpenResourceService.insert(openResource);
-
+            } else {
+                if (0 != openResource.getId()) {
+                    iOpenResourceService.update(openResource);
+                } else {
+                    openResource.setId(openResourceTemp.getId());
+                    iOpenResourceService.update(openResource);
+                }
             }
             status = "success";
         } catch (Exception e) {

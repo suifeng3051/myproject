@@ -91,7 +91,7 @@ public class CarmenApiParamService implements ICarmenApiParamService {
 
     @Override
     public List<CarmenApiParam> getByApiId(long apiId, byte env) {
-        String listRecordPrefix = prefix + "_" + apiId + "_ " + env;
+        String listRecordPrefix = prefix + "_" + apiId + "_" + env;
         String content = redis.getStringByKey(listRecordPrefix);
         List<CarmenApiParam> paramList = new ArrayList<>();
         if (StringUtils.isNotEmpty(content)) {

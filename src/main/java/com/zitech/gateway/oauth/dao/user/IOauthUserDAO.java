@@ -5,31 +5,8 @@ import com.zitech.platform.dao.base.func.IEntityDAO;
 
 public interface IOauthUserDAO extends IEntityDAO<OauthUser, OauthUser> {
     OauthUser getUserByUserId(OauthUser oauthUser);
+    OauthUser getUserByName(String name);
+    OauthUser getUserByMobile(String mobile);
+    OauthUser getUserByMail(String mail);
 
-    OauthUser getUserByQQ(OauthUser oauthUser);
-
-    OauthUser getUserByMobile(OauthUser oauthUser);
-
-    void insertUserByMobile(OauthUser user);
-
-    void updateUserLoginCntByMobile(OauthUser user);
-
-    void insertUserByQQ(OauthUser user);
-
-    OauthUser getUserByWeChatOpenId(OauthUser oauthUser);
-    OauthUser getUserByWeChatOpenIdBinding(OauthUser oauthUser);
-
-    void insertUserByWeChatOpenId(OauthUser user);
-
-    OauthUser getUserByWeibo(OauthUser user);
-
-    void insertUserByWeibo(OauthUser user);
-
-    void updateUserByQQ(OauthUser user);
-    void updateUserByWeiBo(OauthUser user);
-    void updateUserByWeChat(OauthUser user);
-
-    Integer getUserIdByQQ(OauthUser user);
-    Integer getUserIdByWeiBo(OauthUser user);
-    Integer getUserIdByWeChat(OauthUser user);
 }

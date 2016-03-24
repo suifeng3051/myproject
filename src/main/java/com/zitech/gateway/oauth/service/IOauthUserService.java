@@ -15,29 +15,4 @@ import com.zitech.gateway.oauth.model.OauthUser;
 public interface IOauthUserService {
 
 	OauthUser getUserByUserId(OauthUser oauthUser);
-	OauthUser getUserByMobile(OauthUser oauthUser);
-	OauthUser getUserByQQ(OauthUser oauthUser);
-
-	void insertUserByMobile(OauthUser user);
-
-	void insertUserByQQ(OauthUser user);
-
-	OauthUser getUserByWeChatOpenId(OauthUser oauthUser);
-	OauthUser getUserByWeChatOpenIdBinding(OauthUser oauthUser);
-	void insertUserByWeChatOpenId(OauthUser user);
-
-	OauthUser getUserByWeibo(OauthUser user);
-
-	void insertUserByWeibo(OauthUser user);
-
-    void updateUserByQQ(OauthUser user);
-    void updateUserByWeiBo(OauthUser user);
-    void updateUserByWeChat(OauthUser user);
-
-    Integer getUserIdByQQ(OauthUser user);
-    Integer getUserIdByWeiBo(OauthUser user);
-    Integer getUserIdByWeChat(OauthUser user);
-	void updateUserLoginCntByMobile(OauthUser user);
-
-
 }

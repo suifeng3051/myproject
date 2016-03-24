@@ -57,7 +57,7 @@ public class InstanceController {
 
             //添加本地缓存表格头部
             List<String> allCacheNames = CacheManager.getInstance().getAllCacheNames();
-            hashMap.put("cacheNames",allCacheNames);
+             hashMap.put("cacheNames",allCacheNames);
 
         } catch (Exception e) {
             logger.warn("fail to get session", e);
