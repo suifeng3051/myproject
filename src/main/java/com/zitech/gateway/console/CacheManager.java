@@ -109,6 +109,23 @@ public class CacheManager {
         }, 0, 2 * 1000);
     }
 
+    public void startTimerForTokenCache() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    List<String> cacheNames = new ArrayList<String>();
+                    cacheNames.add(Constants.CACHE_NAME_ACCESS_TOKEN);
+                    CacheManager.getInstance().updateNodes(cacheNames);
+                    CacheManager.getInstance().updatePreNodes(cacheNames);
+                } catch (Exception e) {
+                    logger.error("{}", e);
+                }
+            }
+        }, 0, 30 * 60 * 1000);
+    }
+
     public void stop() {
 
     }
