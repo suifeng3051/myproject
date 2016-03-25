@@ -818,6 +818,7 @@ $(document).ready(function(){
         updateObject.sessionFlag = cells[11].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.apiDesc = cells[12].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.apiScenarios = cells[13].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
+        updateObject.resultDemo = cells[14].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.env = getEnv();
         updateObject.creator = $("#userName").val();
 

@@ -52,6 +52,16 @@ public class CarmenApi {
 
     private Byte env;
 
+    private String resultDemo;
+
+    public String getResultDemo() {
+        return resultDemo;
+    }
+
+    public void setResultDemo(String resultDemo) {
+        this.resultDemo = resultDemo;
+    }
+
     public String getApiScenarios() {
         return apiScenarios;
     }

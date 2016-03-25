@@ -282,6 +282,13 @@
                                     <textarea  rows="3" class="form-control required" id="scenarios" name="scenarios" placeholder="API使用场景" >$!results.get('api').apiScenarios</textarea>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <!--<label for="resultDemo" class="col-sm-2 control-label">示例</label>-->
+                                <div class="col-sm-2" style="text-align: right;">示例</div>
+                                <div class="col-sm-6">
+                                    <textarea  rows="3" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API示例" >$!results.get('api').resultDemo</textarea>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
