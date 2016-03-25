@@ -1,9 +1,10 @@
 package com.zitech.gateway.gateway.services;
 
-import com.zitech.gateway.apiconfig.model.OpenResource;
+import com.zitech.gateway.AppConfig;
+import com.zitech.gateway.apiconfig.model.CarmenApi;
 import com.zitech.gateway.gateway.Constants;
+import com.zitech.gateway.gateway.cache.CarmenApiCache;
 import com.zitech.gateway.gateway.cache.OpenOauthClientsCache;
-import com.zitech.gateway.gateway.cache.OpenResourceCache;
 import com.zitech.gateway.gateway.exception.TokenValidateException;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.oauth.model.OpenOauthAccessTokens;
@@ -34,7 +35,10 @@ public class TokenService extends BaseService {
     private OpenOauthClientsCache clientsCache;
 
     @Autowired
-    private OpenResourceCache resourceCache;
+    private CarmenApiCache carmenApiCache;
+
+    @Autowired
+    private AppConfig appConfig;
 
     /**
      * validate access token, please see http://gateway.zitech.com/doc/api/oauthprotocol
@@ -42,16 +46,23 @@ public class TokenService extends BaseService {
     public OpenOauthAccessTokens validateAccessToken(RequestEvent event) throws TokenValidateException, ExecutionException {
 
         String accessToken = event.getAccessToken();
-        String resource = event.getNamespace() + "." + event.getMethod();
+//        String resource = event.getNamespace() + "." + event.getMethod();
 
         if (StringUtils.isEmpty(accessToken)) {
             throw new TokenValidateException(OAuthConstants.OAuthResponse.NO_TOKEN,
                     OAuthConstants.OAuthDescription.INVALID_TOKEN);
         }
 
-        if (StringUtils.isEmpty(resource)) {
-            throw new TokenValidateException(OAuthConstants.OAuthResponse.NO_RESOURCE,
-                    OAuthConstants.OAuthDescription.INVALID_RESOURCE);
+//        if (StringUtils.isEmpty(resource)) {
+//            throw new TokenValidateException(OAuthConstants.OAuthResponse.NO_RESOURCE,
+//                    OAuthConstants.OAuthDescription.INVALID_RESOURCE);
+//        }
+        if(StringUtils.isEmpty(event.getNamespace())||
+                StringUtils.isEmpty(event.getMethod())||
+                StringUtils.isEmpty(event.getVersion()))
+        {
+            throw new TokenValidateException(OAuthConstants.OAuthResponse.INVALID_API_STRUCTURE_CODE,
+                    OAuthConstants.OAuthDescription.INVALID_API_STRUCTURE);
         }
 
         OpenOauthAccessTokens openOauthAccessTokens;
@@ -84,10 +95,12 @@ public class TokenService extends BaseService {
         /**
          * check api resource
          */
-        OpenResource openResource = resourceCache.get(event.getId(), resource);
-        if (openResource == null) {
-            throw new TokenValidateException(OAuthConstants.OAuthResponse.INVALID_RESOURCE,
-                    OAuthConstants.OAuthDescription.INVALID_RESOURCE);
+        CarmenApi carmenApi = carmenApiCache.get(event.getId(), event.getNamespace(), event.getMethod(),
+                event.getVersion(), appConfig.env);
+        //OpenResource openResource = resourceCache.get(event.getId(), resource);
+        if (carmenApi == null) {
+            throw new TokenValidateException(OAuthConstants.OAuthResponse.NO_API,
+                    OAuthConstants.OAuthDescription.INVALID_API);
         }
 
         /**
@@ -95,7 +108,7 @@ public class TokenService extends BaseService {
          */
         Set<String> scopes = OAuthUtils.decodeScopes(openOauthAccessTokens.getScope());
         for (String scope : scopes) {
-            if (scope.equals("all") || scope.equals(openResource.getGroupAlias())) {
+            if (scope.equals("all") || scope.equals(carmenApi.getApiGroup())) {
                 return openOauthAccessTokens;
             }
         }

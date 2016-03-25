@@ -45,8 +45,8 @@ public class ApiListController {
     ICarmenFreqConfigService iCarmenFreqConfigService;
     @Resource
     ICarmenApiParamService iCarmenApiParamService;
-    @Resource
-    IOpenResourceService iOpenResourceService;
+//    @Resource
+//    IOpenResourceService iOpenResourceService;
     @Resource
     IOpenResourceGroupService iOpenResourceGroupService;
     @Resource
@@ -344,24 +344,24 @@ public class ApiListController {
                                 @RequestParam("version") String version,
                                 @RequestParam("apiId") String apiId) {
         String status = "fail";
-        try {
-            OpenResource openResource = iOpenResourceService.getByUriVersion(uri, version);
-            List<OpenResourceGroup> openResourceGroupList = iOpenResourceGroupService.getAll();
-            List<OpenOauthClients> openOauthClientses = iOpenOauthClientsService.getAll();
-            List<CarmenFreqConfig> listValueByApi = iCarmenFreqConfigService.getListValueByApi(Long.valueOf(apiId));
-
-            if(null != openResource) {
-                Map<String, Object> results = new HashMap<>();
-                results.put("openResource", openResource);
-                results.put("groupAlias", openResourceGroupList);
-                results.put("openOauthClientses", openOauthClientses);
-                results.put("listValueByApi", listValueByApi);
-                String result = JSON.toJSONString(results);
-                return result;
-            }
-        } catch (Exception e) {
-            logger.error("fail to get openResource by uri&version or convert object to json.", e);
-        }
+//        try {
+//            OpenResource openResource = iOpenResourceService.getByUriVersion(uri, version);
+//            List<OpenResourceGroup> openResourceGroupList = iOpenResourceGroupService.getAll();
+//            List<OpenOauthClients> openOauthClientses = iOpenOauthClientsService.getAll();
+//            List<CarmenFreqConfig> listValueByApi = iCarmenFreqConfigService.getListValueByApi(Long.valueOf(apiId));
+//
+//            if(null != openResource) {
+//                Map<String, Object> results = new HashMap<>();
+//                results.put("openResource", openResource);
+//                results.put("groupAlias", openResourceGroupList);
+//                results.put("openOauthClientses", openOauthClientses);
+//                results.put("listValueByApi", listValueByApi);
+//                String result = JSON.toJSONString(results);
+//                return result;
+//            }
+//        } catch (Exception e) {
+//            logger.error("fail to get openResource by uri&version or convert object to json.", e);
+//        }
 
         try {
             List<OpenResourceGroup> openResourceGroupList = iOpenResourceGroupService.getAll();
@@ -422,43 +422,43 @@ public class ApiListController {
      * @param update 待更新对象
      * @return 成功返回success，失败返回fail
      */
-    @RequestMapping(value = "/updateresource", produces="application/json;charset=utf-8")
-    @ResponseBody
-    public String updateResource(@RequestParam("update") String update) {
-        String status = "fail";
-        try {
-            update = URLDecoder.decode(update, "UTF-8");
-            OpenResource openResource = JSON.parseObject(update, OpenResource.class);
-
-            openResource.setIsInner((byte) 0);
-            openResource.setIsWrite((byte) 0);
-            openResource.setUpdateTime(new Date());
-
-            OpenResource openResourceTemp = iOpenResourceService.getByUriVersion(openResource.getUri(), openResource.getVersion());
-            if(openResourceTemp == null) {
-                openResource.setCreateTime(new Date());
-                iOpenResourceService.insert(openResource);
-            } else {
-                if (0 != openResource.getId()) {
-                    iOpenResourceService.update(openResource);
-                } else {
-                    openResource.setId(openResourceTemp.getId());
-                    iOpenResourceService.update(openResource);
-                }
-            }
-            status = "success";
-        } catch (Exception e) {
-            status += e.toString();
-            logger.error("fail to update resource.", e);
-        }
-
-        try {
-            status = JSON.toJSONString(status);
-        } catch (Exception e) {
-            logger.warn("fail to convert json", e);
-        }
-        return status;
-    }
+//    @RequestMapping(value = "/updateresource", produces="application/json;charset=utf-8")
+//    @ResponseBody
+//    public String updateResource(@RequestParam("update") String update) {
+//        String status = "fail";
+    //    try {
+          //  update = URLDecoder.decode(update, "UTF-8");
+//            OpenResource openResource = JSON.parseObject(update, OpenResource.class);
+//
+//            openResource.setIsInner((byte) 0);
+//            openResource.setIsWrite((byte) 0);
+//            openResource.setUpdateTime(new Date());
+//
+//            OpenResource openResourceTemp = iOpenResourceService.getByUriVersion(openResource.getUri(), openResource.getVersion());
+//            if(openResourceTemp == null) {
+//                openResource.setCreateTime(new Date());
+//                iOpenResourceService.insert(openResource);
+//            } else {
+//                if (0 != openResource.getId()) {
+//                    iOpenResourceService.update(openResource);
+//                } else {
+//                    openResource.setId(openResourceTemp.getId());
+//                    iOpenResourceService.update(openResource);
+//                }
+//            }
+//            status = "success";
+//        } catch (Exception e) {
+//            status += e.toString();
+//            logger.error("fail to update resource.", e);
+//        }
+//
+//        try {
+//            status = JSON.toJSONString(status);
+//        } catch (Exception e) {
+//            logger.warn("fail to convert json", e);
+//        }
+//        return status;
+//    }
 
     /**
      * 在open_resource_group表中插入数据
