@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by newlife on 16/3/24.
@@ -31,7 +32,7 @@ public class OpenOauthAccessTokensCache implements ICacheClear {
     @Autowired
     private IOpenOauthAccessTokensService openOauthAccessTokensService;
 
-    private Cache<String, OpenOauthAccessTokens> cache = CacheBuilder.newBuilder().maximumSize(10000).build();
+    private Cache<String, OpenOauthAccessTokens> cache = CacheBuilder.newBuilder().maximumSize(10000).expireAfterWrite(30, TimeUnit.MINUTES).build();
 
     public OpenOauthAccessTokens get(UUID eventId, String accessToken) {
         OpenOauthAccessTokens openOauthAccessTokens = null;

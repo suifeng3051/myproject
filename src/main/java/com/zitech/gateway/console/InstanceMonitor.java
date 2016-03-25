@@ -269,7 +269,6 @@ public class InstanceMonitor {
         cacheManager = CacheManager.getInstance();
         cacheManager.createCacheSizeNode(thisNode);
         cacheManager.start();
-        cacheManager.startTimerForTokenCache();
 
         PipelineManager pipelineManager = PipelineManager.getInstance(thisNode);
         pipelineManager.start();
