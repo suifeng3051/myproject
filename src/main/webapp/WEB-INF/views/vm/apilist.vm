@@ -101,7 +101,7 @@
     <div class="row">
         <div class="col-md-2 bs-docs-sidebar" >
             <div data-offset-top="200"  style="margin-top:60px;">
-                <ul class="nav nav-list bs-docs-sidenav">
+                <ul class="nav nav-list bs-docs-sidenav" id="navbarLeft">
                     <li class="affixGroup active" group="all"><a href="#"><i class="icon-chevron-right"></i>所有</a></li>
                     #foreach ($!apiParam in $!results.get("groupList").entrySet())
                         <li class="affixGroup" group="$!apiParam.key"><a href="#"><i class="icon-chevron-right"></i>$!apiParam.value</a></li>
@@ -136,8 +136,8 @@
                                         <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="启用" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id" flag="0" class="glyphicon glyphicon-ok-circle disableIcon"></span></a>
                                     #end
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="新增资源" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-plus-sign addResource"></span></a>
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="$!apiElement.id" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" class="glyphicon glyphicon-wrench testApi"></span></a>
+                                        <a href="#" data-toggle="tooltip" data-placement="top" title="新增资源" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" groupname="$!apiElement.apiGroup" class="glyphicon glyphicon-plus-sign addResource"></span></a>
+                                        <a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="$!apiElement.id" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" groupname="$!apiElement.apiGroup" class="glyphicon glyphicon-wrench testApi"></span></a>
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-edit editIcon"></span></a>
                                 </li>
                             #else
@@ -151,7 +151,7 @@
                                         <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="启用" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id" flag="0" class="glyphicon glyphicon-ok-circle disableIcon"></span></a>
                                     #end
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="新增资源" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-plus-sign addResource"></span></a>
+                                        <a href="#" data-toggle="tooltip" data-placement="top" title="新增资源" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" groupname="$!apiElement.apiGroup" class="glyphicon glyphicon-plus-sign addResource"></span></a>
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="$!apiElement.id" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" class="glyphicon glyphicon-wrench testApi"></span></a>
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-edit editIcon"></span></a>
                                 </li>

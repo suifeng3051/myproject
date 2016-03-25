@@ -100,9 +100,11 @@ cd /
         </div>
         <div class="page-header cut">
             <h3><small>4. 返回结果</small></h3>
+
         </div>
         <div class="page-header cut">
             <h3><small>5. 示例</small></h3>
+            <p style="word-wrap: break-word;word-break: normal;">  $!results.get("carmenApi").resultDemo </p>
         </div>
     </div>
 </div>
