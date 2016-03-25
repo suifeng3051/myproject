@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.zitech.gateway.apiconfig.model.CarmenUser;
 import com.zitech.gateway.apiconfig.service.ICarmenUserService;
 import com.zitech.gateway.cache.RedisOperate;
+import com.zitech.gateway.utils.AppUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -187,4 +190,30 @@ public class UserController {
         return status;
     }
 
+    @RequestMapping("/user/login")
+    public ModelAndView userLogin(HttpServletRequest request,HttpServletResponse response) {
+        return new ModelAndView("admin_login");
+    }
+
+    @RequestMapping(value = "/user/doLogin", produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String doLogin(HttpServletRequest request,HttpServletResponse response,String username,String password) {
+        Map<String, Object> objectMap = new HashMap<>();
+        objectMap.put("result",false);
+        objectMap.put("to", "/user/login");
+        password = AppUtils.MD5(password);
+        List<CarmenUser> users = iCarmenUserService.getByUserName(username);
+        for (CarmenUser u:users){
+            if (u.getPassword().equals(password)){
+                HttpSession httpSession = request.getSession(true);
+                String nameKey = "gateway_login_zitech";
+                httpSession.setAttribute("username", nameKey);
+                redisOperate.set(nameKey, username);
+                objectMap.put("to", "/apilist");
+                objectMap.put("result",true);
+                return JSON.toJSONString(objectMap);
+            }
+        }
+        return JSON.toJSONString(objectMap);
+    }
 }
