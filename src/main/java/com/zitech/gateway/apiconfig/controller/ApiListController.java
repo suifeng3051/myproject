@@ -332,6 +332,40 @@ public class ApiListController {
         return status;
     }
 
+    @RequestMapping(value="/addOauthClient",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String addOauthClient(@RequestParam("oauthclient") String oatuthclient)
+    {
+        String status ="success";
+        try{
+            oatuthclient = URLDecoder.decode(oatuthclient, "UTF-8");
+            CarmenApi update = JSON.parseObject(oatuthclient, CarmenClient.class);
+        }
+        catch (Exception e)
+        {
+            status = "fail";
+        }
+    }
+
+    /**
+     * 检测要增加的组的名称和别名是否已经被占用
+     * @param name  组名
+     * @param alias 组名别名
+     * @return 返回查询到的条数的字符串
+     */
+    @RequestMapping(value = "/checkGroup", produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String checkGroup(@RequestParam("name") String name,
+                             @RequestParam("alias") String alias)
+    {
+        List<OpenResourceGroup> groupByNameAndAlias = iOpenResourceGroupService.getGroupByNameAndAlias(name, alias);
+        if (groupByNameAndAlias == null) {
+            return "0";
+        }
+        return groupByNameAndAlias.size()+"";
+    }
+
+
     /**
      * 查询resource表的内容
      * @param uri namespace和name的组合，以点号连接
