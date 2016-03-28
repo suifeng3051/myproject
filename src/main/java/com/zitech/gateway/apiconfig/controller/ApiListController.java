@@ -355,6 +355,27 @@ public class ApiListController {
         return JSON.toJSONString(status);
     }
 
+    @RequestMapping(value="/getGroupAlias",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getGroupAlias()
+    {
+        Map<String, Object> results = new HashMap<>();
+        String status = "success";
+        try {
+            List<OpenResourceGroup> all = iOpenResourceGroupService.getAll();
+            ArrayList<String> aliases = new ArrayList<>();
+            for (OpenResourceGroup alias : all) {
+                aliases.add(alias.getAlias());
+            }
+            results.put("aliases", aliases);
+        } catch (Exception e) {
+            status = "fail";
+        }
+
+        results.put("status", status);
+        return JSON.toJSONString(results);
+    }
+
     /**
      * 插入新的oauth client
      *
