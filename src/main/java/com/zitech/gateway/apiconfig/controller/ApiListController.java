@@ -339,12 +339,13 @@ public class ApiListController {
         String status ="success";
         try{
             oatuthclient = URLDecoder.decode(oatuthclient, "UTF-8");
-            CarmenApi update = JSON.parseObject(oatuthclient, CarmenClient.class);
+            //CarmenApi update = JSON.parseObject(oatuthclient, OpenOauthClients.class);
         }
         catch (Exception e)
         {
             status = "fail";
         }
+        return status;
     }
 
     /**
@@ -358,11 +359,14 @@ public class ApiListController {
     public String checkGroup(@RequestParam("name") String name,
                              @RequestParam("alias") String alias)
     {
+        Map<String, Object> results = new HashMap<>();
         List<OpenResourceGroup> groupByNameAndAlias = iOpenResourceGroupService.getGroupByNameAndAlias(name, alias);
         if (groupByNameAndAlias == null) {
-            return "0";
+            results.put("count", "0");
+            return JSON.toJSONString(results);
         }
-        return groupByNameAndAlias.size()+"";
+        results.put("count", groupByNameAndAlias.size() + "");
+        return JSON.toJSONString(results);
     }
 
 
@@ -507,6 +511,11 @@ public class ApiListController {
         try {
             insert = URLDecoder.decode(insert, "UTF-8");
             OpenResourceGroup openResourceGroup = JSON.parseObject(insert, OpenResourceGroup.class);
+            List<OpenResourceGroup> groupByNameAndAlias = iOpenResourceGroupService.getGroupByNameAndAlias(openResourceGroup.getName(), openResourceGroup.getAlias());
+            if(groupByNameAndAlias==null ||groupByNameAndAlias.size()!=0)
+            {
+                return JSON.toJSONString(status+":接口已经存在");
+            }
             openResourceGroup.setCreateTime(new Date());
             iOpenResourceGroupService.insert(openResourceGroup);
             status = "success";
