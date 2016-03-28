@@ -283,7 +283,7 @@
         <dependency>
             <groupId>com.github.danielwegener</groupId>
             <artifactId>logback-kafka-appender</artifactId>
-            <version>0.0.4</version>
+            <version>0.1.0</version>
         </dependency>
 
         <dependency>

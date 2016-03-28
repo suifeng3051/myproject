@@ -1,9 +1,0 @@
-.project
-.settings/
-.classpath
-target/
-catalina.base_IS_UNDEFINED/
-.DS_store
-**/*/.DS_store
-*.iml
-.idea
