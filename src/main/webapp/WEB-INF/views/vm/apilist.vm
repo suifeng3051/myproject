@@ -37,7 +37,6 @@
                 <li role="presentation" class="active"><a href="#" role="tab" data-toggle="tab" class="titles">Home</a></li>
                 <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Config</a></li>
                 <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Release</a></li>
-                <li role="presentation" ><a href="#" class="addResource" id="addGroupBtn">AddGroup</a></li>
 
                 <!--<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Monitor</a></li>-->
                 <li role="presentation" class="dropdown">
@@ -58,26 +57,26 @@
             <form class="navbar-form navbar-left" id="env" style="margin: -38px 0 0 46%;">
                 <div class="form-group radio">
                     #if(2 == $!results.get('env'))
-                        <input class="envRadio" type="radio" name="env"  value="1" >
-                        <label><p class="text-primary">dev</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="2" checked>
-                        <label><p class="text-primary">test</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="3">
-                        <label><p class="text-primary">product</p></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="1" >
+                        <span class="text-primary">dev</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="2" checked>
+                        <span class="text-primary">test</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="3">
+                        <span class="text-primary">product</span></label>
                     #elseif(3 == $!results.get('env'))
-                        <input class="envRadio" type="radio" name="env"  value="1" >
-                        <label><p class="text-primary">dev</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="2">
-                        <label><p class="text-primary">test</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="3" checked>
-                        <label><p class="text-primary">product</p></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="1" >
+                        <span class="text-primary">dev</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="2">
+                        <span class="text-primary">test</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="3" checked>
+                        <span class="text-primary">product</span></label>
                     #else
-                        <input class="envRadio" type="radio" name="env"  value="1" checked>
-                        <label><p class="text-primary">dev</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="2">
-                        <label><p class="text-primary">test</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="3">
-                        <label><p class="text-primary">product</p></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="1" checked>
+                        <span class="text-primary">dev</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="2">
+                        <span class="text-primary">test</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="3">
+                        <span class="text-primary">product</span></label>
                     #end
 
                 </div>
@@ -115,10 +114,16 @@
             <div class="panel panel-primary" style="margin-top:60px;min-height:460px;">
                 <div class="panel-heading">API 列表
 
-                    <button type="button" class="btn btn-primary" id="newCreateTask" style="float:right;margin:-7px -15px 0 0; border:0px;">
+                    <button type="button" class="btn btn-primary" id="newCreateTask" style="float:right;margin:-5px 0 0 0; border:0px;">
                         <span class="glyphicon glyphicon-plus"></span>新建API
                     </button>
-                    <button type="button" class="btn btn-primary" id="testMonitorTask" style="float:right;margin:-7px -15px 0 0; border:0px; display:none;">
+                    <button type="button" class="btn btn-primary" id="addOAuthClientBtn" style="float:right;margin:-5px 0 0 0; border:0px;">
+                        <span class="glyphicon glyphicon-plus"></span>新建OAuthClient
+                    </button>
+                    <button type="button" class="btn btn-primary" id="addGroupBtn" style="float:right;margin:-5px 0 0 0; border:0px;">
+                        <span class="glyphicon glyphicon-plus"></span>新建组
+                    </button>
+                    <button type="button" class="btn btn-primary" id="testMonitorTask" style="float:right;margin:-5px 0 0 0; border:0px; display:none;">
                         testMonitor
                     </button>
                 </div>
@@ -226,13 +231,71 @@
     </div>
 </div>
 
+
+<!-- add OAuth Client -->
+<div class="modal fade" id="myOAuthClientModal" tabindex="-1" role="dialog" aria-labelledby="myOAuthClientLabel" aria-hidden="true">
+    <div class="modal-dialog" style="margin-top:90px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myOAuthClientLabel">添加OAuthClient</h4>
+            </div>
+            <div class="modal-body">
+
+                <form class="form-horizontal" id="apiClientIdConfig">
+
+                    <div id="clientIdTable">
+                        <div class="form-group">
+                            <label for="resourceAlias" class="col-sm-3 control-label">Client Name</label>
+                            <div class="col-sm-6"><input type="text" class="form-control" name="client_name" /></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="resourceAlias" class="col-sm-3 control-label">Redirect Uri</label>
+                            <div class="col-sm-6"><input type="text" class="form-control" name="redirect_uri" /></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Grant Types</label>
+                            <div class="col-sm-6 checkbox">
+                                <label><input type="checkbox" name="grant_types" value="authorization_code" />authorization_code</label>
+                                <label><input type="checkbox" name="grant_types" value="refresh_token" />refresh_token</label>
+                                <label><input type="checkbox" name="grant_types" value="client_credentials" />client_credentials</label>
+                                <label><input type="checkbox" name="grant_types" value="implicit" />implicit</label>
+                                <label><input type="checkbox" name="grant_types" value="password" />password</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="resourceAlias" class="col-sm-3 control-label">Client Num</label>
+                            <div class="col-sm-6"><input type="text" class="form-control" name="redirect_uri" /></div>
+                        </div>
+                        <div class="form-group" >
+                            <label for="resourceAlias" class="col-sm-3 control-label">Default Scope</label>
+                            <div id="defaultScopeArea" class="checkbox">
+                                <!--<label><input type="checkbox" name="default_scope" value="" />  </label>-->
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <button type="button" class="btn btn-primary" id="addRowFrequency" style="display:none;margin-left:88%;">新增行</button>
+                <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="clientIdInfo2"></div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" id="checkOAuthBtn" style="float:left;">检查？</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="sureModifyResource">确定</button>
+        </div>
+        </div>
+    </div>
+</div>
+
 <!--  modify Resource Modal -->
 <div class="modal fade" id="myResourceModal" tabindex="-1" role="dialog" aria-labelledby="myResourceLabel" aria-hidden="true">
     <div class="modal-dialog" style="margin-top:90px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myResourceLabel">添加 Group</h4>
+                <h4 class="modal-title" id="myResourceLabel">添加组</h4>
             </div>
             <div class="modal-body">
                 <!--<ul class="nav nav-tabs" id="resourceConfigTab">
