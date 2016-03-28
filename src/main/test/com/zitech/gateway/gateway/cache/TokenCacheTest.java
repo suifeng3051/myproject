@@ -2,6 +2,7 @@ package com.zitech.gateway.gateway.cache;
 
 import com.alibaba.fastjson.JSON;
 import com.zitech.gateway.AbstractJunit;
+import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.oauth.model.OpenOauthAccessTokens;
 import com.zitech.gateway.oauth.service.IOpenOauthAccessTokensService;
 
@@ -21,6 +22,9 @@ public class TokenCacheTest extends AbstractJunit {
     @Autowired
     private IOpenOauthAccessTokensService openOauthAccessTokensService;
 
+    @Autowired
+    private RedisOperate redis;
+
     @Test
     public void testAccessTokensCache() {
         OpenOauthAccessTokens token = accessTokensCache.get(null,"2de3d026d4a13c0da718302b1a664dbc");
@@ -31,6 +35,24 @@ public class TokenCacheTest extends AbstractJunit {
     public void testGetAccessTokensCache() {
         List<OpenOauthAccessTokens> list = openOauthAccessTokensService.getValidToken();
         System.out.println(JSON.toJSONString(list));
+    }
+
+    @Test
+    public void testGetRedisCache() {
+        System.out.println(JSON.toJSONString(redis.keys("88888888_*")));
+    }
+
+    @Test
+    public void testDelRedisCache() {
+        redis.delKeys("88888888_*");
+        System.out.println(JSON.toJSONString(0));
+    }
+
+    @Test
+    public void testSetRedisCache() {
+        for(int i = 0; i < 20; i++) {
+            redis.set("88888888_"+i,"88888888_"+i);
+        }
     }
 
 }

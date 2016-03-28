@@ -84,5 +84,8 @@ public interface RedisOperate {
      */
     long setExpire(String key, int seconds);
 
+    Set<String> keys(String pattern);
+
+    void delKeys(String pattern);
 
 }
