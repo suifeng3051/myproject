@@ -5,6 +5,8 @@ import com.zitech.gateway.apiconfig.model.CarmenUser;
 import com.zitech.gateway.apiconfig.service.ICarmenUserService;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.console.CacheManager;
+import com.zitech.gateway.oauth.Constants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -95,6 +97,11 @@ public class CacheManageController {
         String[] allNames = names.split(",");
         List<String> instance = Arrays.asList(allNames);
         try {
+            if(null != instance && instance.size() > 0) {
+                if(instance.contains(Constants.CACHE_NAME_ACCESS_TOKEN)) {
+                    redisOperate.delKeys(Constants.CACHE_ACCESS_TOKEN_KEY_PATTERN);
+                }
+            }
             CacheManager cacheManager = CacheManager.getInstance();
             cacheManager.updateNodes(instance);
             status = "success";
