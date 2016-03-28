@@ -11,6 +11,7 @@ public class Constants {
     public static final String REQUEST_HTTP_ASYNC = "/http_async";
 
     public static final String LOCAL_CACHE_NODE = "/localCache";
+    public static final String CACHE_NAME_ACCESS_TOKEN = "openOauthAccessTokens";
 //    public static final String API_CACHE="/apiCache";
 //    public static final String API_PARAM_CACHE="/apiParamCache";
 //    public static final String API_MEHOTD_MAP_CACHE="/apiMethodMappingCache";

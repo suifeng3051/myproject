@@ -8,6 +8,8 @@ public final class Constants {
 
     // for cache
     public final static String CACHE_TOKEN_KEY_PATTERN = "open_oauth_access_token_%s";
+    public final static String CACHE_ACCESS_TOKEN_KEY_PATTERN = "open_oauth_access_token_*";
+    public static final String CACHE_NAME_ACCESS_TOKEN = "openOauthAccessTokens";
     public final static String CACHE_APP_KEY_PATTERN = "cache_app_key_%s";
     public final static String CACHE_CLIENT_KEY_PATTERN = "cache_client_key_%s";
     public final static String CACHE_REFRESH_FREQUENCY_PATTERN = "cache_refresh_frequency_pattern_%s";

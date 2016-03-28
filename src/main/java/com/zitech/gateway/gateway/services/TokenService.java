@@ -2,6 +2,7 @@ package com.zitech.gateway.gateway.services;
 
 import com.zitech.gateway.apiconfig.model.OpenResource;
 import com.zitech.gateway.gateway.Constants;
+import com.zitech.gateway.gateway.cache.OpenOauthAccessTokensCache;
 import com.zitech.gateway.gateway.cache.OpenOauthClientsCache;
 import com.zitech.gateway.gateway.cache.OpenResourceCache;
 import com.zitech.gateway.gateway.exception.TokenValidateException;
@@ -10,8 +11,8 @@ import com.zitech.gateway.oauth.model.OpenOauthAccessTokens;
 import com.zitech.gateway.oauth.model.OpenOauthClients;
 import com.zitech.gateway.oauth.oauthex.OAuthConstants;
 import com.zitech.gateway.oauth.service.impl.BaseService;
-import com.zitech.gateway.oauth.service.impl.OAuthService;
 import com.zitech.gateway.utils.AppUtils;
+
 import org.apache.oltu.oauth2.common.utils.OAuthUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +29,10 @@ public class TokenService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
 
     @Autowired
-    private OAuthService oAuthService;
+    private OpenOauthClientsCache clientsCache;
 
     @Autowired
-    private OpenOauthClientsCache clientsCache;
+    private OpenOauthAccessTokensCache accessTokensCache;
 
     @Autowired
     private OpenResourceCache resourceCache;
@@ -57,7 +58,7 @@ public class TokenService extends BaseService {
         OpenOauthAccessTokens openOauthAccessTokens;
         try {
             event.getTicTac().tic(Constants.ST_REDIS_TOKEN);
-            openOauthAccessTokens = oAuthService.getAccessToken(accessToken);
+            openOauthAccessTokens = accessTokensCache.get(event.getId(), accessToken);
         } finally {
             event.getTicTac().tac(Constants.ST_REDIS_TOKEN);
         }

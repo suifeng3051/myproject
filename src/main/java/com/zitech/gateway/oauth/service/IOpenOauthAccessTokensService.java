@@ -11,6 +11,8 @@ public interface IOpenOauthAccessTokensService {
 
     OpenOauthAccessTokens getByToken(String token);
 
+    List<OpenOauthAccessTokens> getValidToken();
+
     List<OpenOauthAccessTokens> getByClientIdAndUserId(String clientId, int adminId);
 
     void deleteById(Integer id);
