@@ -367,6 +367,33 @@ $(document).ready(function(){
         window.location.href = "apilist?env=" + getEnv();
     });
 
+
+
+    // 独立显示 resourceGroup
+    $('#addGroupBtn').click(function(){
+        $("#myResourceModal").modal("show");
+    });
+    $('#checkGroupBtn').click(function(){
+
+        // 检查 Group 是否存在
+        var exists = true; // true 存在， false 不存在
+
+        if( exists ) {
+            $("#apiResourceInfo1").html("<p>呃~ Group 已存在！</p>");
+            $("#apiResourceInfo1").css("display","block");
+//            $("#apiResourceInfo1").removeClass("alert-danger");
+//            $("#apiResourceInfo1").addClass("alert-success");
+        } else {
+            $("#apiResourceInfo1").html("<p>耶！Group 可用！</p>");
+            $("#apiResourceInfo1").css("display","block");
+            $("#apiResourceInfo1").removeClass("alert-danger");
+            $("#apiResourceInfo1").addClass("alert-success");
+        }
+        return;
+    })
+
+
+
     // 给修改resource表的按钮绑定事件
     $('body').on('click', '.addResource', function(e) {
         e.preventDefault();
@@ -1068,5 +1095,6 @@ $(document).ready(function(){
 
 
 
+    $('#resourceGroupTabBtn').trigger('click');
 
 });
