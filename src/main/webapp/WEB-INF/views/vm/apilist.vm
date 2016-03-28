@@ -247,29 +247,29 @@
                     <div id="clientIdTable">
                         <div class="form-group">
                             <label for="resourceAlias" class="col-sm-3 control-label">Client Name</label>
-                            <div class="col-sm-6"><input type="text" class="form-control" name="client_name" /></div>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="client_name" /></div>
                         </div>
                         <div class="form-group">
                             <label for="resourceAlias" class="col-sm-3 control-label">Redirect Uri</label>
-                            <div class="col-sm-6"><input type="text" class="form-control" name="redirect_uri" /></div>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="redirect_uri" /></div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Grant Types</label>
-                            <div class="col-sm-6 checkbox">
-                                <label><input type="checkbox" name="grant_types" value="authorization_code" />authorization_code</label>
-                                <label><input type="checkbox" name="grant_types" value="refresh_token" />refresh_token</label>
-                                <label><input type="checkbox" name="grant_types" value="client_credentials" />client_credentials</label>
-                                <label><input type="checkbox" name="grant_types" value="implicit" />implicit</label>
-                                <label><input type="checkbox" name="grant_types" value="password" />password</label>
+                            <div class="col-sm-9 checkbox">
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="authorization_code" />authorization_code</label>
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="refresh_token" />refresh_token</label>
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="implicit" />implicit</label>
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="client_credentials" />client_credentials</label>
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="password" />password</label>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="resourceAlias" class="col-sm-3 control-label">Client Num</label>
-                            <div class="col-sm-6"><input type="text" class="form-control" name="redirect_uri" /></div>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="redirect_uri" /></div>
                         </div>
                         <div class="form-group" >
                             <label for="resourceAlias" class="col-sm-3 control-label">Default Scope</label>
-                            <div id="defaultScopeArea" class="checkbox">
+                            <div id="defaultScopeArea" class="col-sm-9 checkbox">
                                 <!--<label><input type="checkbox" name="default_scope" value="" />  </label>-->
                             </div>
 
@@ -283,7 +283,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-warning" id="checkOAuthBtn" style="float:left;">检查？</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="sureModifyResource">确定</button>
+                <button type="button" class="btn btn-primary" id="sureAddOAuthClient">确定</button>
         </div>
         </div>
     </div>

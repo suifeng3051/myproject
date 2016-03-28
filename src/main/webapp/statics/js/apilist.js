@@ -408,13 +408,14 @@ $(document).ready(function () {
 
     // OAuthClient 对话框
     $('#addOAuthClientBtn').click(function(){
-
+        $('#apiClientIdConfig')[0].reset();
+        $('#clientIdInfo2').hide();
     $.post('getGroupAlias', function(data){
         if(data.status === 'success'){
             var json = data.aliases;
             var html = '';
             for(var i=0; i<json.length; i++){
-                html += '<label><input type="checkbox" name="default_scope" value="'+json[i]+'" />'+json[i]+'</label>';
+                html += '<label class="col-sm-3"><input type="checkbox" name="default_scope" value="'+json[i]+'" />'+json[i]+'</label>';
             }
             $('#defaultScopeArea').html(html);
             $("#myOAuthClientModal").modal("show");
@@ -434,7 +435,26 @@ $(document).ready(function () {
             $("#clientIdInfo2").removeClass("alert-danger");
             $("#clientIdInfo2").addClass("alert-success");
         }
-    })
+    });
+
+    $('#sureAddOAuthClient').click(function(){
+        var formContent = $("#apiClientIdConfig").serialize();
+
+        $.post('addOauthClient', {'oauthclient': formContent}, function(data){
+            if ( data.indexOf('fail') != -1 ) {
+                $("#clientIdInfo2").html("<p>添加失败</p>"+d);
+                $("#clientIdInfo2").css("display", "block");
+//                $("#clientIdInfo2").removeClass("alert-danger");
+//                $("#clientIdInfo2").addClass("alert-success");
+
+            } else {
+                $("#clientIdInfo2").html("<p>添加成功</p>"+d);
+                $("#clientIdInfo2").css("display", "block");
+                $("#clientIdInfo2").removeClass("alert-danger");
+                $("#clientIdInfo2").addClass("alert-success");
+            }
+        }, 'json');
+    });
 
 
     //给添加group表的按钮绑定事件
