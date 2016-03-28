@@ -118,7 +118,21 @@
       <if test="isDelete != null" >
         is_delete = #{isDelete,jdbcType=CHAR},
       </if>
+
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updatePwd" parameterType="com.zitech.gateway.apiconfig.model.CarmenUser" >
+    update t_admin
+    <set >
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_name = #{userName,jdbcType=VARCHAR}
   </update>
 </mapper>

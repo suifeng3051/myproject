@@ -23,10 +23,14 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.URLDecoder;
 import java.util.*;
+import org.springframework.web.context.request.async.DeferredResult;
 
 /**
  * Created by dingdongsheng on 15/9/5.
@@ -633,6 +637,47 @@ public class ApiListController {
         if (username==null||"".equals(username)){
             username="test";
         }
+        List<CarmenUser> testList = new ArrayList<>();
+        for (int i=0;i<10;i++){
+            CarmenUser user = new CarmenUser();
+            user.setId(i);
+            user.setUserName(username+i);
+            testList.add(user);
+        }
+        String result = JSON.toJSONString(testList);
+        return result;
+    }
+
+    @RequestMapping("/quotes")
+    @ResponseBody
+    public DeferredResult<String> quotes() {
+        DeferredResult<String> deferredResult = new DeferredResult<String>();
+        Thread t = new Thread(
+                new Runnable(){
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        deferredResult.setResult("abcd");
+                    }
+                }
+        );
+        t.start();
+        System.out.println("do something");
+        return deferredResult;
+    }
+
+    @RequestMapping(value = "/user/ding", produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String sdfsfdf( HttpServletRequest request, HttpServletResponse response,String username,String corpid) {
+
+        if (username==null||"".equals(username)){
+            username="test";
+        }
+        System.out.print(corpid);
         List<CarmenUser> testList = new ArrayList<>();
         for (int i=0;i<10;i++){
             CarmenUser user = new CarmenUser();

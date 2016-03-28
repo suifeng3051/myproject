@@ -5,7 +5,7 @@ $(document).ready(function(){
       var group = $("#currentGroup").val();
       var env = $("#env").val();
       if("Monitor" == theme){
-         window.location.href = "monitor?env=" + env;
+         window.location.href = "monitor?env=" + env;h
       } else if("Release" == theme) {
         window.location.href = "release?env=" + env;
       } else if("Config" == theme) {
@@ -22,6 +22,8 @@ $(document).ready(function(){
          window.location.href = "instancedetail?env=" + env;
       } else if("RecoverApi" == theme) {
          window.location.href = "recoverapi?env=" + env;
+      }else if("safety"==theme){
+         window.location.href = "updatepwd?env=" + env;
       }
 
     });
@@ -126,4 +128,3 @@ $(document).ready(function(){
     });
 
     $("#addUserConfig").validate();
-});

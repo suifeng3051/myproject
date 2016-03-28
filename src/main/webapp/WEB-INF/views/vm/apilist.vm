@@ -50,6 +50,7 @@
                             <li><a href="#" role="tab" data-toggle="tab" class="titles console">Users</a></li>
                             <li><a href="#" role="tab" data-toggle="tab" class="titles console">RecoverApi</a></li>
                         #end
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">safety</a></li>
                     </ul>
                 </li>
             </ul>
@@ -81,8 +82,11 @@
                 </div>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li style="margin:-50px 50px 0 0;"><p class="navbar-text">Welcome <span class="glyphicon glyphicon-user"></span> $!results.get('user')</p></li>
+                <li style="margin:-50px 100px 0 0;"><p class="navbar-text">Welcome <span class="glyphicon glyphicon-user"></span> $!results.get('user')</p></li>
 
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li style="margin:-50px 50px 0 0;"><p class="navbar-text"><a href="/user/logout">退出</a></p></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li role="presentation" style="margin:-63px -35px 0 0;" class="help">
