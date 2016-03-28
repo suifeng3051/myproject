@@ -332,6 +332,35 @@ public class ApiListController {
         return status;
     }
 
+    @RequestMapping(value="/checkOauthClient",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String checkOauthClient(@RequestParam("name") String name)
+    {
+        String status ="success";
+        try{
+            name = URLDecoder.decode(name, "UTF-8");
+            //判断欲添加的oauth client是否已存在
+            List<OpenOauthClients> all = iOpenOauthClientsService.getAll();
+            for (OpenOauthClients oauthClient : all) {
+                if(oauthClient.getClientName().contains(name))
+                {
+                    status = "fail: 该名称的oauth client已经存在";
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            status = "fail";
+        }
+        return JSON.toJSONString(status);
+    }
+
+    /**
+     * 插入新的oauth client
+     *
+     * @param oatuthclient
+     * @return
+     */
     @RequestMapping(value="/addOauthClient",produces = "application/json;charset=utf-8")
     @ResponseBody
     public String addOauthClient(@RequestParam("oauthclient") String oatuthclient)
@@ -339,7 +368,38 @@ public class ApiListController {
         String status ="success";
         try{
             oatuthclient = URLDecoder.decode(oatuthclient, "UTF-8");
-            //CarmenApi update = JSON.parseObject(oatuthclient, OpenOauthClients.class);
+            OpenOauthClients openOauthClients = JSON.parseObject(oatuthclient, OpenOauthClients.class);
+            //判断欲添加的oauth client是否已存在
+            List<OpenOauthClients> all = iOpenOauthClientsService.getAll();
+            for (OpenOauthClients oauthClient : all) {
+                if(oauthClient.getClientName().contains(openOauthClients.getClientName()))
+                {
+                    status = "fail: 该名称的oauth client已经存在";
+                    return JSON.toJSONString(status);
+                }
+            }
+
+            //添加ID
+            //获取到最大的id
+            Long value = 0L;
+            for (OpenOauthClients oauthClient : all) {
+                Long aLong = Long.valueOf(oauthClient.getClientId());
+                if(aLong > value)
+                {
+                    value=aLong;
+                }
+            }
+            openOauthClients.setClientId(value+"");
+
+            //添加client_secret
+            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            openOauthClients.setClientSecret(uuid);
+
+            //处理grant_types
+
+            //处理default_scope
+
+            iOpenOauthClientsService.save(openOauthClients);
         }
         catch (Exception e)
         {
@@ -455,48 +515,7 @@ public class ApiListController {
         return status;
     }
 
-    /**
-     * 更新资源表
-     * @param update 待更新对象
-     * @return 成功返回success，失败返回fail
-     */
-//    @RequestMapping(value = "/updateresource", produces="application/json;charset=utf-8")
-//    @ResponseBody
-//    public String updateResource(@RequestParam("update") String update) {
-//        String status = "fail";
-    //    try {
-          //  update = URLDecoder.decode(update, "UTF-8");
-//            OpenResource openResource = JSON.parseObject(update, OpenResource.class);
-//
-//            openResource.setIsInner((byte) 0);
-//            openResource.setIsWrite((byte) 0);
-//            openResource.setUpdateTime(new Date());
-//
-//            OpenResource openResourceTemp = iOpenResourceService.getByUriVersion(openResource.getUri(), openResource.getVersion());
-//            if(openResourceTemp == null) {
-//                openResource.setCreateTime(new Date());
-//                iOpenResourceService.insert(openResource);
-//            } else {
-//                if (0 != openResource.getId()) {
-//                    iOpenResourceService.update(openResource);
-//                } else {
-//                    openResource.setId(openResourceTemp.getId());
-//                    iOpenResourceService.update(openResource);
-//                }
-//            }
-//            status = "success";
-//        } catch (Exception e) {
-//            status += e.toString();
-//            logger.error("fail to update resource.", e);
-//        }
-//
-//        try {
-//            status = JSON.toJSONString(status);
-//        } catch (Exception e) {
-//            logger.warn("fail to convert json", e);
-//        }
-//        return status;
-//    }
+
 
     /**
      * 在open_resource_group表中插入数据
