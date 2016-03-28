@@ -12,7 +12,7 @@
     <result column="is_delete" property="isDelete" jdbcType="CHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, user_group, user_name, creator, create_time, modifier, modify_time, is_delete
+    id, user_group, user_name, creator, create_time, modifier, modify_time, is_delete,password
   </sql>
   <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 

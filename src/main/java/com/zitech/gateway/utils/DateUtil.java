@@ -210,7 +210,7 @@ public class DateUtil {
         c2.setTime(date2);
         c2.add(Calendar.YEAR, 4);
         if (c2.before(c1)) {
-            System.out.println("illegal");
+            System.out.println(" illegal ");
         } else {
             System.out.println("ok");
         }

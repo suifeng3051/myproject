@@ -626,5 +626,21 @@ public class ApiListController {
 
         return status;
     }
+    @RequestMapping(value = "/user/apitest/1.0", produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String apitest( HttpServletRequest request, HttpServletResponse response,String username) {
 
+        if (username==null||"".equals(username)){
+            username="test";
+        }
+        List<CarmenUser> testList = new ArrayList<>();
+        for (int i=0;i<10;i++){
+            CarmenUser user = new CarmenUser();
+            user.setId(i);
+            user.setUserName(username+i);
+            testList.add(user);
+        }
+        String result = JSON.toJSONString(testList);
+        return result;
+    }
 }

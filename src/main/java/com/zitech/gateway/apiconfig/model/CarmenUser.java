@@ -20,6 +20,8 @@ public class CarmenUser {
 
     private String isDelete;
 
+    private String password;
+
     public Integer getId() {
         return id;
     }
@@ -82,5 +84,13 @@ public class CarmenUser {
 
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
