@@ -173,6 +173,9 @@
             <if test="clientSource != null">
                 client_source = #{clientSource,jdbcType=VARCHAR},
             </if>
+            <if test="defaultScope != null">
+                default_scope = #{defaultScope,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>

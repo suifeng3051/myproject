@@ -118,9 +118,6 @@
                     <button type="button" class="btn btn-primary" id="newCreateTask" style="float:right;margin:-5px 0 0 0; border:0px;">
                         <span class="glyphicon glyphicon-plus"></span>新建API
                     </button>
-                    <button type="button" class="btn btn-primary" id="addOAuthClientBtn" style="float:right;margin:-5px 0 0 0; border:0px;">
-                        <span class="glyphicon glyphicon-plus"></span>新建OAuthClient
-                    </button>
                     <button type="button" class="btn btn-primary" id="addGroupBtn" style="float:right;margin:-5px 0 0 0; border:0px;">
                         <span class="glyphicon glyphicon-plus"></span>新建组
                     </button>

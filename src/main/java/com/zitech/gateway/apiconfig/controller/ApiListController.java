@@ -343,7 +343,7 @@ public class ApiListController {
             //判断欲添加的oauth client是否已存在
             List<OpenOauthClients> all = iOpenOauthClientsService.getAll();
             for (OpenOauthClients oauthClient : all) {
-                if(oauthClient.getClientName().contains(name))
+                if(oauthClient.getClientName().equals(name))
                 {
                     status = "fail: 该名称的oauth client已经存在";
                 }

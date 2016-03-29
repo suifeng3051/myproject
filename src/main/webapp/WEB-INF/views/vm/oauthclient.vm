@@ -14,6 +14,10 @@
     <link href="/statics/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link href="/statics/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen"/>
     <link href="/statics/images/favicon.ico"  rel="Shortcut Icon"/>
+
+    <style>
+        th { text-align:center; }
+    </style>
 </head>
 <body>
 
@@ -68,65 +72,54 @@
 
     <div class="row">
 
-            <div class="panel panel-primary" style="margin-top:20px;min-height:460px;">
-                <div class="panel-heading">
-                    <!--<span class="apiconfig">日志</span>-->
-                    <!--<div class="input-append" style="float:left;">-->
-                    <!--<select id="userGroup" name="isFreq" class="form-control" >-->
-                    <!--<option value="1" >所有</option>-->
-                    <!--<option value="2" >管理员</option>-->
-                    <!--<option value="3" >普通用户</option>-->
-                    <!--</select>-->
-                    <!--</div>-->
+        <div class="panel panel-primary" style="margin-top:20px;min-height:460px;">
+            <div class="panel-heading">
+                <!--<span class="apiconfig">日志</span>-->
+                <!--<div class="input-append" style="float:left;">-->
+                <!--<select id="userGroup" name="isFreq" class="form-control" >-->
+                <!--<option value="1" >所有</option>-->
+                <!--<option value="2" >管理员</option>-->
+                <!--<option value="3" >普通用户</option>-->
+                <!--</select>-->
+                <!--</div>-->
 
 
-                    <!--<div class="form-group" style="margin-left:10px;">-->
-                    <!--<label for="username">User Name</label>-->
-                    <!--<input type="text" class="form-control" id="username" placeholder="请输入user name">-->
-                    <!--</div>-->
+                <!--<div class="form-group" style="margin-left:10px;">-->
+                <!--<label for="username">User Name</label>-->
+                <!--<input type="text" class="form-control" id="username" placeholder="请输入user name">-->
+                <!--</div>-->
 
-                    <!--<div class="form-group" style="margin-left:10px;">-->
-                    <!--<button type="button" class="btn btn-primary" id="findUser" style="margin-left:10px;"><span class="glyphicon glyphicon-search"></span>查询</button>-->
-                    <!--</div>-->
-                    <!--<button type="submit" class="btn btn-primary">Transfer cash</button>-->
-                    OAuthClient列表
-                    <button type="button" class="btn btn-primary" id="createUser" style="float:right;margin:-5px 0 0 0; border:0px;">
-                        <span class="glyphicon glyphicon-plus"></span>新增
-                    </button>
-                </div>
-                <!-- 选择配置JAVA还是PHP -->
-                <div class="userconfig">
-                    <div class="alert alert-danger" role="alert" style="margin-bottom: -1px;display:none;" id="OAuthClientConfigInfo"></div>
-                    <table id="users" class="table table-striped table-bordered" >
-                        <thead>
-                        <tr>
-                            <th>Cient Name</th>
-                            <th>Redirect Uri</th>
-                            <th>GrantTypes</th>
-                            <th>Client Num</th>
-                            <th>Default Scope</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody id="OAuthClientConfigBody">
-
-                            <tr>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>34</td>
-                                <td>
-                                    <a href="#" class="needTip deleteCurrentRow" clientId=""  data-toggle="tooltip" data-placement="top" title="删除行" style="margin-left:5px;">
-                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                    </a>
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
+                <!--<div class="form-group" style="margin-left:10px;">-->
+                <!--<button type="button" class="btn btn-primary" id="findUser" style="margin-left:10px;"><span class="glyphicon glyphicon-search"></span>查询</button>-->
+                <!--</div>-->
+                <!--<button type="submit" class="btn btn-primary">Transfer cash</button>-->
+                OAuthClient列表
+                <button type="button" class="btn btn-primary" id="addOAuthClientBtn" style="float:right;margin:-5px 0 0 0; border:0px;">
+                    <span class="glyphicon glyphicon-plus"></span>新建
+                </button>
             </div>
+            <!-- 选择配置JAVA还是PHP -->
+            <div class="userconfig">
+                <div class="alert alert-danger" role="alert" style="margin-bottom: -1px;display:none;" id="OAuthClientConfigInfo"></div>
+                <table id="users" class="table table-striped table-bordered" >
+                    <thead>
+                    <tr>
+                        <th style="min-width:110px">Cient Name</th>
+                        <th>Redirect Uri</th>
+                        <th>GrantTypes</th>
+                        <th style="min-width:100px">Client Num</th>
+                        <th style="min-width:120px">Default Scope</th>
+                        <th style="width:70px"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="OAuthClientConfigBody">
+                    <tr>
+                        <td colspan="6">没有数据</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -149,42 +142,64 @@
     </div>
 </div>
 
-<!--  deleted Modal -->
-<div class="modal fade" id="myAddUserModal" tabindex="-1" role="dialog" aria-labelledby="myAddUserLabel" aria-hidden="true">
-    <div class="modal-dialog" style="  width: 400px;margin-top: 160px;">
+
+<!--  update OAuthClient -->
+<div class="modal fade" id="OAuthClientModal" tabindex="-1" role="dialog" aria-labelledby="myOAuthClientLabel" aria-hidden="true">
+    <div class="modal-dialog" style="margin-top:90px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myAddUserLabel">新增用户</h4>
+                <h4 class="modal-title">添加OAuthClient</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" id="addUserConfig">
 
-                    <div class="form-group">
-                        <label for="userGroup" class="col-sm-3 control-label" >所属组</label>
-                        <div class="col-sm-6">
-                            <select id="userGroup" name="userGroup" class="form-control" >
-                                <option value="1" >管理员</option>
-                                <option value="2" selected>普通用户</option>
-                            </select>
+                <form class="form-horizontal" id="OAuthClientConfig">
+
+                    <div id="OAuthClientTable">
+                        <div class="form-group">
+                            <label for="resourceAlias" class="col-sm-3 control-label">Client Name</label>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="client_name" /></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="resourceAlias" class="col-sm-3 control-label">Redirect Uri</label>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="redirect_uri" /></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Grant Types</label>
+                            <div class="col-sm-9 checkbox" id="grantTypesArea">
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="authorization_code" />authorization_code</label>
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="refresh_token" />refresh_token</label>
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="implicit" />implicit</label>
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="client_credentials" />client_credentials</label>
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="password" />password</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="resourceAlias" class="col-sm-3 control-label">Client Num</label>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="client_num" /></div>
+                        </div>
+                        <div class="form-group" >
+                            <label for="resourceAlias" class="col-sm-3 control-label">Default Scope</label>
+                            <div id="defaultScopeArea" class="col-sm-9 checkbox">
+                                <!--<label><input type="checkbox" name="default_scope" value="" />  </label>-->
+                            </div>
+
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="User" class="col-sm-3 control-label" id="UserLabel">用户</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control required" name="User" id="User" placeholder="user name" value="">
-                        </div>
-                    </div>
-
                 </form>
+                <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="OAuthClientInfo2"></div>
+
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-warning" id="checkOAuthBtn" style="float:left;">检查？</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="sureAdd">确定</button>
+                <button type="button" class="btn btn-primary" id="sureAddOAuthClient">确定</button>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <input type="hidden" id="currentUserId" value="0" />
 <input type="hidden" id="env" value="$!results.get('env')">
