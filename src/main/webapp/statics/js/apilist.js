@@ -26,15 +26,16 @@
         } else if ("OAuthClient" == theme) {
              window.location.href = "oauthclient?env=" + env;
         }
-
     });
 
-    $(".help").on("click", function (e) {
+    // 跳转到帮助页面
+    $(".help").on("click", function(e){
         e.preventDefault();
         var env = getEnv();
         location.href = "manual?env=" + env;
     });
-    $(".console").on("click", function (e) {
+
+    $(".console").on("click", function(e) {
         e.preventDefault();
         var content = $(this).html();
         $("#consoleText").html(content);
