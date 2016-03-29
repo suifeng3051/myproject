@@ -46,6 +46,7 @@
                             <li><a href="#" role="tab" data-toggle="tab" class="titles console">LogView</a></li>
                             <li><a href="#" role="tab" data-toggle="tab" class="titles console">Users</a></li>
                             <li><a href="#" role="tab" data-toggle="tab" class="titles console">RecoverApi</a></li>
+                            <li><a href="#" role="tab" data-toggle="tab" class="titles console">Client</a></li>
                         #end
                     </ul>
                 </li>

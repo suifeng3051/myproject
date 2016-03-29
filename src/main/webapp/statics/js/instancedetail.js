@@ -5,9 +5,6 @@ $(document).ready(function(){
       var env = $("#env").val();
       var group = $("#currentGroup").val();
 
-      console.log(group);
-      console.log(theme);
-      exit();
       if("Monitor" == theme){
          window.location.href = "monitor?env=" + env;
       } else if("Config" == theme) {
@@ -28,7 +25,7 @@ $(document).ready(function(){
          window.location.href = "instancedetail?env=" + env;
       } else if("RecoverApi" == theme) {
         window.location.href = "recoverapi?env=" + env;
-      } else if("OAuthClient" == theme) {
+      } else if("Client" == theme) {
             window.location.href = "oauthclient?env=" + env;
       }
 
