@@ -443,14 +443,16 @@ $(document).ready(function () {
         var formContent = $("#apiClientIdConfig").serialize();
 
         $.post('addOauthClient', {'oauthclient': formContent}, function(data){
+            console.log(data);
             if ( data.indexOf('fail') != -1 ) {
-                $("#clientIdInfo2").html("<p>添加失败</p>"+d);
+                $("#clientIdInfo2").html("<p>添加失败</p>"+data);
                 $("#clientIdInfo2").css("display", "block");
 //                $("#clientIdInfo2").removeClass("alert-danger");
 //                $("#clientIdInfo2").addClass("alert-success");
 
             } else {
-                $("#clientIdInfo2").html("<p>添加成功</p>"+d);
+                console.log("11111");
+                $("#clientIdInfo2").html("<p>添加成功</p>");
                 $("#clientIdInfo2").css("display", "block");
                 $("#clientIdInfo2").removeClass("alert-danger");
                 $("#clientIdInfo2").addClass("alert-success");
