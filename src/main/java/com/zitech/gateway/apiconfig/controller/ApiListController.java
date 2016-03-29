@@ -46,7 +46,7 @@ public class ApiListController {
     ICarmenFreqConfigService iCarmenFreqConfigService;
     @Resource
     ICarmenApiParamService iCarmenApiParamService;
-//    @Resource
+    //    @Resource
 //    IOpenResourceService iOpenResourceService;
     @Resource
     IOpenResourceGroupService iOpenResourceGroupService;
@@ -148,7 +148,7 @@ public class ApiListController {
     @RequestMapping(value = "/getapibygroup", produces="application/json;charset=utf-8")
     @ResponseBody
     public String getGroup(@RequestParam("group") String group,
-                    @RequestParam("env") Byte env) {
+                           @RequestParam("env") Byte env) {
 
         String status = "fail";
         try {
@@ -378,33 +378,29 @@ public class ApiListController {
     }
 
     /**
-     * 插入新的oauth client
-     *
-     * @param oatuthclient
+     * 解析前端返回的字符为OpenOauthClients对象
+     * @param oauthClient
+     * @param openOauthClients
      * @return
      */
-    @RequestMapping(value="/addOauthClient",produces = "application/json;charset=utf-8")
-    @ResponseBody
-    public String addOauthClient(@RequestParam("oauthclient") String oatuthclient)
+    private String parseData(String oauthClient, OpenOauthClients openOauthClients)
     {
-        String status ="success";
-        try{
-            OpenOauthClients openOauthClients = new OpenOauthClients();
-            oatuthclient = URLDecoder.decode(oatuthclient, "UTF-8");
-            String[] splits = oatuthclient.split("&");
+        String status = "success";
+        try {
+            oauthClient = URLDecoder.decode(oauthClient, "UTF-8");
+            String[] splits = oauthClient.split("&");
             boolean b = false;
             //取出client_name
             for (String split : splits) {
                 String[] split1 = split.split("=");
-                if("client_name".equals(split1[0]) && split1.length==2)
-                {
+                if ("client_name".equals(split1[0]) && split1.length == 2) {
                     openOauthClients.setClientName(split1[1]);
-                    b= true;
+                    b = true;
                     break;
                 }
             }
             if (!b) {
-                return JSON.toJSONString("fail: client_name不能为空");
+                return "fail: client_name不能为空";
             }
             //取出redirect_uri
             b = false;
@@ -416,9 +412,8 @@ public class ApiListController {
                     break;
                 }
             }
-            if(!b)
-            {
-                return JSON.toJSONString("fail: redirect_uri不能为空");
+            if (!b) {
+                return "fail: redirect_uri不能为空";
             }
             //取出client_num
             b = false;
@@ -431,13 +426,12 @@ public class ApiListController {
                         openOauthClients.setClientNum(Byte.valueOf(split1[1]));
                         break;
                     } else {
-                        return JSON.toJSONString("fail: client_num必须为数字，且大于0");
+                        return "fail: client_num必须为数字，且大于0";
                     }
                 }
             }
-            if(!b)
-            {
-                return JSON.toJSONString("fail: client_num不能为空");
+            if (!b) {
+                return "fail: client_num不能为空";
             }
 
             //取出 grant_types
@@ -445,19 +439,16 @@ public class ApiListController {
             String grant_types = "";
             for (String split : splits) {
                 String[] split1 = split.split("=");
-                if("grant_types".equals(split1[0])&& (split1.length == 2))
-                {
+                if ("grant_types".equals(split1[0]) && (split1.length == 2)) {
                     b = true;
-                    if(!grant_types.equals(""))
-                    {
+                    if (!grant_types.equals("")) {
                         grant_types += " ";
                     }
                     grant_types += split1[1];
                 }
             }
-            if(!b)
-            {
-                return JSON.toJSONString("fail: grant_types不能为空");
+            if (!b) {
+                return "fail: grant_types不能为空";
             }
             openOauthClients.setGrantTypes(grant_types);
 
@@ -466,21 +457,43 @@ public class ApiListController {
             String default_scope = "";
             for (String split : splits) {
                 String[] split1 = split.split("=");
-                if("default_scope".equals(split1[0])&& (split1.length == 2))
-                {
+                if ("default_scope".equals(split1[0]) && (split1.length == 2)) {
                     b = true;
-                    if(!default_scope.equals(""))
-                    {
+                    if (!default_scope.equals("")) {
                         default_scope += " ";
                     }
                     default_scope += split1[1];
                 }
             }
-            if(!b)
-            {
-                return JSON.toJSONString("fail: default_scope不能为空");
+            if (!b) {
+                return "fail: default_scope不能为空";
             }
             openOauthClients.setDefaultScope(default_scope);
+        } catch (Exception e) {
+            logger.error("Oauth Client 解析数据出错",e);
+            status = "fail: 解析数据出错";
+        }
+
+        return status;
+    }
+    /**
+     * 插入新的oauth client
+     *
+     * @param oatuthclient
+     * @return
+     */
+    @RequestMapping(value="/addOauthClient",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String addOauthClient(@RequestParam("oauthclient") String oatuthclient)
+    {
+        String status ="success";
+        try{
+            OpenOauthClients openOauthClients = new OpenOauthClients();
+            String ret = parseData(oatuthclient, openOauthClients);
+            if(!"success".equals(ret))
+            {
+                return JSON.toJSONString(ret);
+            }
 
 //            OpenOauthClients openOauthClients = JSON.parseObject(oatuthclient, OpenOauthClients.class);
             //判断欲添加的oauth client是否已存在
@@ -523,9 +536,8 @@ public class ApiListController {
     {
         String status = "success";
         try {
-            oatuthclient = URLDecoder.decode(oatuthclient, "UTF-8");
-            String[] splits = oatuthclient.split("&");
-            List<OpenOauthClients> all = iOpenOauthClientsService.getAll();
+            String oauthclient = URLDecoder.decode(oatuthclient, "UTF-8");
+            String[] splits = oauthclient.split("&");
             boolean b = false;
             Integer id= null;
             //查找id
@@ -545,95 +557,12 @@ public class ApiListController {
                 return JSON.toJSONString("fail: 指定id的oauth client不存在");
             }
 
-            //取出client_name
-            for (String split : splits) {
-                String[] split1 = split.split("=");
-                if("client_name".equals(split1[0]) && split1.length==2)
-                {
-                    oauthClientsbyId.setClientName(split1[1]);
-                    b= true;
-                    break;
-                }
-            }
-            if (!b) {
-                return JSON.toJSONString("fail: client_name不能为空");
-            }
-            //取出redirect_uri
-            b = false;
-            for (String split : splits) {
-                String[] split1 = split.split("=");
-                if ("redirect_uri".equals(split1[0]) && split1.length == 2) {
-                    b = true;
-                    oauthClientsbyId.setRedirectUri(split1[1]);
-                    break;
-                }
-            }
-            if(!b)
-            {
-                return JSON.toJSONString("fail: redirect_uri不能为空");
-            }
-            //取出client_num
-            b = false;
-            for (String split : splits) {
-                String[] split1 = split.split("=");
-                if ("client_num".equals(split1[0]) && (split1.length == 2)) {
-                    if (org.apache.commons.lang.StringUtils.isNumeric(split1[1]) &&
-                            (!"0".equals(split1[1]))) {
-                        b = true;
-                        oauthClientsbyId.setClientNum(Byte.valueOf(split1[1]));
-                        break;
-                    } else {
-                        return JSON.toJSONString("fail: client_num必须为数字，且大于0");
-                    }
-                }
-            }
-            if(!b)
-            {
-                return JSON.toJSONString("fail: client_num不能为空");
-            }
 
-            //取出 grant_types
-            b = false;
-            String grant_types = "";
-            for (String split : splits) {
-                String[] split1 = split.split("=");
-                if("grant_types".equals(split1[0])&& (split1.length == 2))
-                {
-                    b = true;
-                    if(!grant_types.equals(""))
-                    {
-                        grant_types += " ";
-                    }
-                    grant_types += split1[1];
-                }
-            }
-            if(!b)
+            String ret = parseData(oatuthclient, oauthClientsbyId);
+            if(!"success".equals(ret))
             {
-                return JSON.toJSONString("fail: grant_types不能为空");
+                return JSON.toJSONString(ret);
             }
-            oauthClientsbyId.setGrantTypes(grant_types);
-
-            //取出 default_scope
-            b = false;
-            String default_scope = "";
-            for (String split : splits) {
-                String[] split1 = split.split("=");
-                if("default_scope".equals(split1[0])&& (split1.length == 2))
-                {
-                    b = true;
-                    if(!default_scope.equals(""))
-                    {
-                        default_scope += " ";
-                    }
-                    default_scope += split1[1];
-                }
-            }
-            if(!b)
-            {
-                return JSON.toJSONString("fail: default_scope不能为空");
-            }
-
-            oauthClientsbyId.setDefaultScope(default_scope);
             iOpenOauthClientsService.update(oauthClientsbyId);
 
         } catch (Exception e) {
@@ -660,6 +589,29 @@ public class ApiListController {
             results.put("status", "fail");
         }
 
+        return JSON.toJSONString(results);
+    }
+
+    /**
+     * 根据指定id查找OauthClient
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/getOauthClientById", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getOauthClientByid(Integer id) {
+        Map<String, Object> results = new HashMap<>();
+        String status = "success";
+        OpenOauthClients openOauthClientsById = iOpenOauthClientsService.getById(id);
+        if(openOauthClientsById == null)
+        {
+            logger.error("根据指定的id未查找到oauth Client");
+            status = "fail";
+        }
+        else {
+            results.put("oauthClient", openOauthClientsById);
+        }
+        results.put("status", status);
         return JSON.toJSONString(results);
     }
 
