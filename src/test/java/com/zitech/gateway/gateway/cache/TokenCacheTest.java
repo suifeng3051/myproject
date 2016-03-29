@@ -39,19 +39,19 @@ public class TokenCacheTest extends AbstractJunit {
 
     @Test
     public void testGetRedisCache() {
-        System.out.println(JSON.toJSONString(redis.keys("88888888_*")));
+        System.out.println(JSON.toJSONString(redis.keys("open_oauth_access_token_*")));
     }
 
     @Test
     public void testDelRedisCache() {
-        redis.delKeys("88888888_*");
+        redis.delKeys("open_oauth_access_token_*");
         System.out.println(JSON.toJSONString(0));
     }
 
     @Test
     public void testSetRedisCache() {
         for(int i = 0; i < 20; i++) {
-            redis.set("88888888_"+i,"88888888_"+i);
+            redis.set("open_oauth_access_token_"+i,"open_oauth_access_token_"+i);
         }
     }
 
