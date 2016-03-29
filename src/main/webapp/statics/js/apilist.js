@@ -23,6 +23,8 @@ $(document).ready(function () {
             window.location.href = "instancedetail?env=" + env;
         } else if ("RecoverApi" == theme) {
             window.location.href = "recoverapi?env=" + env;
+        } else if ("OAuthClient" == theme) {
+             window.location.href = "oauthclient?env=" + env;
         }
 
     });
