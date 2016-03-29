@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@LocalCache("carmenApiMethodMapping")
+@LocalCache("api_mapping")
 public class CarmenApiMethodMappingCache implements ICacheClear {
 
     private static Logger logger = LoggerFactory.getLogger(CarmenApiMethodMappingCache.class);

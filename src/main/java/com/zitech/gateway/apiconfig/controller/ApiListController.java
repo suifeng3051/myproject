@@ -394,9 +394,11 @@ public class ApiListController {
             for (String split : splits) {
                 String[] split1 = split.split("=");
                 if ("client_name".equals(split1[0]) && split1.length == 2) {
-                    openOauthClients.setClientName(split1[1]);
-                    b = true;
-                    break;
+                    if(org.apache.commons.lang.StringUtils.isNotBlank(split1[1])) {
+                        openOauthClients.setClientName(split1[1]);
+                        b = true;
+                        break;
+                    }
                 }
             }
             if (!b) {
@@ -407,9 +409,11 @@ public class ApiListController {
             for (String split : splits) {
                 String[] split1 = split.split("=");
                 if ("redirect_uri".equals(split1[0]) && split1.length == 2) {
-                    b = true;
-                    openOauthClients.setRedirectUri(split1[1]);
-                    break;
+                    if(org.apache.commons.lang.StringUtils.isNotBlank(split1[1])) {
+                        b = true;
+                        openOauthClients.setRedirectUri(split1[1]);
+                        break;
+                    }
                 }
             }
             if (!b) {
@@ -440,11 +444,13 @@ public class ApiListController {
             for (String split : splits) {
                 String[] split1 = split.split("=");
                 if ("grant_types".equals(split1[0]) && (split1.length == 2)) {
-                    b = true;
-                    if (!grant_types.equals("")) {
-                        grant_types += " ";
+                    if(org.apache.commons.lang.StringUtils.isNotBlank(split1[1])) {
+                        b = true;
+                        if (!grant_types.equals("")) {
+                            grant_types += " ";
+                        }
+                        grant_types += split1[1];
                     }
-                    grant_types += split1[1];
                 }
             }
             if (!b) {
@@ -458,11 +464,13 @@ public class ApiListController {
             for (String split : splits) {
                 String[] split1 = split.split("=");
                 if ("default_scope".equals(split1[0]) && (split1.length == 2)) {
-                    b = true;
-                    if (!default_scope.equals("")) {
-                        default_scope += " ";
+                    if(org.apache.commons.lang.StringUtils.isNotBlank(split1[1])) {
+                        b = true;
+                        if (!default_scope.equals("")) {
+                            default_scope += " ";
+                        }
+                        default_scope += split1[1];
                     }
-                    default_scope += split1[1];
                 }
             }
             if (!b) {
