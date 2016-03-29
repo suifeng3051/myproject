@@ -41,9 +41,12 @@
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">Users</a></li>
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">Manual</a></li>
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">Cache</a></li>
+                        #if($!results.get("isAdmin"))
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">Instance</a></li>
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">RecoverApi</a></li>
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">Client</a></li>
+                        #end
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">safety</a></li>
                     </ul>
                 </li>
             </ul>

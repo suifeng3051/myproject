@@ -26,7 +26,9 @@ $(document).ready(function(){
             window.location.href = "oauthclient?env=" + env;
       }else if("safety"==theme){
          window.location.href = "updatepwd?env=" + env;
-      }
+      }else if("safety"==theme){
+        window.location.href = "updatepwd?env=" + env;
+        }
 
     });
 

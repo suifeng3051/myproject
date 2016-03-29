@@ -32,7 +32,9 @@ $(document).ready(function() {
             window.location.href = "release?env=" + env;
           } else if("Config" == theme) {
             window.location.href = "createapi?env=" + env + "&group=" + group;
-          } else if("LogView" == theme) {
+          } else if("Home" == theme) {
+             window.location.href = "apilist?env=" + env;
+          }  else if("LogView" == theme) {
             window.location.href = "pipelog?env=" + env;
           } else if("Users" == theme) {
             window.location.href = "user?env=" + env;
@@ -44,11 +46,33 @@ $(document).ready(function() {
             window.location.href = "instancedetail?env=" + env;
           } else if("RecoverApi" == theme) {
             window.location.href = "recoverapi?env=" + env;
-          }else if("safety"==theme){
+          } else if ("Client" == theme) {
+                window.location.href = "oauthclient?env=" + env;
+           }else if("safety"==theme){
              window.location.href = "updatepwd?env=" + env;
              }
         });
 });
+
+    // 跳转到帮助页面
+    $(".help").on("click", function(e){
+        e.preventDefault();
+        var env = getEnv();
+        location.href = "manual?env=" + env;
+    });
+
+    $(".console").on("click", function(e) {
+        e.preventDefault();
+        var content = $(this).html();
+        $("#consoleText").html(content);
+    });
+
+    // 之前激活按钮的绑定事件
+    $('a[data-toggle="tab"]').on('hide.bs.tab', function (e) {
+        var theme = $(e.target).html(); // 之前激活按钮显示的关键字
+        console.log(theme);
+    });
+
 
     function getEnv() {
         var env = $("#env").val();

@@ -22,7 +22,9 @@ $(document).ready(function(){
          window.location.href = "cachemanage?env=" + env;
       } else if("Instance" == theme) {
          window.location.href = "instancedetail?env=" + env;
-      }
+      }else if("safety"==theme){
+        window.location.href = "updatepwd?env=" + env;
+        }
 
     });
 });
