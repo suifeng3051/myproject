@@ -54,4 +54,11 @@ public class OpenResourceGroupService implements IOpenResourceGroupService {
     public List<OpenResourceGroup> getAll() {
         return resourceGroupDAO.getAll();
     }
+    @Override
+    public List<OpenResourceGroup> getGroupByNameAndAlias(String name, String alias){
+        OpenResourceGroup openResourceGroup = new OpenResourceGroup();
+        openResourceGroup.setName(name);
+        openResourceGroup.setAlias(alias);
+        return resourceGroupDAO.getGroupByNameAndAlias(openResourceGroup);
+    }
 }

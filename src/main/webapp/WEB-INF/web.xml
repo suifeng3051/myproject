@@ -74,6 +74,10 @@
         <filter-name>LoginFilter</filter-name>
         <url-pattern>updatepwd</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>oauthclient</url-pattern>
+    </filter-mapping>
 
     <!-- listener, substituted by DispatcherServlet -->
     <listener>

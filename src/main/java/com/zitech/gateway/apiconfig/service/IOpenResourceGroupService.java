@@ -27,4 +27,6 @@ public interface IOpenResourceGroupService {
 
     List<OpenResourceGroup> getAll();
 
+    List<OpenResourceGroup> getGroupByNameAndAlias(String name, String alias);
+
 }

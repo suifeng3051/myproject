@@ -122,6 +122,15 @@
       </if>
     </trim>
   </select>
+  <select id="getGroupByNameAndAlias" resultMap="BaseResultMap" parameterType="com.zitech.gateway.apiconfig.model.OpenResourceGroup">
+    select
+      <include refid="Base_Column_List"/>
+    from
+      t_resource_group
+    where
+      `name`=#{name,jdbcType=VARCHAR} or alias=#{alias, jdbcType=VARCHAR}
+
+  </select>
 
   <sql id="Base_Column_Cond">
     <trim prefix="WHERE" prefixOverrides="AND | OR">

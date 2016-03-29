@@ -37,6 +37,7 @@
                 <li role="presentation" class="active"><a href="#" role="tab" data-toggle="tab" class="titles">Home</a></li>
                 <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Config</a></li>
                 <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Release</a></li>
+
                 <!--<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Monitor</a></li>-->
                 <li role="presentation" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="tab" aria-haspopup="true" aria-expanded="false"><span id="consoleText">Console</span> <span class="caret"></span></a>
@@ -49,6 +50,7 @@
                             <li><a href="#" role="tab" data-toggle="tab" class="titles console">LogView</a></li>
                             <li><a href="#" role="tab" data-toggle="tab" class="titles console">Users</a></li>
                             <li><a href="#" role="tab" data-toggle="tab" class="titles console">RecoverApi</a></li>
+                            <li><a href="#" role="tab" data-toggle="tab" class="titles console">Client</a></li>
                         #end
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">safety</a></li>
                     </ul>
@@ -57,26 +59,26 @@
             <form class="navbar-form navbar-left" id="env" style="margin: -38px 0 0 46%;">
                 <div class="form-group radio">
                     #if(2 == $!results.get('env'))
-                        <input class="envRadio" type="radio" name="env"  value="1" >
-                        <label><p class="text-primary">dev</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="2" checked>
-                        <label><p class="text-primary">test</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="3">
-                        <label><p class="text-primary">product</p></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="1" >
+                        <span class="text-primary">dev</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="2" checked>
+                        <span class="text-primary">test</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="3">
+                        <span class="text-primary">product</span></label>
                     #elseif(3 == $!results.get('env'))
-                        <input class="envRadio" type="radio" name="env"  value="1" >
-                        <label><p class="text-primary">dev</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="2">
-                        <label><p class="text-primary">test</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="3" checked>
-                        <label><p class="text-primary">product</p></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="1" >
+                        <span class="text-primary">dev</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="2">
+                        <span class="text-primary">test</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="3" checked>
+                        <span class="text-primary">product</span></label>
                     #else
-                        <input class="envRadio" type="radio" name="env"  value="1" checked>
-                        <label><p class="text-primary">dev</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="2">
-                        <label><p class="text-primary">test</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="3">
-                        <label><p class="text-primary">product</p></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="1" checked>
+                        <span class="text-primary">dev</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="2">
+                        <span class="text-primary">test</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="3">
+                        <span class="text-primary">product</span></label>
                     #end
 
                 </div>
@@ -117,10 +119,13 @@
             <div class="panel panel-primary" style="margin-top:60px;min-height:460px;">
                 <div class="panel-heading">API 列表
 
-                    <button type="button" class="btn btn-primary" id="newCreateTask" style="float:right;margin:-7px -15px 0 0; border:0px;">
+                    <button type="button" class="btn btn-primary" id="newCreateTask" style="float:right;margin:-5px 0 0 0; border:0px;">
                         <span class="glyphicon glyphicon-plus"></span>新建API
                     </button>
-                    <button type="button" class="btn btn-primary" id="testMonitorTask" style="float:right;margin:-7px -15px 0 0; border:0px; display:none;">
+                    <button type="button" class="btn btn-primary" id="addGroupBtn" style="float:right;margin:-5px 0 0 0; border:0px;">
+                        <span class="glyphicon glyphicon-plus"></span>新建组
+                    </button>
+                    <button type="button" class="btn btn-primary" id="testMonitorTask" style="float:right;margin:-5px 0 0 0; border:0px; display:none;">
                         testMonitor
                     </button>
                 </div>
@@ -140,7 +145,6 @@
                                         <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="启用" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id" flag="0" class="glyphicon glyphicon-ok-circle disableIcon"></span></a>
                                     #end
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="新增资源" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" groupname="$!apiElement.apiGroup" class="glyphicon glyphicon-plus-sign addResource"></span></a>
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="$!apiElement.id" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" groupname="$!apiElement.apiGroup" class="glyphicon glyphicon-wrench testApi"></span></a>
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-edit editIcon"></span></a>
                                 </li>
@@ -155,7 +159,6 @@
                                         <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="启用" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id" flag="0" class="glyphicon glyphicon-ok-circle disableIcon"></span></a>
                                     #end
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="新增资源" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" groupname="$!apiElement.apiGroup" class="glyphicon glyphicon-plus-sign addResource"></span></a>
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="$!apiElement.id" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" class="glyphicon glyphicon-wrench testApi"></span></a>
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-edit editIcon"></span></a>
                                 </li>
@@ -228,62 +231,126 @@
     </div>
 </div>
 
+
+<!-- add OAuth Client -->
+<div class="modal fade" id="myOAuthClientModal" tabindex="-1" role="dialog" aria-labelledby="myOAuthClientLabel" aria-hidden="true">
+    <div class="modal-dialog" style="margin-top:90px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myOAuthClientLabel">添加OAuthClient</h4>
+            </div>
+            <div class="modal-body">
+
+                <form class="form-horizontal" id="apiClientIdConfig">
+
+                    <div id="clientIdTable">
+                        <div class="form-group">
+                            <label for="resourceAlias" class="col-sm-3 control-label">Client Name</label>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="client_name" /></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="resourceAlias" class="col-sm-3 control-label">Redirect Uri</label>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="redirect_uri" /></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Grant Types</label>
+                            <div class="col-sm-9 checkbox">
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="authorization_code" />authorization_code</label>
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="refresh_token" />refresh_token</label>
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="implicit" />implicit</label>
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="client_credentials" />client_credentials</label>
+                                <label class="col-sm-4"><input type="checkbox" name="grant_types" value="password" />password</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="resourceAlias" class="col-sm-3 control-label">Client Num</label>
+                            <div class="col-sm-9"><input type="text" class="form-control" name="client_num" /></div>
+                        </div>
+                        <div class="form-group" >
+                            <label for="resourceAlias" class="col-sm-3 control-label">Default Scope</label>
+                            <div id="defaultScopeArea" class="col-sm-9 checkbox">
+                                <!--<label><input type="checkbox" name="default_scope" value="" />  </label>-->
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+                <button type="button" class="btn btn-primary" id="addRowFrequency" style="display:none;margin-left:88%;">新增行</button>
+                <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="clientIdInfo2"></div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" id="checkOAuthBtn" style="float:left;">检查？</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="sureAddOAuthClient">确定</button>
+        </div>
+        </div>
+    </div>
+</div>
+
 <!--  modify Resource Modal -->
 <div class="modal fade" id="myResourceModal" tabindex="-1" role="dialog" aria-labelledby="myResourceLabel" aria-hidden="true">
     <div class="modal-dialog" style="margin-top:90px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myResourceLabel">配置资源表</h4>
+                <h4 class="modal-title" id="myResourceLabel">添加组</h4>
             </div>
             <div class="modal-body">
-                <ul class="nav nav-tabs" id="resourceConfigTab">
-                    <li role="presentation" ><a href="#" data-toggle="resourceTab">ResourceGroup</a></li>
+                <!--<ul class="nav nav-tabs" id="resourceConfigTab">
+                    <li role="presentation" ><a href="#" data-toggle="resourceTab" id="resourceGroupTabBtn">ResourceGroup</a></li>
                     <li role="presentation" class="active"><a href="#" data-toggle="resourceTab">Resource</a></li>
                     <li role="presentation" ><a href="#" data-toggle="resourceTab">OAuth Client</a></li>
-                </ul>
+                </ul>-->
                 <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;overflow:auto;height:100px;" id="apiResourceInfo"></div>
+
+
                 <!-- resource表 -->
-                <form class="form-horizontal" id="apiResourceConfig">
-                    <div id="resourceTable">
-                        <div class="form-group">
-                            <label for="uri" class="col-sm-2 control-label">uri</label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" name="uri" id="uri" placeholder="uri" value="">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="description" class="col-sm-2 control-label">description</label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control required" id="description" name="description" placeholder="description" value="">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="groupAlias" class="col-sm-2 control-label">groupAlias</label>
-                            <div class="col-sm-6">
-                                <!--<input type="text" class="form-control required"  name="groupAlias" id="groupAlias" placeholder="groupAlias" value="">-->
-                                <select style="min-width:50px;max-height:35px;" id="groupAlias"  name="groupAlias" class="form-control" >
+                <!--<form class="form-horizontal" id="apiResourceConfig">-->
+                    <!--<div id="resourceTable">-->
+                        <!--<div class="form-group">-->
+                            <!--<label for="uri" class="col-sm-2 control-label">uri</label>-->
+                            <!--<div class="col-sm-6">-->
+                                <!--<input type="text" class="form-control" name="uri" id="uri" placeholder="uri" value="">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <!--<label for="description" class="col-sm-2 control-label">description</label>-->
+                            <!--<div class="col-sm-6">-->
+                                <!--<input type="text" class="form-control required" id="description" name="description" placeholder="description" value="">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <!--<label for="groupAlias" class="col-sm-2 control-label">groupAlias</label>-->
+                            <!--<div class="col-sm-6">-->
+                <!--<input type="text" class="form-control required"  name="groupAlias" id="groupAlias" placeholder="groupAlias" value="">-->
+                                <!--<select style="min-width:50px;max-height:35px;" id="groupAlias"  name="groupAlias" class="form-control" >-->
                                     <!--<option value="1" selected>普通接口</option>-->
                                     <!--<option value="2" >高级接口</option><option value="3" >超级接口</option>-->
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="resourceVersion" class="col-sm-2 control-label">version</label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control required" name="resourceVersion" id="resourceVersion" placeholder="version" value="">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="apiId" class="col-sm-2 control-label">apiId</label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control required" name="apiId" id="apiId" placeholder="apiId" value=""><input type="hidden" id="resourceId" name="resourceId" value="0">
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                                <!--</select>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <!--<label for="resourceVersion" class="col-sm-2 control-label">version</label>-->
+                            <!--<div class="col-sm-6">-->
+                                <!--<input type="text" class="form-control required" name="resourceVersion" id="resourceVersion" placeholder="version" value="">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <!--<label for="apiId" class="col-sm-2 control-label">apiId</label>-->
+                            <!--<div class="col-sm-6">-->
+                                <!--<input type="text" class="form-control required" name="apiId" id="apiId" placeholder="apiId" value=""><input type="hidden" id="resourceId" name="resourceId" value="0">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</form>-->
+
+
+
+
                 <!-- resource group table -->
-                <form class="form-horizontal" id="apiResourceGroupConfig" style="display:none;">
+                <form class="form-horizontal" id="apiResourceGroupConfig" >
                     <div id="resourceGroupTable">
                         <div class="form-group">
                             <label for="resourceGroupName" class="col-sm-3 control-label">资源组名字</label>
@@ -311,32 +378,33 @@
                 </form>
 
                 <!-- client id table -->
-                <form class="form-horizontal" id="apiClientIdConfig" style="display:none;">
+                <!--<form class="form-horizontal" id="apiClientIdConfig" style="display:none;">-->
 
-                    <div id="clientIdTable">
-                        <table id="clientIdParam" class="table table-striped table-bordered" >
-                            <thead>
-                            <tr>
-                                <th>Value</th>
-                                <th>Type</th>
-                                <th>ClientId</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody id="clientIdParamBody">
+                    <!--<div id="clientIdTable">-->
+                        <!--<table id="clientIdParam" class="table table-striped table-bordered" >-->
+                            <!--<thead>-->
+                            <!--<tr>-->
+                                <!--<th>Value</th>-->
+                                <!--<th>Type</th>-->
+                                <!--<th>ClientId</th>-->
+                                <!--<th>操作</th>-->
+                            <!--</tr>-->
+                            <!--</thead>-->
+                            <!--<tbody id="clientIdParamBody">-->
 
-                            </tbody>
-                        </table>
-                    </div>
-                </form>
-                <button type="button" class="btn btn-primary" id="addRowFrequency" style="display:none;margin-left:88%;">新增行</button>
-                <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="clientIdInfo"></div>
+                            <!--</tbody>-->
+                        <!--</table>-->
+                    <!--</div>-->
+                <!--</form>-->
+                <!--<button type="button" class="btn btn-primary" id="addRowFrequency" style="display:none;margin-left:88%;">新增行</button>-->
+                <!--<div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="clientIdInfo"></div>-->
             </div>
             <div class="alert alert-danger" role="alert" style="margin-bottom: -1px;display:none;" id="apiResourceInfo1"></div>
             <div class="modal-footer">
 
+                <button type="button" class="btn btn-warning" id="checkGroupBtn" style="float:left;">检查？</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" flag="resource" id="sureModifyResource">确定</button>
+                <button type="button" class="btn btn-primary" flag="resourceGroup" id="sureModifyResource">确定</button>
 
             </div>
         </div>

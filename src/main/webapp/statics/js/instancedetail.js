@@ -4,6 +4,7 @@ $(document).ready(function(){
       var theme = $(e.target).html(); // 当前激活按钮显示的关键字
       var env = $("#env").val();
       var group = $("#currentGroup").val();
+
       if("Monitor" == theme){
          window.location.href = "monitor?env=" + env;
       } else if("Config" == theme) {
@@ -24,6 +25,8 @@ $(document).ready(function(){
          window.location.href = "instancedetail?env=" + env;
       } else if("RecoverApi" == theme) {
         window.location.href = "recoverapi?env=" + env;
+      } else if("Client" == theme) {
+            window.location.href = "oauthclient?env=" + env;
       }
 
     });

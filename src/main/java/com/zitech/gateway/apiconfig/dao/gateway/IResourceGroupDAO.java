@@ -13,4 +13,5 @@ public interface IResourceGroupDAO extends IEntityDAO<OpenResourceGroup, OpenRes
 
     List<OpenResourceGroup> getAll();
 
+    List<OpenResourceGroup> getGroupByNameAndAlias(OpenResourceGroup openResourceGroup);
 }

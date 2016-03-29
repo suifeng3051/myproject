@@ -1,10 +1,14 @@
 package com.zitech.gateway.gateway.services;
 
-import com.zitech.gateway.apiconfig.model.OpenResource;
+import com.zitech.gateway.AppConfig;
+import com.zitech.gateway.apiconfig.model.CarmenApi;
+//import com.zitech.gateway.apiconfig.model.OpenResource;
 import com.zitech.gateway.gateway.Constants;
+import com.zitech.gateway.gateway.cache.CarmenApiCache;
 import com.zitech.gateway.gateway.cache.OpenOauthClientsCache;
-import com.zitech.gateway.gateway.cache.OpenResourceCache;
+//import com.zitech.gateway.gateway.cache.OpenResourceCache;
 import com.zitech.gateway.gateway.exception.SignValidateException;
+import com.zitech.gateway.gateway.exception.TokenValidateException;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.oauth.model.OpenOauthClients;
 import com.zitech.gateway.oauth.oauthex.OAuthConstants;
@@ -28,8 +32,14 @@ public class SignService {
     @Autowired
     private OpenOauthClientsCache clientsCache;
 
+//    @Autowired
+//    private OpenResourceCache resourceCache;
+
     @Autowired
-    private OpenResourceCache resourceCache;
+    private CarmenApiCache carmenApiCache;
+
+    @Autowired
+    private AppConfig appConfig;
 
     /**
      * validate sign, please see http://gateway.zitech.com/doc/api/protocol
@@ -108,10 +118,17 @@ public class SignService {
         /**
          * check api resource
          */
-        OpenResource openResource = resourceCache.get(event.getId(), resource);
-        if (openResource == null) {
-            throw new SignValidateException(OAuthConstants.OAuthResponse.INVALID_RESOURCE,
-                    OAuthConstants.OAuthDescription.INVALID_RESOURCE);
+//        OpenResource openResource = resourceCache.get(event.getId(), resource);
+//        if (openResource == null) {
+//            throw new SignValidateException(OAuthConstants.OAuthResponse.INVALID_RESOURCE,
+//                    OAuthConstants.OAuthDescription.INVALID_RESOURCE);
+//        }
+        CarmenApi carmenApi = carmenApiCache.get(event.getId(), event.getNamespace(), event.getMethod(),
+                event.getVersion(), appConfig.env);
+        //OpenResource openResource = resourceCache.get(event.getId(), resource);
+        if (carmenApi == null) {
+            throw new SignValidateException(OAuthConstants.OAuthResponse.NO_API,
+                    OAuthConstants.OAuthDescription.INVALID_API);
         }
 
         /**
@@ -119,7 +136,7 @@ public class SignService {
          */
         Set<String> scopes = OAuthUtils.decodeScopes(clients.getDefaultScope());
         for (String scope : scopes) {
-            if (scope.equals("all") || scope.equals(openResource.getGroupAlias())) {
+            if (scope.equals("all") || scope.equals(carmenApi.getApiGroup())) {
                 return clients;
             }
         }

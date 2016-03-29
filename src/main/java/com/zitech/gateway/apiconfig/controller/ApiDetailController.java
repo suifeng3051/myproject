@@ -73,6 +73,11 @@ public class ApiDetailController {
         return new ModelAndView("apidetail", "results", hashMap);
     }
 
+    @RequestMapping("/oauthclient")
+    public ModelAndView oauthclient() {
+        return new ModelAndView("oauthclient");
+    }
+
     public Boolean isAdministrator(String userName) {
 
         try {

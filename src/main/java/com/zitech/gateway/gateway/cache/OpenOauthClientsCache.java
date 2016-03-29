@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@LocalCache("openOauthClients")
+@LocalCache("client")
 public class OpenOauthClientsCache implements ICacheClear {
 
     private static Logger logger = LoggerFactory.getLogger(OpenOauthClientsCache.class);

@@ -2,8 +2,8 @@ package com.zitech.gateway.oauth.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.zitech.gateway.AppConfig;
-import com.zitech.gateway.apiconfig.model.OpenResource;
-import com.zitech.gateway.apiconfig.service.IOpenResourceService;
+//import com.zitech.gateway.apiconfig.model.OpenResource;
+//import com.zitech.gateway.apiconfig.service.IOpenResourceService;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.oauth.Constants;
 import com.zitech.gateway.oauth.LoginType;
@@ -52,8 +52,8 @@ public class OAuthService implements IOAuthService {
     @Autowired
     private IOpenOauthRefreshTokensService openOauthRefreshTokensService;
 
-    @Autowired
-    private IOpenResourceService openResourceService;
+//    @Autowired
+//    private IOpenResourceService openResourceService;
 
     @Autowired
     private AppConfig appConfig;
@@ -395,9 +395,9 @@ public class OAuthService implements IOAuthService {
      * @param uri
      * @return
      */
-    public OpenResource getOpenResourceByUri(String uri) {
-        return openResourceService.getByUri(uri);
-    }
+//    public OpenResource getOpenResourceByUri(String uri) {
+//        return openResourceService.getByUri(uri);
+//    }
 
     /**
      * delete access token by token string

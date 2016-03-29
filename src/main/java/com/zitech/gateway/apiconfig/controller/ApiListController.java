@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.lang.model.util.ElementScanner6;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
@@ -49,8 +50,8 @@ public class ApiListController {
     ICarmenFreqConfigService iCarmenFreqConfigService;
     @Resource
     ICarmenApiParamService iCarmenApiParamService;
-    @Resource
-    IOpenResourceService iOpenResourceService;
+    //    @Resource
+//    IOpenResourceService iOpenResourceService;
     @Resource
     IOpenResourceGroupService iOpenResourceGroupService;
     @Resource
@@ -151,7 +152,7 @@ public class ApiListController {
     @RequestMapping(value = "/getapibygroup", produces="application/json;charset=utf-8")
     @ResponseBody
     public String getGroup(@RequestParam("group") String group,
-                    @RequestParam("env") Byte env) {
+                           @RequestParam("env") Byte env) {
 
         String status = "fail";
         try {
@@ -336,6 +337,337 @@ public class ApiListController {
         return status;
     }
 
+    @RequestMapping(value="/checkOauthClient",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String checkOauthClient(@RequestParam("name") String name)
+    {
+        String status ="success";
+        try{
+            name = URLDecoder.decode(name, "UTF-8");
+            //判断欲添加的oauth client是否已存在
+            List<OpenOauthClients> all = iOpenOauthClientsService.getAll();
+            for (OpenOauthClients oauthClient : all) {
+                if(oauthClient.getClientName().equals(name))
+                {
+                    status = "fail: 该名称的oauth client已经存在";
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            status = "fail";
+        }
+        return JSON.toJSONString(status);
+    }
+
+    @RequestMapping(value="/getGroupAlias",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getGroupAlias()
+    {
+        Map<String, Object> results = new HashMap<>();
+        String status = "success";
+        try {
+            List<OpenResourceGroup> all = iOpenResourceGroupService.getAll();
+            ArrayList<String> aliases = new ArrayList<>();
+            for (OpenResourceGroup alias : all) {
+                aliases.add(alias.getAlias());
+            }
+            results.put("aliases", aliases);
+        } catch (Exception e) {
+            status = "fail";
+        }
+
+        results.put("status", status);
+        return JSON.toJSONString(results);
+    }
+
+    /**
+     * 解析前端返回的字符为OpenOauthClients对象
+     * @param oauthClient
+     * @param openOauthClients
+     * @return
+     */
+    private String parseData(String oauthClient, OpenOauthClients openOauthClients)
+    {
+        String status = "success";
+        try {
+            oauthClient = URLDecoder.decode(oauthClient, "UTF-8");
+            String[] splits = oauthClient.split("&");
+            boolean b = false;
+            //取出client_name
+            for (String split : splits) {
+                String[] split1 = split.split("=");
+                if ("client_name".equals(split1[0]) && split1.length == 2) {
+                    if(org.apache.commons.lang.StringUtils.isNotBlank(split1[1])) {
+                        openOauthClients.setClientName(split1[1]);
+                        b = true;
+                        break;
+                    }
+                }
+            }
+            if (!b) {
+                return "fail: client_name不能为空";
+            }
+            //取出redirect_uri
+            b = false;
+            for (String split : splits) {
+                String[] split1 = split.split("=");
+                if ("redirect_uri".equals(split1[0]) && split1.length == 2) {
+                    if(org.apache.commons.lang.StringUtils.isNotBlank(split1[1])) {
+                        b = true;
+                        openOauthClients.setRedirectUri(split1[1]);
+                        break;
+                    }
+                }
+            }
+            if (!b) {
+                return "fail: redirect_uri不能为空";
+            }
+            //取出client_num
+            b = false;
+            for (String split : splits) {
+                String[] split1 = split.split("=");
+                if ("client_num".equals(split1[0]) && (split1.length == 2)) {
+                    if (org.apache.commons.lang.StringUtils.isNumeric(split1[1]) &&
+                            (!"0".equals(split1[1]))) {
+                        b = true;
+                        openOauthClients.setClientNum(Byte.valueOf(split1[1]));
+                        break;
+                    } else {
+                        return "fail: client_num必须为数字，且大于0";
+                    }
+                }
+            }
+            if (!b) {
+                return "fail: client_num不能为空";
+            }
+
+            //取出 grant_types
+            b = false;
+            String grant_types = "";
+            for (String split : splits) {
+                String[] split1 = split.split("=");
+                if ("grant_types".equals(split1[0]) && (split1.length == 2)) {
+                    if(org.apache.commons.lang.StringUtils.isNotBlank(split1[1])) {
+                        b = true;
+                        if (!grant_types.equals("")) {
+                            grant_types += " ";
+                        }
+                        grant_types += split1[1];
+                    }
+                }
+            }
+            if (!b) {
+                return "fail: grant_types不能为空";
+            }
+            openOauthClients.setGrantTypes(grant_types);
+
+            //取出 default_scope
+            b = false;
+            String default_scope = "";
+            for (String split : splits) {
+                String[] split1 = split.split("=");
+                if ("default_scope".equals(split1[0]) && (split1.length == 2)) {
+                    if(org.apache.commons.lang.StringUtils.isNotBlank(split1[1])) {
+                        b = true;
+                        if (!default_scope.equals("")) {
+                            default_scope += " ";
+                        }
+                        default_scope += split1[1];
+                    }
+                }
+            }
+            if (!b) {
+                return "fail: default_scope不能为空";
+            }
+            openOauthClients.setDefaultScope(default_scope);
+        } catch (Exception e) {
+            logger.error("Oauth Client 解析数据出错",e);
+            status = "fail: 解析数据出错";
+        }
+
+        return status;
+    }
+    /**
+     * 插入新的oauth client
+     *
+     * @param oatuthclient
+     * @return
+     */
+    @RequestMapping(value="/addOauthClient",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String addOauthClient(@RequestParam("oauthclient") String oatuthclient)
+    {
+        String status ="success";
+        try{
+            OpenOauthClients openOauthClients = new OpenOauthClients();
+            String ret = parseData(oatuthclient, openOauthClients);
+            if(!"success".equals(ret))
+            {
+                return JSON.toJSONString(ret);
+            }
+
+//            OpenOauthClients openOauthClients = JSON.parseObject(oatuthclient, OpenOauthClients.class);
+            //判断欲添加的oauth client是否已存在
+            List<OpenOauthClients> all = iOpenOauthClientsService.getAll();
+            for (OpenOauthClients oauthClient : all) {
+                if(oauthClient.getClientName().contains(openOauthClients.getClientName()))
+                {
+                    status = "fail: 该名称的oauth client已经存在";
+                    return JSON.toJSONString(status);
+                }
+            }
+
+            //添加ID
+            //获取到最大的id
+            Long value = 0L;
+            for (OpenOauthClients oauthClient : all) {
+                Long aLong = Long.valueOf(oauthClient.getClientId());
+                if(aLong > value)
+                {
+                    value=aLong;
+                }
+            }
+            openOauthClients.setClientId((value+1)+"");
+
+            //添加client_secret
+            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            openOauthClients.setClientSecret(uuid);
+
+            iOpenOauthClientsService.save(openOauthClients);
+        }
+        catch (Exception e)
+        {
+            status = "fail";
+        }
+        return JSON.toJSONString(status);
+    }
+    @RequestMapping(value="/updateOauthClient", produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String updateOauthClient(@RequestParam("oauthclient") String oatuthclient)
+    {
+        String status = "success";
+        try {
+            String oauthclient = URLDecoder.decode(oatuthclient, "UTF-8");
+            String[] splits = oauthclient.split("&");
+            boolean b = false;
+            Integer id= null;
+            //查找id
+            for (String split : splits) {
+                String[] split1 = split.split("=");
+                if("id".equals(split1[0])&& (split1.length == 2))
+                {
+                    b = true;
+                    id = Integer.valueOf(split1[1]);
+                }
+            }
+            if (!b) {
+                return JSON.toJSONString("fail: id不能为空");
+            }
+            OpenOauthClients oauthClientsbyId = iOpenOauthClientsService.getById(id);
+            if (oauthClientsbyId == null) {
+                return JSON.toJSONString("fail: 指定id的oauth client不存在");
+            }
+
+
+            String ret = parseData(oatuthclient, oauthClientsbyId);
+            if(!"success".equals(ret))
+            {
+                return JSON.toJSONString(ret);
+            }
+            iOpenOauthClientsService.update(oauthClientsbyId);
+
+        } catch (Exception e) {
+            status = "fail";
+        }
+
+
+        return JSON.toJSONString(status);
+    }
+
+
+    @RequestMapping(value="/getOauthClient", produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String getOauthClient()
+    {
+        Map<String, Object> results = new HashMap<>();
+        try {
+            List<OpenOauthClients> all = iOpenOauthClientsService.getAll();
+            results.put("allOauthClient", all);
+            results.put("size", all.size());
+            results.put("status", "success");
+        } catch (Exception e) {
+            logger.error("查询Oauth Client发生异常",e);
+            results.put("status", "fail");
+        }
+
+        return JSON.toJSONString(results);
+    }
+
+    /**
+     * 根据指定id查找OauthClient
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/getOauthClientById", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getOauthClientByid(Integer id) {
+        Map<String, Object> results = new HashMap<>();
+        String status = "success";
+        OpenOauthClients openOauthClientsById = iOpenOauthClientsService.getById(id);
+        if(openOauthClientsById == null)
+        {
+            logger.error("根据指定的id未查找到oauth Client");
+            status = "fail";
+        }
+        else {
+            results.put("oauthClient", openOauthClientsById);
+        }
+        results.put("status", status);
+        return JSON.toJSONString(results);
+    }
+
+    /**
+     * 根据id删除oauth client
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/deleteOauthClient", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String deleteOauthClient(Integer id) {
+        String status = "success";
+        try {
+            iOpenOauthClientsService.deleteById(id);
+        } catch (Exception e) {
+            status = "fail";
+            logger.error("删除Oauth Client出错", e);
+        }
+        return JSON.toJSONString(status);
+    }
+
+
+    /**
+     * 检测要增加的组的名称和别名是否已经被占用
+     * @param name  组名
+     * @param alias 组名别名
+     * @return 返回查询到的条数的字符串
+     */
+    @RequestMapping(value = "/checkGroup", produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String checkGroup(@RequestParam("name") String name,
+                             @RequestParam("alias") String alias)
+    {
+        Map<String, Object> results = new HashMap<>();
+        List<OpenResourceGroup> groupByNameAndAlias = iOpenResourceGroupService.getGroupByNameAndAlias(name, alias);
+        if (groupByNameAndAlias == null) {
+            results.put("count", "0");
+            return JSON.toJSONString(results);
+        }
+        results.put("count", groupByNameAndAlias.size() + "");
+        return JSON.toJSONString(results);
+    }
+
+
     /**
      * 查询resource表的内容
      * @param uri namespace和name的组合，以点号连接
@@ -348,24 +680,24 @@ public class ApiListController {
                                 @RequestParam("version") String version,
                                 @RequestParam("apiId") String apiId) {
         String status = "fail";
-        try {
-            OpenResource openResource = iOpenResourceService.getByUriVersion(uri, version);
-            List<OpenResourceGroup> openResourceGroupList = iOpenResourceGroupService.getAll();
-            List<OpenOauthClients> openOauthClientses = iOpenOauthClientsService.getAll();
-            List<CarmenFreqConfig> listValueByApi = iCarmenFreqConfigService.getListValueByApi(Long.valueOf(apiId));
-
-            if(null != openResource) {
-                Map<String, Object> results = new HashMap<>();
-                results.put("openResource", openResource);
-                results.put("groupAlias", openResourceGroupList);
-                results.put("openOauthClientses", openOauthClientses);
-                results.put("listValueByApi", listValueByApi);
-                String result = JSON.toJSONString(results);
-                return result;
-            }
-        } catch (Exception e) {
-            logger.error("fail to get openResource by uri&version or convert object to json.", e);
-        }
+//        try {
+//            OpenResource openResource = iOpenResourceService.getByUriVersion(uri, version);
+//            List<OpenResourceGroup> openResourceGroupList = iOpenResourceGroupService.getAll();
+//            List<OpenOauthClients> openOauthClientses = iOpenOauthClientsService.getAll();
+//            List<CarmenFreqConfig> listValueByApi = iCarmenFreqConfigService.getListValueByApi(Long.valueOf(apiId));
+//
+//            if(null != openResource) {
+//                Map<String, Object> results = new HashMap<>();
+//                results.put("openResource", openResource);
+//                results.put("groupAlias", openResourceGroupList);
+//                results.put("openOauthClientses", openOauthClientses);
+//                results.put("listValueByApi", listValueByApi);
+//                String result = JSON.toJSONString(results);
+//                return result;
+//            }
+//        } catch (Exception e) {
+//            logger.error("fail to get openResource by uri&version or convert object to json.", e);
+//        }
 
         try {
             List<OpenResourceGroup> openResourceGroupList = iOpenResourceGroupService.getAll();
@@ -421,48 +753,7 @@ public class ApiListController {
         return status;
     }
 
-    /**
-     * 更新资源表
-     * @param update 待更新对象
-     * @return 成功返回success，失败返回fail
-     */
-    @RequestMapping(value = "/updateresource", produces="application/json;charset=utf-8")
-    @ResponseBody
-    public String updateResource(@RequestParam("update") String update) {
-        String status = "fail";
-        try {
-            update = URLDecoder.decode(update, "UTF-8");
-            OpenResource openResource = JSON.parseObject(update, OpenResource.class);
 
-            openResource.setIsInner((byte) 0);
-            openResource.setIsWrite((byte) 0);
-            openResource.setUpdateTime(new Date());
-
-            OpenResource openResourceTemp = iOpenResourceService.getByUriVersion(openResource.getUri(), openResource.getVersion());
-            if(openResourceTemp == null) {
-                openResource.setCreateTime(new Date());
-                iOpenResourceService.insert(openResource);
-            } else {
-                if (0 != openResource.getId()) {
-                    iOpenResourceService.update(openResource);
-                } else {
-                    openResource.setId(openResourceTemp.getId());
-                    iOpenResourceService.update(openResource);
-                }
-            }
-            status = "success";
-        } catch (Exception e) {
-            status += e.toString();
-            logger.error("fail to update resource.", e);
-        }
-
-        try {
-            status = JSON.toJSONString(status);
-        } catch (Exception e) {
-            logger.warn("fail to convert json", e);
-        }
-        return status;
-    }
 
     /**
      * 在open_resource_group表中插入数据
@@ -477,6 +768,11 @@ public class ApiListController {
         try {
             insert = URLDecoder.decode(insert, "UTF-8");
             OpenResourceGroup openResourceGroup = JSON.parseObject(insert, OpenResourceGroup.class);
+            List<OpenResourceGroup> groupByNameAndAlias = iOpenResourceGroupService.getGroupByNameAndAlias(openResourceGroup.getName(), openResourceGroup.getAlias());
+            if(groupByNameAndAlias==null ||groupByNameAndAlias.size()!=0)
+            {
+                return JSON.toJSONString(status+":接口已经存在");
+            }
             openResourceGroup.setCreateTime(new Date());
             iOpenResourceGroupService.insert(openResourceGroup);
             status = "success";
