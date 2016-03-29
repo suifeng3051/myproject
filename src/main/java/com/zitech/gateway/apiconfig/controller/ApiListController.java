@@ -392,46 +392,62 @@ public class ApiListController {
             OpenOauthClients openOauthClients = new OpenOauthClients();
             oatuthclient = URLDecoder.decode(oatuthclient, "UTF-8");
             String[] splits = oatuthclient.split("&");
+            boolean b = false;
             //取出client_name
             for (String split : splits) {
                 String[] split1 = split.split("=");
-                if("client_name".equals(split1[0]))
+                if("client_name".equals(split1[0]) && split1.length==2)
                 {
                     openOauthClients.setClientName(split1[1]);
+                    b= true;
                     break;
                 }
             }
+            if (!b) {
+                return JSON.toJSONString("fail: client_name不能为空");
+            }
             //取出redirect_uri
+            b = false;
             for (String split : splits) {
                 String[] split1 = split.split("=");
-                if("redirect_uri".equals(split1[0]))
-                {
+                if ("redirect_uri".equals(split1[0]) && split1.length == 2) {
+                    b = true;
                     openOauthClients.setRedirectUri(split1[1]);
                     break;
                 }
             }
+            if(!b)
+            {
+                return JSON.toJSONString("fail: redirect_uri不能为空");
+            }
             //取出client_num
+            b = false;
             for (String split : splits) {
                 String[] split1 = split.split("=");
-                if("client_num".equals(split1[0]))
-                {
-                    if(org.apache.commons.lang.StringUtils.isNumeric(split1[1])&&
+                if ("client_num".equals(split1[0]) && (split1.length == 2)) {
+                    if (org.apache.commons.lang.StringUtils.isNumeric(split1[1]) &&
                             (!"0".equals(split1[1]))) {
+                        b = true;
                         openOauthClients.setClientNum(Byte.valueOf(split1[1]));
                         break;
-                    }
-                    else {
+                    } else {
                         return JSON.toJSONString("fail: client_num必须为数字，且大于0");
                     }
                 }
             }
+            if(!b)
+            {
+                return JSON.toJSONString("fail: client_num不能为空");
+            }
 
             //取出 grant_types
+            b = false;
             String grant_types = "";
             for (String split : splits) {
                 String[] split1 = split.split("=");
-                if("grant_types".equals(split1[0]))
+                if("grant_types".equals(split1[0])&& (split1.length == 2))
                 {
+                    b = true;
                     if(!grant_types.equals(""))
                     {
                         grant_types += " ";
@@ -439,19 +455,30 @@ public class ApiListController {
                     grant_types += split1[1];
                 }
             }
+            if(!b)
+            {
+                return JSON.toJSONString("fail: grant_types不能为空");
+            }
             openOauthClients.setGrantTypes(grant_types);
+
             //取出 default_scope
+            b = false;
             String default_scope = "";
             for (String split : splits) {
                 String[] split1 = split.split("=");
-                if("default_scope".equals(split1[0]))
+                if("default_scope".equals(split1[0])&& (split1.length == 2))
                 {
+                    b = true;
                     if(!default_scope.equals(""))
                     {
                         default_scope += " ";
                     }
                     default_scope += split1[1];
                 }
+            }
+            if(!b)
+            {
+                return JSON.toJSONString("fail: default_scope不能为空");
             }
             openOauthClients.setDefaultScope(default_scope);
 
@@ -490,6 +517,133 @@ public class ApiListController {
         }
         return JSON.toJSONString(status);
     }
+    @RequestMapping(value="/updateOauthClient", produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String updateOauthClient(@RequestParam("oauthclient") String oatuthclient)
+    {
+        String status = "success";
+        try {
+            oatuthclient = URLDecoder.decode(oatuthclient, "UTF-8");
+            String[] splits = oatuthclient.split("&");
+            List<OpenOauthClients> all = iOpenOauthClientsService.getAll();
+            boolean b = false;
+            Integer id= null;
+            //查找id
+            for (String split : splits) {
+                String[] split1 = split.split("=");
+                if("id".equals(split1[0])&& (split1.length == 2))
+                {
+                    b = true;
+                    id = Integer.valueOf(split1[1]);
+                }
+            }
+            if (!b) {
+                return JSON.toJSONString("fail: id不能为空");
+            }
+            OpenOauthClients oauthClientsbyId = iOpenOauthClientsService.getById(id);
+            if (oauthClientsbyId == null) {
+                return JSON.toJSONString("fail: 指定id的oauth client不存在");
+            }
+
+            //取出client_name
+            for (String split : splits) {
+                String[] split1 = split.split("=");
+                if("client_name".equals(split1[0]) && split1.length==2)
+                {
+                    oauthClientsbyId.setClientName(split1[1]);
+                    b= true;
+                    break;
+                }
+            }
+            if (!b) {
+                return JSON.toJSONString("fail: client_name不能为空");
+            }
+            //取出redirect_uri
+            b = false;
+            for (String split : splits) {
+                String[] split1 = split.split("=");
+                if ("redirect_uri".equals(split1[0]) && split1.length == 2) {
+                    b = true;
+                    oauthClientsbyId.setRedirectUri(split1[1]);
+                    break;
+                }
+            }
+            if(!b)
+            {
+                return JSON.toJSONString("fail: redirect_uri不能为空");
+            }
+            //取出client_num
+            b = false;
+            for (String split : splits) {
+                String[] split1 = split.split("=");
+                if ("client_num".equals(split1[0]) && (split1.length == 2)) {
+                    if (org.apache.commons.lang.StringUtils.isNumeric(split1[1]) &&
+                            (!"0".equals(split1[1]))) {
+                        b = true;
+                        oauthClientsbyId.setClientNum(Byte.valueOf(split1[1]));
+                        break;
+                    } else {
+                        return JSON.toJSONString("fail: client_num必须为数字，且大于0");
+                    }
+                }
+            }
+            if(!b)
+            {
+                return JSON.toJSONString("fail: client_num不能为空");
+            }
+
+            //取出 grant_types
+            b = false;
+            String grant_types = "";
+            for (String split : splits) {
+                String[] split1 = split.split("=");
+                if("grant_types".equals(split1[0])&& (split1.length == 2))
+                {
+                    b = true;
+                    if(!grant_types.equals(""))
+                    {
+                        grant_types += " ";
+                    }
+                    grant_types += split1[1];
+                }
+            }
+            if(!b)
+            {
+                return JSON.toJSONString("fail: grant_types不能为空");
+            }
+            oauthClientsbyId.setGrantTypes(grant_types);
+
+            //取出 default_scope
+            b = false;
+            String default_scope = "";
+            for (String split : splits) {
+                String[] split1 = split.split("=");
+                if("default_scope".equals(split1[0])&& (split1.length == 2))
+                {
+                    b = true;
+                    if(!default_scope.equals(""))
+                    {
+                        default_scope += " ";
+                    }
+                    default_scope += split1[1];
+                }
+            }
+            if(!b)
+            {
+                return JSON.toJSONString("fail: default_scope不能为空");
+            }
+
+            oauthClientsbyId.setDefaultScope(default_scope);
+            iOpenOauthClientsService.update(oauthClientsbyId);
+
+        } catch (Exception e) {
+            status = "fail";
+        }
+
+
+        return JSON.toJSONString(status);
+    }
+
 
     @RequestMapping(value="/getOauthClient", produces="application/json;charset=utf-8")
     @ResponseBody
@@ -507,6 +661,24 @@ public class ApiListController {
         }
 
         return JSON.toJSONString(results);
+    }
+
+    /**
+     * 根据id删除oauth client
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/deleteOauthClient", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String deleteOauthClient(Integer id) {
+        String status = "success";
+        try {
+            iOpenOauthClientsService.deleteById(id);
+        } catch (Exception e) {
+            status = "fail";
+            logger.error("删除Oauth Client出错", e);
+        }
+        return JSON.toJSONString(status);
     }
 
 
