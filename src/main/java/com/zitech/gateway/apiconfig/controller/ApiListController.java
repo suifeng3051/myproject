@@ -491,6 +491,25 @@ public class ApiListController {
         return JSON.toJSONString(status);
     }
 
+    @RequestMapping(value="/getOauthClient", produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String getOauthClient()
+    {
+        Map<String, Object> results = new HashMap<>();
+        try {
+            List<OpenOauthClients> all = iOpenOauthClientsService.getAll();
+            results.put("allOauthClient", all);
+            results.put("size", all.size());
+            results.put("status", "success");
+        } catch (Exception e) {
+            logger.error("查询Oauth Client发生异常",e);
+            results.put("status", "fail");
+        }
+
+        return JSON.toJSONString(results);
+    }
+
+
     /**
      * 检测要增加的组的名称和别名是否已经被占用
      * @param name  组名
