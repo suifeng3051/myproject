@@ -55,6 +55,12 @@ function addClass(el){
         var env = getEnv();
         location.href = "manual?env=" + env;
     });
+    $('#safety-user-btn').click(function(e){
+        e.preventDefault();
+        var env = getEnv();
+        location.href="updatepwd?env=" + env;
+    });
+
     $(".console").on("click", function(e) {
         e.preventDefault();
         var content = $(this).html();
