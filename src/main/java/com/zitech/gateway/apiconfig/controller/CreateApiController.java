@@ -53,7 +53,7 @@ public class CreateApiController {
     @Resource
     RedisOperate redisOperate;
     @Resource
-    IOpenResourceGroupService iOpenResourceGroupService;
+    IOpenApiGroupService iOpenApiGroupService;
 
 
     /**
@@ -86,13 +86,13 @@ public class CreateApiController {
         results.put("edit","0");
         results.put("apiType","1");
         results.put("env", env);
-        List<OpenResourceGroup> openResourceGroupList = new ArrayList<>();
+        List<OpenApiGroup> openApiGroupList = new ArrayList<>();
         try {
-            openResourceGroupList = iOpenResourceGroupService.getAll();
+            openApiGroupList = iOpenApiGroupService.getAll();
         } catch (Exception e) {
             logger.info("fail to get group info", e);
         }
-        results.put("grouplist", openResourceGroupList);
+        results.put("grouplist", openApiGroupList);
         if(1 == edit) {
             CarmenApiMethodMapping carmenApiMethodMapping = null;
             try {

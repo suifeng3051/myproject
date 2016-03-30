@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import javax.lang.model.util.ElementScanner6;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
@@ -53,7 +52,7 @@ public class ApiListController {
     //    @Resource
 //    IOpenResourceService iOpenResourceService;
     @Resource
-    IOpenResourceGroupService iOpenResourceGroupService;
+    IOpenApiGroupService iOpenApiGroupService;
     @Resource
     IOpenOauthClientsService iOpenOauthClientsService;
     @Resource
@@ -103,8 +102,8 @@ public class ApiListController {
                     }
                 });
             }
-            List<OpenResourceGroup> groupList = iOpenResourceGroupService.getAll();
-            for (OpenResourceGroup group : groupList) {
+            List<OpenApiGroup> groupList = iOpenApiGroupService.getAll();
+            for (OpenApiGroup group : groupList) {
                 if(StringUtils.isEmpty(group.getAlias()) || StringUtils.isEmpty(group.getName())) {
                     continue;
                 }
@@ -367,9 +366,9 @@ public class ApiListController {
         Map<String, Object> results = new HashMap<>();
         String status = "success";
         try {
-            List<OpenResourceGroup> all = iOpenResourceGroupService.getAll();
+            List<OpenApiGroup> all = iOpenApiGroupService.getAll();
             ArrayList<String> aliases = new ArrayList<>();
-            for (OpenResourceGroup alias : all) {
+            for (OpenApiGroup alias : all) {
                 aliases.add(alias.getAlias());
             }
             results.put("aliases", aliases);
@@ -658,7 +657,7 @@ public class ApiListController {
                              @RequestParam("alias") String alias)
     {
         Map<String, Object> results = new HashMap<>();
-        List<OpenResourceGroup> groupByNameAndAlias = iOpenResourceGroupService.getGroupByNameAndAlias(name, alias);
+        List<OpenApiGroup> groupByNameAndAlias = iOpenApiGroupService.getGroupByNameAndAlias(name, alias);
         if (groupByNameAndAlias == null) {
             results.put("count", "0");
             return JSON.toJSONString(results);
@@ -700,12 +699,12 @@ public class ApiListController {
 //        }
 
         try {
-            List<OpenResourceGroup> openResourceGroupList = iOpenResourceGroupService.getAll();
+            List<OpenApiGroup> openApiGroupList = iOpenApiGroupService.getAll();
             List<OpenOauthClients> openOauthClientses = iOpenOauthClientsService.getAll();
             List<CarmenFreqConfig> listValueByApi = iCarmenFreqConfigService.getListValueByApi(Long.valueOf(apiId));
             Map<String, Object> results = new HashMap<>();
             results.put("status", status);
-            results.put("groupAlias", openResourceGroupList);
+            results.put("groupAlias", openApiGroupList);
             results.put("openOauthClientses", openOauthClientses);
             results.put("listValueByApi", listValueByApi);
             status = JSON.toJSONString(results);
@@ -767,14 +766,14 @@ public class ApiListController {
 
         try {
             insert = URLDecoder.decode(insert, "UTF-8");
-            OpenResourceGroup openResourceGroup = JSON.parseObject(insert, OpenResourceGroup.class);
-            List<OpenResourceGroup> groupByNameAndAlias = iOpenResourceGroupService.getGroupByNameAndAlias(openResourceGroup.getName(), openResourceGroup.getAlias());
+            OpenApiGroup openApiGroup = JSON.parseObject(insert, OpenApiGroup.class);
+            List<OpenApiGroup> groupByNameAndAlias = iOpenApiGroupService.getGroupByNameAndAlias(openApiGroup.getName(), openApiGroup.getAlias());
             if(groupByNameAndAlias==null ||groupByNameAndAlias.size()!=0)
             {
                 return JSON.toJSONString(status+":接口已经存在");
             }
-            openResourceGroup.setCreateTime(new Date());
-            iOpenResourceGroupService.insert(openResourceGroup);
+            openApiGroup.setCreateTime(new Date());
+            iOpenApiGroupService.insert(openApiGroup);
             status = "success";
         } catch (Exception e) {
             status = status + e.toString();
