@@ -17,60 +17,8 @@
 </head>
 <body>
 
-<!-- 导航条 -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="apilist?env=$!results.get('env')">
-                <img alt="Brand" class="logo"  src="/statics/imag/logo2.jpg">
-            </a>
-        </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="active1"><a href="apilist?env=$!results.get('env')"><h3 style="margin:0 0 0 0;">Gateway</h3> <span class="sr-only">(current)</span></a></li>
-            </ul>
-            <ul id="myTitle" class="nav nav-pills" style="margin:9px 0 0 0;">
-                <li role="presentation"><a href="#" role="tab" data-toggle="tab" class="titles">Home</a></li>
-                <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Config</a></li>
-                <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Release</a></li>
-                <!--<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Monitor</a></li>-->
-                <li role="presentation" class="dropdown active">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="tab" aria-haspopup="true" aria-expanded="false"><span id="consoleText">LogView</span> <span class="caret"></span></a>
-                    <ul class="dropdown-menu" >
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console ">Monitor</a></li>
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">LogView</a></li>
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Users</a></li>
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Manual</a></li>
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Cache</a></li>
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Instance</a></li>
-                        #if($!results.get("isAdmin"))
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">RecoverApi</a></li>
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">safety</a></li>
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Client</a></li>
-                        #end
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">safety</a></li>
-                    </ul>
-                </li>
-            </ul>
+#parse("template/nav.vm")
 
-            <ul class="nav navbar-nav navbar-right">
-                <li style="margin:-50px 100px 0 0;"><p class="navbar-text">Welcome <span class="glyphicon glyphicon-user"></span> $!results.get("data")</p></li>
-
-            </ul>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li style="margin:-50px 50px 0 0;"><p class="navbar-text"><a href="/user/logout">退出</a></p></li>
-                        </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li role="presentation" style="margin:-63px -35px 0 0;" class="help">
-                    <a href="#">
-                        <p class="navbar-text"><strong>帮助</strong> <span class="glyphicon glyphicon-question-sign" aria-hidden="true"  class="needTip" data-toggle="tooltip" data-placement="left" title="查看帮助文档"></span></p>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-    </div>
-</nav>
 
 <div class="container-fluid center-content">
 
@@ -207,5 +155,6 @@
 <script src="/statics/js/highcharts.js"></script>
 <script src="/statics/js/jquery.dataTables.min.js"></script>
 <script src="/statics/js/user.js"></script>
+<script src="/statics/js/base.js"></script>
 </body>
 </html>
