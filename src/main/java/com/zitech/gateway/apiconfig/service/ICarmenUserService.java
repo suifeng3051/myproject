@@ -24,4 +24,6 @@ public interface ICarmenUserService {
 
     List<CarmenUser> getAllList();
 
+    void updatePwd(CarmenUser user);
+
 }

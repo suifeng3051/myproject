@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zitech.gateway.apiconfig.dao.gateway.IResourceGroupDAO" >
-  <resultMap id="BaseResultMap" type="com.zitech.gateway.apiconfig.model.OpenResourceGroup" >
+<mapper namespace="com.zitech.gateway.apiconfig.dao.gateway.IApiGroupDAO" >
+  <resultMap id="BaseResultMap" type="com.zitech.gateway.apiconfig.model.OpenApiGroup" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="alias" property="alias" jdbcType="VARCHAR" />
@@ -16,27 +16,27 @@
   <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from t_resource_group
+    from t_api_group
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteById" parameterType="java.lang.Integer" >
-    delete from t_resource_group
+    delete from t_api_group
     where id = #{id,jdbcType=INTEGER}
   </delete>
   
   <select id="getGroupAlias" resultType="java.lang.String">
-    select DISTINCT alias  from t_resource_group
+    select DISTINCT alias  from t_api_group
   </select>
 
 
   <select id="getAll" resultMap="BaseResultMap"  >
     select
     <include refid="Base_Column_List" />
-    from t_resource_group
+    from t_api_group
   </select>
 
-  <insert id="save" parameterType="com.zitech.gateway.apiconfig.model.OpenResourceGroup" useGeneratedKeys="true" keyProperty="id" >
-    insert into t_resource_group
+  <insert id="save" parameterType="com.zitech.gateway.apiconfig.model.OpenApiGroup" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_api_group
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -84,8 +84,8 @@
       </if>
     </trim>
   </insert>
-  <update id="update" parameterType="com.zitech.gateway.apiconfig.model.OpenResourceGroup" >
-    update t_resource_group
+  <update id="update" parameterType="com.zitech.gateway.apiconfig.model.OpenApiGroup" >
+    update t_api_group
     <set >
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
@@ -114,13 +114,22 @@
           parameterType="com.zitech.gateway.apiconfig.dto.req.OpenResourceGroupReq">
     select
     <include refid="Base_Column_List" />
-    from t_resource_group t
+    from t_api_group t
     <include refid="Base_Column_Cond" />
     <trim prefix="ORDER BY ">
       <if test="orderColumn != null and  orderColumn != ''">
         ${orderColumn} ${orderDir}
       </if>
     </trim>
+  </select>
+  <select id="getGroupByNameAndAlias" resultMap="BaseResultMap" parameterType="com.zitech.gateway.apiconfig.model.OpenApiGroup">
+    select
+      <include refid="Base_Column_List"/>
+    from
+      t_api_group
+    where
+      `name`=#{name,jdbcType=VARCHAR} or alias=#{alias, jdbcType=VARCHAR}
+
   </select>
 
   <sql id="Base_Column_Cond">

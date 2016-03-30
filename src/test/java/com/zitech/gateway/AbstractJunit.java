@@ -5,10 +5,13 @@
 package com.zitech.gateway;
 
 import org.junit.runner.RunWith;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+
+import javax.annotation.Resource;
 
 
 /** 
@@ -20,9 +23,15 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
  * @Copyright (c) 2015-2020 by zitech
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:spring.xml"})
+@ContextConfiguration(locations={"classpath:spring-test.xml"})
 @TransactionConfiguration(defaultRollback=true,transactionManager="txManagerCommon")
 @ActiveProfiles("dev")
 public abstract class AbstractJunit {
+
+    @Resource
+    protected JdbcTemplate masterJdbcTemplate;
+
+    @Resource
+    protected JdbcTemplate masterJdbcTemplate1;
 
 }

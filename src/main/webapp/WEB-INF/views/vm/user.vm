@@ -43,14 +43,23 @@
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">Manual</a></li>
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">Cache</a></li>
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">Instance</a></li>
+                        #if($!results.get("isAdmin"))
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">RecoverApi</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">safety</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Client</a></li>
+                        #end
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">safety</a></li>
                     </ul>
                 </li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li style="margin:-50px 50px 0 0;"><p class="navbar-text">Welcome <span class="glyphicon glyphicon-user"></span> $!results.get("data")</p></li>
+                <li style="margin:-50px 100px 0 0;"><p class="navbar-text">Welcome <span class="glyphicon glyphicon-user"></span> $!results.get("data")</p></li>
+
             </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li style="margin:-50px 50px 0 0;"><p class="navbar-text"><a href="/user/logout">退出</a></p></li>
+                        </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li role="presentation" style="margin:-63px -35px 0 0;" class="help">
                     <a href="#">

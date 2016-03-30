@@ -25,6 +25,12 @@
         from t_oauth_access_tokens
         where access_token = #{token,jdbcType=VARCHAR}
     </select>
+    <select id="getValidToken" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oauth_access_tokens
+        where expires <![CDATA[ > ]]> now()
+    </select>
     <select id="getByClientIdAndUserId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

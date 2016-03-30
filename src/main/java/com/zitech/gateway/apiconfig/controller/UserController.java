@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.zitech.gateway.apiconfig.model.CarmenUser;
 import com.zitech.gateway.apiconfig.service.ICarmenUserService;
 import com.zitech.gateway.cache.RedisOperate;
+import com.zitech.gateway.utils.AppUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -187,4 +191,75 @@ public class UserController {
         return status;
     }
 
+    @RequestMapping("/user/login")
+    public ModelAndView userLogin(HttpServletRequest request,HttpServletResponse response) {
+        return new ModelAndView("admin_login");
+    }
+
+    @RequestMapping(value = "/user/doLogin", produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String doLogin(HttpServletRequest request,HttpServletResponse response,String username,String password) {
+        Map<String, Object> objectMap = new HashMap<>();
+        objectMap.put("result",false);
+        objectMap.put("to", "/user/login");
+        password = AppUtils.MD5(password);
+        List<CarmenUser> users = iCarmenUserService.getByUserName(username);
+        for (CarmenUser u:users){
+            if (u.getPassword().equals(password)){
+                HttpSession httpSession = request.getSession(true);
+                String nameKey = "gateway_login_" + username;
+                httpSession.setAttribute("username", nameKey);
+                redisOperate.set(nameKey, username,60*60);
+                objectMap.put("to", "/apilist");
+                objectMap.put("result",true);
+                return JSON.toJSONString(objectMap);
+            }
+        }
+        return JSON.toJSONString(objectMap);
+    }
+
+    @RequestMapping("/user/logout")
+    public String logout(HttpServletRequest request,HttpServletResponse response) {
+        HttpSession httpSession = request.getSession(true);
+        httpSession.removeAttribute("username");
+        return "redirect:/user/login";
+    }
+
+
+    @RequestMapping("/updatepwd")
+    public ModelAndView updatepwd(HttpServletRequest request, HttpServletResponse response, String env, Model model) {
+        Map<String, Object> results = new HashMap<>();
+        results.put("env", env);
+        model.addAttribute("env",env);
+        return new ModelAndView("update_pwd", "results", results);
+    }
+
+
+    @RequestMapping(value = "/user/dopwdUp", produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String dopwdUp(HttpServletRequest request,HttpServletResponse response,String oldpwd,String password) {
+        Map<String, Object> objectMap = new HashMap<>();
+        objectMap.put("result",true);
+        objectMap.put("message", "修改成功");
+        HttpSession httpSession = request.getSession(true);
+        String username = (String)httpSession.getAttribute("username");
+        List<CarmenUser> users = iCarmenUserService.getByUserName(username);
+        if (users==null||users.size()<=0){
+            objectMap.put("result",false);
+            objectMap.put("message", "用户不存在");
+            return JSON.toJSONString(objectMap);
+        }
+        CarmenUser user = users.get(0);
+        if (!AppUtils.MD5(oldpwd).equals(user.getPassword())){
+            objectMap.put("result",false);
+            objectMap.put("message", "密码错误");
+            return JSON.toJSONString(objectMap);
+        }
+        password = AppUtils.MD5(password);
+        CarmenUser newuser = new CarmenUser();
+        newuser.setPassword(password);
+        newuser.setUserName(username);
+        iCarmenUserService.updatePwd(newuser);
+        return JSON.toJSONString(objectMap);
+    }
 }

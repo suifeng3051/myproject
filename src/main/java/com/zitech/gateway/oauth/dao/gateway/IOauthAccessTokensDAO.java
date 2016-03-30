@@ -11,6 +11,8 @@ public interface IOauthAccessTokensDAO extends IEntityDAO<OpenOauthAccessTokens,
 
     OpenOauthAccessTokens getByToken(String token);
 
+    List<OpenOauthAccessTokens> getValidToken();
+
     List<OpenOauthAccessTokens> getByClientIdAndUserId(@Param("clientId") String clientId, @Param("userId") int userId);
 
     void deleteByToken(String token);

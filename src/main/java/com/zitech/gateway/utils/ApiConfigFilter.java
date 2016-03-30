@@ -46,10 +46,14 @@ public class ApiConfigFilter implements Filter {
             res.sendRedirect("/");
         } else {
             HttpSession httpSession= req.getSession(true);
-            String name = "zitech";
-            String nameKey = "gateway_login_zitech";
-            httpSession.setAttribute("username", nameKey);
-            redisOperate.set(nameKey, name);
+            String username = (String) httpSession.getAttribute("username");
+            if (StringUtils.isEmpty(username)){
+                request.getRequestDispatcher("/user/login").forward(request,response);
+            }
+           // String name = "zitech";
+            //String nameKey = "gateway_login_zitech";
+            //httpSession.setAttribute("username", nameKey);
+            //redisOperate.set(nameKey, name);
         }
 
         chain.doFilter(request, response);

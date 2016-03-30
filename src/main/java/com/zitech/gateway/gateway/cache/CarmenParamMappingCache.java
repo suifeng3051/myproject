@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@LocalCache("carmenParamMapping")
+@LocalCache("param_mapping")
 public class CarmenParamMappingCache implements ICacheClear {
 
     private static Logger logger = LoggerFactory.getLogger(CarmenParamMappingCache.class);

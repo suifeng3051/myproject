@@ -48,4 +48,9 @@ public class CarmenUserService implements ICarmenUserService {
     public List<CarmenUser> getAllList() {
         return carmenUserDAO.getAllList();
     }
+
+    @Override
+    public void updatePwd(CarmenUser user) {
+        carmenUserDAO.updatePwd(user);
+    }
 }

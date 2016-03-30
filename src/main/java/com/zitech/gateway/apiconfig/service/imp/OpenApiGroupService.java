@@ -1,9 +1,9 @@
 package com.zitech.gateway.apiconfig.service.imp;
 
-import com.zitech.gateway.apiconfig.dao.gateway.IResourceGroupDAO;
+import com.zitech.gateway.apiconfig.dao.gateway.IApiGroupDAO;
 import com.zitech.gateway.apiconfig.dto.req.OpenResourceGroupReq;
-import com.zitech.gateway.apiconfig.model.OpenResourceGroup;
-import com.zitech.gateway.apiconfig.service.IOpenResourceGroupService;
+import com.zitech.gateway.apiconfig.model.OpenApiGroup;
+import com.zitech.gateway.apiconfig.service.IOpenApiGroupService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,19 +14,19 @@ import javax.annotation.Resource;
  * Created by chenyun on 15/7/31.
  */
 @Service
-public class OpenResourceGroupService implements IOpenResourceGroupService {
+public class OpenApiGroupService implements IOpenApiGroupService {
 
     @Resource
-    private IResourceGroupDAO resourceGroupDAO;
+    private IApiGroupDAO resourceGroupDAO;
 
     @Override
-    public int insert(OpenResourceGroup config) {
+    public int insert(OpenApiGroup config) {
         resourceGroupDAO.save(config);
         return config.getId();
     }
 
     @Override
-    public void update(OpenResourceGroup config) {
+    public void update(OpenApiGroup config) {
         resourceGroupDAO.update(config);
     }
 
@@ -36,12 +36,12 @@ public class OpenResourceGroupService implements IOpenResourceGroupService {
     }
 
     @Override
-    public OpenResourceGroup getById(int id) {
+    public OpenApiGroup getById(int id) {
         return resourceGroupDAO.getById(id);
     }
 
     @Override
-    public List<OpenResourceGroup> queryWithPage(OpenResourceGroupReq req) {
+    public List<OpenApiGroup> queryWithPage(OpenResourceGroupReq req) {
         return resourceGroupDAO.queryWithPage(req);
     }
 
@@ -51,7 +51,14 @@ public class OpenResourceGroupService implements IOpenResourceGroupService {
     }
 
     @Override
-    public List<OpenResourceGroup> getAll() {
+    public List<OpenApiGroup> getAll() {
         return resourceGroupDAO.getAll();
+    }
+    @Override
+    public List<OpenApiGroup> getGroupByNameAndAlias(String name, String alias){
+        OpenApiGroup openApiGroup = new OpenApiGroup();
+        openApiGroup.setName(name);
+        openApiGroup.setAlias(alias);
+        return resourceGroupDAO.getGroupByNameAndAlias(openApiGroup);
     }
 }

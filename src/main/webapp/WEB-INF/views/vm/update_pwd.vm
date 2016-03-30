@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Gateway</title>
+
+    <!-- Bootstrap -->
+    <link href="/statics/css/bootstrap.css" rel="stylesheet" />
+    <link href="/statics/css/user.css" rel="stylesheet" />
+    <link href="/statics/css/font-awesome.css" rel="stylesheet" />
+    <link href="/statics/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="/statics/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen"/>
+    <link href="/statics/images/favicon.ico"  rel="Shortcut Icon"/>
+</head>
+<body>
+
+<!-- 导航条 -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="apilist?env=$!results.get('env')">
+                <img alt="Brand" class="logo"  src="/statics/imag/logo2.jpg">
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active1"><a href="apilist?env=$!results.get('env')"><h3 style="margin:0 0 0 0;">Gateway</h3> <span class="sr-only">(current)</span></a></li>
+            </ul>
+            <ul id="myTitle" class="nav nav-pills" style="margin:9px 0 0 0;">
+                <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Home</a></li>
+                <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Config</a></li>
+                <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Release</a></li>
+                <!--<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Monitor</a></li>-->
+                <li role="presentation" class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="tab" aria-haspopup="true" aria-expanded="false"><span id="consoleText">safety</span> <span class="caret"></span></a>
+                    <ul class="dropdown-menu" >
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console ">Monitor</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Manual</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Cache</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Instance</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">LogView</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Users</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">RecoverApi</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Client</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">safety</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li style="margin:-50px 100px 0 0;"><p class="navbar-text">Welcome <span class="glyphicon glyphicon-user"></span> $!results.get("data")</p></li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li style="margin:-50px 50px 0 0;"><p class="navbar-text"><a href="/user/logout">退出</a></p></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li role="presentation" style="margin:-63px -35px 0 0;" class="help">
+                    <a href="#">
+                        <p class="navbar-text"><strong>帮助</strong> <span class="glyphicon glyphicon-question-sign" aria-hidden="true"  class="needTip" data-toggle="tooltip" data-placement="left" title="查看帮助文档"></span></p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+
+<div class="container-fluid center-content" style="margin-left:40%;margin-top:200px">
+<input type="hidden" value="$!env" name="env"/>
+    <p><span id = "message" name= "message" style="color:red"></span></p>
+
+
+    <div class="form-group">
+        <label for="oldpwd" class=" control-label">原密码：</label>
+        <div class="">
+            <input id="oldpwd" name="oldpwd" type="text" class="form-control {required:true,minlength:6,maxlength:6}"  style="width:25%" placeholder="输入原密码"  autofocus>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password" class=" control-label">新密码：</label>
+        <div class="">
+            <input id="password" name="password" type="password" class="form-control" style="width:25%"  placeholder="新密码" required>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="repassword" class=" control-label">确认密码：</label>
+        <div class="">
+            <input id="repassword" name="repassword" type="password" class="form-control" placeholder="新密码" style="width:25%"  required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div style="margin-left:10%">
+            <button id = "updatepwd" name = "updatepwd" type="submit" class="btn btn-primary">修改</button>&nbsp;&nbsp;&nbsp;&nbsp;
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<input type="hidden" id="currentUserId" value="0" />
+<input type="hidden" id="env" value="$!results.get('env')">
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/statics/js/jquery.js"></script>
+<script src="/statics/js/bootstrap.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/statics/js/jquery.validate.js"></script>
+<script src="/statics/js/jquery.metadata.js"></script>
+<script src="/statics/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/statics/js/locales/bootstrap-datetimepicker.fr.js"></script>
+<script src="/statics/js/highcharts.js"></script>
+<script src="/statics/js/jquery.dataTables.min.js"></script>
+<script src="/statics/js/updatepwd.js"></script>
+</body>
+</html>

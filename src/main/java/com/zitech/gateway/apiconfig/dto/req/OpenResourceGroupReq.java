@@ -1,13 +1,13 @@
 package com.zitech.gateway.apiconfig.dto.req;
 
-import com.zitech.gateway.apiconfig.model.OpenResourceGroup;
+import com.zitech.gateway.apiconfig.model.OpenApiGroup;
 
 import java.util.Date;
 
 /**
  * Created by chenyun on 15/7/31.
  */
-public class OpenResourceGroupReq extends ReqQueryBase<OpenResourceGroup> {
+public class OpenResourceGroupReq extends ReqQueryBase<OpenApiGroup> {
 
     private String alias;
 

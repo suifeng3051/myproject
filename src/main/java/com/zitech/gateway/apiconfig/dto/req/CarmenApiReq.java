@@ -1,13 +1,13 @@
 package com.zitech.gateway.apiconfig.dto.req;
 
-import com.zitech.gateway.apiconfig.model.OpenResource;
+import com.zitech.gateway.apiconfig.model.CarmenApi;
 
 import java.util.Date;
 
 /**
  * Created by chenyun on 15/7/31.
  */
-public class OpenResourceReq extends ReqQueryBase<OpenResource> {
+public class CarmenApiReq extends ReqQueryBase<CarmenApi> {
 
     private String groupAlias;
 

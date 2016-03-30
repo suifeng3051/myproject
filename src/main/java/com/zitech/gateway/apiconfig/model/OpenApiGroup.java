@@ -2,7 +2,7 @@ package com.zitech.gateway.apiconfig.model;
 
 import java.util.Date;
 
-public class OpenResourceGroup {
+public class OpenApiGroup {
 
     private Integer id;
 

@@ -31,6 +31,10 @@ public class OpenOauthAccessTokensService extends BaseService implements IOpenOa
         return openOauthAccessTokensDAO.getByToken(token);
     }
 
+    public List<OpenOauthAccessTokens> getValidToken() {
+        return openOauthAccessTokensDAO.getValidToken();
+    }
+
     @Override
     public List<OpenOauthAccessTokens> getByClientIdAndUserId(String clientId, int userId) {
         return openOauthAccessTokensDAO.getByClientIdAndUserId(clientId, userId);

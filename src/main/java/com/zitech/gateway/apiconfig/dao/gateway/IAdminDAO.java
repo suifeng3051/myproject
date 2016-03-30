@@ -11,4 +11,6 @@ public interface IAdminDAO extends IEntityDAO<CarmenUser, CarmenUser> {
     List<CarmenUser> getAllList();
 
     List<CarmenUser> getByUserName(@Param("username") String username);
+
+    void updatePwd(CarmenUser user);
 }
