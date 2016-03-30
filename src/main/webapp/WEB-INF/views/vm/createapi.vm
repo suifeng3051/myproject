@@ -18,86 +18,8 @@
 </head>
 <body>
 
-<!-- 导航条 -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="apilist?env=$!results.get('env')">
-                <img alt="Brand" class="logo"  src="/statics/imag/logo2.jpg">
-            </a>
+#parse("template/nav.vm")
 
-        </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="active1"><a href="apilist?env=$!results.get('env')"><h3 style="margin:0 0 0 0;">Gateway</h3> <span class="sr-only">(current)</span></a></li>
-            </ul>
-            <ul id="myTitle" class="nav nav-pills" style="margin:9px 0 0 0;">
-                <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Home</a></li>
-                <li role="presentation" class="active"><a href="#" role="tab" data-toggle="tab" class="titles">Config</a></li>
-                <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Release</a></li>
-                <!--<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Monitor</a></li>-->
-                <li role="presentation" class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="tab" aria-haspopup="true" aria-expanded="false"><span id="consoleText">Console</span> <span class="caret"></span></a>
-                    <ul class="dropdown-menu" >
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console ">Monitor</a></li>
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Manual</a></li>
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Cache</a></li>
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Instance</a></li>
-                        #if($!results.get("isAdmin"))
-                            <li><a href="#" role="tab" data-toggle="tab" class="titles console">LogView</a></li>
-                            <li><a href="#" role="tab" data-toggle="tab" class="titles console">Users</a></li>
-                            <li><a href="#" role="tab" data-toggle="tab" class="titles console">RecoverApi</a></li>
-                            <li><a href="#" role="tab" data-toggle="tab" class="titles console">Client</a></li>
-                        #end
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">safety</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <form class="navbar-form navbar-left" id="env" style="margin: -38px 0 0 42%;">
-                <div class="form-group radio">
-                    <!--<input type="radio" name="env" id="dev" value="1" checked />-->
-                    <!--<label><p class="text-primary">dev</p></label>-->
-                    <!--<input type="radio" name="env" id="test" value="2" />-->
-                    <!--<label><p class="text-primary">test</p></label>-->
-                    <!--<input type="radio" name="env" id="product" value="3" />-->
-                    <!--<label><p class="text-primary">product</p></label>-->
-                    #if(2 == $!results.get('env'))
-                        <input class="envRadio" type="radio" name="env"  value="1" >
-                        <label><p class="text-primary">dev</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="2" checked>
-                        <label><p class="text-primary">test</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="3">
-                        <label><p class="text-primary">product</p></label>
-                    #elseif(3 == $!results.get('env'))
-                        <input class="envRadio" type="radio" name="env"  value="1" >
-                        <label><p class="text-primary">dev</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="2">
-                        <label><p class="text-primary">test</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="3" checked>
-                        <label><p class="text-primary">product</p></label>
-                    #else
-                        <input class="envRadio" type="radio" name="env"  value="1" checked>
-                        <label><p class="text-primary">dev</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="2">
-                        <label><p class="text-primary">test</p></label>
-                        <input class="envRadio" type="radio" name="env"  value="3">
-                        <label><p class="text-primary">product</p></label>
-                    #end
-                </div>
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-                <li style="margin:-50px 50px 0 0;"><p class="navbar-text">Welcome <span class="glyphicon glyphicon-user"></span> $!results.get("user")</p></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li role="presentation" style="margin:-63px -35px 0 0;" class="help">
-                    <a href="#">
-                        <p class="navbar-text"><strong>帮助</strong> <span class="glyphicon glyphicon-question-sign" aria-hidden="true"  class="needTip" data-toggle="tooltip" data-placement="left" title="查看帮助文档"></span></p>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
 
 
 
@@ -773,6 +695,7 @@
 <script src="/statics/js/highcharts.js"></script>
 <script src="/statics/js/jquery.dataTables.min.js"></script>
 <script src="/statics/js/createapi.js"></script>
+<script src="/statics/js/base.js"></script>
 <footer style="margin-top:50px;">
     <hr>
     <p class="text-muted text-center">© zitech.com</p>
