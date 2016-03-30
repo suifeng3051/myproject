@@ -171,6 +171,6 @@
 <script src="/statics/js/highcharts.js"></script>
 <script src="/statics/js/jquery.dataTables.min.js"></script>
 <script src="/statics/js/oauthclient.js"></script>
-<script src="/statics/js/basae.js"></script>
+<script src="/statics/js/base.js"></script>
 </body>
 </html>
