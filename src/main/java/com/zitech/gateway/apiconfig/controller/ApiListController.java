@@ -37,7 +37,7 @@ public class ApiListController {
 
     // 日志记录器
     private final static Logger logger = LoggerFactory.getLogger(ApiListController.class);
-
+    private static final String GATE_WAY_URL="http://gateway.zitech.com/gw/oauthentry";
     // Resource 默认按照名称进行装配
     @Resource
     ICarmenApiService iCarmenApiService;
@@ -461,6 +461,7 @@ public class ApiListController {
     }
 
     /**
+     *
      * 在open_resource_group表中插入数据
      * @param insert 待插入
      * @return 插入成功返回success，插入失败返回fail
@@ -601,14 +602,14 @@ public class ApiListController {
         String hostIp = null;
         String ip = "127.0.0.1";
         try {
-            hostIp = InetAddress.getByName("login.qima-inc.com").getHostAddress();
-            ip = AppUtils.getHostAddressByConnection(hostIp, 80);
+           // hostIp = InetAddress.getByName("login.qima-inc.com").getHostAddress();
+           // ip = AppUtils.getHostAddressByConnection(hostIp, 80);
         } catch (Exception e) {
             logger.error("fail to get ip address", e);
         }
-        String url = "http://" + ip + ":8091/oauth/token/";
+        String url = "http://" + ip + ":8090/oauth/token/";
         String client_id = "1";
-        String client_secret = "832103d85bad45c495c2a82e5d1928f9";
+        String client_secret = "af045e50f0cf11e59ce95e5517507c66";
         String grant_type = "password";
         String params = "client_id=" + client_id + "&client_secret=" + client_secret + "&grant_type=" + grant_type +
                 "&username=" + username + "&password=" + password + "&type=0";

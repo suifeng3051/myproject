@@ -818,14 +818,22 @@ $(document).ready(function(){
         updateObject.sessionFlag = cells[11].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.apiDesc = cells[12].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.apiScenarios = cells[13].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.resultDemo = cells[14].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
+        var resultDemo =cells[14].split("=")[1];
+        updateObject.resultDemo =resultDemo.replace(/\%22/g, "\%22");
         updateObject.env = getEnv();
         updateObject.creator = $("#userName").val();
 
         var parseResult = JSON.stringify(updateObject);
         return parseResult;
     }
-
+    function valueReplace(v) {
+        if (v.indexOf("\"") != -1) {
+            v = v.toString().replace(new RegExp('(["\"])', 'g'), "\\\"");
+        }
+        else if (v.indexOf("\\") != -1)
+            v = v.toString().replace(new RegExp("([\\\\])", 'g'), "\\\\");
+        return v;
+    }
     //  解析API参数的配置内容
     function parseApiParam(content) {
         var updateArray = new Array();

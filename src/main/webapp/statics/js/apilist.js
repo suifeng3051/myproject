@@ -198,13 +198,8 @@ $(document).ready(function(){
                    paramName,value,operate
                 ] ).draw();
                 // 插入method参数
-                var methodValue = $("#currentTestApiNameSpace").val() + "." + $("#currentTestApiName").val();
-                var paramName = '<input style="max-width:160px;" type="text"  name="paramName" value="method" >';
-                var value = '<input style="min-width:260px;" type="text"  name="value" value="' + methodValue +  '" >';
-                var operate = '<a href="#" class="needTip deleteCurrentParam" flag="step2" apiIdValue="0" data-toggle="tooltip" data-placement="top" title="删除当前行" style="margin-left:5px;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>';
-                testParamTable.row.add( [
-                   paramName,value,operate
-                ] ).draw();
+                var methodValue = $("#currentTestApiNameSpace").val() + "/"+version+"/" + $("#currentTestApiName").val();
+                $("#testUrl").val("http://gateway.zitech.com/gw/oauthentry/"+methodValue);
                 for (var i=0; i< d.length; i++) {
                     var paramName = '<input style="max-width:160px;" type="text"  name="paramName" value="' + d[i].paramName + '" >';
                     var value = '<input style="min-width:260px;" type="text"  name="value" >';

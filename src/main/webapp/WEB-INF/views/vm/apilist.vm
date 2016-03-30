@@ -197,7 +197,7 @@
             <div class="modal-body">
                 <form class="form-inline testApiParam">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="testUrl" id="testUrl" placeholder="Enter request URL here" value="http://service.zitech.com/api/oauthentry">
+                        <input type="text" class="form-control" name="testUrl" id="testUrl" placeholder="Enter request URL here" value="http://gateway.zitech.com/gw/oauthentry">
                     </div>
                     <select style="min-width:50px;max-height:35px;" id="requestType"  name="requestType" class="form-control" ><option value="1" selected>POST</option><option value="2" >GET</option></select>
                     <button type="button" class="btn btn-primary addParams"><span class="glyphicon glyphicon-plus"></span>添加参数</button>
@@ -436,9 +436,9 @@
                         <label for="userName">用户名</label>
                         <input type="text" class="form-control required" name="userName" id="userName" placeholder="user name">
                     </div>
-                    <div hidden class="form-group">
+                    <div  class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" value="1234" class="form-control required" name="password" id="password" placeholder="Password">
+                        <input type="password" class="form-control required" name="password" id="password" placeholder="Password">
                     </div>
                 </form>
 
