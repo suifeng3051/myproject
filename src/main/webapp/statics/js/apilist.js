@@ -261,7 +261,6 @@ $(document).ready(function(){
         $("#apiTestInfo").css("display", "block");
         $.post("testapi", {"requestUrl": requestUrl, "requestType": requestType, "params": paramObject}, function (d) {
 
-            console.log(d);
             if ("" == d) {
                 $("#apiTestInfo").html('<p>无法获取服务器，请联系管理员-叮咚</p>');
                 $("#apiTestInfo").removeClass("alert-success");
@@ -270,8 +269,35 @@ $(document).ready(function(){
                 $("#testResult").val("0");
                 return;
             }
+
             var result = d;
-            var content = '<p style="word-wrap: break-word;word-break: normal;">' + JSON.stringify(d) + '</p>';
+
+            // 检测返回数据是否为json格式，叵有返回，但不是正确的JSON格式，提供报错信息
+            var jsonFormatTest = null;
+
+//            jsonFormatTest = JSON.parse(result);
+
+            function isJsonString(str) {
+                try {
+                    JSON.parse(str);
+                } catch (e) {
+                    return false;
+                }
+                return true;
+            }
+
+            if( !isJsonString(result) ){
+                // JSON格式错误
+                updateTestStatus(0);
+                $("#apiTestInfo").html('<p>错误的JSON格式<br/>'+result+'</p>');
+                $("#apiTestInfo").removeClass("alert-success");
+                $("#apiTestInfo").addClass("alert-danger");
+                return;
+            }
+
+
+
+            var content = '<p style="word-wrap: break-word;word-break: normal;">' + result + '</p>';
             $("#testResultContent").val(content);
             re = /^fail/;
             if (!re.test(result) && "undefined" == typeof(result.error_response)) {
@@ -289,7 +315,7 @@ $(document).ready(function(){
                 $("#apiTestInfo").css("display", "block");
                 $("#testResult").val("0");
             }
-        }, "json");
+        }, "html");
     });
 
     function updateTestStatus(status) {
