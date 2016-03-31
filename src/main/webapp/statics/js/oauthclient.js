@@ -11,13 +11,6 @@ $(document).ready(function(){
     });
 
 
-    // 获取环境变量的值
-    function getEnv() {
-        var env = $("#env").serialize();
-        var envValue = env.split("=")[1];
-        return envValue;
-    }
-
     $('[data-toggle="tooltip"]').tooltip(); // 绑定工具提示js插件
 
 

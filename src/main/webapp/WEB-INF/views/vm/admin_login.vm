@@ -33,7 +33,7 @@
     <div class="form-group">
         <label for="password" class=" control-label">登录密码：</label>
         <div class="">
-            <input id="password" name="password" type="password" class="form-control" placeholder="你的登录密码" required>
+            <input id="password" name="password" type="password" class="form-control" placeholder="你的登录密码" required />
         </div>
     </div>
 

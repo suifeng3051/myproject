@@ -260,6 +260,8 @@ $(document).ready(function(){
         $("#apiTestInfo").addClass("alert-success");
         $("#apiTestInfo").css("display", "block");
         $.post("testapi", {"requestUrl": requestUrl, "requestType": requestType, "params": paramObject}, function (d) {
+
+            console.log(d);
             if ("" == d) {
                 $("#apiTestInfo").html('<p>无法获取服务器，请联系管理员-叮咚</p>');
                 $("#apiTestInfo").removeClass("alert-success");

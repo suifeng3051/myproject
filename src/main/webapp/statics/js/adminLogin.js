@@ -36,4 +36,15 @@ $(document).ready(function() {
         }, "json");
         
     });
+
+
+
 });
+    window.document.onkeydown = eventForLogin;
+    // 按下回车键
+    function eventForLogin(e){
+        e = e ? e : window.event;
+        if (e.keyCode==13 && document.activeElement.id=='password'){  //回车键的键值为13
+            document.getElementById("login").click(); //调用登录按钮的登录事件
+        }
+    }
