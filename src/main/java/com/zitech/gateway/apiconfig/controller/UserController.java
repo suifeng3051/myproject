@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -232,6 +233,21 @@ public class UserController {
     @RequestMapping("/updatepwd")
     public ModelAndView updatepwd(HttpServletRequest request, HttpServletResponse response, String env, Model model) {
         Map<String, Object> results = new HashMap<>();
+
+        String userName = null;
+        try {
+            String userKey = request.getSession().getAttribute("username").toString();
+            userName = redisOperate.getStringByKey(userKey);
+            redisOperate.set("username", userName, 60*60); // 一小时
+        } catch (Exception e) {
+            logger.warn("fail to get session", e);
+        }
+        if(null == userName) {
+            return new ModelAndView("redirect:/unifyerror", "cause", "test");
+        }
+        Boolean isAdmin = isAdministrator(userName);
+        results.put("isAdmin", isAdmin);
+        results.put("user", userName);
         results.put("env", env);
         model.addAttribute("env",env);
         return new ModelAndView("update_pwd", "results", results);
