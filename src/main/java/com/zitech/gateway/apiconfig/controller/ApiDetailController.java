@@ -70,6 +70,7 @@ public class ApiDetailController {
         }
         Boolean isAdmin = isAdministrator(userName);
         hashMap.put("isAdmin", isAdmin);
+        hashMap.put("user", userName);
         return new ModelAndView("apidetail", "results", hashMap);
     }
 
@@ -92,6 +93,7 @@ public class ApiDetailController {
         }
 
         Boolean isAdmin = isAdministrator(userName);
+        hashMap.put("user", userName);
         hashMap.put("isAdmin", isAdmin);
 
         return new ModelAndView("oauthclient", "results", hashMap);

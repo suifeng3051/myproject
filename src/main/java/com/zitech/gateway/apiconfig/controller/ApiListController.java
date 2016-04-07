@@ -608,6 +608,7 @@ public class ApiListController {
             results.put("size", all.size());
             results.put("status", "success");
             results.put("isAdmin", isAdmin);
+            results.put("user", userName);
         } catch (Exception e) {
             logger.error("查询Oauth Client发生异常",e);
             results.put("status", "fail");

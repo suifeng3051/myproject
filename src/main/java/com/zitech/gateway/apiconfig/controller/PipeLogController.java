@@ -65,6 +65,7 @@ public class PipeLogController {
         }
         Boolean isAdmin = isAdministrator(userName);
         results.put("isAdmin", isAdmin);
+        results.put("user", userName);
         return new ModelAndView("pipelog", "results", results);
     }
 
