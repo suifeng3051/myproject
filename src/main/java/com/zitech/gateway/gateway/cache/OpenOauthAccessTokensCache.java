@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @Service
-@LocalCache("openOauthAccessTokens")
+@LocalCache("access_token")
 public class OpenOauthAccessTokensCache implements ILocalCache {
 
     private static Logger logger = LoggerFactory.getLogger(OpenOauthAccessTokensCache.class);
