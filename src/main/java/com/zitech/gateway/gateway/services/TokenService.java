@@ -47,26 +47,20 @@ public class TokenService extends BaseService {
     public OpenOauthAccessTokens validateAccessToken(RequestEvent event) throws TokenValidateException, ExecutionException {
 
         String accessToken = event.getAccessToken();
-//        String resource = event.getNamespace() + "." + event.getMethod();
 
         if (StringUtils.isEmpty(accessToken)) {
             throw new TokenValidateException(OAuthConstants.OAuthResponse.NO_TOKEN,
                     OAuthConstants.OAuthDescription.INVALID_TOKEN);
         }
 
-//        if (StringUtils.isEmpty(resource)) {
-//            throw new TokenValidateException(OAuthConstants.OAuthResponse.NO_RESOURCE,
-//                    OAuthConstants.OAuthDescription.INVALID_RESOURCE);
-//        }
-        if(StringUtils.isEmpty(event.getNamespace())||
-                StringUtils.isEmpty(event.getMethod())||
-                StringUtils.isEmpty(event.getVersion()))
-        {
+        if (StringUtils.isEmpty(event.getNamespace()) ||
+                StringUtils.isEmpty(event.getMethod()) ||
+                StringUtils.isEmpty(event.getVersion())) {
             throw new TokenValidateException(OAuthConstants.OAuthResponse.INVALID_API_STRUCTURE_CODE,
                     OAuthConstants.OAuthDescription.INVALID_API_STRUCTURE);
         }
 
-        OpenOauthAccessTokens openOauthAccessTokens;
+        /*OpenOauthAccessTokens openOauthAccessTokens;
         try {
             event.getTicTac().tic(Constants.ST_REDIS_TOKEN);
             openOauthAccessTokens = accessTokensCache.get(event.getId(), accessToken);
@@ -76,7 +70,8 @@ public class TokenService extends BaseService {
         if (openOauthAccessTokens == null) {
             throw new TokenValidateException(OAuthConstants.OAuthResponse.NO_OR_EXPIRED_TOKEN,
                     OAuthConstants.OAuthDescription.INVALID_TOKEN);
-        }
+        }*/
+        OpenOauthAccessTokens openOauthAccessTokens = accessTokensCache.get(event.getId(), accessToken);
 
         /**
          * check if expired

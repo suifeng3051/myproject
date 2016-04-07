@@ -6,12 +6,14 @@ import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.gateway.model.RequestState;
 import com.zitech.gateway.gateway.model.ValidateType;
 import com.zitech.gateway.gateway.services.HelpService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 public class ParsePipe extends AbstractPipe {

@@ -1,11 +1,20 @@
 package com.zitech.gateway.gateway.services;
 
 import com.zitech.gateway.AppConfig;
+import com.zitech.gateway.apiconfig.model.CarmenApi;
+import com.zitech.gateway.apiconfig.model.CarmenApiMethodMapping;
+import com.zitech.gateway.apiconfig.model.CarmenApiParam;
+import com.zitech.gateway.apiconfig.model.CarmenParamMapping;
+import com.zitech.gateway.apiconfig.model.CarmenServiceMethod;
+import com.zitech.gateway.gateway.cache.CarmenApiCache;
+import com.zitech.gateway.gateway.cache.CarmenApiMethodMappingCache;
+import com.zitech.gateway.gateway.cache.CarmenParamMappingCache;
+import com.zitech.gateway.gateway.cache.CarmenServiceMethodCache;
+import com.zitech.gateway.gateway.cache.ILocalCache;
 import com.zitech.gateway.gateway.exception.ValidateException;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.utils.RegexUtils;
-import com.zitech.gateway.apiconfig.model.*;
-import com.zitech.gateway.gateway.cache.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +33,7 @@ public class CallService {
     private CarmenApiCache carmenApiCache;
 
     @Autowired
-    private CarmenApiParamCache carmenApiParamCache;
+    private ILocalCache carmenApiParamCache;
 
     @Autowired
     private CarmenApiMethodMappingCache carmenApiMethodMappingCache;
@@ -127,7 +136,7 @@ public class CallService {
              */
 
             // skip default value
-            if(paramMapping.getApiParamName().equals("default"))
+            if (paramMapping.getApiParamName().equals("default"))
                 continue;
 
             boolean isApiParam = false;

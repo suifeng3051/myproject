@@ -2,10 +2,12 @@ package com.zitech.gateway.gateway.cache;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.CarmenParamMapping;
 import com.zitech.gateway.apiconfig.model.CarmenParamMappingFilter;
 import com.zitech.gateway.apiconfig.service.imp.CarmenParamMappingService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ import java.util.UUID;
 
 @Service
 @LocalCache("param_mapping")
-public class CarmenParamMappingCache implements ICacheClear {
+public class CarmenParamMappingCache implements ILocalCache {
 
     private static Logger logger = LoggerFactory.getLogger(CarmenParamMappingCache.class);
 
@@ -44,8 +46,8 @@ public class CarmenParamMappingCache implements ICacheClear {
         List<CarmenParamMappingFilter> paramMappingFilter =
                 mappingService.getParamMappingFilter(config.env);
         for (CarmenParamMappingFilter mappingFilter : paramMappingFilter) {
-            get(null, mappingFilter.getApiNamespace(),mappingFilter.getApiName(),mappingFilter
-                    .getVersion(),config.env);
+            get(null, mappingFilter.getApiNamespace(), mappingFilter.getApiName(), mappingFilter
+                    .getVersion(), config.env);
         }
     }
 

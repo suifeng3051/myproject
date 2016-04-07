@@ -2,14 +2,16 @@ package com.zitech.gateway.gateway.model;
 
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.excutor.TicTac;
+
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 public class RequestEvent {

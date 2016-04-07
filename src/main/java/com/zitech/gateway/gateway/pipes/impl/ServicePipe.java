@@ -12,6 +12,7 @@ import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.gateway.model.RequestState;
 import com.zitech.gateway.gateway.services.CallService;
 import com.zitech.gateway.utils.SpringContext;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -43,7 +44,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -163,14 +168,14 @@ public class ServicePipe extends AbstractPipe {
 
                     // cannot use MultipartEntity directly, so ...
                     HttpEntity byteEntity = new NByteArrayEntity(bytes, ContentType.MULTIPART_FORM_DATA);
-                    
+
                     /** 获取APP版本号 */
                     String version = event.getRequest().getHeader("version");
-                    if(org.apache.commons.lang.StringUtils.isNotBlank(version)){
-                    	httpPost.setHeader("version",version);
+                    if (org.apache.commons.lang.StringUtils.isNotBlank(version)) {
+                        httpPost.setHeader("version", version);
                     }
                     /** 获取APP版本号 */
-                    
+
                     httpPost.setHeader("Content-Type", "multipart/form-data;boundary=-------------" + boundary);
                     httpPost.setEntity(byteEntity);
                 } else {
@@ -196,14 +201,14 @@ public class ServicePipe extends AbstractPipe {
 
                 String s = requestUrl + "?" + sb.toString();
                 HttpGet httpGet = new HttpGet(s);
-                
+
                 /** 获取APP版本号 */
                 String version = event.getRequest().getHeader("version");
-                if(org.apache.commons.lang.StringUtils.isNotBlank(version)){
-                	httpGet.setHeader("version",version);
+                if (org.apache.commons.lang.StringUtils.isNotBlank(version)) {
+                    httpGet.setHeader("version", version);
                 }
                 /** 获取APP版本号 */
-                
+
                 httpAsyncClient.execute(httpGet, new HttpAsyncCallback(event));
             }
 
@@ -262,7 +267,7 @@ public class ServicePipe extends AbstractPipe {
             this.event.getTicTac().tac(Constants.ST_CALL);
             this.event.getTicTac().tac(Constants.ST_ALL);
             event.setException(new CallException(5016, "async http client exception :" + ex.toString()));
-                    event.setState(RequestState.ERROR);
+            event.setState(RequestState.ERROR);
             Pipeline.getInstance().process(event);
         }
 

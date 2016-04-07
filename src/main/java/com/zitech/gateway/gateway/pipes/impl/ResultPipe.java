@@ -7,6 +7,7 @@ import com.zitech.gateway.gateway.excutor.Pipeline;
 import com.zitech.gateway.gateway.model.ApiResponse;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.gateway.model.RequestState;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,7 @@ public class ResultPipe extends AbstractPipe {
                     if (apiResponse.getCode() == 0) {
                         ResponseEntity<String> responseEntity = new ResponseEntity<String>(event.getResultStr(), HttpStatus.valueOf(200));
                         eventResult.setResult(responseEntity);
-                        logger.info("get correct response, event: {}, result: {}", event,event.getResultStr());
+                        logger.info("get correct response, event: {}, result: {}", event, event.getResultStr());
                     } else {
                         ResponseEntity<String> responseEntity = new ResponseEntity<String>(event.getResultStr(), HttpStatus.valueOf(200));
                         eventResult.setResult(responseEntity);
@@ -68,7 +69,7 @@ public class ResultPipe extends AbstractPipe {
     @Override
     protected void onNext(RequestEvent event) {
         if (event.getException() != null)
-            if(event.getException() instanceof ResultException)
+            if (event.getException() instanceof ResultException)
                 event.setState(RequestState.POST);
             else
                 event.setState(RequestState.ERROR);

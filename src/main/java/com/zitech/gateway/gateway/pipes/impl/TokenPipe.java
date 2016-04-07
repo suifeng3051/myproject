@@ -15,6 +15,7 @@ import com.zitech.gateway.gateway.services.TokenService;
 import com.zitech.gateway.oauth.model.OpenOauthAccessTokens;
 import com.zitech.gateway.oauth.model.OpenOauthClients;
 import com.zitech.gateway.utils.SpringContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,8 +78,7 @@ public class TokenPipe extends AbstractPipe {
         } catch (Exception e) {
             event.setException(e);
             logger.error("exception happened when validating token: {}", event.getId(), e);
-        }
-        finally {
+        } finally {
             logger.info("complete token validation: {}", event.getId());
             onNext(event);
         }
