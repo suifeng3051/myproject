@@ -25,7 +25,6 @@ public class ApiConfigFilter implements Filter {
 
     private AppConfig appConfig = SpringContext.getBean(AppConfig.class);
 
-	private static RedisOperate redisOperate = SpringContext.getBean(RedisOperateImp.class);
     private static final Logger logger = LoggerFactory.getLogger(ApiConfigFilter.class);
 
     public void destroy() {
@@ -50,10 +49,6 @@ public class ApiConfigFilter implements Filter {
             if (StringUtils.isEmpty(username)){
                 request.getRequestDispatcher("/user/login").forward(request,response);
             }
-           // String name = "zitech";
-            //String nameKey = "gateway_login_zitech";
-            //httpSession.setAttribute("username", nameKey);
-            //redisOperate.set(nameKey, name);
         }
 
         chain.doFilter(request, response);
