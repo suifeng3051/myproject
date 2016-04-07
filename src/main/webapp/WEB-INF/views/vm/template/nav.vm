@@ -29,7 +29,6 @@
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">RecoverApi</a></li>
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">Client</a></li>
                         #end
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">safety</a></li>
                     </ul>
                 </li>
             </ul>
@@ -61,7 +60,15 @@
                 </div>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li style="margin:-50px 100px 0 0;"><p class="navbar-text">Welcome <span class="glyphicon glyphicon-user"></span> $!results.get('user')</p></li>
+                <li style="margin:-50px 100px 0 0;">
+                    <span class="navbar-text">Welcome
+                        <span class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" style="cursor:pointer;margin-left:10px;"> $!results.get('user')</span>
+                        <ul class="dropdown-menu" role="menu">
+                            <li id="safety-user-btn"><a href="#">修改密码</a></li>
+                            <!--<li class="divider"></li>-->
+                        </ul>
+                    </span>
+                </li>
 
             </ul>
             <ul class="nav navbar-nav navbar-right">
