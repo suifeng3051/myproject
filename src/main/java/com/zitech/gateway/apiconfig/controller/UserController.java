@@ -262,6 +262,7 @@ public class UserController {
         objectMap.put("message", "修改成功");
         HttpSession httpSession = request.getSession(true);
         String username = (String)httpSession.getAttribute("username");
+        username = username.replaceAll("gateway_login_","");
         List<CarmenUser> users = iCarmenUserService.getByUserName(username);
         if (users==null||users.size()<=0){
             objectMap.put("result",false);
