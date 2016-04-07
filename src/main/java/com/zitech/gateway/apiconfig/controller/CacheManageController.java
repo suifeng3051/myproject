@@ -67,6 +67,7 @@ public class CacheManageController {
         }
         Boolean isAdmin = isAdministrator(userName);
         hashMap.put("isAdmin", isAdmin);
+        hashMap.put("user", userName);
         return new ModelAndView("cachemanage", "results", hashMap);
     }
 

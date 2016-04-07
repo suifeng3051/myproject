@@ -55,6 +55,7 @@ public class ManualController {
 
         Boolean isAdmin = isAdministrator(userName);
         hashMap.put("isAdmin", isAdmin);
+        hashMap.put("user", userName);
         return new ModelAndView("manual", "results", hashMap);
     }
 

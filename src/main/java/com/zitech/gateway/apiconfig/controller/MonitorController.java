@@ -64,6 +64,7 @@ public class MonitorController {
         results.put("env", env);
         Boolean isAdmin = isAdministrator(userName);
         results.put("isAdmin", isAdmin);
+        results.put("user", userName);
         return new ModelAndView("monitor", "results", results);
     }
 

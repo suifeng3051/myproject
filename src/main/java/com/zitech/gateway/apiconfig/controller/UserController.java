@@ -64,6 +64,9 @@ public class UserController {
         if(null == userName) {
             return new ModelAndView("redirect:/unifyerror", "cause", "userName is null.");
         }
+        Boolean isAdmin = isAdministrator(userName);
+        hashMap.put("isAdmin", isAdmin);
+        hashMap.put("user", userName);
         return new ModelAndView("user", "results", hashMap);
     }
 
