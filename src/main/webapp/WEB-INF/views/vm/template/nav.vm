@@ -1,6 +1,7 @@
 
 <style>
     #consoleText { text-transform:capitalize; }
+    .nav .glyphicon-user::before { color:#337ab7; margin-right:-8px; }
 </style>
 
 <!-- 导航条 -->
@@ -67,7 +68,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li style="margin:-50px 100px 0 0;">
                     <span class="navbar-text">Welcome
-                        <span class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" style="cursor:pointer;margin-left:10px;"> $!results.get('user')</span>
+                        <span class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" style="cursor:pointer;margin:0 10px;"> $!results.get('user')</span>
                         <ul class="dropdown-menu" role="menu">
                             <li id="safety-user-btn"><a href="#">修改密码</a></li>
                             <!--<li class="divider"></li>-->
