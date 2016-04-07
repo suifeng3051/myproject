@@ -8,6 +8,7 @@ import com.zitech.gateway.apiconfig.model.CarmenParamMapping;
 import com.zitech.gateway.apiconfig.model.CarmenServiceMethod;
 import com.zitech.gateway.gateway.cache.CarmenApiCache;
 import com.zitech.gateway.gateway.cache.CarmenApiMethodMappingCache;
+import com.zitech.gateway.gateway.cache.CarmenApiParamCache;
 import com.zitech.gateway.gateway.cache.CarmenParamMappingCache;
 import com.zitech.gateway.gateway.cache.CarmenServiceMethodCache;
 import com.zitech.gateway.gateway.cache.ILocalCache;
@@ -33,7 +34,7 @@ public class CallService {
     private CarmenApiCache carmenApiCache;
 
     @Autowired
-    private ILocalCache carmenApiParamCache;
+    private CarmenApiParamCache carmenApiParamCache;
 
     @Autowired
     private CarmenApiMethodMappingCache carmenApiMethodMappingCache;

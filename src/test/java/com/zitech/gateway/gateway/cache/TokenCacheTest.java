@@ -3,6 +3,7 @@ package com.zitech.gateway.gateway.cache;
 import com.alibaba.fastjson.JSON;
 import com.zitech.gateway.AbstractJunit;
 import com.zitech.gateway.cache.RedisOperate;
+import com.zitech.gateway.gateway.exception.TokenValidateException;
 import com.zitech.gateway.oauth.model.OpenOauthAccessTokens;
 import com.zitech.gateway.oauth.service.IOpenOauthAccessTokensService;
 
@@ -26,7 +27,7 @@ public class TokenCacheTest extends AbstractJunit {
     private RedisOperate redis;
 
     @Test
-    public void testAccessTokensCache() {
+    public void testAccessTokensCache() throws TokenValidateException {
         OpenOauthAccessTokens token = accessTokensCache.get(null,"2de3d026d4a13c0da718302b1a664dbc");
         System.out.println(JSON.toJSONString(token));
     }
