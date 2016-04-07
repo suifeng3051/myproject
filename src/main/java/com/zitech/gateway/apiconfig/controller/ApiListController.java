@@ -587,14 +587,27 @@ public class ApiListController {
 
     @RequestMapping(value="/getOauthClient", produces="application/json;charset=utf-8")
     @ResponseBody
-    public String getOauthClient()
+    public String getOauthClient(@RequestParam(value="env", defaultValue = "1") byte env,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response)
     {
+        String userName = null;
+        try {
+            String userKey = request.getSession().getAttribute("username").toString();
+            userName = redisOperate.getStringByKey(userKey);
+            redisOperate.set("username", userName, 60*60); // 一小时
+        } catch (Exception e) {
+            logger.warn("fail to get session", e);
+        }
+
         Map<String, Object> results = new HashMap<>();
         try {
             List<OpenOauthClients> all = iOpenOauthClientsService.getAll();
+            Boolean isAdmin = isAdministrator(userName);
             results.put("allOauthClient", all);
             results.put("size", all.size());
             results.put("status", "success");
+            results.put("isAdmin", isAdmin);
         } catch (Exception e) {
             logger.error("查询Oauth Client发生异常",e);
             results.put("status", "fail");
