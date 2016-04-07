@@ -74,8 +74,27 @@ public class ApiDetailController {
     }
 
     @RequestMapping("/oauthclient")
-    public ModelAndView oauthclient() {
-        return new ModelAndView("oauthclient");
+    public ModelAndView oauthclient(@RequestParam(value = "env", required = false, defaultValue = "1") String env,
+                                    HttpServletRequest request) {
+
+        String userName = null;
+        Map<String, Object> hashMap = new HashMap();
+        hashMap.put("env", env);
+        try {
+            String userKey = request.getSession().getAttribute("username").toString();
+            userName = redisOperate.getStringByKey(userKey);
+            redisOperate.set("username", userName, 60 * 60); // 一小时
+        } catch (Exception e) {
+            logger.error("fail to get oauthclient", e);
+        }
+        if (null == userName) {
+            return new ModelAndView("redirect:/unifyerror", "cause", "userName is null.");
+        }
+
+        Boolean isAdmin = isAdministrator(userName);
+        hashMap.put("isAdmin", isAdmin);
+
+        return new ModelAndView("oauthclient", "results", hashMap);
     }
 
     public Boolean isAdministrator(String userName) {

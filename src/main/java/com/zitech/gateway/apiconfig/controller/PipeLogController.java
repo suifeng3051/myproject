@@ -1,5 +1,7 @@
 package com.zitech.gateway.apiconfig.controller;
 
+import com.zitech.gateway.apiconfig.model.CarmenUser;
+import com.zitech.gateway.apiconfig.service.ICarmenUserService;
 import com.zitech.gateway.cache.RedisOperate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,6 +37,9 @@ public class PipeLogController {
     @Resource
     RedisOperate redisOperate;
 
+    @Resource
+    ICarmenUserService iCarmenUserService;
+
     /**
      * 查看API的pipeline调用
      * @param request
@@ -44,7 +50,7 @@ public class PipeLogController {
                                 HttpServletRequest request) {
 
         String userName = null;
-        Map<String, String> results = new HashMap<>();
+        Map<String, Object> results = new HashMap<>();
         results.put("env", env);
         try {
             String userKey = request.getSession().getAttribute("username").toString();
@@ -57,6 +63,8 @@ public class PipeLogController {
         if(null == userName) {
             return new ModelAndView("redirect:/unifyerror", "cause", "userName is null.");
         }
+        Boolean isAdmin = isAdministrator(userName);
+        results.put("isAdmin", isAdmin);
         return new ModelAndView("pipelog", "results", results);
     }
 
@@ -149,6 +157,21 @@ public class PipeLogController {
             logger.info("ShellUtil.ExeShell=>"+result);
             return  result;
         }
+    }
+
+    public Boolean isAdministrator(String userName) {
+
+        try {
+            List<CarmenUser> user = iCarmenUserService.getByUserName(userName);
+            for(CarmenUser carmenUser : user) {
+                if(1 == carmenUser.getUserGroup()) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            logger.error("can not get uesrs.", e);
+        }
+        return false;
     }
 
 
