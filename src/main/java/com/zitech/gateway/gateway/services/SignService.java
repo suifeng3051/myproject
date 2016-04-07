@@ -2,18 +2,16 @@ package com.zitech.gateway.gateway.services;
 
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.CarmenApi;
-//import com.zitech.gateway.apiconfig.model.OpenResource;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.cache.CarmenApiCache;
 import com.zitech.gateway.gateway.cache.OpenOauthClientsCache;
-//import com.zitech.gateway.gateway.cache.OpenResourceCache;
 import com.zitech.gateway.gateway.exception.SignValidateException;
-import com.zitech.gateway.gateway.exception.TokenValidateException;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.oauth.model.OpenOauthClients;
 import com.zitech.gateway.oauth.oauthex.OAuthConstants;
 import com.zitech.gateway.utils.AppUtils;
 import com.zitech.gateway.utils.DateUtil;
+
 import org.apache.oltu.oauth2.common.utils.OAuthUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +19,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
+
+//import com.zitech.gateway.apiconfig.model.OpenResource;
+//import com.zitech.gateway.gateway.cache.OpenResourceCache;
 
 @Service
 public class SignService {

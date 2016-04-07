@@ -1,7 +1,7 @@
 package com.zitech.gateway.console;
 
 
-import com.zitech.gateway.gateway.cache.ICacheClear;
+import com.zitech.gateway.gateway.cache.ILocalCache;
 import com.zitech.gateway.gateway.cache.LocalCache;
 import com.zitech.gateway.utils.ClassUtils;
 import com.zitech.gateway.utils.SpringContext;
@@ -35,7 +35,7 @@ public class CacheManager {
 
     private String preCacheNodePrefix = "/preCache";
 
-    private Map<String, ICacheClear> cacheMap = new HashMap<>();
+    private Map<String, ILocalCache> cacheMap = new HashMap<>();
 
     private ZkFramework framework = ZkFramework.getInstance();
 
@@ -45,7 +45,7 @@ public class CacheManager {
 
 
     private CacheManager() {
-        List<Class> allCaches = ClassUtils.getAllClassByInterface(ICacheClear.class);
+        List<Class> allCaches = ClassUtils.getAllClassByInterface(ILocalCache.class);
         for (Class clazz : allCaches) {
             LocalCache localCache = (LocalCache) clazz.getAnnotation(LocalCache.class);
             if (localCache == null) {
@@ -54,7 +54,7 @@ public class CacheManager {
 
             assert localCache != null;
             String name = localCache.value();
-            ICacheClear clear = (ICacheClear) SpringContext.getBean(clazz);
+            ILocalCache clear = (ILocalCache) SpringContext.getBean(clazz);
 
             cacheMap.put(name, clear);
             cacheSizeMap.put(name, -1L);
@@ -86,10 +86,10 @@ public class CacheManager {
             public void run() {
                 try {
                     CuratorFramework client = framework.getClient();
-                    for (Map.Entry<String, ICacheClear> entry : cacheMap
+                    for (Map.Entry<String, ILocalCache> entry : cacheMap
                             .entrySet()) {
                         String key = entry.getKey();
-                        ICacheClear cacheClear = entry.getValue();
+                        ILocalCache cacheClear = entry.getValue();
                         long size = cacheClear.cacheSize();
                         long previous = cacheSizeMap.get(key);
                         if (previous != size) {
@@ -118,7 +118,7 @@ public class CacheManager {
             CuratorFramework client = framework.getClient();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             byte[] bytes = formatter.format(Calendar.getInstance().getTime()).getBytes();
-            for (Map.Entry<String, ICacheClear> entry : cacheMap.entrySet()) {
+            for (Map.Entry<String, ILocalCache> entry : cacheMap.entrySet()) {
                 String node = cacheNode + "/" + entry.getKey();
                 String preCacheNode = preCacheNodePrefix + "/" + entry.getKey();
                 try {
@@ -208,22 +208,22 @@ public class CacheManager {
 
     public List<String> getAllCacheNames() {
         List<String> names = new ArrayList<>();
-        for (Map.Entry<String, ICacheClear> entry : cacheMap.entrySet()) {
+        for (Map.Entry<String, ILocalCache> entry : cacheMap.entrySet()) {
             names.add(entry.getKey());
         }
         return names;
     }
 
     public void clearAll() {
-        for (Map.Entry<String, ICacheClear> entry : cacheMap.entrySet()) {
+        for (Map.Entry<String, ILocalCache> entry : cacheMap.entrySet()) {
             entry.getValue().clear();
         }
     }
 
     public void clear(String name) {
-        ICacheClear iCacheClear = cacheMap.get(name);
-        if (iCacheClear != null) {
-            iCacheClear.clear();
+        ILocalCache iLocalCache = cacheMap.get(name);
+        if (iLocalCache != null) {
+            iLocalCache.clear();
         }
     }
 
@@ -315,7 +315,7 @@ public class CacheManager {
 
                     String name = path.substring(path.lastIndexOf('/') + 1);
 
-                    ICacheClear cache = cacheMap.get(name);
+                    ILocalCache cache = cacheMap.get(name);
 
                     cache.load();
 

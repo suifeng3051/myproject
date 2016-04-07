@@ -2,9 +2,11 @@ package com.zitech.gateway.gateway.cache;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+
 import com.zitech.gateway.oauth.model.OpenOauthClients;
 import com.zitech.gateway.oauth.service.IOpenOauthClientsService;
 import com.zitech.gateway.oauth.service.impl.OAuthService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import java.util.UUID;
 
 @Service
 @LocalCache("client")
-public class OpenOauthClientsCache implements ICacheClear {
+public class OpenOauthClientsCache implements ILocalCache {
 
     private static Logger logger = LoggerFactory.getLogger(OpenOauthClientsCache.class);
 
@@ -48,6 +50,7 @@ public class OpenOauthClientsCache implements ICacheClear {
     public void clear() {
         cache.invalidateAll();
     }
+
     @Override
     public long cacheSize() {
         return cache.size();

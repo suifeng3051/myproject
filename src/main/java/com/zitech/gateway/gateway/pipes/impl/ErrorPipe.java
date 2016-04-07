@@ -27,7 +27,7 @@ public class ErrorPipe extends AbstractPipe {
     private static Logger logger = LoggerFactory.getLogger(ErrorPipe.class);
 
     private MonitorService monitorService;
-    
+
     public ErrorPipe() {
 
         this.monitorService = SpringContext.getBean(MonitorService.class);
@@ -35,7 +35,7 @@ public class ErrorPipe extends AbstractPipe {
 
     @Override
     public void onEvent(RequestEvent event) {
-    	long all = 0;
+        long all = 0;
         long call = 0;
         long pre = 0;
         long redis = 0;
@@ -93,7 +93,6 @@ public class ErrorPipe extends AbstractPipe {
             Map<String, Long> perfMap = new HashMap<>();
 
             for (Map.Entry<String, TicTac.STEntry> entry : ticTac.getEntryMap().entrySet()) {
-
                 if (entry.getKey().equals(Constants.ST_PRE_PIPE)) {
                     pre = entry.getValue().getElapsed();
                 } else if (entry.getKey().equals(Constants.ST_REDIS_TOKEN)) {
@@ -107,7 +106,7 @@ public class ErrorPipe extends AbstractPipe {
                 if (!entry.getKey().equals(Constants.ST_POST))
                     perfMap.put(entry.getKey(), entry.getValue().getElapsed());
             }
-            
+
             monitorService.saveMonitorData(event, all, call, pre, redis, GatewayConstant.FAILUE, exceptionName);
             onNext(event);
         }

@@ -1,22 +1,22 @@
 package com.zitech.gateway.gateway.pipes.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.exception.CarmenException;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.excutor.PerfMonitor;
-import com.zitech.gateway.gateway.excutor.TicTac;
-import com.zitech.gateway.monitor.service.MonitorService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.gateway.excutor.Pipeline;
+import com.zitech.gateway.gateway.excutor.TicTac;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.gateway.model.RequestState;
 import com.zitech.gateway.monitor.constants.GatewayConstant;
+import com.zitech.gateway.monitor.service.MonitorService;
 import com.zitech.gateway.utils.SpringContext;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
 public class PostPipe extends AbstractPipe {
@@ -48,7 +48,6 @@ public class PostPipe extends AbstractPipe {
             Map<String, Long> perfMap = new HashMap<>();
 
             for (Map.Entry<String, TicTac.STEntry> entry : ticTac.getEntryMap().entrySet()) {
-
                 if (entry.getKey().equals(Constants.ST_PRE_PIPE)) {
                     pre = entry.getValue().getElapsed();
                 } else if (entry.getKey().equals(Constants.ST_REDIS_TOKEN)) {
@@ -68,16 +67,16 @@ public class PostPipe extends AbstractPipe {
             if (e != null && !(e instanceof CarmenException)) {
                 logger.error("unknown error", event.getException());
                 isSuccess = GatewayConstant.FAILUE;
-                exceptionName = "Excetpion";
+                exceptionName = "Exception";
             }
 
             logger.info("event: {}, performance of {}.{}: {}", event.getId(), event.getNamespace(), event.getMethod(), JSONObject.toJSON(perfMap));
 
         } finally {
             logger.debug("end of post processing: {}", event);
-            
+
             monitorService.saveMonitorData(event, all, call, pre, redis, isSuccess, exceptionName);
-            
+
             onNext(event);
         }
     }

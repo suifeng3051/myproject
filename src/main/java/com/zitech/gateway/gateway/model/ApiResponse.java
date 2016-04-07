@@ -2,58 +2,58 @@ package com.zitech.gateway.gateway.model;
 
 public class ApiResponse {
 
-	private int code;
-	private String message;
-	private String data;
+    private int code;
+    private String message;
+    private String data;
 
-	public ApiResponse() {
+    public ApiResponse() {
 
-	}
+    }
 
-	public ApiResponse(int code, String data) {
-		this.code = code;
-		this.message = "";
-		this.data = data;
-	}
+    public ApiResponse(int code, String data) {
+        this.code = code;
+        this.message = "";
+        this.data = data;
+    }
 
-	public int getCode() {
-		return code;
-	}
+    public int getCode() {
+        return code;
+    }
 
-	public void setCode(int code) {
-		this.code = code;
-	}
+    public void setCode(int code) {
+        this.code = code;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public void setMessage(String description) {
-		this.message = description;
-	}
+    public void setMessage(String description) {
+        this.message = description;
+    }
 
-	public String getData() {
-		return data;
-	}
+    public String getData() {
+        return data;
+    }
 
-	public void setData(String data) {
-		this.data = data;
-	}
+    public void setData(String data) {
+        this.data = data;
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("{")
-                .append("code:") .append(code)
-                .append(", message:\"") .append(message).append("\"");
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("code:").append(code)
+                .append(", message:\"").append(message).append("\"");
 
-		if (null == data)
-			sb.append(", data:\"").append("").append("\"");
-		else
-			sb.append(", data:\"").append(data).append("\"");
+        if (null == data)
+            sb.append(", data:\"").append("").append("\"");
+        else
+            sb.append(", data:\"").append(data).append("\"");
 
-		sb.append("}");
+        sb.append("}");
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 }

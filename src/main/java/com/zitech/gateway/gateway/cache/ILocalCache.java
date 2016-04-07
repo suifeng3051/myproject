@@ -1,6 +1,6 @@
 package com.zitech.gateway.gateway.cache;
 
-public interface ICacheClear {
+public interface ILocalCache {
 
     void load();
 

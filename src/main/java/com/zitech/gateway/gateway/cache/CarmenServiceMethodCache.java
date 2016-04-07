@@ -2,9 +2,11 @@ package com.zitech.gateway.gateway.cache;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.CarmenServiceMethod;
 import com.zitech.gateway.apiconfig.service.ICarmenServiceMethodService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import java.util.UUID;
 
 @Service
 @LocalCache("service")
-public class CarmenServiceMethodCache implements ICacheClear {
+public class CarmenServiceMethodCache implements ILocalCache {
 
     private static Logger logger = LoggerFactory.getLogger(CarmenServiceMethodCache.class);
 
@@ -48,6 +50,7 @@ public class CarmenServiceMethodCache implements ICacheClear {
     public void clear() {
         cache.invalidateAll();
     }
+
     @Override
     public long cacheSize() {
         return cache.size();

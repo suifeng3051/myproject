@@ -1,6 +1,7 @@
 package com.zitech.gateway.gateway.excutor;
 
 import com.alibaba.fastjson.JSON;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,10 +41,6 @@ public class TicTac {
     public Map<String, STEntry> getEntryMap() {
         return entryMap;
     }
-
-    /*public void setEntryMap(Map<String, STEntry> entryMap) {
-        this.entryMap = entryMap;
-    }*/
 
     /**
      * get time by name
@@ -89,18 +86,6 @@ public class TicTac {
             }
             return end - start;
         }
-
-        /*public long getStartThreadId() {
-            return startThreadId;
-        }
-
-        public void setStartThreadId(long startThreadId) {
-            this.startThreadId = startThreadId;
-        }
-
-        public long getEndThreadId() {
-            return endThreadId;
-        }*/
 
         public void setEndThreadId(long endThreadId) {
             this.endThreadId = endThreadId;

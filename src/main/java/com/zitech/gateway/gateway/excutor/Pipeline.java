@@ -3,11 +3,19 @@ package com.zitech.gateway.gateway.excutor;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.gateway.pipes.IPipe;
-import com.zitech.gateway.gateway.pipes.impl.*;
+import com.zitech.gateway.gateway.pipes.impl.DispatchPipe;
+import com.zitech.gateway.gateway.pipes.impl.ErrorPipe;
+import com.zitech.gateway.gateway.pipes.impl.ParsePipe;
+import com.zitech.gateway.gateway.pipes.impl.PostPipe;
+import com.zitech.gateway.gateway.pipes.impl.ResultPipe;
+import com.zitech.gateway.gateway.pipes.impl.ServicePipe;
+import com.zitech.gateway.gateway.pipes.impl.SignPipe;
+import com.zitech.gateway.gateway.pipes.impl.TokenPipe;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -35,7 +43,6 @@ public class Pipeline {
     private IPipe postPipe = new PostPipe();
 
     private AtomicInteger preCount = new AtomicInteger(0);
-    private AtomicInteger dubboCount = new AtomicInteger(0);
 
     private Pipeline() {
 
@@ -44,9 +51,9 @@ public class Pipeline {
         preThreadCount = cpuCount * 2;
 
         preExecutor = TimingExecutor.newFixedThreadPool("pre", preThreadCount, preThreadCount, 60L, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(), false, preCount);
+                new ArrayBlockingQueue<>(20000), false, preCount);
         postExecutor = TimingExecutor.newFixedThreadPool("post", cpuCount, cpuCount, 60, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(), false);
+                new ArrayBlockingQueue<>(20000), false);
 
         RejectedExecutionHandler rejectedExecutionHandler = (r, executor) -> {
             TimingExecutor timingExecutor = (TimingExecutor) executor;

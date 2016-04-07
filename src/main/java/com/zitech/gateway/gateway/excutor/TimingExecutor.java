@@ -2,6 +2,7 @@ package com.zitech.gateway.gateway.excutor;
 
 
 import com.zitech.gateway.gateway.model.RequestEvent;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,7 @@ public class TimingExecutor extends ThreadPoolExecutor {
                 }
             }, 0, 100);
         }*/
+        this.setThreadFactory(r -> new Thread(r, name + "_" + threadCount.incrementAndGet()));
     }
 
     public TimingExecutor(String name, int corePoolSize, int maximumPoolSize, long keepAliveTime,
@@ -59,6 +61,7 @@ public class TimingExecutor extends ThreadPoolExecutor {
             }, 0, 100);
         }
         this.count = count;
+        this.setThreadFactory(r -> new Thread(r, name + "_" + threadCount.incrementAndGet()));
     }
 
     public static TimingExecutor newFixedThreadPool(String name, int corePoolSize, int maximumPoolSize,
@@ -128,7 +131,6 @@ public class TimingExecutor extends ThreadPoolExecutor {
             if (monitor)
                 this.putToTimeMap(worker.getName(), event);
         }
-        threadCount.incrementAndGet();
 
         if (count != null)
             count.incrementAndGet();
@@ -144,7 +146,6 @@ public class TimingExecutor extends ThreadPoolExecutor {
                 this.rmvFromTimeMap(worker.getName(), event);
         }
         super.afterExecute(r, t);
-        threadCount.decrementAndGet();
 
         if (count != null)
             count.decrementAndGet();
@@ -153,14 +154,6 @@ public class TimingExecutor extends ThreadPoolExecutor {
     @Override
     protected void terminated() {
         super.terminated();
-    }
-
-    public AtomicLong getThreadCount() {
-        return threadCount;
-    }
-
-    public void setThreadCount(AtomicLong threadCount) {
-        this.threadCount = threadCount;
     }
 
     public String getName() {

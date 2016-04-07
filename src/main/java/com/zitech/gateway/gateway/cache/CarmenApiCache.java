@@ -2,9 +2,11 @@ package com.zitech.gateway.gateway.cache;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.CarmenApi;
 import com.zitech.gateway.apiconfig.service.ICarmenApiService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import java.util.UUID;
 
 @Service
 @LocalCache("api")
-public class CarmenApiCache implements ICacheClear {
+public class CarmenApiCache implements ILocalCache {
 
     private static Logger logger = LoggerFactory.getLogger(CarmenApiCache.class);
 
@@ -40,11 +42,10 @@ public class CarmenApiCache implements ICacheClear {
 
     @Override
     public void load() {
-
-        List<CarmenApi> carmenApiList=apiService.getRecordByEnv(config.env);
+        List<CarmenApi> carmenApiList = apiService.getRecordByEnv(config.env);
         for (CarmenApi carmenApi : carmenApiList) {
-            get(null, carmenApi.getNamespace(),carmenApi.getName()
-                    ,carmenApi.getVersion(),config.env);
+            get(null, carmenApi.getNamespace(), carmenApi.getName()
+                    , carmenApi.getVersion(), config.env);
         }
 
     }

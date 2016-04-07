@@ -5,6 +5,7 @@ import com.zitech.gateway.gateway.excutor.Pipeline;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.gateway.model.RequestState;
 import com.zitech.gateway.gateway.model.ValidateType;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ public class AcceptorController {
         }
         if (StringUtils.isNotEmpty(request.getParameter("default"))) {
             ResponseEntity<String> responseEntity = new ResponseEntity<String>(
-                    String.format(Constants.ERROR_RESPONSE,  5125, "default cannot be parameter"),
+                    String.format(Constants.ERROR_RESPONSE, 5125, "default cannot be parameter"),
                     HttpStatus.valueOf(200));
             deferredResult.setResult(responseEntity);
             return deferredResult;
@@ -79,7 +80,7 @@ public class AcceptorController {
         }
         if (StringUtils.isNotEmpty(request.getParameter("default"))) {
             ResponseEntity<String> responseEntity = new ResponseEntity<String>(
-                    String.format(Constants.ERROR_RESPONSE,  5125, "default cannot be parameter"),
+                    String.format(Constants.ERROR_RESPONSE, 5125, "default cannot be parameter"),
                     HttpStatus.valueOf(200));
             deferredResult.setResult(responseEntity);
             return deferredResult;
