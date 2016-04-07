@@ -5,11 +5,22 @@ switch(path){
     case 'apilist': addClass('Home'); break;
     case 'createapi': addClass('Config'); break;
     case 'release': addClass('Release'); break;
-    default :
-            //$('li[role="presentation"]:last').addClass('active');
-            $("#consoleText").html(path);
-     break;
+    case 'monitor': path = 'Monitor';break;
+    case 'manual': path = 'Manual';break;
+    case 'cachemanage': path = 'Cache';break;
+    case 'instancedetail': path = 'Instance';break;
+    case 'pipelog': path = 'LogView';break;
+    case 'user': path = 'users';break;
+    case 'recoverapi': path = 'RecoverApi';break;
+    case 'oauthclient': path = 'Client';break;
+    case 'updatepwd': path = 'Safety';break;
+    default : break;
 }
+ // 如果是下拉菜单项为当前页，则修改下拉菜单文字，否则默认显示 Console
+if($('#myTitle li:last-child').hasClass('active')){
+    $("#consoleText").html(path);
+}
+
 function addClass(el){
     $('#myTitle a.titles').each(function(){
         if($(this).text() ===  el){
@@ -68,7 +79,7 @@ function addClass(el){
     });
 
     function getEnv() {
-        var env = $("#env").val();
+        var env = $("input[name='env']:checked").val();
         return env;
     }
 

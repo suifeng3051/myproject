@@ -1,3 +1,8 @@
+
+<style>
+    #consoleText { text-transform:capitalize; }
+</style>
+
 <!-- 导航条 -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
