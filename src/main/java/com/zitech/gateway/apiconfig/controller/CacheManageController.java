@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by dingdongsheng on 15/9/5.
@@ -57,7 +58,13 @@ public class CacheManageController {
             hashMap.put("data", userName);
             CacheManager cacheManager = CacheManager.getInstance();
             Map<String, String> allCacheNames = cacheManager.readNodes();
-            hashMap.put("allCacheNames", allCacheNames);
+
+            TreeMap<String, String> cacheNames = new TreeMap<>();
+            for (Map.Entry<String, String> entry : allCacheNames.entrySet()) {
+                cacheNames.put(entry.getKey(), entry.getValue());
+            }
+
+            hashMap.put("allCacheNames", cacheNames);
 
         } catch (Exception e) {
             logger.warn("fail to get session", e);

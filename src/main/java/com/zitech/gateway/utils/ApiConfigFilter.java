@@ -48,6 +48,7 @@ public class ApiConfigFilter implements Filter {
             String username = (String) httpSession.getAttribute("username");
             if (StringUtils.isEmpty(username)){
                 request.getRequestDispatcher("/user/login").forward(request,response);
+                return;
             }
         }
 
