@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.zitech.gateway.apiconfig.model.*;
 import com.zitech.gateway.apiconfig.service.*;
 import com.zitech.gateway.cache.RedisOperate;
-import com.zitech.gateway.frequency.model.CarmenFreqConfig;
-import com.zitech.gateway.frequency.service.ICarmenFreqConfigService;
 import com.zitech.gateway.oauth.model.OpenOauthClients;
 import com.zitech.gateway.oauth.service.IOpenOauthClientsService;
 import com.zitech.gateway.utils.AppUtils;
@@ -45,8 +43,6 @@ public class ApiListController {
     // Resource 默认按照名称进行装配
     @Resource
     ICarmenApiService iCarmenApiService;
-    @Resource
-    ICarmenFreqConfigService iCarmenFreqConfigService;
     @Resource
     ICarmenApiParamService iCarmenApiParamService;
     //    @Resource
@@ -176,32 +172,6 @@ public class ApiListController {
             return result;
         } catch (Exception e) {
             logger.error("fail to get api list by group", e);
-        }
-
-        try {
-            status = JSON.toJSONString(status);
-        } catch (Exception e) {
-            logger.warn("fail to convert json", e);
-        }
-        return status;
-    }
-
-
-    /**
-     * 根据id删除clientid 的记录
-     * @param id id
-     * @return 成功返回success，失败返回fail
-     */
-    @RequestMapping(value = "/deleteclienttable", produces="application/json;charset=utf-8")
-    @ResponseBody
-    public String deleteClientTable(@RequestParam("id") String id){
-        String status = "success";
-
-        try {
-            iCarmenFreqConfigService.deleteById(Long.valueOf(id));
-        } catch (NumberFormatException e) {
-            status = "fail";
-            logger.warn("fail to delete", e);
         }
 
         try {
@@ -715,58 +685,16 @@ public class ApiListController {
         try {
             List<OpenApiGroup> openApiGroupList = iOpenApiGroupService.getAll();
             List<OpenOauthClients> openOauthClientses = iOpenOauthClientsService.getAll();
-            List<CarmenFreqConfig> listValueByApi = iCarmenFreqConfigService.getListValueByApi(Long.valueOf(apiId));
             Map<String, Object> results = new HashMap<>();
             results.put("status", status);
             results.put("groupAlias", openApiGroupList);
             results.put("openOauthClientses", openOauthClientses);
-            results.put("listValueByApi", listValueByApi);
             status = JSON.toJSONString(results);
         } catch (Exception e) {
             logger.warn("fail to convert json", e);
         }
         return status;
     }
-
-    /**
-     * 新增client 表记录
-     * @param updateArray 待更新的行
-     * @param addArray 待新增的行
-     * @return 成功返回success，失败返回fail
-     */
-    @RequestMapping(value = "/updateclienttable", produces="application/json;charset=utf-8")
-    @ResponseBody
-    public String updateClientTable(@RequestParam("updateArray") String updateArray,
-                                    @RequestParam("addArray") String addArray) {
-        String status = "success";
-
-        try {
-
-            List<CarmenFreqConfig> updateObjects = JSON.parseArray(updateArray, CarmenFreqConfig.class);
-            List<CarmenFreqConfig> addObjects = JSON.parseArray(addArray, CarmenFreqConfig.class);
-
-            for (CarmenFreqConfig update : updateObjects) {
-
-                iCarmenFreqConfigService.update(update);
-            }
-            for (CarmenFreqConfig add : addObjects) {
-
-                iCarmenFreqConfigService.insert(add);
-            }
-        } catch (Exception e) {
-            status = "fail" + e.toString();
-            logger.warn("fail to update", e);
-        }
-
-        try {
-            status = JSON.toJSONString(status);
-        } catch (Exception e) {
-            logger.warn("fail to convert json", e);
-        }
-        return status;
-    }
-
-
 
     /**
      *
