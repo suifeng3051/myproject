@@ -121,18 +121,7 @@
                                     <input type="text" class="form-control" name="appName" id="appName" placeholder="appName" value="$!results.get('api').appName">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="url" class="col-sm-2 control-label" id="apiUrl">url</label>
-                                <div class="col-sm-6">
-                                    <!--<input type="text" class="form-control required" name="url" id="url" placeholder="url" value="$!results.get('api').addressUrl">-->
-                                    #if(!$!results.get('api').addressUrl)
-                                        <input type="text" class="form-control required" name="url" id="url" placeholder="url" value="http://service.zitech.com">
-                                    #else
-                                        <input type="text" class="form-control required" name="url" id="url" placeholder="url" value="$!results.get('api').addressUrl">
 
-                                    #end
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <label for="isLog" class="col-sm-2 control-label">开启日志</label>
                                 <div class="col-sm-6">
@@ -314,15 +303,34 @@
                         <form class="form-inline" id="methodconfigform">
                             <div class="form-group">
                                 <label for="namespaceMethodParam">serviceName</label>
+
                                 <input type="text" style="min-width:230px;" class="form-control required" id="namespaceMethodParam" name="namespaceMethodParam" placeholder="serviceName" value="$!results.get('method').name">
+
                             </div>
                             <div class="form-group">
                                 <label for="nameMethodParam">method</label>
+
                                 <input type="text" class="form-control required" id="nameMethodParam"  name="nameMethodParam" placeholder="method" value="$!results.get('method').method">
+
+                            </div>
+                            <div class="form-group" style="display: none">
+                                <label for="versionMethodParam">version</label>
+
+                                <input type="text" class="form-control required" id="versionMethodParam" name="versionMethodParam" placeholder="version" #if(1==$!results.get('edit'))value="$!results.get('method').version"#else value="1.0"#end>
+                                #if(1 == $!results.get('edit'))<input type="hidden" name="currentId" value="$!results.get('method').id"> #else <input type="hidden" name="currentId" value="0"> #end
+
                             </div>
                             <div class="form-group">
-                                <label for="versionMethodParam">version</label>
-                                <input type="text" class="form-control required" id="versionMethodParam" name="versionMethodParam" placeholder="version" value="$!results.get('method').version">#if(1 == $!results.get('edit'))<input type="hidden" name="currentId" value="$!results.get('method').id"> #else <input type="hidden" name="currentId" value="0"> #end
+                                <label for="url"  id="apiUrl">url</label>
+
+                                    <!--<input type="text" class="form-control required" name="url" id="url" placeholder="url" value="$!results.get('api').addressUrl">-->
+                                    #if(!$!results.get('method').addressUrl)
+                                        <input type="text" class="form-control required" name="url" id="url" placeholder="url" value="http://service.zitech.com">
+                                    #else
+                                        <input type="text" class="form-control required" name="url" id="url" placeholder="url" value="$!results.get('method').addressUrl">
+
+                                    #end
+
                             </div>
                         </form>
 

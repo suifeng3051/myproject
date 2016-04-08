@@ -11,7 +11,7 @@
         <result column="api_group" property="apiGroup" jdbcType="VARCHAR"/>
         <result column="api_desc" property="apiDesc" jdbcType="VARCHAR"/>
         <result column="api_scenarios" property="apiScenarios" jdbcType="VARCHAR"/>
-        <result column="address_url" property="addressUrl" jdbcType="VARCHAR"/>
+        <!--<result column="address_url" property="addressUrl" jdbcType="VARCHAR"/>-->
         <result column="enable_log" property="enableLog" jdbcType="TINYINT"/>
         <result column="enable_freq" property="enableFreq" jdbcType="TINYINT"/>
         <result column="enable_inner_outer" property="enableInnerOuter" jdbcType="TINYINT"/>
@@ -30,7 +30,7 @@
         <result column="result_demo" property="resultDemo" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, namespace, name, version, app_name,api_group,api_desc,api_scenarios, address_url, enable_log, enable_freq, enable_inner_outer,valid_flag,test_flag,migrate_flag,
+    id, namespace, name, version, app_name,api_group,api_desc,api_scenarios, enable_log, enable_freq, enable_inner_outer,valid_flag,test_flag,migrate_flag,
     api_type, request_type,session_flag, creator, create_time, modifier, modify_time, is_delete, env,result_demo
    </sql>
 
@@ -109,9 +109,9 @@
             <if test="apiScenarios != null">
                 api_scenarios,
             </if>
-            <if test="addressUrl != null">
-                address_url,
-            </if>
+            <!--<if test="addressUrl != null">-->
+                <!--address_url,-->
+            <!--</if>-->
             <if test="enableLog != null">
                 enable_log,
             </if>
@@ -164,7 +164,7 @@
                 env,
             </if>
             <if test="resultDemo != null">
-                resultDemo,
+                result_demo,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -192,9 +192,9 @@
             <if test="apiScenarios != null">
                 #{apiScenarios,jdbcType=VARCHAR},
             </if>
-            <if test="addressUrl != null">
-                #{addressUrl,jdbcType=VARCHAR},
-            </if>
+            <!--<if test="addressUrl != null">-->
+                <!--#{addressUrl,jdbcType=VARCHAR},-->
+            <!--</if>-->
             <if test="enableLog != null">
                 #{enableLog,jdbcType=TINYINT},
             </if>
@@ -275,9 +275,9 @@
             <if test="apiScenarios != null">
                api_scenarios = #{apiScenarios,jdbcType=VARCHAR},
             </if>
-            <if test="addressUrl != null">
-                address_url = #{addressUrl,jdbcType=VARCHAR},
-            </if>
+            <!--<if test="addressUrl != null">-->
+                <!--address_url = #{addressUrl,jdbcType=VARCHAR},-->
+            <!--</if>-->
             <if test="enableLog != null">
                 enable_log = #{enableLog,jdbcType=TINYINT},
             </if>

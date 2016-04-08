@@ -36,7 +36,7 @@ public class CarmenApiServiceTest extends AbstractJunit {
         config.setApiScenarios("xxxxxxxxxyyyyyy");
         config.setVersion("1.0.0");
         config.setApiType((byte) 1);
-        config.setAddressUrl("dubbo://127.0.0.1");
+        //config.setAddressUrl("dubbo://127.0.0.1");
         config.setCreateTime(new Date());
         config.setValidFlag((byte) 2);
         config.setTestFlag((byte) 2);
@@ -61,7 +61,7 @@ public class CarmenApiServiceTest extends AbstractJunit {
         config.setApiScenarios("xxxxxxxxxyyyyyy");
         config.setVersion("1.0.0");
         config.setApiType((byte) 1);
-        config.setAddressUrl("dubbo://127.0.0.2");
+        //config.setAddressUrl("dubbo://127.0.0.2");
         config.setCreateTime(new Date());
         config.setSessionFlag((byte)1);
         config.setEnv((byte)2);
@@ -69,7 +69,7 @@ public class CarmenApiServiceTest extends AbstractJunit {
         try {
             id=apiService.insert(config);
             CarmenApi configChange=apiService.getById(id);
-            assertEquals("dubbo://127.0.0.2",configChange.getAddressUrl());
+            assertEquals("1.0.0",configChange.getVersion());
         } finally {
             if (id!=0){
                 innerDelete(id);
@@ -97,7 +97,7 @@ public class CarmenApiServiceTest extends AbstractJunit {
     @Test
     public void testGetById() throws Exception {
         CarmenApi config=apiService.getById(id);
-        assertEquals("dubbo://127.0.0.1", config.getAddressUrl());
+        assertEquals("1.0.0", config.getVersion());
     }
 
     @Test

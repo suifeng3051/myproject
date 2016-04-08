@@ -58,7 +58,7 @@ public class CarmenApiParamServiceTest extends AbstractJunit {
         config.setName("createAccount_param");
         config.setVersion("1.0.0");
         config.setApiType((byte) 1);
-        config.setAddressUrl("dubbo://127.0.0.1");
+        //config.setAddressUrl("dubbo://127.0.0.1");
         config.setCreateTime(new Date());
         config.setEnv((byte) 2);
         apiId = apiService.insert(config);

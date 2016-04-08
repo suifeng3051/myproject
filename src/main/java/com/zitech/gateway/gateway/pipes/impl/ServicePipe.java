@@ -118,13 +118,15 @@ public class ServicePipe extends AbstractPipe {
                 throw new PipelineException(5018, "namespace method is null");
             }
 
-            String url = carmenApi.getAddressUrl();
+//            String url = carmenApi.getAddressUrl();
+            String url = serviceMethod.getAddressUrl();
             if (!url.endsWith("/")) {
                 url = url + "/";
             }
 
             String service = StringUtils.replace(serviceMethod.getName(), ".", "/");
-            String requestUrl = url + service + "/" + serviceMethod.getMethod() + "/" + serviceMethod.getVersion();
+//            String requestUrl = url + service + "/" + serviceMethod.getMethod() + "/" + serviceMethod.getVersion();
+            String requestUrl = url + service + "/" + serviceMethod.getMethod();
 
             if (carmenApi.getRequestType().equals("1")) {
                 // build parameters

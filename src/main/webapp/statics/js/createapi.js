@@ -760,18 +760,18 @@ $(document).ready(function(){
         updateObject.name = cells[1].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.version = cells[2].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.appName = cells[3].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.addressUrl = cells[4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.enableLog = cells[5].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.enableFreq = cells[6].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.enableInnerOuter = cells[7].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
+        //updateObject.addressUrl = cells[4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
+        updateObject.enableLog = cells[4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
+        updateObject.enableFreq = cells[5].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
+        updateObject.enableInnerOuter = cells[6].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.apiType = getAPIType()
-        updateObject.requestType = cells[8].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.id = cells[9].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.apiGroup = cells[10].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.sessionFlag = cells[11].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.apiDesc = cells[12].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.apiScenarios = cells[13].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        var resultDemo =cells[14].split("=")[1];
+        updateObject.requestType = cells[7].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
+        updateObject.id = cells[8].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
+        updateObject.apiGroup = cells[9].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
+        updateObject.sessionFlag = cells[10].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
+        updateObject.apiDesc = cells[11].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
+        updateObject.apiScenarios = cells[12].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
+        var resultDemo =cells[13].split("=")[1];
         updateObject.resultDemo =resultDemo.replace(/\%22/g, "\%22");
         updateObject.env = getEnv();
         updateObject.creator = $("#userName").val();
@@ -826,6 +826,7 @@ $(document).ready(function(){
         updateObject.method = elements[1].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.version = elements[2].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.id = elements[3].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
+        updateObject.addressUrl = elements[4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.creator = $("#userName").val();
         updateObject.env = getEnv();
 
