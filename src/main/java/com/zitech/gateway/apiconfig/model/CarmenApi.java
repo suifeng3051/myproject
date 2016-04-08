@@ -20,7 +20,7 @@ public class CarmenApi {
 
     private String apiScenarios;
 
-    private String addressUrl;
+//    private String addressUrl;
 
     private Byte enableLog;
 
@@ -158,17 +158,17 @@ public class CarmenApi {
         this.appName = appName;
     }
 
-    public String getAddressUrl() {
-        return addressUrl;
-    }
-
-    public void setAddressUrl(String addressUrl) {
-        this.addressUrl = addressUrl;
-    }
-
-    public Byte getEnableLog() {
-        return enableLog;
-    }
+//    public String getAddressUrl() {
+//        return addressUrl;
+//    }
+//
+//    public void setAddressUrl(String addressUrl) {
+//        this.addressUrl = addressUrl;
+//    }
+//
+//    public Byte getEnableLog() {
+//        return enableLog;
+//    }
 
     public void setEnableLog(Byte enableLog) {
         this.enableLog = enableLog;

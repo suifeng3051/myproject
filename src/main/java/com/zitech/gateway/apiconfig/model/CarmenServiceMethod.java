@@ -22,7 +22,17 @@ public class CarmenServiceMethod {
 
     private String isDelete;
 
+    private String addressUrl;
+
     private Byte env;
+
+    public String getAddressUrl() {
+        return addressUrl;
+    }
+
+    public void setAddressUrl(String addressUrl) {
+        this.addressUrl = addressUrl;
+    }
 
     public Long getId() {
         return id;

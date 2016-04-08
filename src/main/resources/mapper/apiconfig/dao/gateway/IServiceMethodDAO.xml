@@ -7,6 +7,7 @@
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="method" property="method" jdbcType="VARCHAR"/>
         <result column="version" property="version" jdbcType="VARCHAR"/>
+        <result column="address_url" property="addressUrl" jdbcType="VARCHAR"/>
         <result column="creator" property="creator" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
@@ -15,7 +16,7 @@
         <result column="env" property="env" jdbcType="TINYINT"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, name, method, version, creator, create_time, modifier, modify_time, is_delete, 
+    id, name, method, version, address_url,creator, create_time, modifier, modify_time, is_delete,
     env
     </sql>
 
@@ -66,6 +67,9 @@
             <if test="version != null">
                 version,
             </if>
+            <if test="addressUrl != null">
+                address_url,
+            </if>
             <if test="creator != null">
                 creator,
             </if>
@@ -98,6 +102,9 @@
             <if test="version != null">
                 #{version,jdbcType=VARCHAR},
             </if>
+            <if test="addressUrl != null">
+                #{addressUrl, jdbcType=VARCHAR},
+            </if>
             <if test="creator != null">
                 #{creator,jdbcType=VARCHAR},
             </if>
@@ -129,6 +136,9 @@
             </if>
             <if test="version != null">
                 version = #{version,jdbcType=VARCHAR},
+            </if>
+            <if test="addressUrl != null">
+                #{addressUrl, jdbcType=VARCHAR},
             </if>
             <if test="creator != null">
                 creator = #{creator,jdbcType=VARCHAR},

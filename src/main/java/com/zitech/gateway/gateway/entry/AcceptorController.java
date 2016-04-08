@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ public class AcceptorController {
     /**
      * the token entry for gateway
      */
-    @RequestMapping(value = "/gw/oauthentry/{namespace}/{version}/{method}", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/gw/oauthentry/{namespace}/{version}/{method}",produces = "application/json;charset=utf-8")
     public DeferredResult<Object> token(HttpServletRequest request,
                                         @PathVariable String namespace,
                                         @PathVariable String version,
