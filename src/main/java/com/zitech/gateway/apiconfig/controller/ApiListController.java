@@ -713,7 +713,7 @@ public class ApiListController {
             List<OpenApiGroup> groupByNameAndAlias = iOpenApiGroupService.getGroupByNameAndAlias(openApiGroup.getName(), openApiGroup.getAlias());
             if(groupByNameAndAlias==null ||groupByNameAndAlias.size()!=0)
             {
-                return JSON.toJSONString(status+":接口已经存在");
+                return JSON.toJSONString(status+":组已经存在");
             }
             openApiGroup.setCreateTime(new Date());
             iOpenApiGroupService.insert(openApiGroup);

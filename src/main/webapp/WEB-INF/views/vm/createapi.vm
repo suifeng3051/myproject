@@ -199,7 +199,7 @@
                                 <!--<label for="resultDemo" class="col-sm-2 control-label">示例</label>-->
                                 <div class="col-sm-2" style="text-align: right;">示例</div>
                                 <div class="col-sm-6">
-                                    <textarea  rows="3" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API示例" >$!results.get('api').resultDemo</textarea>
+                                    <textarea  rows="20" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API示例" >$!results.get('api').resultDemo</textarea>
                                 </div>
                             </div>
                         </form>
@@ -325,7 +325,7 @@
 
                                     <!--<input type="text" class="form-control required" name="url" id="url" placeholder="url" value="$!results.get('api').addressUrl">-->
                                     #if(!$!results.get('method').addressUrl)
-                                        <input type="text" class="form-control required" name="url" id="url" placeholder="url" value="http://service.zitech.com">
+                                        <input type="text" class="form-control required" name="url" id="url" placeholder="url" value="http://study.zitech.com">
                                     #else
                                         <input type="text" class="form-control required" name="url" id="url" placeholder="url" value="$!results.get('method').addressUrl">
 
