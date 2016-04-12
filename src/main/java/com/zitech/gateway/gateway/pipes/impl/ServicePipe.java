@@ -1,5 +1,7 @@
 package com.zitech.gateway.gateway.pipes.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.apiconfig.model.CarmenApi;
 import com.zitech.gateway.apiconfig.model.CarmenServiceMethod;
 import com.zitech.gateway.exception.CarmenException;
@@ -22,6 +24,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.InputStreamBody;
@@ -33,6 +36,7 @@ import org.apache.http.impl.nio.reactor.IOReactorConfig;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.nio.entity.NByteArrayEntity;
 import org.apache.http.nio.reactor.ConnectingIOReactor;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,14 +122,14 @@ public class ServicePipe extends AbstractPipe {
                 throw new PipelineException(5018, "namespace method is null");
             }
 
-//            String url = carmenApi.getAddressUrl();
+            //String url = carmenApi.getAddressUrl();
             String url = serviceMethod.getAddressUrl();
             if (!url.endsWith("/")) {
                 url = url + "/";
             }
 
             String service = StringUtils.replace(serviceMethod.getName(), ".", "/");
-//            String requestUrl = url + service + "/" + serviceMethod.getMethod() + "/" + serviceMethod.getVersion();
+            //String requestUrl = url + service + "/" + serviceMethod.getMethod() + "/" + serviceMethod.getVersion();
             String requestUrl = url + service + "/" + serviceMethod.getMethod();
 
             if (carmenApi.getRequestType().equals("1")) {
@@ -181,8 +185,13 @@ public class ServicePipe extends AbstractPipe {
                     httpPost.setHeader("Content-Type", "multipart/form-data;boundary=-------------" + boundary);
                     httpPost.setEntity(byteEntity);
                 } else {
-                    UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairs, Charset.forName("utf-8"));
-                    httpPost.setEntity(urlEncodedFormEntity);
+                    JSONObject jsonObject = new JSONObject();
+                    for (NameValuePair nameValuePair : nameValuePairs) {
+                        jsonObject.put(nameValuePair.getName(), nameValuePair.getValue());
+                    }
+                    StringEntity stringEntity = new StringEntity(jsonObject.toJSONString(), "UTF-8");
+                    stringEntity.setContentType("application/json");
+                    httpPost.setEntity(stringEntity);
                 }
 
                 // send post
