@@ -386,7 +386,8 @@ $(document).ready(function(){
             var methodName = $("#nameMethodParam").val();
             var methodVersion = $("#versionMethodParam").val();
             var apiService = apiNamespace + "/" + apiVersion + "/" + apiName;
-            var innerService = methodNamespace + "/" + methodVersion + "/" + methodName;
+            //var innerService = methodNamespace + "/" + methodVersion + "/" + methodName;
+            var innerService = methodNamespace + "/" + methodName;
             $("#namespaceMethodMappingApi").html(apiService);
             //$("#nameMethodMappingApi").html(apiName);
             //$("#versionMethodMappingApi").html(apiVersion);
@@ -764,14 +765,14 @@ $(document).ready(function(){
         updateObject.enableLog = cells[4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.enableFreq = cells[5].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.enableInnerOuter = cells[6].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.apiType = getAPIType()
+        updateObject.apiType = getAPIType();
         updateObject.requestType = cells[7].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.id = cells[8].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.apiGroup = cells[9].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.sessionFlag = cells[10].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.apiDesc = cells[11].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.apiScenarios = cells[12].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        var resultDemo =cells[13].split("=")[1];
+        var resultDemo = encodeURI(cells[13].split("=")[1]);
         updateObject.resultDemo =resultDemo.replace(/\%22/g, "\%22");
         updateObject.env = getEnv();
         updateObject.creator = $("#userName").val();
