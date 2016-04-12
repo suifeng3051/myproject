@@ -12,6 +12,7 @@ public class OauthUser {
 	private int status;
 	private Date insertTime;
 	private Date updateTime;
+	private String scope;
 
 	public int getId() {
 		return id;
@@ -77,6 +78,14 @@ public class OauthUser {
 		this.updateTime = updateTime;
 	}
 
+	public String getScope() {
+		return scope;
+	}
+
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
+
 	@Override
 	public String toString() {
 		return "OauthUser{" +
@@ -88,6 +97,7 @@ public class OauthUser {
 				", status=" + status +
 				", insertTime=" + insertTime +
 				", updateTime=" + updateTime +
+				", scope=" + scope +
 				'}';
 	}
 }
