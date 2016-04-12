@@ -29,7 +29,7 @@
         <div class="page-header cut">
             <h3><small>1. API说明</small></h3>
         </div>
-        <p style="word-wrap: break-word;word-break: normal;">$!results.get("carmenApi").namespace/$!results.get("carmenApi").name/$!results.get("carmenApi").version <br/> -- $!results.get("carmenApi").apiDesc</p>
+        <p style="word-wrap: break-word;word-break: normal;">$!results.get("carmenApi").namespace/$!results.get("carmenApi").version/$!results.get("carmenApi").name <br/> -- $!results.get("carmenApi").apiDesc</p>
         <div class="page-header cut">
             <h3><small>2. 应用场景</small></h3>
             <p style="word-wrap: break-word;word-break: normal;">$!results.get("carmenApi").apiScenarios </p>

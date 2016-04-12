@@ -58,7 +58,7 @@
                             #if(1 == $!apiElement.testFlag)
                                 <li class="list-group-item list-group-item-success apiElement">
                                     <span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span>
-                                    <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace.$!apiElement.name.$!apiElement.version</a>
+                                    <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.name</a>
                                     <a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="$!apiElement.id" class="glyphicon glyphicon-trash deleteIcon"></span></a>
                                     <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id"  class="glyphicon glyphicon-eye-open apimonitor"></span></a>
                                     #if(1==$!apiElement.validFlag)
@@ -72,7 +72,7 @@
                                 </li>
                             #else
                                 <li class="list-group-item apiElement">
-                                    <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace.$!apiElement.name.$!apiElement.version</a>
+                                    <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.name</a>
                                     <a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="$!apiElement.id" class="glyphicon glyphicon-trash deleteIcon"></span></a>
                                     <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id"  class="glyphicon glyphicon-eye-open apimonitor"></span></a>
                                     #if(1==$!apiElement.validFlag)
