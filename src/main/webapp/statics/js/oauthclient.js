@@ -78,21 +78,15 @@ $(document).ready(function(){
                         console.log(OAuthClientData); // 所保存的数据
 
                         // 自动选中已经保存的 default_scope 选项
-                        $.post('getGroupAlias', function(allGroupData){
+                        $.post('getGroupTree', function(allGroupData){
                             if(allGroupData.status === 'success'){
                                 console.log(allGroupData);
-
+                                var html = '';
                                 var scopeArr = OAuthClientData.oauthClient.defaultScope.split(' ');
 
-                                var aliases = allGroupData.aliases;
-                                var html = '';
-                                if(aliases!=null){
+                                var groupTree = allGroupData.tree;
 
-                                    $.each(aliases, function(i, item) {
-                                        var check = in_array(item,scopeArr) ?  'checked' : '';
-                                        html += '<label class="col-sm-3"><input type="checkbox" name="default_scope" '+check+' value="'+item+'" />'+item+'</label>';
-                                    });
-                                }
+                                html = foreachGroupTree(groupTree,html,true,scopeArr);
 
                                 $('#defaultScopeArea').html(html);
                             }
@@ -133,26 +127,25 @@ $(document).ready(function(){
 
     // OAuthClient 对话框
     $('#addOAuthClientBtn').click(function(){
-        $('#OAuthClientConfig')[0].reset();
+         $('#sureAddOAuthClient').attr('action','');
+         $('#OAuthClientConfig')[0].reset();
+        $('#OAuthClientConfig input').attr("checked",false);
+
         $('#OAuthClientInfo2').hide();
         $('#checkOAuthBtn').show();
-        //$.post('getGroupAlias', function(data){
-        $.post('getGroupAlias', function(data){
+         $.post('getGroupTree', function(data){
             if(data.status === 'success'){
                 var html = '';
-                var aliases = data.aliases;
-                if(aliases!=null){
+                var groupTree = data.tree;
 
-                    $.each(aliases, function(i, item) {
-                        html += '<label class="col-sm-3"><input type="checkbox" name="default_scope" value="'+item+'" />'+item+'</label>';
-                    });
-                }
-
-                $('#defaultScopeArea').html(html);
+                html = foreachGroupTree(groupTree,html,false,null);
+                 $('#defaultScopeArea').html(html);
                 $("#OAuthClientModal").modal("show");
             }
         });
-    });
+
+        var formContent = $("#OAuthClientConfig").serialize();
+     });
 
 
     $('#checkOAuthBtn').click(function(){
@@ -174,15 +167,14 @@ $(document).ready(function(){
 
     $('#sureAddOAuthClient').click(function(){
         var formContent = $("#OAuthClientConfig").serialize();
-
-        if($(this).attr('action')){
+         if($(this).attr('action')){
             formContent += '&id='+ $(this).attr('action');
             var url = 'updateOauthClient';
         } else {
             var url = 'addOauthClient';
         }
 
-        $.post(url, {'oauthclient': formContent}, function(data){
+         $.post(url, {'oauthclient': formContent}, function(data){
             if ( data.indexOf('fail') != -1 ) {
                 $("#OAuthClientInfo2").html("<p>失败</p>"+data)
                     .css("display", "block")
@@ -199,7 +191,7 @@ $(document).ready(function(){
                     window.location.reload();
                 }, 1000);
             }
-        }, 'json');
+        }, 'json'); 
     });
 
     function in_array(search,array){
@@ -215,14 +207,14 @@ $(document).ready(function(){
 
 
 	$('#defaultScopeArea label').click(function(){
-		console.log($(this).text());
 
 		// 子对象被选中父级对象自动选中
-		$(this).parent().siblings('label').children('input').prop('checked', true);
-		$(this).parent().parent().siblings('label').children('input').prop('checked', true);
+		//$(this).parent().siblings('label').children('input').prop('checked', true);
+        //$(this).parent().parent().siblings('label').children('input').prop('checked', true);
+        //$(this).parent().parent().parent().siblings('label').children('input').prop('checked', true);
 
 		// 父级对象取消选中，子对象全部取消选中
-		$(this).siblings('.level-box').find('[type="checkbox"]').prop('checked', false);
+		//$(this).siblings('.level-box').find('[type="checkbox"]').prop('checked', false);
 
 		//父级对象选中，子对象全部选中
 		// if($(this).find('input').is(':checked'))
@@ -230,6 +222,36 @@ $(document).ready(function(){
 
 
 	});
+
+    function foreachGroupTree(groupTree,html,flag_check,scopeArr){
+
+        if(groupTree!=null){
+
+            if(flag_check){
+                var check = in_array(groupTree.alias, scopeArr) ? 'checked' : '';
+                if(check){
+                    html += '<div class="level-box"><label> <input name="default_scope" value="'+groupTree.alias+'" type="checkbox" checked="checked" />'+groupTree.name+'</label>';
+                }else{
+                    html += '<div class="level-box"><label> <input name="default_scope" value="'+groupTree.alias+'" type="checkbox"   />'+groupTree.name+'</label>';
+                }
+            }else{
+                html += '<div class="level-box"><label> <input name="default_scope" value="'+groupTree.alias+'" type="checkbox"   />'+groupTree.name+'</label>';
+            }
+
+            var children = groupTree.children;
+            //第一次取下级，即取所有的group节点
+            if(children!=null&&children.length>0) {
+                $.each(children, function (i, item) {
+
+                    html  = foreachGroupTree(item,html,flag_check,scopeArr);
+
+                });// end foreach
+            }//end if
+            html += '</div>'
+        }
+        return html;
+
+    }
 
 
 
