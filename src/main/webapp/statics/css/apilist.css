@@ -930,6 +930,7 @@ form.bs-docs-example {
 
 .nav-list .nav-list li a{ text-indent:1.5em; }
 .nav-list .nav-list .nav-list li a { text-indent:3em; }
+.nav-list .nav-list .nav-list .nav-list li a { text-indent:4.5em; }
 .icon-chevron-right + ul { display: none; }
 
 .bs-docs-sidenav .icon-chevron-right:hover { background-color:rgba(0, 0, 0, .1); }

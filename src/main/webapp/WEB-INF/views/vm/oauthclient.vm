@@ -17,6 +17,13 @@
 
     <style>
         th { text-align:center; }
+
+		.level-box { min-height:25px; }
+		#defaultScopeArea > .level-box { margin-left:auto; }
+		#defaultScopeArea > .level-box > .level-box,
+		#defaultScopeArea > .level-box > .level-box > .level-box,
+        #defaultScopeArea > .level-box > .level-box > .level-box > .level-box { margin-left:1.5em; }
+
     </style>
 </head>
 <body>
@@ -138,7 +145,44 @@
                             <label for="resourceAlias" class="col-sm-3 control-label">Default Scope</label>
                             <div id="defaultScopeArea" class="col-sm-9 checkbox">
                                 <!--<label><input type="checkbox" name="default_scope" value="" />  </label>-->
+
                             </div>
+
+
+
+
+
+                            <!-- 该标签<div id="defaultScopeArea"></div>内的静态代码放入上面对应位置 -->
+
+#*                            <div id="defaultScopeArea" class="col-sm-9 checkbox">
+                                <div class="level-box">
+                                    <label> <input name="default_scope" value="all" type="checkbox" />all</label>
+
+                                    <div class="level-box">
+                                        <label> <input name="default_scope" value="scene" type="checkbox" >scene</label>
+                                        <div class="level-box">
+                                            <label  class="col-sm-3"> <input name="default_scope" value="testA" type="checkbox"  />testA</label>
+                                            <label class="col-sm-3"> <input name="default_scope" value="testB" type="checkbox" />testB</label>
+                                            <label class="col-sm-3"> <input name="default_scope" value="testc" type="checkbox" />testc</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="level-box">
+                                        <label> <input name="default_scope" value="scene" type="checkbox" />scene</label>
+                                        <div class="level-box">
+                                            <label class="col-sm-3"> <input name="default_scope" value="testB" type="checkbox" />testB</label>
+                                            <label class="col-sm-3"> <input name="default_scope" value="testc" type="checkbox" />testc</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="level-box">
+                                    <label> <input name="default_scope" value="testD" type="checkbox" />testD</label>
+                                </div>
+                            </div>*#
+
+                            <!-- END Example -->
 
                         </div>
                     </div>

@@ -396,7 +396,7 @@ public class ApiListController {
         Map<String, Object> results = new HashMap<>();
         Map<String,Object> groupTree = new HashMap<String,Object>();
          try{
-             groupTree = iOpenApiGroupService.getGroupTreeById(0);
+             groupTree = iOpenApiGroupService.getGroupTreeById(-1);
         }catch(Exception e){status="fail";}
 
         results.put("status", status);
