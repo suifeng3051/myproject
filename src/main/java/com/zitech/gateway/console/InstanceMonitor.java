@@ -35,7 +35,7 @@ public class InstanceMonitor {
 
         AppConfig appConfig = SpringContext.getBean(AppConfig.class);
 
-        InetAddress localHost = InetAddress.getLocalHost();
+        //InetAddress localHost = InetAddress.getLocalHost();
         String hostName = executeShellCommand("hostname");
         //String hostAddress = this.getHostAddress(appConfig.RedisAddress + ":" + appConfig.RedisPort);
         String hostAddress = this.getHostAddress(appConfig.ZookeeperAddress);
