@@ -17,7 +17,7 @@ $(document).ready(function(){
             for (var item in results) {
                 var operate = "";
                 if (1 == results[item].testFlag) { // 如果测试通过
-                    operate += '<li class="list-group-item list-group-item-success apiElement"><span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '.' + results[item].name + '.' + results[item].version + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
+                    operate += '<li class="list-group-item list-group-item-success apiElement"><span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name  + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
                     operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiID="' + results[item].id + '" class="glyphicon glyphicon-eye-open apimonitor"></span></a>';
                     if (1 == results[item].validFlag) {
                         operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="禁用" namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiID="' + results[item].id + '" flag="1" class="glyphicon glyphicon-remove-circle disableIcon"></span></a>';
@@ -27,7 +27,7 @@ $(document).ready(function(){
                     operate += '<a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiId="' + results[item].id + '" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>';
                     operate += '<a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="' + results[item].id + '"namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" class="glyphicon glyphicon-wrench testApi"></span></a><a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiId="' + results[item].id + '" class="glyphicon glyphicon-edit editIcon"></span></a></li>';
                 } else {
-                    operate += '<li class="list-group-item  apiElement"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '.' + results[item].name + '.' + results[item].version + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
+                    operate += '<li class="list-group-item  apiElement"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
                     operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiID="' + results[item].id + '" class="glyphicon glyphicon-eye-open apimonitor"></span></a>';
                     if (1 == results[item].validFlag) {
                         operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="禁用" namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiID="' + results[item].id + '" flag="1" class="glyphicon glyphicon-remove-circle disableIcon"></span></a>';
@@ -357,7 +357,12 @@ $(document).ready(function(){
         document.getElementById("apiResourceGroupConfig").reset();
         $("#apiResourceInfo1").css("display", "none");
         $("#apiResourceInfo").css("display", "none");
-
+        var resourceGroupParent = $(".affixGroup.active");
+        var resourceGroupParentAlias = resourceGroupParent.attr("group");
+        var text = resourceGroupParent.text();
+        $("#resourceGroupParentAlias").attr("group",resourceGroupParentAlias);
+       // $("#resourceGroupParentAlias").attr("placeholder",text);
+        $("#resourceGroupParentAlias").attr("value",text);
         $("#myResourceModal").modal("show");
     });
 
@@ -690,6 +695,7 @@ $(document).ready(function(){
                 $("#apiResourceInfo").removeClass("alert-danger");
                 $("#apiResourceInfo").addClass("alert-success");
                 $("#apiResourceInfo").css("display", "block");
+                $('#myResourceModal').modal('hide');
             }
         }, "json");
     }
@@ -699,9 +705,10 @@ $(document).ready(function(){
         var formContent = $("#apiResourceGroupConfig").serialize();
         var fields = formContent.split("&");
         var insert = new Object();
-        insert.name = fields[0].split("=")[1];
-        insert.alias = fields[1].split("=")[1];
-        insert.level = fields[2].split("=")[1];
+        insert.name = fields[1].split("=")[1];
+        insert.alias = fields[2].split("=")[1];
+        insert.level = fields[3].split("=")[1];
+        insert.pAlias = $("#resourceGroupParentAlias").attr("group");
         $.post("insertresourcegroup", {"insert": JSON.stringify(insert)}, function (d) {
             re = /^fail/;
             if (re.test(d)) {
@@ -714,6 +721,13 @@ $(document).ready(function(){
                 $("#apiResourceInfo").removeClass("alert-danger");
                 $("#apiResourceInfo").addClass("alert-success");
                 $("#apiResourceInfo").css("display", "block");
+
+                setTimeout(function (){
+                    $("#myResourceModal").modal('hide');
+                }, 1500);
+
+
+
             }
         });
     }
@@ -1061,7 +1075,7 @@ $(document).ready(function(){
             for (var item in results) {
                 var operate = "";
                 if (1 == results[item].testFlag) { // 如果测试通过
-                    operate += '<li class="list-group-item list-group-item-success apiElement"><span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '.' + results[item].name + '.' + results[item].version + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
+                    operate += '<li class="list-group-item list-group-item-success apiElement"><span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
                     operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiID="' + results[item].id + '" class="glyphicon glyphicon-eye-open apimonitor"></span></a>';
                     if (1 == results[item].validFlag) {
                         operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="禁用" namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiID="' + results[item].id + '" flag="1" class="glyphicon glyphicon-remove-circle disableIcon"></span></a>';
@@ -1071,7 +1085,7 @@ $(document).ready(function(){
                     operate += '<a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiId="' + results[item].id + '" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>';
                     operate += '<a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="' + results[item].id + '"namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" class="glyphicon glyphicon-wrench testApi"></span></a><a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiId="' + results[item].id + '" class="glyphicon glyphicon-edit editIcon"></span></a></li>';
                 } else {
-                    operate += '<li class="list-group-item  apiElement"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '.' + results[item].name + '.' + results[item].version + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
+                    operate += '<li class="list-group-item  apiElement"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
                     operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiID="' + results[item].id + '" class="glyphicon glyphicon-eye-open apimonitor"></span></a>';
                     if (1 == results[item].validFlag) {
                         operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="禁用" namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiID="' + results[item].id + '" flag="1" class="glyphicon glyphicon-remove-circle disableIcon"></span></a>';
@@ -1093,5 +1107,7 @@ $(document).ready(function(){
 
 
     $('#resourceGroupTabBtn').trigger('click');
+    $('.affixGroup[group*=all]').trigger('click');
+
 
 });

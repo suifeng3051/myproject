@@ -3,7 +3,6 @@ package com.zitech.gateway.oauth.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.oauth.Constants;
-import com.zitech.gateway.oauth.LoginType;
 import com.zitech.gateway.oauth.exception.OAuthException;
 import com.zitech.gateway.oauth.model.OAuthAuthzParameters;
 import com.zitech.gateway.oauth.model.OauthUser;
@@ -12,7 +11,6 @@ import com.zitech.gateway.oauth.model.OpenOauthRefreshTokens;
 import com.zitech.gateway.oauth.oauthex.*;
 import com.zitech.gateway.oauth.service.impl.OAuthService;
 import com.zitech.gateway.utils.AppUtils;
-import com.zitech.gateway.utils.LoginType2EnumUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
@@ -591,18 +589,26 @@ public class TokenController {
             String refreshToken = oauthIssuerImpl.refreshToken();
 
             oAuthAuthzParameters.setUserId(user.getId());
+
             if (StringUtils.isEmpty(oAuthAuthzParameters.getScope())) {
                 oAuthAuthzParameters.setScope(openOauthClients.getDefaultScope());
             } else {
-                oAuthAuthzParameters.setScope(
-                        OAuthUtils.encodeScopes(
-                                oAuthService.getRetainScopes(
-                                        openOauthClients.getDefaultScope(),
-                                        oAuthAuthzParameters.getScope()
-                                )
-                        )
-                );
-            }
+                // add by panxl 若该用户已被分配了权限，则写入其被分配的权限,否则就是写入该client所拥有的默认权限
+                String scope_userHas = user.getScope();
+                if(StringUtils.isNotBlank(scope_userHas)){
+                    oAuthAuthzParameters.setScope(scope_userHas.trim());
+                }else{
+                    oAuthAuthzParameters.setScope(
+                            OAuthUtils.encodeScopes(
+                                    oAuthService.getRetainScopes(
+                                            openOauthClients.getDefaultScope(),
+                                            oAuthAuthzParameters.getScope()
+                                    )
+                            )
+                    );
+                }//end else StringUtils.isNotBlank(scope_userHas)
+
+            }//end else StringUtils.isEmpty(oAuthAuthzParameters.getScope()
 
             /**
              * limit client access token number

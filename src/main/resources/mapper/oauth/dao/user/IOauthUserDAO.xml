@@ -10,30 +10,44 @@
 		<result column="status" property="status" jdbcType="INTEGER"/>
 		<result column="insertTime" property="insertTime" jdbcType="DATE"/>
 		<result column="updateTime" property="updateTime" jdbcType="DATE"/>
-
+		<result column="scope" property="scope" jdbcType="VARCHAR"/>
 	</resultMap>
 
 	<sql id="Base_Column_List">
-        id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime
+        id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_alias
     </sql>
 
 	<select id="getUserByUserId" parameterType="com.zitech.gateway.oauth.model.OauthUser" resultMap="BaseResultMap">
-		select <include refid="Base_Column_List"/>
-		from account where id=#{id,jdbcType=INTEGER}
+		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(group_alias SEPARATOR ' ') as scope from  (
+ 		select <include refid="Base_Column_List"/>
+		from account a
+		LEFT JOIN account_group ag on ag.accountid=a.id
+		where id=#{id,jdbcType=INTEGER} )a
 	</select>
 
 	<!--账号登陆-->
 	<select id="getUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(group_alias SEPARATOR ' ') as scope from  (
 		select <include refid="Base_Column_List"/>
-		from account where loginName=#{name,jdbcType=VARCHAR} and status=1
-	</select><!--手机号登录-->
+		from account a
+		LEFT JOIN account_group ag on ag.accountid=a.id
+	    where loginName=#{name,jdbcType=VARCHAR} and status=1 )a
+	</select>
+	<!--手机号登录-->
 	<select id="getUserByMobile" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(group_alias SEPARATOR ' ') as scope from  (
 		select <include refid="Base_Column_List"/>
-		from account where loginPhone=#{mobile,jdbcType=VARCHAR} and status=1
-	</select><!--邮箱登陆-->
+		from account a
+		LEFT JOIN account_group ag on ag.accountid=a.id
+		where loginPhone=#{mobile,jdbcType=VARCHAR} and status=1 )a
+	</select>
+	<!--邮箱登陆-->
 	<select id="getUserByMail" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(group_alias SEPARATOR ' ') as scope from  (
 		select <include refid="Base_Column_List"/>
-		from account where loginMail=#{mail,jdbcType=VARCHAR} and status=1
+		from account a
+		LEFT JOIN account_group ag on ag.accountid=a.id
+		where loginMail=#{mail,jdbcType=VARCHAR} and status=1 )a
 	</select>
 
 

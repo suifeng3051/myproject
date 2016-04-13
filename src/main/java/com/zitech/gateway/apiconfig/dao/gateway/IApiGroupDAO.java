@@ -14,4 +14,6 @@ public interface IApiGroupDAO extends IEntityDAO<OpenApiGroup, OpenResourceGroup
     List<OpenApiGroup> getAll();
 
     List<OpenApiGroup> getGroupByNameAndAlias(OpenApiGroup openApiGroup);
+
+    OpenApiGroup getByAlias(String alias);
 }
