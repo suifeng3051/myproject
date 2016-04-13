@@ -63,7 +63,12 @@
         </div>
         <div class="page-header cut">
             <h3><small>5. 示例</small></h3>
-            <p style="word-wrap: break-word;word-break: normal;">  $!results.get("carmenApi").resultDemo </p>
+            <p style="word-wrap: break-word;word-break: normal;">
+                <script type="text/javascript">
+                    document.write(decodeURI("$!results.get("carmenApi").resultDemo"));
+                </script>
+            </p>
+
         </div>
     </div>
 </div>
