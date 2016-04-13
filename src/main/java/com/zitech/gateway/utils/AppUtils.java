@@ -155,9 +155,15 @@ public class AppUtils {
             for (Map<String, Object> child : treeChildren) {
                 int childId = (int) child.get("id");
                 Map<String, Object> o = getTreeById(childId, groupTreeKeyByID, groupTreeKeyByPID); //递归
-                List<Map<String, Object>> children = (List<Map<String, Object>>) treeObj.get("children");
-                children.add(o);
-            }
+                List<Map<String, Object>> children = new ArrayList<>();
+                if(treeObj.get("children")!=null){
+                    children = (List<Map<String, Object>>) treeObj.get("children");
+                    children.add(o);
+                }else{
+                    children.add(o);
+                    treeObj.put("children",children);
+                  }
+             }
         }
         return treeObj;
     }

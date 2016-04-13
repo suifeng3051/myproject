@@ -23,20 +23,72 @@
 
 #parse("template/nav.vm")
 
-
+    #set ( $groupTree = $!results.get('groupMap') )
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2 bs-docs-sidebar" >
             <div data-offset-top="200"  style="margin-top:60px;">
                 <ul class="nav nav-list bs-docs-sidenav" id="navbarLeft">
-#*
-                    <li class="affixGroup active" group="all"><a href="#"><i class="icon-chevron-right"></i>所有</a></li>
-*#
-                    #foreach ($!apiParam in $!results.get("groupList").entrySet())
-                        <li class="affixGroup" group="$!apiParam.key" ><a href="#"><i class="icon-chevron-right"></i>$!apiParam.value</a></li>
-                    #end
-                </ul>
+
+                    <li class="affixGroup" group="$!groupTree.get('alias')" >
+                        <a href="#">$!groupTree.get('name')</a>
+                        #if($groupTree.get("children"))
+                             <i class="icon-chevron-right"></i>
+                        <ul class="nav nav-list bs-docs-sidenav" >
+                            #foreach ($group_lv1 in $!groupTree.get("children") )
+                                 <li class="affixGroup" group='$!group_lv1.get("alias")' >
+                                 <a href="#">$!group_lv1.get("name")</a>
+                                     #if($group_lv1.get("children"))
+                                        <i class="icon-chevron-right"></i>
+                                    <ul class="nav nav-list bs-docs-sidenav" >
+                                        #foreach($group_lv2 in $!group_lv1.get("children"))
+                                                   <li class="affixGroup" group='$!group_lv2.get("alias")' >
+                                                       <a href="#">$!group_lv2.get("name")</a>
+                                                          #if($group_lv2.get("children"))
+                                                              <i class="icon-chevron-right"></i>
+                                                          <ul class="nav nav-list bs-docs-sidenav" >
+                                                                #foreach($group_lv3 in $!group_lv2.get("children"))
+                                                                 <li class="affixGroup" group='$!group_lv3.get("alias")' >
+                                                                     <a href="#">$!group_lv3.get("name")</a>
+                                                                 <li>
+                                                                 #end
+                                                          </ul>
+                                                          #end
+                                                   </li>
+                                           #end
+                                         </ul>
+                                    #end
+
+                                 </li>
+
+                            #end
+                        </ul>
+                        #end
+
+                    </li>
+
+                    </ul>
+                    #* <li  class="affixGroup" group="$!groupTree.alias">
+                            <a href="#">测试组D</a>
+
+                            <i class="icon-chevron-right"></i>
+                            <ul class="nav nav-list bs-docs-sidenav" >
+                                <li class="affixGroup"> <a href="#">子选项1</a> </li>
+                                <li class="affixGroup">
+                                    <a href="#">子选项2</a> <i class="icon-chevron-right"></i>
+
+                                    <ul class="nav nav-list bs-docs-sidenav" >
+                                        <li class="affixGroup"> <a href="#">子选项1</a> </li>
+                                        <li class="affixGroup"> <a href="#">子选项2</a> </li>
+                                        <li class="affixGroup"> <a href="#">子选项3</a> </li>
+                                    </ul>
+                                </li>
+
+                                <li  class="affixGroup"> <a href="#">子选项3</a> </li>
+                            </ul>
+
+                        </li>*#
 
 
 
@@ -46,7 +98,8 @@
 
 
 
-                <ul class="nav nav-list bs-docs-sidenav" id="navbarLeft">
+
+#*                <ul class="nav nav-list bs-docs-sidenav" id="navbarLeft">
                     <li class="affixGroup current" group="all"><a href="#">所有</a></li>
                     <li  class="affixGroup" group="testD">
                         <a href="#">测试组D</a> <i class="icon-chevron-right"></i>
@@ -70,7 +123,7 @@
                     <li  class="affixGroup" group="testc"> <a href="#">测试组C</a> </li>
                     <li  class="affixGroup" group="testA"> <a href="#">测试组A</a> </li>
                     <li  class="affixGroup" group="scene"> <a href="#">场景</a> </li>
-                </ul>
+                </ul>*#
 
 
 

@@ -357,12 +357,12 @@ $(document).ready(function(){
         document.getElementById("apiResourceGroupConfig").reset();
         $("#apiResourceInfo1").css("display", "none");
         $("#apiResourceInfo").css("display", "none");
-        var resourceGroupParent = $(".affixGroup.active");
+        var resourceGroupParent = $(".affixGroup.current");
         var resourceGroupParentAlias = resourceGroupParent.attr("group");
         var text = resourceGroupParent.text();
         $("#resourceGroupParentAlias").attr("group",resourceGroupParentAlias);
        // $("#resourceGroupParentAlias").attr("placeholder",text);
-        $("#resourceGroupParentAlias").attr("value",text);
+        $("#resourceGroupParentAlias").attr("value",text.trim());
         $("#myResourceModal").modal("show");
     });
 
