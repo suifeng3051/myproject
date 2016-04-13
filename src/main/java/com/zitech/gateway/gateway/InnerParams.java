@@ -1,4 +1,4 @@
-package com.zitech.gateway.gateway.pipes;
+package com.zitech.gateway.gateway;
 
 import com.zitech.gateway.gateway.Constants;
 

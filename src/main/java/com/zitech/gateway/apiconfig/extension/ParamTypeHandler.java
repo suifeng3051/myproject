@@ -35,7 +35,7 @@ public class ParamTypeHandler extends BaseTypeHandler<ParamType> {
     public void setNonNullParameter(PreparedStatement ps, int i,
                                     ParamType parameter, JdbcType jdbcType) throws SQLException {
         // baseTypeHandler已经帮我们做了parameter的null判断
-        ps.setInt(i, parameter.getDataFrom());
+        ps.setInt(i, parameter.getValue());
 
     }
 
@@ -86,7 +86,7 @@ public class ParamTypeHandler extends BaseTypeHandler<ParamType> {
      */
     private ParamType locateEnumStatus(int code) {
         for(ParamType type : enums) {
-            if(type.getDataFrom()==(Integer.valueOf(code))) {
+            if(type.getValue()==(Integer.valueOf(code))) {
                 return type;
             }
         }

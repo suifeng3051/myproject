@@ -9,22 +9,26 @@ public enum ParamType {
     INNER(2),
     FREE(3);
 
-    private int dataFrom;
+    private int value;
 
-    ParamType(int dataFrom) {
-        this.dataFrom = dataFrom;
+    ParamType(int value) {
+        this.value = value;
     }
 
     public static ParamType fromValue(int dataFrom) {
         for (ParamType paramType : ParamType.values()) {
-            if (paramType.dataFrom == dataFrom) {
+            if (paramType.value == dataFrom) {
                 return paramType;
             }
         }
         throw new IllegalArgumentException("Cannot create evalue from value: " + dataFrom + "!");
     }
 
-    public int getDataFrom() {
-        return dataFrom;
+    public ParamType valueOf(int value) {
+        return fromValue(value);
+    }
+
+    public int getValue() {
+        return value;
     }
 }

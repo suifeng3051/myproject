@@ -48,6 +48,10 @@ public class CarmenParamMapping {
         this.dataFrom = dataFrom;
     }
 
+    public void setDataFrom(int dataFrom) {
+        this.dataFrom = ParamType.fromValue(dataFrom);
+    }
+
     public Long getId() {
         return id;
     }

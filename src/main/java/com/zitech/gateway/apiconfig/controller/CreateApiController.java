@@ -1,6 +1,7 @@
 package com.zitech.gateway.apiconfig.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.zitech.gateway.apiconfig.model.*;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.apiconfig.service.*;
@@ -332,6 +333,9 @@ public class CreateApiController {
 
         List<CarmenStruct> carmenStructUpdate = "".equals(structureUpdate) ? new ArrayList<>() : JSON.parseArray(structureUpdate, CarmenStruct.class);
         List<CarmenStruct> carmenStructAdd = "".equals(structureAdd) ? new ArrayList<>() : JSON.parseArray(structureAdd, CarmenStruct.class);
+
+        JSONArray objects = JSON.parseArray(paramMappingUpdate);
+        CarmenParamMapping object = objects.getObject(0, CarmenParamMapping.class);
 
         List<CarmenParamMapping> carmenParamMappingUpdate = "".equals(paramMappingUpdate) ? new ArrayList<>() : JSON.parseArray(paramMappingUpdate, CarmenParamMapping.class);
         List<CarmenParamMapping> carmenParamMappingAdd = "".equals(paramMappingAdd) ? new ArrayList<>() : JSON.parseArray(paramMappingAdd, CarmenParamMapping.class);
