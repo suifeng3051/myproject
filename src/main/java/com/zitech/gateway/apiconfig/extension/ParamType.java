@@ -5,30 +5,16 @@ package com.zitech.gateway.apiconfig.extension;
  */
 public enum ParamType {
 
-    OUTER(1),
-    INNER(2),
-    FREE(3);
+    OUTER,
+    INNER,
+    FREE;
 
-    private int value;
-
-    ParamType(int value) {
-        this.value = value;
-    }
-
-    public static ParamType fromValue(int dataFrom) {
+    public static ParamType fromValue(String value) {
         for (ParamType paramType : ParamType.values()) {
-            if (paramType.value == dataFrom) {
+            if (paramType.name().equals(value)) {
                 return paramType;
             }
         }
-        throw new IllegalArgumentException("Cannot create evalue from value: " + dataFrom + "!");
-    }
-
-    public ParamType valueOf(int value) {
-        return fromValue(value);
-    }
-
-    public int getValue() {
-        return value;
+        throw new IllegalArgumentException("Cannot create evalue from value: " + value + "!");
     }
 }

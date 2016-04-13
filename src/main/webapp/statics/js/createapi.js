@@ -628,7 +628,7 @@ $(document).ready(function(){
         }
         methodParamRefElement += '<input style="max-width:160px;display:none;" type="text"  name="methodParamRef" >';
         methodParamRefElement += '<input type="hidden" name="currentId" value="0"><input type="hidden" name="currentSequence" value="' + timestamp + '" >';
-        var dateFromElement = '<select style="min-width:50px;max-height: 25px;" id="dataFrom"  name="dateFrom" class="form-control" ><option value="1" selected>API参数</option><option value="2" >内部参数</option><option value="3" >自定义参数</option></select>'
+        var dateFromElement = '<select style="min-width:50px;max-height: 25px;" id="dataFrom"  name="dateFrom" class="form-control" ><option value="OUTER" selected>API参数</option><option value="INNER" >内部参数</option><option value="FREE" >自定义参数</option></select>'
         carmenParamMappingTable.row.add( [
            dateFromElement, fieldNameElement, fieldTypeElement, apiParamNameElement, methodParamRefElement, operate
         ] ).draw();
@@ -903,19 +903,19 @@ $(document).ready(function(){
         for (var i=0; i<elements.length/10; i++ ){
             var updateObject = new Object();
             updateObject.dataFrom = elements[i*10].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            if(2 == updateObject.dataFrom) { //内部参数
+            if("INNER" == updateObject.dataFrom) { //内部参数
                 updateObject.fieldName = elements[i*10+1].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
             } else {
                 updateObject.fieldName = elements[i*10+2].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
             }
 
             updateObject.fieldType = elements[i*10+3].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            if(1 == updateObject.dataFrom) { //API参数
+            if("OUTER" == updateObject.dataFrom) { //API参数
                 updateObject.apiParamName = elements[i*10+4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
             } else {
                 updateObject.apiParamName = elements[i*10+5].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
             }
-            if(1 == updateObject.dataFrom) { //API参数
+            if("OUTER" == updateObject.dataFrom) { //API参数
                 updateObject.methodParamRef = elements[i*10+6].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
             } else {
                 updateObject.methodParamRef = elements[i*10+7].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
@@ -1129,7 +1129,7 @@ $(document).ready(function(){
     $("body").on("change", "#dataFrom", function() {
         var content = $(this).val();
         //console.log("content: " + content);
-        if(1 == content) { // API参数
+        if("OUTER" == content) { // API参数
             // 参数名的select和input的切换
             $($(this).parent().next().children()[0]).css("display", "none");
             $($(this).parent().next().children()[1]).css("display", "block");
@@ -1142,7 +1142,7 @@ $(document).ready(function(){
             $($(this).parent().next().next().next().next().children()[0]).css("display", "block");
             $($(this).parent().next().next().next().next().children()[1]).css("display", "none");
 
-        } else if(2 == content) { // 内部参数
+        } else if("INNER" == content) { // 内部参数
             // 参数名的select和input的切换
             $($(this).parent().next().children()[0]).css("display", "block");
             $($(this).parent().next().children()[1]).css("display", "none");
@@ -1156,7 +1156,7 @@ $(document).ready(function(){
             $($(this).parent().next().next().next().next().children()[0]).css("display", "none");
             $($(this).parent().next().next().next().next().children()[1]).css("display", "block");
 
-        } else if(3 == content) { // 自定义参数
+        } else if("FREE" == content) { // 自定义参数
             // 参数名的select和input的切换
             $($(this).parent().next().children()[0]).css("display", "none");
             $($(this).parent().next().children()[1]).css("display", "block");

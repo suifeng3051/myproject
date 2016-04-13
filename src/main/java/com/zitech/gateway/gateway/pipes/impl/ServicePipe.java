@@ -5,6 +5,7 @@ import com.zitech.gateway.apiconfig.model.CarmenApi;
 import com.zitech.gateway.apiconfig.model.CarmenServiceMethod;
 import com.zitech.gateway.exception.CarmenException;
 import com.zitech.gateway.gateway.Constants;
+import com.zitech.gateway.gateway.InnerParams;
 import com.zitech.gateway.gateway.exception.CallException;
 import com.zitech.gateway.gateway.exception.PipelineException;
 import com.zitech.gateway.gateway.excutor.PerfMonitor;
@@ -43,6 +44,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -149,7 +151,13 @@ public class ServicePipe extends AbstractPipe {
 
                     // normal value
                     for (NameValuePair nameValuePair : nameValuePairs) {
-                        builder.addTextBody(nameValuePair.getName(), nameValuePair.getValue());
+                        String name = nameValuePair.getName();
+                        String head = InnerParams.getHeadName(name);
+                        if (head == null) {
+                            builder.addTextBody(nameValuePair.getName(), nameValuePair.getValue());
+                        } else {
+                            httpPost.setHeader(head, nameValuePair.getValue());
+                        }
                     }
 
                     // file value
@@ -177,7 +185,13 @@ public class ServicePipe extends AbstractPipe {
                 } else {
                     JSONObject jsonObject = new JSONObject();
                     for (NameValuePair nameValuePair : nameValuePairs) {
-                        jsonObject.put(nameValuePair.getName(), nameValuePair.getValue());
+                        String name = nameValuePair.getName();
+                        String head = InnerParams.getHeadName(name);
+                        if (head == null) {
+                            jsonObject.put(name, nameValuePair.getValue());
+                        } else {
+                            httpPost.setHeader(head, nameValuePair.getValue());
+                        }
                     }
                     StringEntity stringEntity = new StringEntity(jsonObject.toJSONString(), "UTF-8");
                     stringEntity.setContentType("application/json;charset=utf-8");
@@ -187,12 +201,19 @@ public class ServicePipe extends AbstractPipe {
                 // send post
                 httpAsyncClient.execute(httpPost, new HttpAsyncCallback(event));
             } else {
+                HttpGet httpGet = new HttpGet();
                 StringBuilder sb = new StringBuilder();
                 for (Map.Entry<String, Object> entry : paraMapChange.entrySet()) {
-                    sb.append(entry.getKey())
-                            .append("=")
-                            .append(URLEncoder.encode(entry.getValue().toString(), "utf-8"))
-                            .append("&");
+                    String name = entry.getKey();
+                    String head = InnerParams.getHeadName(name);
+                    if (head == null) {
+                        sb.append(name)
+                                .append("=")
+                                .append(URLEncoder.encode(entry.getValue().toString(), "utf-8"))
+                                .append("&");
+                    } else {
+                        httpGet.setHeader(head, entry.getValue().toString());
+                    }
                 }
 
                 // remove last '&'
@@ -201,7 +222,7 @@ public class ServicePipe extends AbstractPipe {
                 }
 
                 String s = requestUrl + "?" + sb.toString();
-                HttpGet httpGet = new HttpGet(s);
+                httpGet.setURI(new URI(s));
                 httpAsyncClient.execute(httpGet, new HttpAsyncCallback(event));
             }
 

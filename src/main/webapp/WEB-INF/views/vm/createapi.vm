@@ -482,23 +482,23 @@
                             <tr>
                                 <td>
                                     <select style="min-width:50px;max-height: 25px;" id="dataFrom" name="dateFrom" class="form-control" >
-                                    #if(1==$!paramMapping.dataFrom.value)
-                                        <option value="1" selected>API参数</option>
-                                        <option value="2" >内部参数</option>
-                                        <option value="3" >自定义参数</option>
-                                    #elseif(2==$!paramMapping.dataFrom.value)
-                                        <option value="1" >API参数</option>
-                                        <option value="2" selected>内部参数</option>
-                                        <option value="3" >自定义参数</option>
+                                    #if("OUTER"==$!paramMapping.dataFrom.name())
+                                        <option value="OUTER" selected>API参数</option>
+                                        <option value="INNER" >内部参数</option>
+                                        <option value="FREE" >自定义参数</option>
+                                    #elseif("INNER"==$!paramMapping.dataFrom.name())
+                                        <option value="OUTE" >API参数</option>
+                                        <option value="INNER" selected>内部参数</option>
+                                        <option value="FREE" >自定义参数</option>
                                     #else
-                                        <option value="1" >API参数</option>
-                                        <option value="2" >内部参数</option>
-                                        <option value="3" selected>自定义参数</option>
+                                        <option value="OUTE" >API参数</option>
+                                        <option value="INNER" >内部参数</option>
+                                        <option value="FREE" selected>自定义参数</option>
                                     #end
                                     </select>
                                 </td>
                                 <td>
-                                    #if(2==$!paramMapping.dataFrom.value)
+                                    #if("INNER"==$!paramMapping.dataFrom.name())
                                         <select style="max-width:150px;max-height: 25px;"  name="innerParam" class="form-control innerParam" >
                                             #if("user_id" == $!paramMapping.fieldName)
                                                 <option value="user_id" selected>user_id</option>
@@ -600,7 +600,7 @@
                                 </td>
                                 <td><input style="max-width:160px;" type="text"  name="fieldType" value="$!paramMapping.fieldType"></td>
                                 <td>
-                                    #if(1==$!paramMapping.dataFrom.value)
+                                    #if("OUTER"==$!paramMapping.dataFrom.name())
                                         <select style="max-width:150px;max-height: 25px;" name="innerParam" class="form-control apiParamsSelect" >
                                             <option value="$!paramMapping.apiParamName" selected>$!paramMapping.apiParamName</option>
                                         </select>
@@ -613,7 +613,7 @@
                                     #end
                                 </td>
                                 <td>
-                                    #if(1==$!paramMapping.dataFrom.value)
+                                    #if("OUTER"==$!paramMapping.dataFrom.name())
                                         <select style="max-width:150px;max-height:25px;" name="methodParamRef" class="form-control methodParamSelect" >
                                             <option value="$!paramMapping.methodParamRef" selected>$!paramMapping.methodParamRef</option>
                                         </select>

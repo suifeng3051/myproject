@@ -2,6 +2,7 @@ package com.zitech.gateway.apiconfig.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.apiconfig.model.*;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.apiconfig.service.*;
@@ -334,12 +335,21 @@ public class CreateApiController {
         List<CarmenStruct> carmenStructUpdate = "".equals(structureUpdate) ? new ArrayList<>() : JSON.parseArray(structureUpdate, CarmenStruct.class);
         List<CarmenStruct> carmenStructAdd = "".equals(structureAdd) ? new ArrayList<>() : JSON.parseArray(structureAdd, CarmenStruct.class);
 
-        JSONArray objects = JSON.parseArray(paramMappingUpdate);
-        CarmenParamMapping object = objects.getObject(0, CarmenParamMapping.class);
+        List<CarmenParamMapping> carmenParamMappingUpdate = new ArrayList<>();
+        if (!"".equals(paramMappingUpdate)) {
+            JSONArray parseArray = JSON.parseArray(paramMappingUpdate);
+            for (int i = 0; i < parseArray.size(); ++i) {
+                carmenParamMappingUpdate.add(parseArray.getObject(i, CarmenParamMapping.class));
+            }
+        }
 
-        List<CarmenParamMapping> carmenParamMappingUpdate = "".equals(paramMappingUpdate) ? new ArrayList<>() : JSON.parseArray(paramMappingUpdate, CarmenParamMapping.class);
-        List<CarmenParamMapping> carmenParamMappingAdd = "".equals(paramMappingAdd) ? new ArrayList<>() : JSON.parseArray(paramMappingAdd, CarmenParamMapping.class);
-
+        List<CarmenParamMapping> carmenParamMappingAdd = new ArrayList<>();
+        if (!"".equals(paramMappingAdd)) {
+            JSONArray parseArray = JSON.parseArray(paramMappingAdd);
+            for (int i = 0; i < parseArray.size(); ++i) {
+                carmenParamMappingAdd.add(parseArray.getObject(i, CarmenParamMapping.class));
+            }
+        }
 
         // 1. 更新或者插入API配置信息
         Long id = carmenApi.getId();
