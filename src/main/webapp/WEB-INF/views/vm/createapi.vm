@@ -325,9 +325,9 @@
 
                                     <!--<input type="text" class="form-control required" name="url" id="url" placeholder="url" value="$!results.get('api').addressUrl">-->
                                     #if(!$!results.get('method').addressUrl)
-                                        <input type="text" class="form-control required" name="url" id="url" placeholder="url" value="http://study.zitech.com">
+                                        <input type="text" class="form-control" style="min-width:550px" name="url" id="url" placeholder="url" value="http://study.zitech.com">
                                     #else
-                                        <input type="text" class="form-control required" name="url" id="url" placeholder="url" value="$!results.get('method').addressUrl">
+                                        <input type="text" class="form-control required " style="min-width:550px" name="url" id="url" placeholder="url" value="$!results.get('method').addressUrl">
 
                                     #end
 
