@@ -772,7 +772,10 @@ $(document).ready(function(){
         updateObject.sessionFlag = cells[10].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.apiDesc = cells[11].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.apiScenarios = cells[12].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        var resultDemo = encodeURI(cells[13].split("=")[1]);
+        var decoded = decodeURIComponent(cells[13].split("=")[1]).replace(/\+/g, ' ');
+        console.log(decoded);
+        var resultDemo = encodeURIComponent(encodeURI(decoded));
+        console.log(resultDemo);
         updateObject.resultDemo =resultDemo.replace(/\%22/g, "\%22");
         updateObject.env = getEnv();
         updateObject.creator = $("#userName").val();

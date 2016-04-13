@@ -63,11 +63,19 @@
         </div>
         <div class="page-header cut">
             <h3><small>5. 示例</small></h3>
-            <p style="word-wrap: break-word;word-break: normal;">
-                <script type="text/javascript">
-                    document.write(decodeURI("$!results.get("carmenApi").resultDemo"));
-                </script>
-            </p>
+##            <div style="word-wrap: break-word;word-break: normal;">
+##                <script type="text/javascript">
+##                    document.write(decodeURI("$!results.get("carmenApi").resultDemo"));
+##                </script>
+##            </div>
+            <p/>
+            <script type="text/javascript">
+                document.write('<textarea  rows="20" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API示例" >');
+
+                document.write(decodeURI("$!results.get("carmenApi").resultDemo"));
+
+                document.write('</textarea>');
+            </script>
 
         </div>
     </div>
