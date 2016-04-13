@@ -14,7 +14,7 @@ public class CarmenApi {
 
     private String appName;
 
-    private String apiGroup;
+    private String  apiGroup;
 
     private String apiDesc;
 

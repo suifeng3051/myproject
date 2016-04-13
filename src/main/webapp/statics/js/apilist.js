@@ -357,7 +357,12 @@ $(document).ready(function(){
         document.getElementById("apiResourceGroupConfig").reset();
         $("#apiResourceInfo1").css("display", "none");
         $("#apiResourceInfo").css("display", "none");
-
+        var resourceGroupParent = $(".affixGroup.active");
+        var resourceGroupParentAlias = resourceGroupParent.attr("group");
+        var text = resourceGroupParent.text();
+        $("#resourceGroupParentAlias").attr("group",resourceGroupParentAlias);
+       // $("#resourceGroupParentAlias").attr("placeholder",text);
+        $("#resourceGroupParentAlias").attr("value",text);
         $("#myResourceModal").modal("show");
     });
 
@@ -690,6 +695,7 @@ $(document).ready(function(){
                 $("#apiResourceInfo").removeClass("alert-danger");
                 $("#apiResourceInfo").addClass("alert-success");
                 $("#apiResourceInfo").css("display", "block");
+                $('#myResourceModal').modal('hide');
             }
         }, "json");
     }
@@ -699,9 +705,10 @@ $(document).ready(function(){
         var formContent = $("#apiResourceGroupConfig").serialize();
         var fields = formContent.split("&");
         var insert = new Object();
-        insert.name = fields[0].split("=")[1];
-        insert.alias = fields[1].split("=")[1];
-        insert.level = fields[2].split("=")[1];
+        insert.name = fields[1].split("=")[1];
+        insert.alias = fields[2].split("=")[1];
+        insert.level = fields[3].split("=")[1];
+        insert.pAlias = $("#resourceGroupParentAlias").attr("group");
         $.post("insertresourcegroup", {"insert": JSON.stringify(insert)}, function (d) {
             re = /^fail/;
             if (re.test(d)) {
@@ -714,6 +721,13 @@ $(document).ready(function(){
                 $("#apiResourceInfo").removeClass("alert-danger");
                 $("#apiResourceInfo").addClass("alert-success");
                 $("#apiResourceInfo").css("display", "block");
+
+                setTimeout(function (){
+                    $("#myResourceModal").modal('hide');
+                }, 1500);
+
+
+
             }
         });
     }
@@ -1093,5 +1107,7 @@ $(document).ready(function(){
 
 
     $('#resourceGroupTabBtn').trigger('click');
+    $('.affixGroup[group*=all]').trigger('click');
+
 
 });

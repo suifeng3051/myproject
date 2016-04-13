@@ -14,11 +14,11 @@
 	</resultMap>
 
 	<sql id="Base_Column_List">
-        id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,groupid
+        id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_alias
     </sql>
 
 	<select id="getUserByUserId" parameterType="com.zitech.gateway.oauth.model.OauthUser" resultMap="BaseResultMap">
-		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(groupid SEPARATOR ' ') as scope from  (
+		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(group_alias SEPARATOR ' ') as scope from  (
  		select <include refid="Base_Column_List"/>
 		from account a
 		LEFT JOIN account_group ag on ag.accountid=a.id
@@ -27,7 +27,7 @@
 
 	<!--账号登陆-->
 	<select id="getUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
-		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(groupid SEPARATOR ' ') as scope from  (
+		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(group_alias SEPARATOR ' ') as scope from  (
 		select <include refid="Base_Column_List"/>
 		from account a
 		LEFT JOIN account_group ag on ag.accountid=a.id
@@ -35,7 +35,7 @@
 	</select>
 	<!--手机号登录-->
 	<select id="getUserByMobile" parameterType="java.lang.String" resultMap="BaseResultMap">
-		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(groupid SEPARATOR ' ') as scope from  (
+		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(group_alias SEPARATOR ' ') as scope from  (
 		select <include refid="Base_Column_List"/>
 		from account a
 		LEFT JOIN account_group ag on ag.accountid=a.id
@@ -43,7 +43,7 @@
 	</select>
 	<!--邮箱登陆-->
 	<select id="getUserByMail" parameterType="java.lang.String" resultMap="BaseResultMap">
-		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(groupid SEPARATOR ' ') as scope from  (
+		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(group_alias SEPARATOR ' ') as scope from  (
 		select <include refid="Base_Column_List"/>
 		from account a
 		LEFT JOIN account_group ag on ag.accountid=a.id

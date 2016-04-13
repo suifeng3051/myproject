@@ -5,6 +5,7 @@ import com.zitech.gateway.apiconfig.dto.req.OpenResourceGroupReq;
 import com.zitech.gateway.apiconfig.model.OpenApiGroup;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by chenyun on 15/7/31.
@@ -29,4 +30,10 @@ public interface IOpenApiGroupService {
 
     List<OpenApiGroup> getGroupByNameAndAlias(String name, String alias);
 
-}
+    OpenApiGroup getGroupByAlias(String alias);
+
+    String getGroupNamesByIds(String ids);
+
+    Map<String, Object> getGroupTreeById(int id);
+
+    }

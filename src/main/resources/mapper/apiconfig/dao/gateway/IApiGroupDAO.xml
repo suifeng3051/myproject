@@ -11,7 +11,7 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, alias, level, description, create_time, update_time
+    id,pid, name, alias, level, description, create_time, update_time
   </sql>
   <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -19,6 +19,15 @@
     from t_api_group
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <select id="getByAlias" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from t_api_group
+    where alias = #{alias,jdbcType=VARCHAR}
+  </select>
+
+
   <delete id="deleteById" parameterType="java.lang.Integer" >
     delete from t_api_group
     where id = #{id,jdbcType=INTEGER}
@@ -40,6 +49,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
+      </if>
+      <if test="pid != null" >
+        pid,
       </if>
       <if test="name != null" >
         name,
@@ -63,6 +75,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},

@@ -31,7 +31,7 @@ public class CarmenApiServiceTest extends AbstractJunit {
         CarmenApi config=new CarmenApi();
         config.setNamespace("accountService2");
         config.setName("createAccount");
-        config.setApiGroup("trade");
+        config.setApiGroup("test");
         config.setApiDesc("xxxxxxxxxxxxx");
         config.setApiScenarios("xxxxxxxxxyyyyyy");
         config.setVersion("1.0.0");
@@ -56,7 +56,7 @@ public class CarmenApiServiceTest extends AbstractJunit {
         CarmenApi config=new CarmenApi();
         config.setNamespace("accountService");
         config.setName("createAccount");
-        config.setApiGroup("trade");
+        config.setApiGroup("test");
         config.setApiDesc("xxxxxxxxxxxxx");
         config.setApiScenarios("xxxxxxxxxyyyyyy");
         config.setVersion("1.0.0");

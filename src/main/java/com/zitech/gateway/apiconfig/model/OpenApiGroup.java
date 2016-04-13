@@ -6,11 +6,13 @@ public class OpenApiGroup {
 
     private Integer id;
 
+    private Integer pid;
+
     private String name;
 
     private String alias;
 
-    private Byte level;
+    private int level;
 
     private String description;
 
@@ -24,6 +26,13 @@ public class OpenApiGroup {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getPid() {
+        return pid;
+    }
+    public void setPid(Integer pid) {
+        this.pid = pid;
     }
 
     public String getName() {
@@ -42,11 +51,11 @@ public class OpenApiGroup {
         this.alias = alias;
     }
 
-    public Byte getLevel() {
+    public int getLevel() {
         return level;
     }
 
-    public void setLevel(Byte level) {
+    public void setLevel(int level) {
         this.level = level;
     }
 

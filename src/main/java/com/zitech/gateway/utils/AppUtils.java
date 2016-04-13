@@ -2,6 +2,7 @@ package com.zitech.gateway.utils;
 
 import org.apache.commons.lang.StringUtils;
 
+import javax.swing.tree.TreeNode;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,8 +10,7 @@ import java.io.InputStreamReader;
 import java.net.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -137,4 +137,30 @@ public class AppUtils {
         pwd = AppUtils.MD5(pwd);
         return pwd;
     }
+
+    /**
+     * 递归取树形结构菜单   by pxl   2016.4.12
+     * @param id
+     * @param groupTreeKeyByID
+     * @param groupTreeKeyByPID
+     * @return
+     */
+    public static Map<String,Object> getTreeById(int id, Map<Integer,Map<String,Object>> groupTreeKeyByID,Map<Integer,List<Map<String,Object>>> groupTreeKeyByPID) {
+        //根据id获取树的某一个节点对象
+        Map<String, Object> treeObj = groupTreeKeyByID.get(id);
+        //查询id下的所有子节点
+        List<Map<String,Object>>  treeChildren = groupTreeKeyByPID.get(id);
+        //遍历子节点
+        if(null!=treeChildren&&treeChildren.size()>0) {
+            for (Map<String, Object> child : treeChildren) {
+                int childId = (int) child.get("id");
+                Map<String, Object> o = getTreeById(childId, groupTreeKeyByID, groupTreeKeyByPID); //递归
+                List<Map<String, Object>> children = (List<Map<String, Object>>) treeObj.get("children");
+                children.add(o);
+            }
+        }
+        return treeObj;
+    }
+
+
 }
