@@ -1,13 +1,14 @@
 package com.zitech.gateway.apiconfig.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.apiconfig.model.*;
 import com.zitech.gateway.apiconfig.service.*;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.oauth.model.OpenOauthClients;
 import com.zitech.gateway.oauth.service.IOpenOauthClientsService;
-import com.zitech.gateway.utils.AppUtils;
 import com.zitech.gateway.utils.HttpUtils;
+import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +26,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
 import java.net.URLDecoder;
 import java.util.*;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -140,23 +140,25 @@ public class ApiListController {
 
     /**
      * 按group获取API接口
-     * @param group
+     * @param apiGroup
      * @param env
      * @return
      */
     @RequestMapping(value = "/getapibygroup", produces="application/json;charset=utf-8")
     @ResponseBody
-    public String getGroup(@RequestParam("group") String group,
+    public String getGroup(@RequestParam("group") String apiGroup,
                            @RequestParam("env") Byte env) {
 
         String status = "fail";
         try {
             List<CarmenApi> carmenApiList = null;
-            if("all".equals(group)) {
+            if(org.apache.commons.lang.StringUtils.isNotBlank(apiGroup)&&"all".equals(apiGroup.trim())){
                 carmenApiList = iCarmenApiService.getRecordByEnv(env);
-            } else {
-                carmenApiList = iCarmenApiService.getRecordByEnvGroup(env, group);
+            }else{
+                iCarmenApiService.getRecordByEnvGroup(env, apiGroup);
             }
+
+
             if(null != carmenApiList) {
                 Collections.sort(carmenApiList, new Comparator<CarmenApi>() {
                     @Override
@@ -349,6 +351,57 @@ public class ApiListController {
         results.put("status", status);
         return JSON.toJSONString(results);
     }
+
+    @RequestMapping(value="/getGroupInfo",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getGroupInfo()
+    {
+        Map<String, Object> results = new HashMap<>();
+        String status = "success";
+        try {
+            List<OpenApiGroup> all = iOpenApiGroupService.getAll();
+            results.put("groupInfo", all);
+        } catch (Exception e) {
+            status = "fail";
+        }
+
+        results.put("status", status);
+        return JSON.toJSONString(results);
+    }
+
+    @RequestMapping(value="/getGroupNamesByIds",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getGroupNamesByIds(@RequestParam("ids") String ids)
+    {
+        String status = "success";
+        Map<String, Object> results = new HashMap<>();
+        String groupNames = "";
+        try{
+             groupNames = iOpenApiGroupService.getGroupNamesByIds(ids);
+        }catch(Exception e){status="fail";}
+
+        results.put("status", status);
+        results.put("groupNames", groupNames);
+        return JSON.toJSONString(results);
+    }
+
+    @RequestMapping(value="/getGroupTree",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getGroupTree()
+    {
+        String status = "success";
+        Map<String, Object> results = new HashMap<>();
+        Map<String,Object> groupTree = new HashMap<String,Object>();
+         try{
+             groupTree = iOpenApiGroupService.getGroupTreeById(0);
+        }catch(Exception e){status="fail";}
+
+        results.put("status", status);
+        results.put("tree", groupTree);
+        return JSON.toJSONString(results);
+    }
+
+
 
     /**
      * 解析前端返回的字符为OpenOauthClients对象
@@ -709,8 +762,18 @@ public class ApiListController {
 
         try {
             insert = URLDecoder.decode(insert, "UTF-8");
-            OpenApiGroup openApiGroup = JSON.parseObject(insert, OpenApiGroup.class);
-            List<OpenApiGroup> groupByNameAndAlias = iOpenApiGroupService.getGroupByNameAndAlias(openApiGroup.getName(), openApiGroup.getAlias());
+            JSONObject obj  = JSON.parseObject(insert);
+            OpenApiGroup openApiGroup = new OpenApiGroup();
+            openApiGroup.setName(obj.getString("name"));
+            openApiGroup.setAlias(obj.getString("alias"));
+            openApiGroup.setLevel(obj.getInteger("level"));
+            OpenApiGroup openApiGroupParent  = iOpenApiGroupService.getGroupByAlias(obj.getString("pAlias"));
+
+            if(openApiGroupParent!=null){
+                openApiGroup.setPid(openApiGroupParent.getId());
+            }
+
+            List<OpenApiGroup> groupByNameAndAlias = iOpenApiGroupService.getGroupByNameAndAlias(openApiGroup.getName(),openApiGroup.getAlias());
             if(groupByNameAndAlias==null ||groupByNameAndAlias.size()!=0)
             {
                 return JSON.toJSONString(status+":组已经存在");
