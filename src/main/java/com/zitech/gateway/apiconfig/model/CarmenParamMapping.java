@@ -1,5 +1,7 @@
 package com.zitech.gateway.apiconfig.model;
 
+import com.zitech.gateway.apiconfig.extension.ParamType;
+
 import java.util.Date;
 
 public class CarmenParamMapping {
@@ -14,7 +16,7 @@ public class CarmenParamMapping {
 
     private String apiParamName;
 
-    private Integer dataFrom;
+    private ParamType dataFrom;
 
     private String apiNamespace;
 
@@ -38,11 +40,11 @@ public class CarmenParamMapping {
 
     private Byte env;
 
-    public Integer getDataFrom() {
+    public ParamType getDataFrom() {
         return dataFrom;
     }
 
-    public void setDataFrom(Integer dataFrom) {
+    public void setDataFrom(ParamType dataFrom) {
         this.dataFrom = dataFrom;
     }
 

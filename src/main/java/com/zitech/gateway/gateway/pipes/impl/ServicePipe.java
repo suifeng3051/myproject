@@ -1,6 +1,5 @@
 package com.zitech.gateway.gateway.pipes.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.apiconfig.model.CarmenApi;
 import com.zitech.gateway.apiconfig.model.CarmenServiceMethod;
@@ -19,7 +18,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.concurrent.FutureCallback;
@@ -36,7 +34,6 @@ import org.apache.http.impl.nio.reactor.IOReactorConfig;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.nio.entity.NByteArrayEntity;
 import org.apache.http.nio.reactor.ConnectingIOReactor;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,9 +110,9 @@ public class ServicePipe extends AbstractPipe {
             Map<String, Object> filesMapChange = new HashMap<>();
             callService.getParamsValueMap(event, carmenApi, paramsMap, filesMap, paramsNeedMap,
                     paraMapChange, filesMapChange);
-            paraMapChange.put("debug", "gateway");
+            paraMapChange.put("source", "gateway");
 
-            // call php service
+            // call restful service
             CarmenServiceMethod serviceMethod = callService.getServiceMethod(event.getId(), carmenApi);
 
             if (serviceMethod == null) {
@@ -175,13 +172,6 @@ public class ServicePipe extends AbstractPipe {
                     // cannot use MultipartEntity directly, so ...
                     HttpEntity byteEntity = new NByteArrayEntity(bytes, ContentType.MULTIPART_FORM_DATA);
 
-                    /** 获取APP版本号 */
-                    String version = event.getRequest().getHeader("version");
-                    if (org.apache.commons.lang.StringUtils.isNotBlank(version)) {
-                        httpPost.setHeader("version", version);
-                    }
-                    /** 获取APP版本号 */
-
                     httpPost.setHeader("Content-Type", "multipart/form-data;boundary=-------------" + boundary);
                     httpPost.setEntity(byteEntity);
                 } else {
@@ -190,7 +180,7 @@ public class ServicePipe extends AbstractPipe {
                         jsonObject.put(nameValuePair.getName(), nameValuePair.getValue());
                     }
                     StringEntity stringEntity = new StringEntity(jsonObject.toJSONString(), "UTF-8");
-                    stringEntity.setContentType("application/json");
+                    stringEntity.setContentType("application/json;charset=utf-8");
                     httpPost.setEntity(stringEntity);
                 }
 
@@ -212,14 +202,6 @@ public class ServicePipe extends AbstractPipe {
 
                 String s = requestUrl + "?" + sb.toString();
                 HttpGet httpGet = new HttpGet(s);
-
-                /** 获取APP版本号 */
-                String version = event.getRequest().getHeader("version");
-                if (org.apache.commons.lang.StringUtils.isNotBlank(version)) {
-                    httpGet.setHeader("version", version);
-                }
-                /** 获取APP版本号 */
-
                 httpAsyncClient.execute(httpGet, new HttpAsyncCallback(event));
             }
 

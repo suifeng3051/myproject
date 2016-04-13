@@ -1,6 +1,7 @@
 package com.zitech.gateway.gateway.services;
 
 import com.zitech.gateway.AppConfig;
+import com.zitech.gateway.apiconfig.extension.ParamType;
 import com.zitech.gateway.apiconfig.model.CarmenApi;
 import com.zitech.gateway.apiconfig.model.CarmenApiMethodMapping;
 import com.zitech.gateway.apiconfig.model.CarmenApiParam;
@@ -149,9 +150,9 @@ public class CallService {
             }
 
             Object res;
-            if (paramMapping.getDataFrom() == 2) {
+            if (paramMapping.getDataFrom() == ParamType.INNER) {
                 res = event.getIntParams().get(apiParamName);
-            } else if (paramMapping.getDataFrom() == 3) {
+            } else if (paramMapping.getDataFrom() == ParamType.FREE) {
                 res = apiParamName;
             } else {
                 if (isFileParam)
@@ -162,7 +163,8 @@ public class CallService {
             }
 
             /*
-                get parameter value, if the value is needed, then throw exception
+                get parameter value, if the value is needed
+                and not provided, then throw exception
              */
             String paramRef = paramMapping.getMethodParamRef();
             if (res != null) {

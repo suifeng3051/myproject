@@ -1,5 +1,6 @@
 package com.zitech.gateway.gateway.services;
 
+import com.zitech.gateway.apiconfig.extension.ParamType;
 import com.zitech.gateway.apiconfig.model.CarmenParamMapping;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.model.RequestEvent;
@@ -37,7 +38,7 @@ public class ContextService {
                                       List<CarmenParamMapping> mappings) {
         Map<String, Object> params = event.getIntParams();
         for (CarmenParamMapping mapping : mappings) {
-            if (mapping.getDataFrom() == 2) {
+            if (mapping.getDataFrom() == ParamType.INNER) {
                 // context params
                 for (String p : tokenParams) {
                     if (mapping.getFieldName().equals(p)) {
@@ -59,7 +60,7 @@ public class ContextService {
                                       List<CarmenParamMapping> mappings) {
         Map<String, Object> params = event.getIntParams();
         for (CarmenParamMapping mapping : mappings) {
-            if (mapping.getDataFrom() == 2) {
+            if (mapping.getDataFrom() == ParamType.INNER) {
                 // context params
                 for (String p : clientParams) {
                     if (mapping.getFieldName().equals(p)) {

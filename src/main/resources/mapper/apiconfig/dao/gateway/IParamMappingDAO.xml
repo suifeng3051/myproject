@@ -8,7 +8,7 @@
         <result column="field_type" property="fieldType" jdbcType="VARCHAR"/>
         <result column="service_method_id" property="serviceMethodId" jdbcType="BIGINT"/>
         <result column="api_param_name" property="apiParamName" jdbcType="VARCHAR"/>
-        <result column="data_from" property="dataFrom" jdbcType="INTEGER"/>
+        <result column="data_from" property="dataFrom" typeHandler="com.zitech.gateway.apiconfig.extension.ParamTypeHandler"/>
         <result column="api_namespace" property="apiNamespace" jdbcType="VARCHAR"/>
         <result column="api_name" property="apiName" jdbcType="VARCHAR"/>
         <result column="sequence" property="sequence" jdbcType="INTEGER"/>
@@ -90,7 +90,7 @@
             #{item.fieldType},
             #{item.serviceMethodId},
             #{item.apiParamName},
-            #{item.dataFrom},
+            #{item.dataFrom, typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
             #{item.apiNamespace},
             #{item.apiName},
             #{item.sequence},
@@ -184,7 +184,7 @@
                 #{apiParamName,jdbcType=VARCHAR},
             </if>
             <if test="dataFrom !=null">
-                #{dataFrom,jdbcType=INTEGER},
+                #{dataFrom, typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
             </if>
             <if test="apiNamespace != null">
                 #{apiNamespace,jdbcType=VARCHAR},
@@ -237,7 +237,7 @@
                 api_param_name = #{apiParamName,jdbcType=VARCHAR},
             </if>
             <if test="dataFrom !=null">
-               data_from = #{dataFrom,jdbcType=INTEGER},
+               data_from = #{dataFrom, typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
             </if>
             <if test="apiNamespace != null">
                 api_namespace = #{apiNamespace,jdbcType=VARCHAR},
