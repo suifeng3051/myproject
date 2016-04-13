@@ -297,3 +297,4 @@ ul.nav-wizard.nav-wizard-backnav .active ~ li a:focus {
     min-width: 100px;
 }
 
+.form-inline .form-group { margin-bottom:15px; margin-right:15px; }
