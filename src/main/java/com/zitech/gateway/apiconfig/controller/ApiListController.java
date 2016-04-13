@@ -84,7 +84,7 @@ public class ApiListController {
             logger.warn("fail to get session", e);
         }
         List<CarmenApi> carmenApi = null;
-        Map<String, String> groupMap = new HashMap<>();
+        Map<String, Object> groupMap = new HashMap<>();
         try {
             carmenApi = iCarmenApiService.getRecordByEnv(env);
             if(null != carmenApi) {
@@ -98,13 +98,16 @@ public class ApiListController {
                     }
                 });
             }
-            List<OpenApiGroup> groupList = iOpenApiGroupService.getAll();
+/*            List<OpenApiGroup> groupList = iOpenApiGroupService.getAll();
             for (OpenApiGroup group : groupList) {
                 if(StringUtils.isEmpty(group.getAlias()) || StringUtils.isEmpty(group.getName())) {
                     continue;
                 }
                 groupMap.put(group.getAlias(), group.getName());
-            }
+            }*/
+
+            //-1 表示拉取所有的组
+            groupMap = iOpenApiGroupService.getGroupTreeById(-1);
 
         } catch (Exception e) {
             logger.error("can not get api config", e);
@@ -117,7 +120,7 @@ public class ApiListController {
         results.put("apilists", carmenApi);
         results.put("user", userName);
         results.put("env", env);
-        results.put("groupList", groupMap);
+        results.put("groupMap", groupMap);
         results.put("isAdmin", isAdmin);
         return new ModelAndView("apilist", "results", results);
     }
@@ -767,7 +770,7 @@ public class ApiListController {
             openApiGroup.setName(obj.getString("name"));
             openApiGroup.setAlias(obj.getString("alias"));
             openApiGroup.setLevel(obj.getInteger("level"));
-            OpenApiGroup openApiGroupParent  = iOpenApiGroupService.getGroupByAlias(obj.getString("pAlias"));
+            OpenApiGroup openApiGroupParent  = iOpenApiGroupService.getGroupByAlias(obj.getString("pAlias").trim());
 
             if(openApiGroupParent!=null){
                 openApiGroup.setPid(openApiGroupParent.getId());

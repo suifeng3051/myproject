@@ -102,19 +102,30 @@ public class OpenApiGroupService implements IOpenApiGroupService {
     @Override
     public Map<String, Object> getGroupTreeById(int id) {
 
+        if(id==-1){
+            OpenApiGroup openApiGroup_all = resourceGroupDAO.getByAlias("all");
+            id=openApiGroup_all.getId();
+        }
+
+
         Map<Integer,Map<String,Object>> groupTreeKeyByID = new HashMap<Integer,Map<String,Object>>();
         Map<Integer,List<Map<String,Object>>> groupTreeKeyByPID = new HashMap<Integer,List<Map<String,Object>>>();
         List<OpenApiGroup>  list_openApiGroup = resourceGroupDAO.getAll();
 
         //为了递归的时候不重新去数据库取
         for(OpenApiGroup openApiGroup:list_openApiGroup) {
+
+            if(StringUtils.isEmpty(openApiGroup.getAlias()) || StringUtils.isEmpty(openApiGroup.getName())) {
+                continue;
+            }
+
             Map<String,Object>  treeObj = new HashMap<String,Object>();
             treeObj.put("pid",openApiGroup.getPid());
             treeObj.put("id",openApiGroup.getId());
             treeObj.put("name",openApiGroup.getName());
             treeObj.put("alias",openApiGroup.getAlias());
             treeObj.put("level",openApiGroup.getLevel());
-            treeObj.put("children",new ArrayList<Map<String,Object>>());
+            treeObj.put("children",null);
             groupTreeKeyByID.put(openApiGroup.getId(), treeObj);
 
             List<Map<String,Object>> temp = new ArrayList<Map<String,Object>>();

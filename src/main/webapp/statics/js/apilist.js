@@ -357,12 +357,12 @@ $(document).ready(function(){
         document.getElementById("apiResourceGroupConfig").reset();
         $("#apiResourceInfo1").css("display", "none");
         $("#apiResourceInfo").css("display", "none");
-        var resourceGroupParent = $(".affixGroup.active");
+        var resourceGroupParent = $(".affixGroup.current");
         var resourceGroupParentAlias = resourceGroupParent.attr("group");
         var text = resourceGroupParent.text();
         $("#resourceGroupParentAlias").attr("group",resourceGroupParentAlias);
        // $("#resourceGroupParentAlias").attr("placeholder",text);
-        $("#resourceGroupParentAlias").attr("value",text);
+        $("#resourceGroupParentAlias").attr("value",text.trim());
         $("#myResourceModal").modal("show");
     });
 
@@ -1058,14 +1058,14 @@ $(document).ready(function(){
 
     //$("#navbarLeft").affix();
 
-    $("body").on("click", ".affixGroup", function (e) {
+    $("body").on("click", ".affixGroup>a", function (e) {
         e.preventDefault();
         $("#navbarLeft li").each(function (index) {
-            $(this).removeClass("active");
+            $(this).removeClass("current");
             $(this).removeClass("list-group-item-info");
         });
-        $(this).addClass("active");
-        var group = $(this).attr("group");
+        $(this).parent().addClass("current");
+        var group = $(this).parent().attr("group");
         var env = getEnv();
         $(".apiElement").remove(); // 清除之前所有的API列表
         $("#currentGroup").val(group); // 设置当前的group,以便新建的时候去的取到当前的group
@@ -1109,5 +1109,12 @@ $(document).ready(function(){
     $('#resourceGroupTabBtn').trigger('click');
     $('.affixGroup[group*=all]').trigger('click');
 
+
+    // 左导航菜单收缩展开效果
+    $('.icon-chevron-right').click(function(e){
+        e.preventDefault();
+        $(this).siblings('.nav-list').toggle('normal');
+        $(this).parent().toggleClass('active');
+    })
 
 });
