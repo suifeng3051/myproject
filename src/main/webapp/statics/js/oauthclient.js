@@ -206,4 +206,25 @@ $(document).ready(function(){
     }
 
 
+
+
+	$('#defaultScopeArea label').click(function(){
+		console.log($(this).text());
+
+		// 子对象被选中父级对象自动选中
+		$(this).parent().siblings('label').children('input').prop('checked', true);
+		$(this).parent().parent().siblings('label').children('input').prop('checked', true);
+
+		// 父级对象取消选中，子对象全部取消选中
+		$(this).siblings('.level-box').find('[type="checkbox"]').prop('checked', false);
+
+		//父级对象选中，子对象全部选中
+		// if($(this).find('input').is(':checked'))
+		// 	$(this).siblings('.level-box').find('[type="checkbox"]').prop('checked', true);
+
+
+	});
+
+
+
 });
