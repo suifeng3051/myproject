@@ -1065,8 +1065,8 @@ $(document).ready(function(){
             $(this).removeClass("list-group-item-info");
         });
         $(this).parent().addClass("current");
-        var group = $(this).parent().attr("group");
-        var env = getEnv();
+        var group = $(this).parent().attr("group").trim();
+         var env = getEnv();
         $(".apiElement").remove(); // 清除之前所有的API列表
         $("#currentGroup").val(group); // 设置当前的group,以便新建的时候去的取到当前的group
         $.post("getapibygroup", {"group": group, "env": env}, function (d) {
