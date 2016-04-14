@@ -112,7 +112,6 @@ public class ServicePipe extends AbstractPipe {
             Map<String, Object> filesMapChange = new HashMap<>();
             callService.getParamsValueMap(event, carmenApi, paramsMap, filesMap, paramsNeedMap,
                     paraMapChange, filesMapChange);
-            paraMapChange.put("source", "gateway");
 
             // call restful service
             CarmenServiceMethod serviceMethod = callService.getServiceMethod(event.getId(), carmenApi);
