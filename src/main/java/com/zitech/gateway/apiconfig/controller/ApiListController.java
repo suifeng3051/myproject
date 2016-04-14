@@ -158,7 +158,7 @@ public class ApiListController {
             if(org.apache.commons.lang.StringUtils.isNotBlank(apiGroup)&&"all".equals(apiGroup.trim())){
                 carmenApiList = iCarmenApiService.getRecordByEnv(env);
             }else{
-                iCarmenApiService.getRecordByEnvGroup(env, apiGroup);
+                carmenApiList = iCarmenApiService.getRecordByEnvGroup(env, apiGroup);
             }
 
 
