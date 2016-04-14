@@ -296,6 +296,6 @@ public class CarmenController {
     @RequestMapping("/unifyerror")
     public ModelAndView unifyError() {
 
-        return new ModelAndView("unifyError");
+        return new ModelAndView("unifyerror");
     }
 }
