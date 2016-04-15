@@ -106,19 +106,19 @@
         </property>
     </bean>
 
-    <!-- session factory -->
-    <bean id="sqlSessionFactoryGateway"
-          class="com.zitech.platform.dao.mybatis3.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSourceGateway"/>
-        <property name="dataBaseDialect" ref="mySqlDialect"/>
-        <property name="configLocation" value="classpath:mybatis/app-mybatis.xml"/>
-        <property name="mapperLocations" value="classpath*:mapper/**/gateway/*.xml"/>
-        <property name="plugins">
-            <list>
-                <ref bean="paginationInterceptor"/>
-            </list>
-        </property>
-    </bean>
+        <!-- session factory -->
+        <bean id="sqlSessionFactoryGateway"
+              class="com.zitech.platform.dao.mybatis3.SqlSessionFactoryBean">
+            <property name="dataSource" ref="dataSourceGateway"/>
+            <property name="dataBaseDialect" ref="mySqlDialect"/>
+            <property name="configLocation" value="classpath:mybatis/app-mybatis.xml"/>
+            <property name="mapperLocations" value="classpath*:mapper/**/gateway/*.xml"/>
+            <property name="plugins">
+                <list>
+                    <ref bean="paginationInterceptor"/>
+                </list>
+            </property>
+        </bean>
 
     <!-- mapper interface -->
     <!-- for user database -->
