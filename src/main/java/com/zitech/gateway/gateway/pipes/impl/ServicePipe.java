@@ -216,11 +216,11 @@ public class ServicePipe extends AbstractPipe {
                 }
 
                 // remove last '&'
-                if (sb.charAt(sb.length() - 1) == '&') {
+                if (sb.length() > 0 && sb.charAt(sb.length() - 1) == '&') {
                     sb.deleteCharAt(sb.length() - 1);
                 }
 
-                String s = requestUrl + "?" + sb.toString();
+                String s = requestUrl + (sb.length() > 0 ? "?" + sb.toString() : "");
                 httpGet.setURI(new URI(s));
                 httpAsyncClient.execute(httpGet, new HttpAsyncCallback(event));
             }
