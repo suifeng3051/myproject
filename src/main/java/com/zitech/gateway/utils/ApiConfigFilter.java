@@ -2,6 +2,7 @@ package com.zitech.gateway.utils;
 
 import java.io.IOException;
 
+import javax.annotation.Resource;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -11,6 +12,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.*;
 
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.cache.RedisOperate;
@@ -22,6 +24,9 @@ import com.zitech.gateway.cache.RedisOperateImp;
 
 
 public class ApiConfigFilter implements Filter {
+
+
+
 
     private AppConfig appConfig = SpringContext.getBean(AppConfig.class);
 
@@ -44,8 +49,15 @@ public class ApiConfigFilter implements Filter {
         if (StringUtils.isNotEmpty(appConfig.allowAccess) && !appConfig.allowAccess.contains(addr)) {
             res.sendRedirect("/");
         } else {
+            RedisOperate redisOperate = SpringContext.getBean(RedisOperate.class);
             HttpSession httpSession= req.getSession(true);
             String username = (String) httpSession.getAttribute("username");
+            if(StringUtils.isEmpty(username))
+            {
+                request.getRequestDispatcher("/user/login").forward(request,response);
+                return;
+            }
+            username = redisOperate.getStringByKey(username);
             if (StringUtils.isEmpty(username)){
                 request.getRequestDispatcher("/user/login").forward(request,response);
                 return;
