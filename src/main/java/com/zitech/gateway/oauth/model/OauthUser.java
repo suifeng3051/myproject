@@ -10,8 +10,8 @@ public class OauthUser {
 	private String loginMail;
 	private String password;
 	private int status;
-	private Date insertTime;
-	private Date updateTime;
+	private Date createdTime;
+	private Date updatedTime;
 	private String scope;
 
 	public int getId() {
@@ -62,20 +62,20 @@ public class OauthUser {
 		this.status = status;
 	}
 
-	public Date getInsertTime() {
-		return insertTime;
+	public Date getUpdatedTime() {
+		return updatedTime;
 	}
 
-	public void setInsertTime(Date insertTime) {
-		this.insertTime = insertTime;
+	public void setUpdatedTime(Date updatedTime) {
+		this.updatedTime = updatedTime;
 	}
 
-	public Date getUpdateTime() {
-		return updateTime;
+	public Date getCreatedTime() {
+		return createdTime;
 	}
 
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
 	}
 
 	public String getScope() {
@@ -95,8 +95,8 @@ public class OauthUser {
 				", loginMail='" + loginMail + '\'' +
 				", password='" + password + '\'' +
 				", status=" + status +
-				", insertTime=" + insertTime +
-				", updateTime=" + updateTime +
+				", createdTime =" + createdTime +
+				", updatedTime=" + updatedTime +
 				", scope=" + scope +
 				'}';
 	}
