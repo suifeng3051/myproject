@@ -137,7 +137,7 @@
 
         </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="panel panel-primary" style="margin-top:60px;min-height:460px;">
                 <div class="panel-heading">API 列表
 
@@ -159,6 +159,12 @@
                                 <li class="list-group-item list-group-item-success apiElement">
                                     <span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span>
                                     <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.name</a>
+                                    <span style="position: absolute;left:400px;color:#929292;">$!apiElement.apiDesc</span>
+                                    <span style="position: absolute;right:200px;color:#929292;">#if(0 == $!apiElement.requestType)
+                                        GET
+                                    #elseif(1 == $!apiElement.requestType)
+                                        POST
+                                    #end</span>
                                     <a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="$!apiElement.id" class="glyphicon glyphicon-trash deleteIcon"></span></a>
                                     <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id"  class="glyphicon glyphicon-eye-open apimonitor"></span></a>
                                     #if(1==$!apiElement.validFlag)
@@ -166,13 +172,19 @@
                                     #else
                                         <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="启用" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id" flag="0" class="glyphicon glyphicon-ok-circle disableIcon"></span></a>
                                     #end
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>
+##                                        <a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="$!apiElement.id" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" groupname="$!apiElement.apiGroup" class="glyphicon glyphicon-wrench testApi"></span></a>
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-edit editIcon"></span></a>
                                 </li>
                             #else
                                 <li class="list-group-item apiElement">
                                     <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.name</a>
+                                    <span style="position: absolute;left:400px;color:#929292;">$!apiElement.apiDesc</span>
+                                    <span style="position: absolute;right:200px;color:#929292;">#if(0 == $!apiElement.requestType)
+                                        GET
+                                    #elseif(1 == $!apiElement.requestType)
+                                        POST
+                                    #end</span>
                                     <a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="$!apiElement.id" class="glyphicon glyphicon-trash deleteIcon"></span></a>
                                     <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id"  class="glyphicon glyphicon-eye-open apimonitor"></span></a>
                                     #if(1==$!apiElement.validFlag)
@@ -180,7 +192,7 @@
                                     #else
                                         <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="启用" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id" flag="0" class="glyphicon glyphicon-ok-circle disableIcon"></span></a>
                                     #end
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>
+##                                        <a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="$!apiElement.id" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" class="glyphicon glyphicon-wrench testApi"></span></a>
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-edit editIcon"></span></a>
                                 </li>

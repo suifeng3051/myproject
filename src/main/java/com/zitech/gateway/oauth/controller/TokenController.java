@@ -592,7 +592,10 @@ public class TokenController {
 
             if (StringUtils.isEmpty(oAuthAuthzParameters.getScope())) {
                 oAuthAuthzParameters.setScope(openOauthClients.getDefaultScope());
-            } else {
+            }
+
+            // remove by pxl 网关权限暂时只到client级别
+            /*else {
                 // add by panxl 若该用户已被分配了权限，则写入其被分配的权限,否则就是写入该client所拥有的默认权限
                 String scope_userHas = user.getScope();
                 if(StringUtils.isNotBlank(scope_userHas)){
@@ -609,7 +612,7 @@ public class TokenController {
                 }//end else StringUtils.isNotBlank(scope_userHas)
 
             }//end else StringUtils.isEmpty(oAuthAuthzParameters.getScope()
-
+*/
             /**
              * limit client access token number
              */
