@@ -487,11 +487,11 @@
                                         <option value="INNER" >内部参数</option>
                                         <option value="FREE" >自定义参数</option>
                                     #elseif("INNER"==$!paramMapping.dataFrom.name())
-                                        <option value="OUTE" >API参数</option>
+                                        <option value="OUTER" >API参数</option>
                                         <option value="INNER" selected>内部参数</option>
                                         <option value="FREE" >自定义参数</option>
                                     #else
-                                        <option value="OUTE" >API参数</option>
+                                        <option value="OUTER" >API参数</option>
                                         <option value="INNER" >内部参数</option>
                                         <option value="FREE" selected>自定义参数</option>
                                     #end
@@ -605,6 +605,11 @@
                                             <option value="$!paramMapping.apiParamName" selected>$!paramMapping.apiParamName</option>
                                         </select>
                                         <input style="max-width:160px;display:none;" type="text"  name="apiParamName" value="" />
+                                    #elseif("INNER"==$!paramMapping.dataFrom.name())
+                                        <select style="max-width:150px;max-height:25px;display:none;" name="innerParam" class="form-control apiParamsSelect" >
+                                            <option value="default" selected>default</option>
+                                        </select>
+                                        <input style="max-width:160px;" type="text"  name="apiParamName" readonly='readonly' value="$!paramMapping.apiParamName" />
                                     #else
                                         <select style="max-width:150px;max-height:25px;display:none;" name="innerParam" class="form-control apiParamsSelect" >
                                             <option value="default" selected>default</option>
@@ -618,6 +623,11 @@
                                             <option value="$!paramMapping.methodParamRef" selected>$!paramMapping.methodParamRef</option>
                                         </select>
                                         <input style="max-width:160px;display:none;" type="text"  name="methodParamRef" value="" />
+                                    #elseif("INNER"==$!paramMapping.dataFrom.name())
+                                        <select style="max-width:150px;max-height:25px;display:none;" name="methodParamRef" class="form-control methodParamSelect" >
+                                            <option value="default" selected>default</option>
+                                        </select>
+                                        <input style="max-width:160px;" type="text"  name="methodParamRef" readonly='readonly' value="$!paramMapping.methodParamRef" />
                                     #else
                                         <select style="max-width:150px;max-height:25px;display:none;" name="methodParamRef" class="form-control methodParamSelect" >
                                             <option value="default" selected>default</option>
