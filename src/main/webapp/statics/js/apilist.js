@@ -18,8 +18,8 @@ $(document).ready(function(){
                 var operate = "";
                 if (1 == results[item].testFlag) { // 如果测试通过
                     operate += '<li class="list-group-item list-group-item-success apiElement"><span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name  + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
-                    operate += '<span style="position: absolute;left:400px;">'+results[item].apiDesc+'</span>';
-                    operate +='<span style="position: absolute;right:200px;">';
+                    operate += '<span style="position: absolute;left:400px;color:#929292;">'+results[item].apiDesc+'</span>';
+                    operate +='<span style="position: absolute;right:200px;color:#929292;">';
                     if(0 == results[item].requestType)
                     {   operate +='GET';}
                     else if(1 == results[item].requestType) {
@@ -36,8 +36,8 @@ $(document).ready(function(){
                     operate += '<a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="' + results[item].id + '"namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" class="glyphicon glyphicon-wrench testApi"></span></a><a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiId="' + results[item].id + '" class="glyphicon glyphicon-edit editIcon"></span></a></li>';
                 } else {
                     operate += '<li class="list-group-item  apiElement"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
-                    operate += '<span style="position: absolute;left:400px;">'+results[item].apiDesc+'</span>';
-                    operate +='<span style="position: absolute;right:200px;">';
+                    operate += '<span style="position: absolute;left:400px;color:#929292;">'+results[item].apiDesc+'</span>';
+                    operate +='<span style="position: absolute;right:200px;color:#929292;">';
                     if(0 == results[item].requestType)
                     {   operate +='GET';}
                     else if(1 == results[item].requestType) {
@@ -1092,8 +1092,8 @@ $(document).ready(function(){
                 var operate = "";
                 if (1 == results[item].testFlag) { // 如果测试通过
                     operate += '<li class="list-group-item list-group-item-success apiElement"><span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
-                    operate += '<span style="position: absolute;left:400px;">'+results[item].apiDesc+'</span>';
-                    operate +='<span style="position: absolute;right:200px;">';
+                    operate += '<span style="position: absolute;left:400px;color:#929292;">'+results[item].apiDesc+'</span>';
+                    operate +='<span style="position: absolute;right:200px;color:#929292;">';
                     if(0 == results[item].requestType)
                     {   operate +='GET';}
                     else if(1 == results[item].requestType) {
@@ -1110,8 +1110,8 @@ $(document).ready(function(){
                     operate += '<a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="' + results[item].id + '"namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" class="glyphicon glyphicon-wrench testApi"></span></a><a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiId="' + results[item].id + '" class="glyphicon glyphicon-edit editIcon"></span></a></li>';
                 } else {
                     operate += '<li class="list-group-item  apiElement"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
-                    operate += '<span style="position: absolute;left:400px;">'+results[item].apiDesc+'</span>';
-                    operate +='<span style="position: absolute;right:200px;">';
+                    operate += '<span style="position: absolute;left:400px;color:#929292;">'+results[item].apiDesc+'</span>';
+                    operate +='<span style="position: absolute;right:200px;color:#929292;">';
                     if(0 == results[item].requestType)
                     {   operate +='GET';}
                     else if(1 == results[item].requestType) {
