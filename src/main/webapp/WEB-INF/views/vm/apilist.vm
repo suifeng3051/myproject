@@ -160,7 +160,7 @@
                                     <span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span>
                                     <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.name</a>
                                     <span style="position: absolute;left:400px;">$!apiElement.apiDesc</span>
-                                    <span style="position: absolute;left:1000px;">#if(0 == $!apiElement.requestType)
+                                    <span style="position: absolute;right:400px;">#if(0 == $!apiElement.requestType)
                                         GET
                                     #elseif(1 == $!apiElement.requestType)
                                         POST
@@ -180,7 +180,7 @@
                                 <li class="list-group-item apiElement">
                                     <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.name</a>
                                     <span style="position: absolute;left:400px;">$!apiElement.apiDesc</span>
-                                    <span style="position: absolute;left:1000px;">#if(0 == $!apiElement.requestType)
+                                    <span style="position: absolute;right:400px;">#if(0 == $!apiElement.requestType)
                                         GET
                                     #elseif(1 == $!apiElement.requestType)
                                         POST
