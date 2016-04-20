@@ -162,8 +162,7 @@ public class ApiListController {
             }
 
 
-            if(null != carmenApiList) {
-                Collections.sort(carmenApiList, new Comparator<CarmenApi>() {
+                 Collections.sort(carmenApiList, new Comparator<CarmenApi>() {
                     @Override
                     public int compare(CarmenApi arg1, CarmenApi arg2) {
                         if(StringUtils.isEmpty(arg1.getCreateTime()) || StringUtils.isEmpty(arg2.getCreateTime())){ // 防止脏数据
@@ -172,8 +171,8 @@ public class ApiListController {
                         return arg2.getCreateTime().compareTo(arg1.getCreateTime()); // 按时间逆序排序
                     }
                 });
-            }
-            String result = JSON.toJSONString(carmenApiList);
+
+             String result = JSON.toJSONString(carmenApiList);
             return result;
         } catch (Exception e) {
             logger.error("fail to get api list by group", e);
