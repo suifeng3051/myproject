@@ -19,7 +19,7 @@ $(document).ready(function(){
                 if (1 == results[item].testFlag) { // 如果测试通过
                     operate += '<li class="list-group-item list-group-item-success apiElement"><span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name  + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
                     operate += '<span style="position: absolute;left:400px;">'+results[item].apiDesc+'</span>';
-                    operate +='<span style="position: absolute;right:400px;">';
+                    operate +='<span style="position: absolute;right:200px;">';
                     if(0 == results[item].requestType)
                     {   operate +='GET';}
                     else if(1 == results[item].requestType) {
@@ -37,7 +37,7 @@ $(document).ready(function(){
                 } else {
                     operate += '<li class="list-group-item  apiElement"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
                     operate += '<span style="position: absolute;left:400px;">'+results[item].apiDesc+'</span>';
-                    operate +='<span style="position: absolute;right:400px;">';
+                    operate +='<span style="position: absolute;right:200px;">';
                     if(0 == results[item].requestType)
                     {   operate +='GET';}
                     else if(1 == results[item].requestType) {
@@ -1093,7 +1093,7 @@ $(document).ready(function(){
                 if (1 == results[item].testFlag) { // 如果测试通过
                     operate += '<li class="list-group-item list-group-item-success apiElement"><span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
                     operate += '<span style="position: absolute;left:400px;">'+results[item].apiDesc+'</span>';
-                    operate +='<span style="position: absolute;right:400px;">';
+                    operate +='<span style="position: absolute;right:200px;">';
                     if(0 == results[item].requestType)
                     {   operate +='GET';}
                     else if(1 == results[item].requestType) {
@@ -1111,7 +1111,7 @@ $(document).ready(function(){
                 } else {
                     operate += '<li class="list-group-item  apiElement"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
                     operate += '<span style="position: absolute;left:400px;">'+results[item].apiDesc+'</span>';
-                    operate +='<span style="position: absolute;right:400px;">';
+                    operate +='<span style="position: absolute;right:200px;">';
                     if(0 == results[item].requestType)
                     {   operate +='GET';}
                     else if(1 == results[item].requestType) {
