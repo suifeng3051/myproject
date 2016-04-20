@@ -3,51 +3,47 @@
 <mapper namespace="com.zitech.gateway.oauth.dao.user.IOauthUserDAO">
 	<resultMap id="BaseResultMap" type="com.zitech.gateway.oauth.model.OauthUser">
 		<id column="id" property="id" jdbcType="BIGINT" />
-		<result column="loginName" property="loginName" jdbcType="VARCHAR" />
-		<result column="loginPhone" property="loginPhone" jdbcType="VARCHAR" />
-		<result column="loginMail" property="loginMail" jdbcType="VARCHAR"/>
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="login_phone" property="loginPhone" jdbcType="VARCHAR" />
+		<result column="login_mail" property="loginMail" jdbcType="VARCHAR"/>
 		<result column="password" property="password" jdbcType="VARCHAR"/>
 		<result column="status" property="status" jdbcType="INTEGER"/>
-		<result column="insertTime" property="insertTime" jdbcType="DATE"/>
-		<result column="updateTime" property="updateTime" jdbcType="DATE"/>
+		<result column="created_time" property="createdTime" jdbcType="DATE"/>
+		<result column="updated_time" property="updatedTime" jdbcType="DATE"/>
 		<result column="scope" property="scope" jdbcType="VARCHAR"/>
 	</resultMap>
 
 	<sql id="Base_Column_List">
-        id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_alias
+        id, login_name, login_phone,login_mail,password,status,created_time,updated_time
     </sql>
 
 	<select id="getUserByUserId" parameterType="com.zitech.gateway.oauth.model.OauthUser" resultMap="BaseResultMap">
-		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(group_alias SEPARATOR ' ') as scope from  (
- 		select <include refid="Base_Column_List"/>
-		from account a
-		LEFT JOIN account_group ag on ag.accountid=a.id
-		where id=#{id,jdbcType=INTEGER} )a
+ 		select
+		<include refid="Base_Column_List"/>
+		from account
+		where id=#{id,jdbcType=INTEGER} and deleted = 0
 	</select>
 
 	<!--账号登陆-->
 	<select id="getUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
-		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(group_alias SEPARATOR ' ') as scope from  (
-		select <include refid="Base_Column_List"/>
-		from account a
-		LEFT JOIN account_group ag on ag.accountid=a.id
-	    where loginName=#{name,jdbcType=VARCHAR} and status=1 )a
+		select
+        <include refid="Base_Column_List"/>
+		from account
+	    where login_name=#{name,jdbcType=VARCHAR} and status=1 and deleted = 0
 	</select>
 	<!--手机号登录-->
 	<select id="getUserByMobile" parameterType="java.lang.String" resultMap="BaseResultMap">
-		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(group_alias SEPARATOR ' ') as scope from  (
-		select <include refid="Base_Column_List"/>
-		from account a
-		LEFT JOIN account_group ag on ag.accountid=a.id
-		where loginPhone=#{mobile,jdbcType=VARCHAR} and status=1 )a
+		select
+        <include refid="Base_Column_List"/>
+		from account
+		where login_phone=#{mobile,jdbcType=VARCHAR} and status=1 and deleted = 0
 	</select>
 	<!--邮箱登陆-->
 	<select id="getUserByMail" parameterType="java.lang.String" resultMap="BaseResultMap">
-		select  id, loginName, loginPhone,loginMail,password,status,insertTime,updateTime,group_concat(group_alias SEPARATOR ' ') as scope from  (
-		select <include refid="Base_Column_List"/>
-		from account a
-		LEFT JOIN account_group ag on ag.accountid=a.id
-		where loginMail=#{mail,jdbcType=VARCHAR} and status=1 )a
+		select
+        <include refid="Base_Column_List"/>
+		from account
+		where login_mail=#{mail,jdbcType=VARCHAR} and status=1 and deleted = 0
 	</select>
 
 
