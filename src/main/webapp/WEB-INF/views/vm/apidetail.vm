@@ -57,12 +57,20 @@
                 </tbody>
             </table>
         </div>
+
         <div class="page-header cut">
-            <h3><small>4. 返回结果</small></h3>
+            <h3><small>4. 请求方式</small></h3>
+            #if(0 == $!results.get("carmenApi").requestType)
+                GET
+            #elseif(1 == $!results.get("carmenApi").requestType)
+                POST
+            #end
 
         </div>
+
+
         <div class="page-header cut">
-            <h3><small>5. 示例</small></h3>
+            <h3><small>6. 示例</small></h3>
 ##            <div style="word-wrap: break-word;word-break: normal;">
 ##                <script type="text/javascript">
 ##                    document.write(decodeURI("$!results.get("carmenApi").resultDemo"));
