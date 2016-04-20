@@ -1128,6 +1128,15 @@ $(document).ready(function(){
         }
      });
 
+    function bindEventHandlerForInnerParam() {
+        $("body").on("change", "#innerParam", function () {
+            var selected = $(this).find("option:selected").text();
+            console.log("selected:" + selected);
+            $($(this).parent().next().next().children()[1]).val(selected);
+            $($(this).parent().next().next().next().children()[1]).val(selected);
+        });
+    }
+    bindEventHandlerForInnerParam();
 
     $("body").on("change", "#dataFrom", function() {
         var content = $(this).val();
@@ -1149,15 +1158,18 @@ $(document).ready(function(){
             // 参数名的select和input的切换
             $($(this).parent().next().children()[0]).css("display", "block");
             $($(this).parent().next().children()[1]).css("display", "none");
-
+            var selected = $($(this).parent().next().children()[0]).find("option:selected").text();
 
             // api参数名的select与input的切换
             $($(this).parent().next().next().next().children()[0]).css("display", "none");
             $($(this).parent().next().next().next().children()[1]).css("display", "block");
 
+            $($(this).parent().next().next().next().children()[1]).val(selected);
             // api参数名的select与input的切换
             $($(this).parent().next().next().next().next().children()[0]).css("display", "none");
             $($(this).parent().next().next().next().next().children()[1]).css("display", "block");
+            $($(this).parent().next().next().next().next().children()[1]).val(selected);
+            bindEventHandlerForInnerParam();
 
         } else if("FREE" == content) { // 自定义参数
             // 参数名的select和input的切换
@@ -1167,11 +1179,12 @@ $(document).ready(function(){
             // api参数名的select与input的切换
             $($(this).parent().next().next().next().children()[0]).css("display", "none");
             $($(this).parent().next().next().next().children()[1]).css("display", "block");
-
+            $($(this).parent().next().next().next().children()[1]).val("");
 
             // api参数名的select与input的切换
             $($(this).parent().next().next().next().next().children()[0]).css("display", "none");
             $($(this).parent().next().next().next().next().children()[1]).css("display", "block");
+            $($(this).parent().next().next().next().next().children()[1]).val("");
 
         }
     });

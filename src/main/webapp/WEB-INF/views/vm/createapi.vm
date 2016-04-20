@@ -499,7 +499,7 @@
                                 </td>
                                 <td>
                                     #if("INNER"==$!paramMapping.dataFrom.name())
-                                        <select style="max-width:150px;max-height: 25px;"  name="innerParam" class="form-control innerParam" >
+                                        <select id="innerParam" style="max-width:150px;max-height: 25px;" name="innerParam" class="form-control innerParam" >
                                             #if("user_id" == $!paramMapping.fieldName)
                                                 <option value="user_id" selected>user_id</option>
                                             #else
@@ -548,7 +548,7 @@
                                         </select>
                                         <input style="max-width:160px;display:none;" type="text"  name="fieldName" value="$!paramMapping.fieldName" >
                                     #else
-                                        <select style="max-width:150px;max-height: 25px;display:none;" name="innerParam" class="form-control innerParam" >
+                                        <select id="innerParam" style="max-width:150px;max-height: 25px;display:none;" name="innerParam" class="form-control innerParam" >
                                             #if("user_id" == $!paramMapping.fieldName)
                                                 <option value="user_id" selected>user_id</option>
                                             #else
