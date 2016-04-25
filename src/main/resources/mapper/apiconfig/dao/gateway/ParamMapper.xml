@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zitech.gateway.apiconfig.dao.gateway.ParamDAO">
+    <resultMap id="BaseResultMap" type="com.zitech.gateway.apiconfig.model.Param">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="request_demo" property="requestDemo" jdbcType="VARCHAR"/>
+        <result column="request_structure" property="requestStructure" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_id" property="updatedId" jdbcType="INTEGER"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="TINYINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, request_demo, request_structure, created_time, updated_id, updated_time, deleted
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_param
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from t_param
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.zitech.gateway.apiconfig.model.Param">
+        insert into t_param (id, request_demo, request_structure,
+        created_time, updated_id, updated_time,
+        deleted)
+        values (#{id,jdbcType=INTEGER}, #{requestDemo,jdbcType=VARCHAR},
+        #{requestStructure,jdbcType=VARCHAR},
+        #{createdTime,jdbcType=TIMESTAMP}, #{updatedId,jdbcType=INTEGER},
+        #{updatedTime,jdbcType=TIMESTAMP},
+        #{deleted,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.zitech.gateway.apiconfig.model.Param">
+        insert into t_param
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="requestDemo != null">
+                request_demo,
+            </if>
+            <if test="requestStructure != null">
+                request_structure,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+            <if test="updatedId != null">
+                updated_id,
+            </if>
+            <if test="updatedTime != null">
+                updated_time,
+            </if>
+            <if test="deleted != null">
+                deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="requestDemo != null">
+                #{requestDemo,jdbcType=VARCHAR},
+            </if>
+            <if test="requestStructure != null">
+                #{requestStructure,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedId != null">
+                #{updatedId,jdbcType=INTEGER},
+            </if>
+            <if test="updatedTime != null">
+                #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.zitech.gateway.apiconfig.model.Param">
+        update t_param
+        <set>
+            <if test="requestDemo != null">
+                request_demo = #{requestDemo,jdbcType=VARCHAR},
+            </if>
+            <if test="requestStructure != null">
+                request_structure = #{requestStructure,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedId != null">
+                updated_id = #{updatedId,jdbcType=INTEGER},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zitech.gateway.apiconfig.model.Param">
+        update t_param
+        set request_demo = #{requestDemo,jdbcType=VARCHAR},
+        request_structure = #{requestStructure,jdbcType=VARCHAR},
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+        updated_id = #{updatedId,jdbcType=INTEGER},
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+        deleted = #{deleted,jdbcType=TINYINT}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zitech.gateway.apiconfig.dao.gateway.ApiDAO">
+    <resultMap id="BaseResultMap" type="com.zitech.gateway.apiconfig.model.Api">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="namespace" property="namespace" jdbcType="VARCHAR"/>
+        <result column="method" property="method" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="INTEGER"/>
+        <result column="group_id" property="groupId" jdbcType="INTEGER"/>
+        <result column="frequency_control" property="frequencyControl" jdbcType="TINYINT"/>
+        <result column="check_inner" property="checkInner" jdbcType="TINYINT"/>
+        <result column="api_description" property="apiDescription" jdbcType="VARCHAR"/>
+        <result column="api_scene" property="apiScene" jdbcType="VARCHAR"/>
+        <result column="result_demo" property="resultDemo" jdbcType="LONGVARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="updated_id" property="updatedId" jdbcType="INTEGER"/>
+        <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="TINYINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, namespace, method, version, group_id, frequency_control, check_inner, api_description,
+        api_scene, result_demo, created_time, updated_id, updated_time, deleted
+    </sql>
+    <sql id="Blob_Column_List">
+        result_demo
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_api_n
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from t_api_n
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.zitech.gateway.apiconfig.model.Api">
+        insert into t_api_n (id, namespace, method,
+        version, group_id, frequency_control,
+        check_inner, api_description, api_scene,
+        created_time, updated_id, updated_time,
+        deleted, result_demo)
+        values (#{id,jdbcType=INTEGER}, #{namespace,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR},
+        #{version,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER},
+        #{frequencyControl,jdbcType=TINYINT},
+        #{checkInner,jdbcType=TINYINT}, #{apiDescription,jdbcType=VARCHAR},
+        #{apiScene,jdbcType=VARCHAR},
+        #{createdTime,jdbcType=TIMESTAMP}, #{updatedId,jdbcType=INTEGER},
+        #{updatedTime,jdbcType=TIMESTAMP},
+        #{deleted,jdbcType=TINYINT}, #{resultDemo,jdbcType=LONGVARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.zitech.gateway.apiconfig.model.Api">
+        insert into t_api_n
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="namespace != null">
+                namespace,
+            </if>
+            <if test="method != null">
+                method,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+            <if test="groupId != null">
+                group_id,
+            </if>
+            <if test="frequencyControl != null">
+                frequency_control,
+            </if>
+            <if test="checkInner != null">
+                check_inner,
+            </if>
+            <if test="apiDescription != null">
+                api_description,
+            </if>
+            <if test="apiScene != null">
+                api_scene,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+            <if test="updatedId != null">
+                updated_id,
+            </if>
+            <if test="updatedTime != null">
+                updated_time,
+            </if>
+            <if test="deleted != null">
+                deleted,
+            </if>
+            <if test="resultDemo != null">
+                result_demo,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="namespace != null">
+                #{namespace,jdbcType=VARCHAR},
+            </if>
+            <if test="method != null">
+                #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+            <if test="groupId != null">
+                #{groupId,jdbcType=INTEGER},
+            </if>
+            <if test="frequencyControl != null">
+                #{frequencyControl,jdbcType=TINYINT},
+            </if>
+            <if test="checkInner != null">
+                #{checkInner,jdbcType=TINYINT},
+            </if>
+            <if test="apiDescription != null">
+                #{apiDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="apiScene != null">
+                #{apiScene,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedId != null">
+                #{updatedId,jdbcType=INTEGER},
+            </if>
+            <if test="updatedTime != null">
+                #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=TINYINT},
+            </if>
+            <if test="resultDemo != null">
+                #{resultDemo,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zitech.gateway.apiconfig.model.Api">
+        update t_api_n
+        <set>
+            <if test="namespace != null">
+                namespace = #{namespace,jdbcType=VARCHAR},
+            </if>
+            <if test="method != null">
+                method = #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                version = #{version,jdbcType=INTEGER},
+            </if>
+            <if test="groupId != null">
+                group_id = #{groupId,jdbcType=INTEGER},
+            </if>
+            <if test="frequencyControl != null">
+                frequency_control = #{frequencyControl,jdbcType=TINYINT},
+            </if>
+            <if test="checkInner != null">
+                check_inner = #{checkInner,jdbcType=TINYINT},
+            </if>
+            <if test="apiDescription != null">
+                api_description = #{apiDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="apiScene != null">
+                api_scene = #{apiScene,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedId != null">
+                updated_id = #{updatedId,jdbcType=INTEGER},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted,jdbcType=TINYINT},
+            </if>
+            <if test="resultDemo != null">
+                result_demo = #{resultDemo,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zitech.gateway.apiconfig.model.Api">
+        update t_api_n
+        set namespace = #{namespace,jdbcType=VARCHAR},
+        method = #{method,jdbcType=VARCHAR},
+        version = #{version,jdbcType=INTEGER},
+        group_id = #{groupId,jdbcType=INTEGER},
+        frequency_control = #{frequencyControl,jdbcType=TINYINT},
+        check_inner = #{checkInner,jdbcType=TINYINT},
+        api_description = #{apiDescription,jdbcType=VARCHAR},
+        api_scene = #{apiScene,jdbcType=VARCHAR},
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+        updated_id = #{updatedId,jdbcType=INTEGER},
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+        deleted = #{deleted,jdbcType=TINYINT},
+        result_demo = #{resultDemo,jdbcType=LONGVARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zitech.gateway.apiconfig.model.Api">
+        update t_api_n
+        set namespace = #{namespace,jdbcType=VARCHAR},
+        method = #{method,jdbcType=VARCHAR},
+        version = #{version,jdbcType=INTEGER},
+        group_id = #{groupId,jdbcType=INTEGER},
+        frequency_control = #{frequencyControl,jdbcType=TINYINT},
+        check_inner = #{checkInner,jdbcType=TINYINT},
+        api_description = #{apiDescription,jdbcType=VARCHAR},
+        api_scene = #{apiScene,jdbcType=VARCHAR},
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+        updated_id = #{updatedId,jdbcType=INTEGER},
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+        deleted = #{deleted,jdbcType=TINYINT}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
