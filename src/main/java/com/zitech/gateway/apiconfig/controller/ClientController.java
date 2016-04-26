@@ -22,6 +22,7 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by hy on 16-4-26.
@@ -36,6 +37,68 @@ public class ClientController {
     @Autowired
     private AdminService adminService;
 
+
+
+    /**
+     * 插入新的oauth client
+     *
+     * @param clientStr
+     * @return
+     */
+    @RequestMapping(value="/add/client",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String addOauthClient(@RequestParam("client") String clientStr)
+    {
+        ApiResult<String> apiResult = new ApiResult<>(0, "success");
+
+        try{
+            Client client = new Client();
+            String ret = parseData(clientStr, client);
+            if(!"success".equals(ret))
+            {
+                apiResult.setCode(9011);
+                apiResult.setMessage(ret);
+                return apiResult.toString();
+
+            }
+
+            //判断欲添加的oauth client是否已存在
+            List<Client> all = clientService.getAll();
+            for (Client oauthClient : all) {
+                if(oauthClient.getClientName().equals(client.getClientName().trim()))
+                {
+                    apiResult.setCode(9012);
+                    apiResult.setMessage("该名称的oauth client已经存在");
+                    return apiResult.toString();
+                }
+            }
+
+            //添加ID
+            //获取到最大的id
+            Long value = 0L;
+            for (Client oauthClient : all) {
+                Long aLong = Long.valueOf(oauthClient.getClientId());
+                if(aLong > value)
+                {
+                    value=aLong;
+                }
+            }
+            client.setClientId((value+1)+"");
+
+            //添加client_secret
+            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            client.setClientSecret(uuid);
+
+            clientService.save(client);
+        }
+        catch (Exception e)
+        {
+            logger.info("添加client出错",e);
+            apiResult.setCode(9013);
+            apiResult.setMessage("添加client出错");
+        }
+        return apiResult.toString();
+    }
 
     /**
      * 根据指定id查找OauthClient

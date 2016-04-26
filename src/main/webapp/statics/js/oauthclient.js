@@ -51,8 +51,12 @@ $(document).ready(function(){
 
                 if(confirm('确定删除 '+OAuthName+ ' 吗?')){
                     $.post('delete/client', {id: OAuthClientId}, function(data){
-                        if(data === 'success'){
+                        if(data.code == 0){
                             window.location.reload();
+                        }
+                        else
+                        {
+                            alert(data.message);
                         }
                     });
                 }
@@ -139,7 +143,7 @@ $(document).ready(function(){
         $('#OAuthClientInfo2').hide();
         $('#checkOAuthBtn').show();
          $.post('getGroupTree', function(data){
-            if(data.status === 'success'){
+            if(data.code == 0){
                 var html = '';
                 var groupTree = data.data;
 
@@ -176,7 +180,7 @@ $(document).ready(function(){
             formContent += '&id='+ $(this).attr('action');
             var url = 'update/client';
         } else {
-            var url = 'addOauthClient';
+            var url = 'add/client';
         }
 
          $.post(url, {'client': formContent}, function(data){
@@ -193,7 +197,7 @@ $(document).ready(function(){
             }
             else
             {
-                $("#OAuthClientInfo2").html("<p>data.message</p>"+data)
+                $("#OAuthClientInfo2").html(data.message)
                     .css("display", "block")
                     .removeClass("alert-success")
                     .addClass("alert-danger");
