@@ -153,7 +153,7 @@
         is_delete = #{isDelete,jdbcType=VARCHAR}
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updatePwd" parameterType="com.zitech.gateway.apiconfig.model.User" >
+    <update id="updatePwd" parameterType="com.zitech.gateway.apiconfig.model.Admin" >
         update t_admin
         <set >
             <if test="password != null" >
