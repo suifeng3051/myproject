@@ -12,7 +12,7 @@ switch(path){
     case 'pipelog': path = 'LogView';break;
     case 'user': path = 'users';break;
     case 'recoverapi': path = 'RecoverApi';break;
-    case 'oauthclient': path = 'Client';break;
+    case 'client': path = 'Client';break;
     case 'updatepwd': path = 'Safety';break;
     default : break;
 }
@@ -55,7 +55,7 @@ function addClass(el){
         } else if ("RecoverApi" == theme) {
             window.location.href = "recoverapi?env=" + env;
         } else if ("Client" == theme) {
-             window.location.href = "oauthclient?env=" + env;
+             window.location.href = "client?env=" + env;
         }else if("Safety"==theme){
             window.location.href = "updatepwd?env=" + env;
          }

@@ -14,22 +14,23 @@ $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip(); // 绑定工具提示js插件
 
     // 读取 oauthClient 列表
-    $.post('getOauthClient', function(data){
+    $.post('get/client', function(jsondata){
 
-        if(data.status === 'success'){
+        if(jsondata.code == 0){
             var html = '';
+            var data = jsondata.data;
             for(var i=0; i<data.size; i++){
                 html += '<tr>'+
-                    '<td>'+data.allOauthClient[i].clientName+'</td>'+
-                    '<td>'+data.allOauthClient[i].redirectUri+'</td>'+
-                    '<td>'+data.allOauthClient[i].grantTypes+'</td>'+
-                    '<td>'+data.allOauthClient[i].clientNum+'</td>'+
-                    '<td>'+data.allOauthClient[i].defaultScope+'</td>'+
+                    '<td>'+data.allClient[i].clientName+'</td>'+
+                    '<td>'+data.allClient[i].redirectUri+'</td>'+
+                    '<td>'+data.allClient[i].grantTypes+'</td>'+
+                    '<td>'+data.allClient[i].clientNum+'</td>'+
+                    '<td>'+data.allClient[i].defaultScope+'</td>'+
                     '<td>'+
-                    '<a data-original-title="编辑" class="needTip updateCurrentRow" href="#" OAuthClientId="'+data.allOauthClient[i].id+'" data-toggle="tooltip" data-placement="top" title="" >'+
+                    '<a data-original-title="编辑" class="needTip updateCurrentRow" href="#" OAuthClientId="'+data.allClient[i].id+'" data-toggle="tooltip" data-placement="top" title="" >'+
                     '<span version="1.0" class="glyphicon glyphicon-edit editIcon"></span>'+
                     '</a>'+
-                    '<a href="#" class="needTip deleteCurrentRow" OAuthClientId="'+data.allOauthClient[i].id+'"  data-toggle="tooltip" data-placement="top" title="删除行" style="margin-left:8px;">'+
+                    '<a href="#" class="needTip deleteCurrentRow" OAuthClientId="'+data.allClient[i].id+'"  data-toggle="tooltip" data-placement="top" title="删除行" style="margin-left:8px;">'+
                     '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>'+
                     '</a>'+
                     '</td>'+
@@ -119,6 +120,10 @@ $(document).ready(function(){
             });
 
         }
+        else
+        {
+            alert(jsondata.message);
+        }
     });
 
 
@@ -174,7 +179,7 @@ $(document).ready(function(){
             var url = 'addOauthClient';
         }
 
-         $.post(url, {'oauthclient': formContent}, function(data){
+         $.post(url, {'client': formContent}, function(data){
             if ( data.indexOf('fail') != -1 ) {
                 $("#OAuthClientInfo2").html("<p>失败</p>"+data)
                     .css("display", "block")
