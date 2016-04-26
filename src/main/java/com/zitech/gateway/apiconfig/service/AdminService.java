@@ -24,4 +24,6 @@ public interface AdminService {
 
     void updatePwd(Admin user);
 
+    boolean isAdmin(String username);
+
 }

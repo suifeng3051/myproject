@@ -1,9 +1,11 @@
 package com.zitech.gateway.apiconfig.service.imp;
 
+import com.sun.media.jfxmedia.logging.Logger;
 import com.zitech.gateway.apiconfig.dao.gateway.AdminDAO;
 import com.zitech.gateway.apiconfig.model.Admin;
 import com.zitech.gateway.apiconfig.service.AdminService;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,8 @@ import javax.annotation.Resource;
  */
 @Service
 public class AdminServiceImpl implements AdminService {
+
+    private final static org.slf4j.Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
 
     @Resource
     private AdminDAO adminDAO;
@@ -53,5 +57,22 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void updatePwd(Admin user) {
         adminDAO.updatePwd(user);
+    }
+
+    @Override
+    public boolean isAdmin(String username) {
+        try {
+            List<Admin> admins = adminDAO.selectByUserName(username);
+            for(Admin admin:admins)
+            {
+                if(admin.getUserGroup() == 1)
+                {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            logger.error("判断是否为管理员出错,username:{}",username,e);
+        }
+        return false;
     }
 }

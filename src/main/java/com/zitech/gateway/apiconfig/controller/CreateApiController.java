@@ -1,6 +1,7 @@
 package com.zitech.gateway.apiconfig.controller;
 
 import com.zitech.gateway.apiconfig.model.Group;
+import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.apiconfig.service.GroupService;
 import com.zitech.gateway.cache.RedisOperate;
 import org.slf4j.Logger;
@@ -28,6 +29,9 @@ public class CreateApiController {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private AdminService adminService;
 
 
 
