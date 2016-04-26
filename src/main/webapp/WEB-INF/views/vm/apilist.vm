@@ -31,25 +31,25 @@
             <div data-offset-top="200"  style="margin-top:60px;">
                 <ul class="nav nav-list bs-docs-sidenav" id="navbarLeft">
 
-                    <li class="affixGroup" group="$!groupTree.get('alias')" >
+                    <li class="affixGroup" groupid='$!group_lv3.get("id")' group="$!groupTree.get('alias')" >
                         <a href="#">$!groupTree.get('name')</a>
                         #if($groupTree.get("children"))
                              <i class="icon-chevron-right"></i>
                         <ul class="nav nav-list bs-docs-sidenav" style="display:block">
                             #foreach ($group_lv1 in $!groupTree.get("children") )
-                                 <li class="affixGroup" group='$!group_lv1.get("alias")' >
+                                 <li class="affixGroup" groupid='$!group_lv3.get("id")' group='$!group_lv1.get("alias")' >
                                  <a href="#">$!group_lv1.get("name")</a>
                                      #if($group_lv1.get("children"))
                                         <i class="icon-chevron-right"></i>
                                     <ul class="nav nav-list bs-docs-sidenav" >
                                         #foreach($group_lv2 in $!group_lv1.get("children"))
-                                                   <li class="affixGroup" group='$!group_lv2.get("alias")' >
+                                                   <li class="affixGroup" groupid='$!group_lv3.get("id")' group='$!group_lv2.get("alias")' >
                                                        <a href="#">$!group_lv2.get("name")</a>
                                                           #if($group_lv2.get("children"))
                                                               <i class="icon-chevron-right"></i>
                                                           <ul class="nav nav-list bs-docs-sidenav" >
                                                                 #foreach($group_lv3 in $!group_lv2.get("children"))
-                                                                 <li class="affixGroup" group='$!group_lv3.get("alias")' >
+                                                                 <li class="affixGroup" groupid='$!group_lv3.get("id")' group='$!group_lv3.get("alias")' >
                                                                      <a href="#">$!group_lv3.get("name")</a>
                                                                  <li>
                                                                  #end
@@ -155,28 +155,28 @@
                 <div>
                     <ul class="list-group" id="listAPI">
                         #foreach ($!apiElement in $!results.get("apilists"))
-                            #if(1 == $!apiElement.testFlag)
-                                <li class="list-group-item list-group-item-success apiElement">
-                                    <span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span>
-                                    <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.name</a>
-                                    <span style="position: absolute;left:400px;color:#929292;">$!apiElement.apiDesc</span>
-                                    <span style="position: absolute;right:200px;color:#929292;">#if(0 == $!apiElement.requestType)
-                                        GET
-                                    #elseif(1 == $!apiElement.requestType)
-                                        POST
-                                    #end</span>
-                                    <a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="$!apiElement.id" class="glyphicon glyphicon-trash deleteIcon"></span></a>
-                                    <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id"  class="glyphicon glyphicon-eye-open apimonitor"></span></a>
-                                    #if(1==$!apiElement.validFlag)
-                                        <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="禁用" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id" flag="1" class="glyphicon glyphicon-remove-circle disableIcon"></span></a>
-                                    #else
-                                        <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="启用" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id" flag="0" class="glyphicon glyphicon-ok-circle disableIcon"></span></a>
-                                    #end
-##                                        <a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="$!apiElement.id" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" groupname="$!apiElement.apiGroup" class="glyphicon glyphicon-wrench testApi"></span></a>
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-edit editIcon"></span></a>
-                                </li>
-                            #else
+##                            #if(1 == $!apiElement.testFlag)
+##                                <li class="list-group-item list-group-item-success apiElement">
+##                                    <span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span>
+##                                    <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.name</a>
+##                                    <span style="position: absolute;left:400px;color:#929292;">$!apiElement.apiDesc</span>
+##                                    <span style="position: absolute;right:200px;color:#929292;">#if(0 == $!apiElement.requestType)
+##                                        GET
+##                                    #elseif(1 == $!apiElement.requestType)
+##                                        POST
+##                                    #end</span>
+##                                    <a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="$!apiElement.id" class="glyphicon glyphicon-trash deleteIcon"></span></a>
+##                                    <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id"  class="glyphicon glyphicon-eye-open apimonitor"></span></a>
+##                                    #if(1==$!apiElement.validFlag)
+##                                        <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="禁用" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id" flag="1" class="glyphicon glyphicon-remove-circle disableIcon"></span></a>
+##                                    #else
+##                                        <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="启用" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id" flag="0" class="glyphicon glyphicon-ok-circle disableIcon"></span></a>
+##                                    #end
+####                                        <a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>
+##                                        <a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="$!apiElement.id" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" groupname="$!apiElement.apiGroup" class="glyphicon glyphicon-wrench testApi"></span></a>
+##                                        <a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-edit editIcon"></span></a>
+##                                </li>
+##                            #else
                                 <li class="list-group-item apiElement">
                                     <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.name</a>
                                     <span style="position: absolute;left:400px;color:#929292;">$!apiElement.apiDesc</span>
@@ -193,10 +193,10 @@
                                         <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="启用" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id" flag="0" class="glyphicon glyphicon-ok-circle disableIcon"></span></a>
                                     #end
 ##                                        <a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="$!apiElement.id" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" class="glyphicon glyphicon-wrench testApi"></span></a>
+##                                        <a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="$!apiElement.id" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" class="glyphicon glyphicon-wrench testApi"></span></a>
                                         <a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-edit editIcon"></span></a>
                                 </li>
-                            #end
+##                            #end
                         #end
                     </ul>
                 </div>
@@ -581,6 +581,7 @@
 <input type="hidden" id="clientNamesStr" value="0" />
 <input type="hidden" id="currentClientApiId" value="0" />
 <input type="hidden" id="currentGroup" value="all" />
+<input type="hidden" id="currentGroupid" value="1" />
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="/statics/js/jquery.js"></script>
 <script src="/statics/js/bootstrap.js"></script>

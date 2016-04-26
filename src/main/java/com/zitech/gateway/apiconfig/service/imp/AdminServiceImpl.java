@@ -1,16 +1,19 @@
 package com.zitech.gateway.apiconfig.service.imp;
 
-import com.sun.media.jfxmedia.logging.Logger;
+
 import com.zitech.gateway.apiconfig.dao.gateway.AdminDAO;
 import com.zitech.gateway.apiconfig.model.Admin;
 import com.zitech.gateway.apiconfig.service.AdminService;
 
+import com.zitech.gateway.cache.RedisOperate;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by chenyun on 15/8/27.
@@ -22,6 +25,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Resource
     private AdminDAO adminDAO;
+
+    @Autowired
+    private RedisOperate redisOperate;
 
     @Override
     public int insert(Admin user) {
@@ -74,5 +80,19 @@ public class AdminServiceImpl implements AdminService {
             logger.error("判断是否为管理员出错,username:{}",username,e);
         }
         return false;
+    }
+
+    @Override
+    public String getUserNameFromSessionAndRedis(HttpServletRequest request) {
+        String userName = null;
+        try {
+            String userKey = request.getSession().getAttribute("username").toString();
+            userName = redisOperate.getStringByKey(userKey);
+            redisOperate.set("username", userName, 60*60); // 一小时
+        } catch (Exception e) {
+            logger.warn("fail to get session", e);
+        }
+
+        return userName;
     }
 }

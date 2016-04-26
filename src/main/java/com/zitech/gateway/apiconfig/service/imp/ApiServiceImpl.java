@@ -6,6 +6,8 @@ import com.zitech.gateway.apiconfig.service.ApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by hy on 16-4-26.
  */
@@ -47,5 +49,13 @@ public class ApiServiceImpl implements ApiService {
         return false;
     }
 
+    @Override
+    public List<Api> getAll() {
+        return apiDAO.getAllApi();
+    }
 
+    @Override
+    public List<Api> getbyGroupId(Integer group) {
+        return apiDAO.getByGroupId(group);
+    }
 }

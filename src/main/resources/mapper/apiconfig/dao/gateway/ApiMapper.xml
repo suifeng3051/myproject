@@ -31,6 +31,18 @@
         from t_api_n
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="getAllApi" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_api_n
+        where deleted=0
+    </select>
+    <select id="getByGroupId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_api_n
+        where group_id = #{groupId,jdbcType=INTEGER} and deleted=0
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from t_api_n
         where id = #{id,jdbcType=INTEGER}

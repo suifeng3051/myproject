@@ -66,79 +66,79 @@ public class CreateApiController {
             logger.info("fail to get group info", e);
         }
         results.put("grouplist", openApiGroupList);
-        if(1 == edit) {
-            CarmenApiMethodMapping carmenApiMethodMapping = null;
-            try {
-                carmenApiMethodMapping = iCarmenApiMethodMappingService.getByApiId(apiId, env);
-
-                if(null == carmenApiMethodMapping) { // 如果找不到直接跳转到错误页面
-                    return new ModelAndView("redirect:/unifyerror", "cause", "Fail to get methodId by apiId.");
-                }
-                Long methodId = carmenApiMethodMapping.getServiceMethodId();
-                CarmenServiceMethod carmenServiceMethod = iCarmenServiceMethodService.getById(methodId);
-                if(null == carmenServiceMethod) {
-                    return new ModelAndView("redirect:/unifyerror", "cause", "Fail to get method object by methodId.");
-                }
-                String service = carmenServiceMethod.getName();
-                String method = carmenServiceMethod.getMethod();
-                String version = carmenServiceMethod.getVersion();
-                CarmenApiDataMigrate carmenApiDataMigrate =  icarmenDataMigrateService.dataExport(service, method, version, env);
-                results.put("api", carmenApiDataMigrate.getApi());
-                if(2 == carmenApiDataMigrate.getApi().getApiType()) { // 2表示PHP
-                    results.put("apiType","2");
-                }
-                // 对方法参数排序
-                List<CarmenServiceMethodParam> methodParamLists = carmenApiDataMigrate.getServiceMethodParamList();
-                Collections.sort(methodParamLists, new Comparator<CarmenServiceMethodParam>() {
-                    @Override
-                    public int compare(CarmenServiceMethodParam arg0, CarmenServiceMethodParam arg1) {
-                        if(StringUtils.isEmpty(arg0.getSequence()) || StringUtils.isEmpty(arg1.getSequence())) {
-                            return 0;
-                        }
-                        return arg0.getSequence() - arg1.getSequence();
-                    }
-                });
-                // 对API参数排序
-                List<CarmenApiParam> apiParamList = carmenApiDataMigrate.getApiParamList();
-                Collections.sort(apiParamList, new Comparator<CarmenApiParam>() {
-                    @Override
-                    public int compare(CarmenApiParam arg0, CarmenApiParam arg1) {
-                        if(StringUtils.isEmpty(arg0.getSequence()) || StringUtils.isEmpty(arg1.getSequence())) {
-                            return 0;
-                        }
-                        return arg0.getSequence() - arg1.getSequence();
-                    }
-                });
-                // 对参数参数映射排序
-                List<CarmenParamMapping> paramMappingList = carmenApiDataMigrate.getParamMappingList();
-                Collections.sort(paramMappingList, new Comparator<CarmenParamMapping>() {
-                    @Override
-                    public int compare(CarmenParamMapping arg0, CarmenParamMapping arg1) {
-                        if(StringUtils.isEmpty(arg0.getSequence()) || StringUtils.isEmpty(arg1.getSequence())) {
-                            return 0;
-                        }
-                        return arg0.getSequence() - arg1.getSequence();
-                    }
-                });
-                results.put("apiParamList", carmenApiDataMigrate.getApiParamList());
-                results.put("method", carmenApiDataMigrate.getServiceMethod());
-                results.put("methodParamList", methodParamLists);
-                results.put("structure", carmenApiDataMigrate.getStructList());
-                results.put("methodMapping", carmenApiDataMigrate.getApiMethodMapping());
-                results.put("paramMapping", carmenApiDataMigrate.getParamMappingList());
-                results.put("edit","1");
-
-                results.put("isAdmin", isAdmin);
-                results.put("group", group);
-                return new ModelAndView("createapi", "results", results);
-            } catch (Exception e) {
-                logger.error("fail to get api when status is edited.", e);
-            }
-
-        }
-
-        Boolean isAdmin = isAdministrator(userName);
-        results.put("isAdmin", isAdmin);
+//        if(1 == edit) {
+//            CarmenApiMethodMapping carmenApiMethodMapping = null;
+//            try {
+//                carmenApiMethodMapping = iCarmenApiMethodMappingService.getByApiId(apiId, env);
+//
+//                if(null == carmenApiMethodMapping) { // 如果找不到直接跳转到错误页面
+//                    return new ModelAndView("redirect:/unifyerror", "cause", "Fail to get methodId by apiId.");
+//                }
+//                Long methodId = carmenApiMethodMapping.getServiceMethodId();
+//                CarmenServiceMethod carmenServiceMethod = iCarmenServiceMethodService.getById(methodId);
+//                if(null == carmenServiceMethod) {
+//                    return new ModelAndView("redirect:/unifyerror", "cause", "Fail to get method object by methodId.");
+//                }
+//                String service = carmenServiceMethod.getName();
+//                String method = carmenServiceMethod.getMethod();
+//                String version = carmenServiceMethod.getVersion();
+//                CarmenApiDataMigrate carmenApiDataMigrate =  icarmenDataMigrateService.dataExport(service, method, version, env);
+//                results.put("api", carmenApiDataMigrate.getApi());
+//                if(2 == carmenApiDataMigrate.getApi().getApiType()) { // 2表示PHP
+//                    results.put("apiType","2");
+//                }
+//                // 对方法参数排序
+//                List<CarmenServiceMethodParam> methodParamLists = carmenApiDataMigrate.getServiceMethodParamList();
+//                Collections.sort(methodParamLists, new Comparator<CarmenServiceMethodParam>() {
+//                    @Override
+//                    public int compare(CarmenServiceMethodParam arg0, CarmenServiceMethodParam arg1) {
+//                        if(StringUtils.isEmpty(arg0.getSequence()) || StringUtils.isEmpty(arg1.getSequence())) {
+//                            return 0;
+//                        }
+//                        return arg0.getSequence() - arg1.getSequence();
+//                    }
+//                });
+//                // 对API参数排序
+//                List<CarmenApiParam> apiParamList = carmenApiDataMigrate.getApiParamList();
+//                Collections.sort(apiParamList, new Comparator<CarmenApiParam>() {
+//                    @Override
+//                    public int compare(CarmenApiParam arg0, CarmenApiParam arg1) {
+//                        if(StringUtils.isEmpty(arg0.getSequence()) || StringUtils.isEmpty(arg1.getSequence())) {
+//                            return 0;
+//                        }
+//                        return arg0.getSequence() - arg1.getSequence();
+//                    }
+//                });
+//                // 对参数参数映射排序
+//                List<CarmenParamMapping> paramMappingList = carmenApiDataMigrate.getParamMappingList();
+//                Collections.sort(paramMappingList, new Comparator<CarmenParamMapping>() {
+//                    @Override
+//                    public int compare(CarmenParamMapping arg0, CarmenParamMapping arg1) {
+//                        if(StringUtils.isEmpty(arg0.getSequence()) || StringUtils.isEmpty(arg1.getSequence())) {
+//                            return 0;
+//                        }
+//                        return arg0.getSequence() - arg1.getSequence();
+//                    }
+//                });
+//                results.put("apiParamList", carmenApiDataMigrate.getApiParamList());
+//                results.put("method", carmenApiDataMigrate.getServiceMethod());
+//                results.put("methodParamList", methodParamLists);
+//                results.put("structure", carmenApiDataMigrate.getStructList());
+//                results.put("methodMapping", carmenApiDataMigrate.getApiMethodMapping());
+//                results.put("paramMapping", carmenApiDataMigrate.getParamMappingList());
+//                results.put("edit","1");
+//
+//                results.put("isAdmin", isAdmin);
+//                results.put("group", group);
+//                return new ModelAndView("createapi", "results", results);
+//            } catch (Exception e) {
+//                logger.error("fail to get api when status is edited.", e);
+//            }
+//
+//        }
+//
+//        Boolean isAdmin = isAdministrator(userName);
+        //results.put("isAdmin", isAdmin);
         results.put("group", group);
         return new ModelAndView("createapi", "results", results);
     }

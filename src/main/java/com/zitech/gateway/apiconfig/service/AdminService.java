@@ -3,6 +3,7 @@ package com.zitech.gateway.apiconfig.service;
 
 import com.zitech.gateway.apiconfig.model.Admin;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -25,5 +26,8 @@ public interface AdminService {
     void updatePwd(Admin user);
 
     boolean isAdmin(String username);
+
+    String getUserNameFromSessionAndRedis(HttpServletRequest request);
+
 
 }
