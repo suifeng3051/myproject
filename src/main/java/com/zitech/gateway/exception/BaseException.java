@@ -6,7 +6,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 
-public class BaseException extends Exception {
+public class BaseException extends RuntimeException {
 
     private int code;
     private String description;
