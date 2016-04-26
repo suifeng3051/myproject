@@ -42,14 +42,7 @@ public class CreateApiController {
                                   @RequestParam(value = "apiId", required = false) Long apiId,
                                   HttpServletRequest request,
                                   HttpServletResponse response) {
-        String userName = null;
-        try {
-            String userKey = request.getSession().getAttribute("username").toString();
-            userName = redisOperate.getStringByKey(userKey);
-            redisOperate.set("username", userName); // 一小时
-        } catch (Exception e) {
-            logger.warn("fail to get session", e);
-        }
+        String userName = adminService.getUserNameFromSessionAndRedis(request);
         if(null == userName) {
             return new ModelAndView("redirect:/unifyerror", "cause", "Fail to get user name");
         }
@@ -59,13 +52,13 @@ public class CreateApiController {
         results.put("edit","0");
         results.put("apiType","1");
         results.put("env", env);
-        List<Group> openApiGroupList = new ArrayList<>();
+        List<Group> groupList = null;
         try {
-            openApiGroupList = groupService.getAll();
+            groupList = groupService.getAll();
         } catch (Exception e) {
             logger.info("fail to get group info", e);
         }
-        results.put("grouplist", openApiGroupList);
+        results.put("grouplist", groupList);
 //        if(1 == edit) {
 //            CarmenApiMethodMapping carmenApiMethodMapping = null;
 //            try {
