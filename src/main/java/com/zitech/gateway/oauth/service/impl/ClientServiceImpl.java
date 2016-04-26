@@ -25,16 +25,16 @@ public class ClientServiceImpl extends BaseService implements ClientService {
     }
 
     public Client getById(Integer id) {
-        return clientDAO.getById(id);
+        return clientDAO.selectByPrimaryKey(id);
     }
 
     public Client getByClientId(String clientId) {
-        return clientDAO.getByClientId(clientId);
+        return clientDAO.selectByClientId(clientId);
     }
 
     @Override
     public Client getByUserId(Integer userId) {
-        return clientDAO.getByUserId(userId);
+        return clientDAO.selectByUserId(userId);
     }
 
     public void deleteById(Integer id) {
@@ -46,7 +46,7 @@ public class ClientServiceImpl extends BaseService implements ClientService {
     }
 
     public int save(Client openOauthClients) {
-        clientDAO.save(openOauthClients);
+        clientDAO.insert(openOauthClients);
         return openOauthClients.getId();
     }
 
@@ -56,11 +56,11 @@ public class ClientServiceImpl extends BaseService implements ClientService {
 
     @Override
     public List<Client> getAll() {
-        return clientDAO.getAll();
+        return clientDAO.selectAll();
     }
 
     @Override
     public List<String> getClientIdList() {
-        return clientDAO.getClientIdList();
+        return clientDAO.selectClientIds();
     }
 }

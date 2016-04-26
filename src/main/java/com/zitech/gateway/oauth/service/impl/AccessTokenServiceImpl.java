@@ -25,20 +25,20 @@ public class AccessTokenServiceImpl extends BaseService implements AccessTokenSe
     }
 
     public AccessToken getById(Integer id) {
-        return accessTokenDAO.getById(id);
+        return accessTokenDAO.selectByPrimaryKey(id);
     }
 
     public AccessToken getByToken(String token) {
-        return accessTokenDAO.getByToken(token);
+        return accessTokenDAO.selectByToken(token);
     }
 
     public List<AccessToken> getValidToken() {
-        return accessTokenDAO.getValidToken();
+        return accessTokenDAO.selectValidToken();
     }
 
     @Override
     public List<AccessToken> getByClientIdAndUserId(String clientId, int userId) {
-        return accessTokenDAO.getByClientIdAndUserId(clientId, userId);
+        return accessTokenDAO.selectByClientIdAndUserId(clientId, userId);
     }
 
     public void deleteById(Integer id) {
@@ -56,7 +56,7 @@ public class AccessTokenServiceImpl extends BaseService implements AccessTokenSe
     }
 
     public int save(AccessToken openOauthAccessTokens) {
-        accessTokenDAO.save(openOauthAccessTokens);
+        accessTokenDAO.insert(openOauthAccessTokens);
         return openOauthAccessTokens.getId();
     }
 

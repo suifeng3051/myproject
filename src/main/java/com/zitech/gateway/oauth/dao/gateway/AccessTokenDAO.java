@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface AccessTokenDAO {
 
-    Integer save(AccessToken accessToken);
+    Integer insert(AccessToken accessToken);
 
-    AccessToken getById(Integer token);
+    AccessToken selectByPrimaryKey(Integer token);
 
-    AccessToken getByToken(String token);
+    AccessToken selectByToken(String token);
 
-    List<AccessToken> getValidToken();
+    List<AccessToken> selectValidToken();
 
-    List<AccessToken> getByClientIdAndUserId(@Param("clientId") String clientId, @Param("userId") int userId);
+    List<AccessToken> selectByClientIdAndUserId(@Param("clientId") String clientId, @Param("userId") int userId);
 
     void deleteByToken(String token);
 

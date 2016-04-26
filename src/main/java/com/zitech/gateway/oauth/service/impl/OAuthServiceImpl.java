@@ -105,7 +105,7 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     /**
-     * save client
+     * insert client
      *
      * @param openOauthClients
      * @return
@@ -118,7 +118,7 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     /**
-     * save access token to db
+     * insert access token to db
      *
      * @param accessToken
      * @param oAuthAuthzParameters
@@ -172,7 +172,7 @@ public class OAuthServiceImpl implements OAuthService {
     // }
 
     /**
-     * save refresh token to db
+     * insert refresh token to db
      *
      * @param refreshToken
      * @param oAuthAuthzParameters
