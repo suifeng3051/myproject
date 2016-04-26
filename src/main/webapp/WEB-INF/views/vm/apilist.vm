@@ -31,19 +31,19 @@
             <div data-offset-top="200"  style="margin-top:60px;">
                 <ul class="nav nav-list bs-docs-sidenav" id="navbarLeft">
 
-                    <li class="affixGroup" groupid='$!group_lv3.get("id")' group="$!groupTree.get('alias')" >
+                    <li class="affixGroup" groupid='$!groupTree.get("id")' group="$!groupTree.get('alias')" >
                         <a href="#">$!groupTree.get('name')</a>
                         #if($groupTree.get("children"))
                              <i class="icon-chevron-right"></i>
                         <ul class="nav nav-list bs-docs-sidenav" style="display:block">
                             #foreach ($group_lv1 in $!groupTree.get("children") )
-                                 <li class="affixGroup" groupid='$!group_lv3.get("id")' group='$!group_lv1.get("alias")' >
+                                 <li class="affixGroup" groupid='$!group_lv1.get("id")' group='$!group_lv1.get("alias")' >
                                  <a href="#">$!group_lv1.get("name")</a>
                                      #if($group_lv1.get("children"))
                                         <i class="icon-chevron-right"></i>
                                     <ul class="nav nav-list bs-docs-sidenav" >
                                         #foreach($group_lv2 in $!group_lv1.get("children"))
-                                                   <li class="affixGroup" groupid='$!group_lv3.get("id")' group='$!group_lv2.get("alias")' >
+                                                   <li class="affixGroup" groupid='$!group_lv2.get("id")' group='$!group_lv2.get("alias")' >
                                                        <a href="#">$!group_lv2.get("name")</a>
                                                           #if($group_lv2.get("children"))
                                                               <i class="icon-chevron-right"></i>
@@ -178,8 +178,8 @@
 ##                                </li>
 ##                            #else
                                 <li class="list-group-item apiElement">
-                                    <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.name</a>
-                                    <span style="position: absolute;left:400px;color:#929292;">$!apiElement.apiDesc</span>
+                                    <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.method</a>
+                                    <span style="position: absolute;left:400px;color:#929292;">$!apiElement.api_description</span>
                                     <span style="position: absolute;right:200px;color:#929292;">#if(0 == $!apiElement.requestType)
                                         GET
                                     #elseif(1 == $!apiElement.requestType)

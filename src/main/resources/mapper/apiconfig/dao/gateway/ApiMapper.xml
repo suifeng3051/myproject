@@ -8,6 +8,7 @@
         <result column="method" property="method" jdbcType="VARCHAR"/>
         <result column="version" property="version" jdbcType="INTEGER"/>
         <result column="group_id" property="groupId" jdbcType="INTEGER"/>
+        <result column="request_type" property="requestType" jdbcType="TINYINT"/>
         <result column="frequency_control" property="frequencyControl" jdbcType="TINYINT"/>
         <result column="check_inner" property="checkInner" jdbcType="TINYINT"/>
         <result column="api_description" property="apiDescription" jdbcType="VARCHAR"/>
@@ -17,6 +18,7 @@
         <result column="updated_id" property="updatedId" jdbcType="INTEGER"/>
         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
         <result column="deleted" property="deleted" jdbcType="TINYINT"/>
+        <result column="env" property="env" jdbcType="TINYINT"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, namespace, method, version, group_id, frequency_control, check_inner, api_description,
@@ -31,17 +33,17 @@
         from t_api_n
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="getAllApi" resultMap="BaseResultMap">
+    <select id="getAllApiByEnv" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from t_api_n
-        where deleted=0
+        where deleted=0 and env=#{env,jdbcType=TINYINT}
     </select>
-    <select id="getByGroupId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="getByGroupIdAndEnv" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from t_api_n
-        where group_id = #{groupId,jdbcType=INTEGER} and deleted=0
+        where group_id = #{groupId,jdbcType=INTEGER} and deleted=0 and env=#{env,jdbcType=TINYINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from t_api_n

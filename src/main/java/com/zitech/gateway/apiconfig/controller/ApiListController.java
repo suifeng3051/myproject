@@ -6,7 +6,6 @@ import com.zitech.gateway.apiconfig.service.ApiService;
 import com.zitech.gateway.apiconfig.service.GroupService;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +41,8 @@ public class ApiListController {
 
 
     @RequestMapping("/apilist")
-    public ModelAndView getApiList(HttpServletRequest request, HttpServletResponse response)
+    public ModelAndView getApiList(@RequestParam(value = "env",required = false, defaultValue = "1") Byte env,
+            HttpServletRequest request, HttpServletResponse response)
     {
         Map<String, Object> results = new HashMap<>();
         try {
@@ -53,7 +53,7 @@ public class ApiListController {
             }
 
             //api
-            List<Api> allApi = apiService.getAll();
+            List<Api> allApi = apiService.getAllByEnv(env);
             if(null != allApi) {
                 Collections.sort(allApi, new Comparator<Api>() {
                     @Override
@@ -73,6 +73,7 @@ public class ApiListController {
             results.put("isAdmin", adminService.isAdmin(userName));
             results.put("apilists", allApi);
             results.put("groupMap", groupMap);
+            results.put("env", env);
         } catch (Exception e) {
             logger.error("get api list error",e);
             return new ModelAndView("redirect:/unifyerror", "cause", "error when get api list");
@@ -83,16 +84,17 @@ public class ApiListController {
 
     @RequestMapping(value = "/getapi/by/groupid", produces="application/json;charset=utf-8")
     @ResponseBody
-    public String getApiByGroup(@RequestParam("groupid") Integer groupid)
+    public String getApiByGroup(@RequestParam("groupid") Integer groupid,
+                                @RequestParam(value = "env",required = false, defaultValue = "1") Byte env)
     {
         ApiResult<List<Api>> apiResult = new ApiResult<>(0,"success");
 
         try {
             List<Api> list = null;
             if (groupid == null || groupid == 1) {
-                list = apiService.getAll();
+                list = apiService.getAllByEnv(env);
             } else {
-                list = apiService.getbyGroupId(groupid);
+                list = apiService.getbyGroupIdAndEnv(groupid,env);
             }
             Collections.sort(list, new Comparator<Api>() {
                 @Override

@@ -50,12 +50,12 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public List<Api> getAll() {
-        return apiDAO.getAllApi();
+    public List<Api> getAllByEnv(Byte env) {
+        return apiDAO.getAllApiByEnv(env);
     }
 
     @Override
-    public List<Api> getbyGroupId(Integer group) {
-        return apiDAO.getByGroupId(group);
+    public List<Api> getbyGroupIdAndEnv(Integer groupid,Byte env) {
+        return apiDAO.getByGroupIdAndEnv(groupid, env);
     }
 }

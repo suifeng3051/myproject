@@ -13,6 +13,8 @@ public class Api {
 
     private Integer groupId;
 
+    private Byte requestType;
+
     private Byte frequencyControl;
 
     private Byte checkInner;
@@ -30,6 +32,23 @@ public class Api {
     private Byte deleted;
 
     private String resultDemo;
+    private Byte env;
+
+    public Byte getRequestType() {
+        return requestType;
+    }
+
+    public void setRequestType(Byte requestType) {
+        this.requestType = requestType;
+    }
+
+    public Byte getEnv() {
+        return env;
+    }
+
+    public void setEnv(Byte env) {
+        this.env = env;
+    }
 
     public Integer getId() {
         return id;

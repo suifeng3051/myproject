@@ -1087,7 +1087,7 @@ $(document).ready(function(){
         $(".apiElement").remove(); // 清除之前所有的API列表
         $("#currentGroup").val(group); // 设置当前的group,以便新建的时候去的取到当前的group
         $("#currentGroupid").val(groupid); // 设置当前的group,以便新建的时候去的取到当前的group
-        $.post("getapi/by/groupid", {"groupid": groupid}, function (d) {
+        $.post("getapi/by/groupid", {"groupid": groupid, "env":env}, function (d) {
             //console.log("d: " + d);
 
             if(d.code == 0) {
