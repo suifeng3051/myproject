@@ -1,7 +1,8 @@
 package com.zitech.gateway.apiconfig.dao.gateway;
 
 
-import java.security.acl.Group;
+import com.zitech.gateway.apiconfig.model.Group;
+
 import java.util.List;
 
 public interface GroupDAO {
@@ -14,13 +15,13 @@ public interface GroupDAO {
 
     Group selectByAlias(String alias);
 
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(Group record);
 
     int insertSelective(Group record);
 
-    Group selectByPrimaryKey(Long id);
+    Group selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(Group record);
 

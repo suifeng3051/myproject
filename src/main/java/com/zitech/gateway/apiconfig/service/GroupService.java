@@ -1,7 +1,6 @@
 package com.zitech.gateway.apiconfig.service;
 
 
-import com.zitech.gateway.apiconfig.dto.req.OpenResourceGroupReq;
 import com.zitech.gateway.apiconfig.model.Group;
 
 import java.util.List;
@@ -16,11 +15,9 @@ public interface GroupService {
 
     void update(Group config);
 
-    void deleteById(int id);
+    void deleteById(Integer id);
 
     Group getById(int id);
-
-    List<Group> queryWithPage(OpenResourceGroupReq req);
 
     List<String> getGroupAlias();
 

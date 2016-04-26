@@ -1,7 +1,6 @@
 package com.zitech.gateway.apiconfig.service.imp;
 
 import com.zitech.gateway.apiconfig.dao.gateway.GroupDAO;
-import com.zitech.gateway.apiconfig.dto.req.OpenResourceGroupReq;
 import com.zitech.gateway.apiconfig.model.Group;
 import com.zitech.gateway.apiconfig.service.GroupService;
 import com.zitech.gateway.utils.AppUtils;
@@ -15,61 +14,54 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-/**
- * Created by chenyun on 15/7/31.
- */
+
 @Service
 public class GroupServiceImpl implements GroupService {
 
     @Resource
-    private GroupDAO resourceGroupDAO;
+    private GroupDAO groupDAO;
 
     @Override
     public int insert(Group config) {
-        resourceGroupDAO.save(config);
+        groupDAO.insert(config);
         return config.getId();
     }
 
     @Override
     public void update(Group config) {
-        resourceGroupDAO.update(config);
+        groupDAO.updateByPrimaryKey(config);
     }
 
     @Override
-    public void deleteById(int id) {
-        resourceGroupDAO.deleteById(id);
+    public void deleteById(Integer id) {
+        groupDAO.deleteByPrimaryKey(id);
     }
 
     @Override
     public Group getById(int id) {
-        return resourceGroupDAO.getById(id);
-    }
-
-    @Override
-    public List<Group> queryWithPage(OpenResourceGroupReq req) {
-        return resourceGroupDAO.queryWithPage(req);
+        return groupDAO.selectByPrimaryKey(id);
     }
 
     @Override
     public List<String> getGroupAlias() {
-        return resourceGroupDAO.selectAllGroupAlias();
+        return groupDAO.selectAllGroupAlias();
     }
 
     @Override
     public List<Group> getAll() {
-        return resourceGroupDAO.selectAll();
+        return groupDAO.selectAll();
     }
     @Override
     public List<Group> getGroupByNameAndAlias(String name, String alias){
         Group openApiGroup = new Group();
         openApiGroup.setName(name);
         openApiGroup.setAlias(alias);
-        return resourceGroupDAO.selectGroupByNameAndAlias(openApiGroup);
+        return groupDAO.selectGroupByNameAndAlias(openApiGroup);
     }
 
     @Override
     public Group getGroupByAlias(String alias) {
-        return  resourceGroupDAO.selectByAlias(alias);
+        return  groupDAO.selectByAlias(alias);
     }
 
     @Override
@@ -81,11 +73,11 @@ public class GroupServiceImpl implements GroupService {
                 String[] groupIds = ids.split(" ");
                 for(String groupId:groupIds){
                     int id = Integer.parseInt(groupId.trim());
-                    groupNames.append(resourceGroupDAO.getById(id).getAlias()+" ");
+                    groupNames.append(groupDAO.selectByPrimaryKey(id).getAlias()+" ");
                 }
             }else{
                     int id = Integer.parseInt(ids.trim());
-                    groupNames.append(resourceGroupDAO.getById(id).getAlias()+" ");
+                    groupNames.append(groupDAO.selectByPrimaryKey(id).getAlias()+" ");
             }
         }
 
@@ -101,14 +93,14 @@ public class GroupServiceImpl implements GroupService {
     public Map<String, Object> getGroupTreeById(int id) {
 
         if(id==-1){
-            Group openApiGroup_all = resourceGroupDAO.selectByAlias("all");
+            Group openApiGroup_all = groupDAO.selectByAlias("all");
             id=openApiGroup_all.getId();
         }
 
 
         Map<Integer,Map<String,Object>> groupTreeKeyByID = new HashMap<Integer,Map<String,Object>>();
         Map<Integer,List<Map<String,Object>>> groupTreeKeyByPID = new HashMap<Integer,List<Map<String,Object>>>();
-        List<Group>  list_openApiGroup = resourceGroupDAO.selectAll();
+        List<Group>  list_openApiGroup = groupDAO.selectAll();
 
         //为了递归的时候不重新去数据库取
         for(Group openApiGroup:list_openApiGroup) {

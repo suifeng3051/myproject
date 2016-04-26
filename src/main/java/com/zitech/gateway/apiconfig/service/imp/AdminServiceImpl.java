@@ -21,23 +21,23 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public int insert(Admin user) {
-        adminDAO.save(user);
+        adminDAO.insert(user);
         return user.getId();
     }
 
     @Override
     public void update(Admin user) {
-        adminDAO.update(user);
+        adminDAO.updateByPrimaryKey(user);
     }
 
     @Override
     public void deleteById(int id) {
-        adminDAO.deleteById(id);
+        adminDAO.deleteByPrimaryKey(id);
     }
 
     @Override
     public Admin getById(int id) {
-        return adminDAO.getById(id);
+        return adminDAO.selectByPrimaryKey(id);
     }
 
     @Override

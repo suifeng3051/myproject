@@ -13,13 +13,13 @@ public interface AdminDAO {
 
     void updatePwd(Admin user);
 
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(Admin record);
 
     int insertSelective(Admin record);
 
-    Admin selectByPrimaryKey(Long id);
+    Admin selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(Admin record);
 
