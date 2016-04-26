@@ -5,6 +5,8 @@ import java.util.Date;
 public class Param {
     private Integer id;
 
+    private Integer apiId;
+
     private String requestDemo;
 
     private String requestStructure;
@@ -16,6 +18,14 @@ public class Param {
     private Date updatedTime;
 
     private Byte deleted;
+
+    public Integer getApiId() {
+        return apiId;
+    }
+
+    public void setApiId(Integer apiId) {
+        this.apiId = apiId;
+    }
 
     public Integer getId() {
         return id;
