@@ -1,7 +1,7 @@
 package com.zitech.gateway.gateway.pipes.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zitech.gateway.exception.CarmenException;
+import com.zitech.gateway.exception.BaseException;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.excutor.PerfMonitor;
 import com.zitech.gateway.gateway.excutor.Pipeline;
@@ -64,7 +64,7 @@ public class PostPipe extends AbstractPipe {
 
             // log unknown error
             Exception e = event.getException();
-            if (e != null && !(e instanceof CarmenException)) {
+            if (e != null && !(e instanceof BaseException)) {
                 logger.error("unknown error", event.getException());
                 isSuccess = GatewayConstant.FAILUE;
                 exceptionName = "Exception";

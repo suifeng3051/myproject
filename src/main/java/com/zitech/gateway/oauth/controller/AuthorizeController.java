@@ -3,11 +3,11 @@ package com.zitech.gateway.oauth.controller;
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.oauth.Constants;
 import com.zitech.gateway.oauth.model.OAuthAuthzParameters;
-import com.zitech.gateway.oauth.model.OpenOauthClients;
+import com.zitech.gateway.oauth.model.Client;
 import com.zitech.gateway.oauth.oauthex.OAuthASResponseEx;
 import com.zitech.gateway.oauth.oauthex.OAuthConstants;
 import com.zitech.gateway.oauth.oauthex.UUIDValueGeneratorEx;
-import com.zitech.gateway.oauth.service.impl.OAuthService;
+import com.zitech.gateway.oauth.service.impl.OAuthServiceImpl;
 import com.zitech.gateway.utils.AppUtils;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
@@ -48,7 +48,7 @@ public class AuthorizeController extends BaseController {
     private AppConfig appConfig;
 
     @Autowired
-    private OAuthService oAuthService;
+    private OAuthServiceImpl oAuthService;
 
     /**
      * used for authorization code type and implicit type which are the
@@ -74,7 +74,7 @@ public class AuthorizeController extends BaseController {
             String responseType = oAuthAuthzParameters.getResponseType();
 
             // check client id
-            OpenOauthClients openOauthClients = oAuthService.getClientByClientId(oAuthAuthzParameters.getClientId());
+            Client openOauthClients = oAuthService.getClientByClientId(oAuthAuthzParameters.getClientId());
             if (openOauthClients == null) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)

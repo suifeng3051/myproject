@@ -1,7 +1,7 @@
 package com.zitech.gateway.gateway.pipes.impl;
 
 import com.alibaba.fastjson.JSONException;
-import com.zitech.gateway.exception.CarmenException;
+import com.zitech.gateway.exception.BaseException;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.excutor.Pipeline;
 import com.zitech.gateway.gateway.excutor.TicTac;
@@ -54,8 +54,8 @@ public class ErrorPipe extends AbstractPipe {
 
             if (exception != null) {
                 logger.info("exception happened, context: {}", event);
-                if (exception instanceof CarmenException) {
-                    CarmenException e = (CarmenException) exception;
+                if (exception instanceof BaseException) {
+                    BaseException e = (BaseException) exception;
                     ResponseEntity<String> responseEntity = new ResponseEntity<String>(
                             String.format(Constants.ERROR_RESPONSE, e.getCode(), e.getDescription()),
                             HttpStatus.valueOf(200));

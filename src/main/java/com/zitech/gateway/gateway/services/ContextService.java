@@ -4,8 +4,8 @@ import com.zitech.gateway.apiconfig.extension.ParamType;
 import com.zitech.gateway.apiconfig.model.CarmenParamMapping;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.oauth.model.OpenOauthAccessTokens;
-import com.zitech.gateway.oauth.model.OpenOauthClients;
+import com.zitech.gateway.oauth.model.AccessToken;
+import com.zitech.gateway.oauth.model.Client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class ContextService {
         requestParams.add(Constants.CONTEXT_REQUEST_IP);
     }
 
-    public static void prepareContext(OpenOauthAccessTokens tokens, RequestEvent event,
+    public static void prepareContext(AccessToken tokens, RequestEvent event,
                                       List<CarmenParamMapping> mappings) {
         Map<String, Object> params = event.getIntParams();
         for (CarmenParamMapping mapping : mappings) {
@@ -56,7 +56,7 @@ public class ContextService {
         }
     }
 
-    public static void prepareContext(OpenOauthClients clients, RequestEvent event,
+    public static void prepareContext(Client clients, RequestEvent event,
                                       List<CarmenParamMapping> mappings) {
         Map<String, Object> params = event.getIntParams();
         for (CarmenParamMapping mapping : mappings) {

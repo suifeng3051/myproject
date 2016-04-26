@@ -1,9 +1,9 @@
 package com.zitech.gateway.gateway.exception;
 
 
-import com.zitech.gateway.exception.CarmenException;
+import com.zitech.gateway.exception.BaseException;
 
-public class ResultException extends CarmenException {
+public class ResultException extends BaseException {
 
     public ResultException(int code, String error) {
         super(code, error);

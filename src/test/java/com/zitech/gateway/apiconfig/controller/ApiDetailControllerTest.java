@@ -2,10 +2,10 @@ package com.zitech.gateway.apiconfig.controller;
 
 import com.zitech.gateway.apiconfig.model.CarmenApi;
 import com.zitech.gateway.apiconfig.model.CarmenApiParam;
-import com.zitech.gateway.apiconfig.model.CarmenUser;
+import com.zitech.gateway.apiconfig.model.Admin;
 import com.zitech.gateway.apiconfig.service.ICarmenApiParamService;
 import com.zitech.gateway.apiconfig.service.ICarmenApiService;
-import com.zitech.gateway.apiconfig.service.ICarmenUserService;
+import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.cache.RedisOperate;
 
 import org.apache.struts.mock.MockHttpServletRequest;
@@ -25,8 +25,6 @@ import mockit.NonStrictExpectations;
 import mockit.Tested;
 import mockit.integration.junit4.JMockit;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by bobo on 10/20/15.
  */
@@ -44,16 +42,16 @@ public class ApiDetailControllerTest {
     @Injectable
     private ICarmenApiParamService iCarmenApiParamService;
     @Injectable
-    private ICarmenUserService iCarmenUserService;
+    private AdminService iCarmenUserService;
 
 
     @Test
     public void testIsAdministrator() throws Exception {
         new Expectations(){{
             iCarmenUserService.getByUserName("dingdongsheng");
-            CarmenUser carmenUser = new CarmenUser();
+            Admin carmenUser = new Admin();
             carmenUser.setUserGroup(1);
-            List<CarmenUser> carmenUserList = new ArrayList<>();
+            List<Admin> carmenUserList = new ArrayList<>();
             carmenUserList.add(carmenUser);
             result = carmenUserList;
         }};

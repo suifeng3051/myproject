@@ -4,10 +4,10 @@ import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.CarmenApi;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.cache.CarmenApiCache;
-import com.zitech.gateway.gateway.cache.OpenOauthClientsCache;
+import com.zitech.gateway.gateway.cache.ClientCache;
 import com.zitech.gateway.gateway.exception.SignValidateException;
 import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.oauth.model.OpenOauthClients;
+import com.zitech.gateway.oauth.model.Client;
 import com.zitech.gateway.oauth.oauthex.OAuthConstants;
 import com.zitech.gateway.utils.AppUtils;
 import com.zitech.gateway.utils.DateUtil;
@@ -35,7 +35,7 @@ public class SignService {
     private static final Logger logger = LoggerFactory.getLogger(SignService.class);
 
     @Autowired
-    private OpenOauthClientsCache clientsCache;
+    private ClientCache clientsCache;
 
 //    @Autowired
 //    private OpenResourceCache resourceCache;
@@ -49,7 +49,7 @@ public class SignService {
     /**
      * validate sign, please see http://gateway.zitech.com/doc/api/protocol
      */
-    public OpenOauthClients validateSign(RequestEvent event) throws SignValidateException, ExecutionException {
+    public Client validateSign(RequestEvent event) throws SignValidateException, ExecutionException {
 
         String clientId = event.getValue(Constants.CLIENTID);
         String sign = event.getSign();
@@ -66,7 +66,7 @@ public class SignService {
                     OAuthConstants.OAuthDescription.INVALID_TIME_STAMP);
         }
 
-        OpenOauthClients clients = clientsCache.get(event.getId(), clientId);
+        Client clients = clientsCache.get(event.getId(), clientId);
         if (clients == null) {
             throw new SignValidateException(OAuthConstants.OAuthResponse.INVALID_CLIENT,
                     OAuthConstants.OAuthDescription.INVALID_CLIENT_DESCRIPTION);

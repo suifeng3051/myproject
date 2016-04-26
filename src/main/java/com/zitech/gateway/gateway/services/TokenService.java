@@ -2,14 +2,13 @@ package com.zitech.gateway.gateway.services;
 
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.CarmenApi;
-import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.cache.CarmenApiCache;
-import com.zitech.gateway.gateway.cache.OpenOauthAccessTokensCache;
-import com.zitech.gateway.gateway.cache.OpenOauthClientsCache;
+import com.zitech.gateway.gateway.cache.AccessTokenCache;
+import com.zitech.gateway.gateway.cache.ClientCache;
 import com.zitech.gateway.gateway.exception.TokenValidateException;
 import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.oauth.model.OpenOauthAccessTokens;
-import com.zitech.gateway.oauth.model.OpenOauthClients;
+import com.zitech.gateway.oauth.model.AccessToken;
+import com.zitech.gateway.oauth.model.Client;
 import com.zitech.gateway.oauth.oauthex.OAuthConstants;
 import com.zitech.gateway.oauth.service.impl.BaseService;
 import com.zitech.gateway.utils.AppUtils;
@@ -30,10 +29,10 @@ public class TokenService extends BaseService {
     private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
 
     @Autowired
-    private OpenOauthClientsCache clientsCache;
+    private ClientCache clientsCache;
 
     @Autowired
-    private OpenOauthAccessTokensCache accessTokensCache;
+    private AccessTokenCache accessTokensCache;
 
     @Autowired
     private CarmenApiCache carmenApiCache;
@@ -44,7 +43,7 @@ public class TokenService extends BaseService {
     /**
      * validate access token, please see http://gateway.zitech.com/doc/api/oauthprotocol
      */
-    public OpenOauthAccessTokens validateAccessToken(RequestEvent event) throws TokenValidateException, ExecutionException {
+    public AccessToken validateAccessToken(RequestEvent event) throws TokenValidateException, ExecutionException {
 
         String accessToken = event.getAccessToken();
 
@@ -71,7 +70,7 @@ public class TokenService extends BaseService {
             throw new TokenValidateException(OAuthConstants.OAuthResponse.NO_OR_EXPIRED_TOKEN,
                     OAuthConstants.OAuthDescription.INVALID_TOKEN);
         }*/
-        OpenOauthAccessTokens openOauthAccessTokens = accessTokensCache.get(event.getId(), accessToken);
+        AccessToken openOauthAccessTokens = accessTokensCache.get(event.getId(), accessToken);
 
         /**
          * check if expired
@@ -82,7 +81,7 @@ public class TokenService extends BaseService {
         }
 
         String clientId = openOauthAccessTokens.getClientId();
-        OpenOauthClients openOauthClients = clientsCache.get(event.getId(), clientId);
+        Client openOauthClients = clientsCache.get(event.getId(), clientId);
         if (openOauthClients == null) {
             throw new TokenValidateException(OAuthConstants.OAuthResponse.INVALID_CLIENT_NO,
                     OAuthConstants.OAuthDescription.INVALID_CLIENT_DESCRIPTION);

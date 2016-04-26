@@ -1,7 +1,7 @@
 package com.zitech.gateway.apiconfig.controller;
 
-import com.zitech.gateway.apiconfig.model.CarmenUser;
-import com.zitech.gateway.apiconfig.service.ICarmenUserService;
+import com.zitech.gateway.apiconfig.model.Admin;
+import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.console.CacheManager;
 import com.zitech.gateway.console.InstanceMonitor;
@@ -18,9 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by dingdongsheng on 15/9/5.
- */
+
 @Controller
 public class InstanceController {
 
@@ -31,7 +29,7 @@ public class InstanceController {
     @Resource
     RedisOperate redisOperate;
     @Resource
-    ICarmenUserService iCarmenUserService;
+    AdminService iCarmenUserService;
 
     /**
      * 每个实例当前JVM状态
@@ -74,8 +72,8 @@ public class InstanceController {
     public Boolean isAdministrator(String userName) {
 
         try {
-            List<CarmenUser> user = iCarmenUserService.getByUserName(userName);
-            for(CarmenUser carmenUser : user) {
+            List<Admin> user = iCarmenUserService.getByUserName(userName);
+            for(Admin carmenUser : user) {
                 if(1 == carmenUser.getUserGroup()) {
                     return true;
                 }

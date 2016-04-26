@@ -2,7 +2,7 @@ package com.zitech.gateway.gateway.pipes.impl;
 
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.CarmenParamMapping;
-import com.zitech.gateway.exception.CarmenException;
+import com.zitech.gateway.exception.BaseException;
 import com.zitech.gateway.gateway.cache.CarmenParamMappingCache;
 import com.zitech.gateway.gateway.excutor.Pipeline;
 import com.zitech.gateway.gateway.model.RequestEvent;
@@ -10,7 +10,7 @@ import com.zitech.gateway.gateway.model.RequestState;
 import com.zitech.gateway.gateway.model.ValidateType;
 import com.zitech.gateway.gateway.services.ContextService;
 import com.zitech.gateway.gateway.services.SignService;
-import com.zitech.gateway.oauth.model.OpenOauthClients;
+import com.zitech.gateway.oauth.model.Client;
 import com.zitech.gateway.utils.SpringContext;
 
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public class SignPipe extends AbstractPipe {
                 return;
 
             // validate sign
-            OpenOauthClients clients = signService.validateSign(event);
+            Client clients = signService.validateSign(event);
 
             // get param mappings
             List<CarmenParamMapping> paramMappings = paramMappingCache.get(event.getId(), event.getNamespace(),
@@ -52,7 +52,7 @@ public class SignPipe extends AbstractPipe {
             // set context parameter from OpenApp
             ContextService.prepareContext(clients, event, paramMappings);
 
-        } catch (CarmenException e) {
+        } catch (BaseException e) {
             event.setException(e);
             logger.info("exception happened when validating sign: {}", event.getId(), e);
         } catch (Exception e) {

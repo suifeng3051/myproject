@@ -1,9 +1,9 @@
 package com.zitech.gateway.gateway.exception;
 
 
-import com.zitech.gateway.exception.CarmenException;
+import com.zitech.gateway.exception.BaseException;
 
-public class PipelineException extends CarmenException {
+public class PipelineException extends BaseException {
 
     public PipelineException(int code, String error) {
         super(code, error);

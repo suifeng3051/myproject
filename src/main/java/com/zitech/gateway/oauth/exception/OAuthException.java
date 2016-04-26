@@ -1,11 +1,11 @@
 package com.zitech.gateway.oauth.exception;
 
-import com.zitech.gateway.exception.CarmenException;
+import com.zitech.gateway.exception.BaseException;
 
 /**
  * Created by bobo on 6/11/15.
  */
-public class OAuthException extends CarmenException {
+public class OAuthException extends BaseException {
 
     public OAuthException(int code, String error) {
         super(code, error);

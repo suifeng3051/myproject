@@ -3,7 +3,7 @@ package com.zitech.gateway.gateway.pipes.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.apiconfig.model.CarmenApi;
 import com.zitech.gateway.apiconfig.model.CarmenServiceMethod;
-import com.zitech.gateway.exception.CarmenException;
+import com.zitech.gateway.exception.BaseException;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.InnerParams;
 import com.zitech.gateway.gateway.exception.CallException;
@@ -225,7 +225,7 @@ public class ServicePipe extends AbstractPipe {
                 httpAsyncClient.execute(httpGet, new HttpAsyncCallback(event));
             }
 
-        } catch (CarmenException e) {
+        } catch (BaseException e) {
             event.setException(e);
             logger.info("exception happened when calling service: {}", event.getId(), e);
         } catch (Exception e) {

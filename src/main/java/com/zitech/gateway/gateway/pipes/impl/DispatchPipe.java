@@ -2,7 +2,7 @@ package com.zitech.gateway.gateway.pipes.impl;
 
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.CarmenApi;
-import com.zitech.gateway.exception.CarmenException;
+import com.zitech.gateway.exception.BaseException;
 import com.zitech.gateway.gateway.cache.CarmenApiCache;
 import com.zitech.gateway.gateway.exception.PipelineException;
 import com.zitech.gateway.gateway.excutor.Pipeline;
@@ -54,7 +54,7 @@ public class DispatchPipe extends AbstractPipe {
 
             logger.info("complete dispatch: {}", event.getId());
 
-        } catch (CarmenException e) {
+        } catch (BaseException e) {
             event.setException(e);
             logger.info("exception happened when dispatching", e);
         } catch (Exception e) {

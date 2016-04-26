@@ -1,7 +1,7 @@
 package com.zitech.gateway.apiconfig.controller;
 
-import com.zitech.gateway.apiconfig.model.CarmenUser;
-import com.zitech.gateway.apiconfig.service.ICarmenUserService;
+import com.zitech.gateway.apiconfig.model.Admin;
+import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.cache.RedisOperate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by dingdongsheng on 15/9/5.
- */
+
 
 @Controller
 public class MonitorController {
@@ -29,7 +27,7 @@ public class MonitorController {
     @Resource
     RedisOperate redisOperate;
     @Resource
-    ICarmenUserService iCarmenUserService;
+    AdminService iCarmenUserService;
 
     /**
      * 监控页面
@@ -71,8 +69,8 @@ public class MonitorController {
     public Boolean isAdministrator(String userName) {
 
         try {
-            List<CarmenUser> user = iCarmenUserService.getByUserName(userName);
-            for(CarmenUser carmenUser : user) {
+            List<Admin> user = iCarmenUserService.getByUserName(userName);
+            for(Admin carmenUser : user) {
                 if(1 == carmenUser.getUserGroup()) {
                     return true;
                 }

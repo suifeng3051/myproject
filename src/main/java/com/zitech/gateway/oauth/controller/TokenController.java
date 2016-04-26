@@ -5,11 +5,11 @@ import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.oauth.Constants;
 import com.zitech.gateway.oauth.exception.OAuthException;
 import com.zitech.gateway.oauth.model.OAuthAuthzParameters;
-import com.zitech.gateway.oauth.model.OauthUser;
-import com.zitech.gateway.oauth.model.OpenOauthClients;
-import com.zitech.gateway.oauth.model.OpenOauthRefreshTokens;
+import com.zitech.gateway.oauth.model.Account;
+import com.zitech.gateway.oauth.model.Client;
+import com.zitech.gateway.oauth.model.RefreshToken;
 import com.zitech.gateway.oauth.oauthex.*;
-import com.zitech.gateway.oauth.service.impl.OAuthService;
+import com.zitech.gateway.oauth.service.impl.OAuthServiceImpl;
 import com.zitech.gateway.utils.AppUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
@@ -42,7 +42,7 @@ public class TokenController {
     private static final Logger logger = LoggerFactory.getLogger(TokenController.class);
 
     @Autowired
-    private OAuthService oAuthService;
+    private OAuthServiceImpl oAuthService;
 
     @Autowired
     private AppConfig appConfig;
@@ -153,7 +153,7 @@ public class TokenController {
             }
 
             // check client id
-            OpenOauthClients openOauthClients = oAuthService.getClientByClientId(oauthRequest.getClientId());
+            Client openOauthClients = oAuthService.getClientByClientId(oauthRequest.getClientId());
             if (openOauthClients == null) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
@@ -265,7 +265,7 @@ public class TokenController {
             }
 
             // check token
-            OpenOauthRefreshTokens token = oAuthService.getRefreshToken(refreshToken);
+            RefreshToken token = oAuthService.getRefreshToken(refreshToken);
             if (token == null) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
@@ -288,7 +288,7 @@ public class TokenController {
             }
 
             // check client id
-            OpenOauthClients openOauthClients = oAuthService.getClientByClientId(oauthRequest.getClientId());
+            Client openOauthClients = oAuthService.getClientByClientId(oauthRequest.getClientId());
             if (openOauthClients == null) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
@@ -405,7 +405,7 @@ public class TokenController {
                 return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
-            OpenOauthClients openOauthClients = oAuthService.getClientByClientId(oAuthAuthzParameters.getClientId());
+            Client openOauthClients = oAuthService.getClientByClientId(oAuthAuthzParameters.getClientId());
             if (openOauthClients == null) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
@@ -531,7 +531,7 @@ public class TokenController {
             }
 
             //判断ClientId是否正确
-            OpenOauthClients openOauthClients = oAuthService.getClientByClientId(oAuthAuthzParameters.getClientId());
+            Client openOauthClients = oAuthService.getClientByClientId(oAuthAuthzParameters.getClientId());
             if (openOauthClients == null) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
@@ -565,7 +565,7 @@ public class TokenController {
             }
 
 
-            OauthUser user = null;
+            Account user = null;
             try {
 //                user = oAuthService.login(oAuthAuthzParameters.getUserName(),oAuthAuthzParameters.getPassword(), Integer.valueOf(type));
                 user = oAuthService.login(oAuthAuthzParameters, request);

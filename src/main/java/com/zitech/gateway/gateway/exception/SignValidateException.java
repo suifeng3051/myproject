@@ -1,9 +1,9 @@
 package com.zitech.gateway.gateway.exception;
 
 
-import com.zitech.gateway.exception.CarmenException;
+import com.zitech.gateway.exception.BaseException;
 
-public class SignValidateException extends CarmenException {
+public class SignValidateException extends BaseException {
 
     public SignValidateException(int code, String error) {
         super(code, error);

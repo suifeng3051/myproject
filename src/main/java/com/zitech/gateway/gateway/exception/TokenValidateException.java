@@ -1,9 +1,9 @@
 package com.zitech.gateway.gateway.exception;
 
 
-import com.zitech.gateway.exception.CarmenException;
+import com.zitech.gateway.exception.BaseException;
 
-public class TokenValidateException extends CarmenException {
+public class TokenValidateException extends BaseException {
 
     public TokenValidateException(int code, String error) {
         super(code, error);

@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.zitech.gateway.AbstractJunit;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.gateway.exception.TokenValidateException;
-import com.zitech.gateway.oauth.model.OpenOauthAccessTokens;
-import com.zitech.gateway.oauth.service.IOpenOauthAccessTokensService;
+import com.zitech.gateway.oauth.model.AccessToken;
+import com.zitech.gateway.oauth.service.AccessTokenService;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,23 +18,23 @@ import java.util.List;
 public class TokenCacheTest extends AbstractJunit {
 
     @Autowired
-    private OpenOauthAccessTokensCache accessTokensCache;
+    private AccessTokenCache accessTokensCache;
 
     @Autowired
-    private IOpenOauthAccessTokensService openOauthAccessTokensService;
+    private AccessTokenService openOauthAccessTokensService;
 
     @Autowired
     private RedisOperate redis;
 
     @Test
     public void testAccessTokensCache() throws TokenValidateException {
-        OpenOauthAccessTokens token = accessTokensCache.get(null,"2de3d026d4a13c0da718302b1a664dbc");
+        AccessToken token = accessTokensCache.get(null,"2de3d026d4a13c0da718302b1a664dbc");
         System.out.println(JSON.toJSONString(token));
     }
 
     @Test
     public void testGetAccessTokensCache() {
-        List<OpenOauthAccessTokens> list = openOauthAccessTokensService.getValidToken();
+        List<AccessToken> list = openOauthAccessTokensService.getValidToken();
         System.out.println(JSON.toJSONString(list));
     }
 

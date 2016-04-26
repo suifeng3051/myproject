@@ -1,8 +1,8 @@
 package com.zitech.gateway.apiconfig.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.zitech.gateway.apiconfig.model.CarmenUser;
-import com.zitech.gateway.apiconfig.service.ICarmenUserService;
+import com.zitech.gateway.apiconfig.model.Admin;
+import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.console.CacheManager;
 import com.zitech.gateway.oauth.Constants;
@@ -23,9 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * Created by dingdongsheng on 15/9/5.
- */
+
 @Controller
 public class CacheManageController {
 
@@ -36,7 +34,7 @@ public class CacheManageController {
     @Resource
     RedisOperate redisOperate;
     @Resource
-    ICarmenUserService iCarmenUserService;
+    AdminService iCarmenUserService;
 
     /**
      * 管理cache
@@ -81,8 +79,8 @@ public class CacheManageController {
     public Boolean isAdministrator(String userName) {
 
         try {
-            List<CarmenUser> user = iCarmenUserService.getByUserName(userName);
-            for(CarmenUser carmenUser : user) {
+            List<Admin> user = iCarmenUserService.getByUserName(userName);
+            for(Admin carmenUser : user) {
                 if(1 == carmenUser.getUserGroup()) {
                     return true;
                 }
