@@ -14,25 +14,25 @@
     <sql id="Base_Column_List">
         id, access_token, client_id, user_id, extra, expires, scope
     </sql>
-    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
         from t_oauth_access_tokens
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="getByToken" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="selectByToken" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
         from t_oauth_access_tokens
         where access_token = #{token,jdbcType=VARCHAR}
     </select>
-    <select id="getValidToken" resultMap="BaseResultMap">
+    <select id="selectValidToken" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from t_oauth_access_tokens
         where expires <![CDATA[ > ]]> now()
     </select>
-    <select id="getByClientIdAndUserId" resultMap="BaseResultMap">
+    <select id="selectByClientIdAndUserId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from t_oauth_access_tokens
@@ -55,7 +55,7 @@
         </foreach>
         )
     </delete>
-    <insert id="save" parameterType="com.zitech.gateway.oauth.model.AccessToken"
+    <insert id="insert" parameterType="com.zitech.gateway.oauth.model.AccessToken"
             useGeneratedKeys="true" keyProperty="id">
         insert into t_oauth_access_tokens
         <trim prefix="(" suffix=")" suffixOverrides=",">

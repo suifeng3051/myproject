@@ -26,11 +26,11 @@ public class RefreshTokenServiceImpl extends BaseService implements RefreshToken
     }
 
     public RefreshToken getById(Integer id) {
-        return refreshTokenDAO.getById(id);
+        return refreshTokenDAO.selectByPrimaryKey(id);
     }
 
     public RefreshToken getByToken(String token) {
-        return refreshTokenDAO.getByToken(token);
+        return refreshTokenDAO.selectByToken(token);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class RefreshTokenServiceImpl extends BaseService implements RefreshToken
         if (list.size() == 0) {
             return new LinkedList<>();
         }
-        return refreshTokenDAO.getByAccessTokens(list);
+        return refreshTokenDAO.selectByAccessTokens(list);
     }
 
     public void deleteById(Integer id) {
@@ -56,7 +56,7 @@ public class RefreshTokenServiceImpl extends BaseService implements RefreshToken
     }
 
     public int save(RefreshToken openOauthRefreshTokens) {
-        refreshTokenDAO.save(openOauthRefreshTokens);
+        refreshTokenDAO.insert(openOauthRefreshTokens);
         return openOauthRefreshTokens.getId();
     }
 

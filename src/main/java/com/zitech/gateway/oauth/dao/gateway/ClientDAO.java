@@ -7,17 +7,17 @@ import java.util.List;
 
 public interface ClientDAO {
 
-    int save(Client client);
+    int insert(Client client);
 
-    Client getByClientId(String clientId);
+    Client selectByClientId(String clientId);
 
-    Client getById(Integer id);
+    Client selectByPrimaryKey(Integer id);
 
-    Client getByUserId(Integer userId);
+    Client selectByUserId(Integer userId);
 
-    List<Client> getAll();
+    List<Client> selectAll();
 
-    List<String> getClientIdList();
+    List<String> selectClientIds();
 
     void deleteByClientId(String clientId);
 

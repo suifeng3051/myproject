@@ -21,35 +21,35 @@
         client_type, client_num, client_source, default_scope
     </sql>
 
-    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
         from t_oauth_clients
         where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <select id="getByClientId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="selectByClientId" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
         from t_oauth_clients
         where client_id = #{clientId,jdbcType=VARCHAR}
     </select>
 
-    <select id="getByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
         from t_oauth_clients
         where user_id = #{userId,jdbcType=INTEGER}
     </select>
 
-    <select id="getAll" resultMap="BaseResultMap">
+    <select id="selectAll" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from t_oauth_clients
     </select>
 
 
-    <select id="getClientIdList" resultType="java.lang.String">
+    <select id="selectClientIds" resultType="java.lang.String">
         select DISTINCT client_id from t_oauth_clients
     </select>
 
@@ -62,7 +62,7 @@
         delete from t_oauth_clients
         where client_id = #{clientId,jdbcType=VARCHAR}
     </delete>
-    <insert id="save" parameterType="com.zitech.gateway.oauth.model.Client"
+    <insert id="insert" parameterType="com.zitech.gateway.oauth.model.Client"
             useGeneratedKeys="true" keyProperty="id">
         insert into t_oauth_clients
         <trim prefix="(" suffix=")" suffixOverrides=",">

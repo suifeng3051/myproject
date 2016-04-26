@@ -49,7 +49,7 @@ public class AccessTokenCache implements ILocalCache {
 
         /***access token need not load***/
 
-        /*List<OpenOauthAccessTokens> list = openOauthAccessTokensService.getValidToken();
+        /*List<OpenOauthAccessTokens> list = openOauthAccessTokensService.selectValidToken();
         if (null != list && list.size() > 0) {
             for (OpenOauthAccessTokens token : list) {
                 get(null, token.getAccessToken());

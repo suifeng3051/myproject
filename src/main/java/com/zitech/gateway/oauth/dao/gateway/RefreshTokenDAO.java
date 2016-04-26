@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface RefreshTokenDAO {
 
-    int save(RefreshToken refreshToken);
+    int insert(RefreshToken refreshToken);
 
-    RefreshToken getById(Integer id);
+    RefreshToken selectByPrimaryKey(Integer id);
 
-    RefreshToken getByToken(String token);
+    RefreshToken selectByToken(String token);
 
-    List<RefreshToken> getByAccessTokens(List<String> list);
+    List<RefreshToken> selectByAccessTokens(List<String> list);
 
     void deleteByToken(String token);
 
