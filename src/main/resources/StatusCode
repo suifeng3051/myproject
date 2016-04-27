@@ -40,3 +40,19 @@ Code    Message                         Data
 5125    default cannot be parameter
 5130    非企业账号
 
+5201    no array field
+5202    unknown param type
+5203    param error
+5204    unknown param
+5205    param required
+5206    param not object
+5207    param not array
+5208    json parse error
+        public static final Integer UNKNOWN_PARAM_TYPE = 5202;
+        public static final Integer PARAM_ERROR = 5203;
+        public static final Integer UNKNOWN_PARAM = 5204;
+        public static final Integer PARAM_REQUIRED = 5205;
+        public static final Integer PARAM_SHOULD_OBJECT = 5206;
+        public static final Integer PARAM_SHOULD_ARRAY = 5207;
+        public static final Integer JSON_PARSE_ERROR = 5208;
+

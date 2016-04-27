@@ -64,7 +64,7 @@ public class ParamHelper {
             } else if (param.getType() == ParamType.ARRAY) {
                 JSONArray fields = struct.getJSONArray(FIELDS);
                 if(fields.size() == 0)
-                    throw new LogicalException(1, "error array filed: " + param.getName());
+                    throw new LogicalException(Constants.Code.NO_ARRAY_FIELD, "no array field: " + param.getName());
                 ParamHelper.parseArray((JSONObject) fields.get(0), param);
             }
         }
@@ -90,7 +90,7 @@ public class ParamHelper {
         } else if (param.getType() == ParamType.ARRAY) {
             JSONArray fields = object.getJSONArray(FIELDS);
             if(fields.size() == 0)
-                throw new LogicalException(1, "error array filed: " + param.getName());
+                throw new LogicalException(Constants.Code.NO_ARRAY_FIELD, "no array field: " + param.getName());
             ParamHelper.parseArray((JSONObject) fields.get(0), param);
         }
     }
@@ -112,7 +112,7 @@ public class ParamHelper {
                 return new ObjectValidator();
         }
 
-        throw new LogicalException(1, "unknown param type");
+        throw new LogicalException(Constants.Code.UNKNOWN_PARAM_TYPE, "unknown param type");
     }
 
     /**
@@ -138,7 +138,7 @@ public class ParamHelper {
             Param vp = ParamHelper.getParam(param, key);
             IValidator validator = vp.getValidate();
             if(!validator.v(o, param))
-                throw new ParamException(1, "parameter error: " + getPath(param));
+                throw new ParamException(Constants.Code.PARAM_ERROR, "param error: " + getPath(param));
 
             if(o instanceof JSONObject)
                 ParamHelper.validateObject(o, vp);
@@ -158,7 +158,7 @@ public class ParamHelper {
         IValidator validator = vp.getValidate();
         for (Object o : ja) {
             if (!validator.v(o, param))
-                throw new ParamException(1, "parameter error: " + getPath(param));
+                throw new ParamException(Constants.Code.PARAM_ERROR, "param error: " + getPath(param));
 
             if (o instanceof JSONObject)
                 ParamHelper.validateObject(o, vp);
@@ -182,7 +182,7 @@ public class ParamHelper {
             }
         }
 
-        throw new ParamException(1, "unknown parameter: " + getPath(param));
+        throw new ParamException(Constants.Code.UNKNOWN_PARAM, "unknown param: " + getPath(param));
     }
 
     /**
@@ -233,7 +233,7 @@ public class ParamHelper {
                 validateArray(p, so);
             else{
                 if (p.getRequired() && so == null)
-                    throw new ParamException(1, "param: " + ParamHelper.getPath(p) + " required");
+                    throw new ParamException(Constants.Code.PARAM_REQUIRED, "param: " + ParamHelper.getPath(p) + " required");
 
                 if(!p.getRequired() && so == null)
                     continue; // some other action?
@@ -248,13 +248,13 @@ public class ParamHelper {
      */
     private static void validateObject(Param param, Object object) {
         if (param.getRequired() && object == null)
-            throw new ParamException(1, "param: " + ParamHelper.getPath(param) + " required");
+            throw new ParamException(Constants.Code.PARAM_REQUIRED, "param: " + ParamHelper.getPath(param) + " required");
 
         if(!param.getRequired() && object == null)
             return;
 
         if(!(object instanceof JSONObject))
-            throw new ParamException(1, "param: " + ParamHelper.getPath(param) + "not object");
+            throw new ParamException(Constants.Code.PARAM_SHOULD_OBJECT, "param: " + ParamHelper.getPath(param) + "not object");
 
         JSONObject source = (JSONObject) object;
         List<Param> paramList = param.getFields();
@@ -266,7 +266,7 @@ public class ParamHelper {
                 validateArray(p, so);
             else{
                 if (p.getRequired() && so == null)
-                    throw new ParamException(1, "param: " + ParamHelper.getPath(p) + " required");
+                    throw new ParamException(Constants.Code.PARAM_REQUIRED, "param: " + ParamHelper.getPath(p) + " required");
 
                 if(!p.getRequired() && so == null)
                     continue; // some other action?
@@ -281,13 +281,13 @@ public class ParamHelper {
      */
     private static void validateArray(Param param, Object object) {
         if (param.getRequired() && object == null)
-            throw new ParamException(1, "param: " + ParamHelper.getPath(param) + " required");
+            throw new ParamException(Constants.Code.PARAM_REQUIRED, "param: " + ParamHelper.getPath(param) + " required");
 
         if(!param.getRequired() && object == null)
             return;
 
         if(!(object instanceof JSONArray))
-            throw new ParamException(1, "param: " + ParamHelper.getPath(param) + "not array");
+            throw new ParamException(Constants.Code.PARAM_SHOULD_ARRAY, "param: " + ParamHelper.getPath(param) + "not array");
 
         JSONArray source = (JSONArray) object;
         for (Param p : param.getFields()) { // only one parameter
@@ -298,7 +298,7 @@ public class ParamHelper {
                     validateArray(p, so);
                 else {
                     if (param.getRequired() && so == null)
-                        throw new ParamException(1, "param: " + ParamHelper.getPath(param) + " required");
+                        throw new ParamException(Constants.Code.PARAM_REQUIRED, "param: " + ParamHelper.getPath(param) + " required");
 
                     if (!param.getRequired() && so == null)
                         continue; // some other action?
@@ -319,7 +319,7 @@ public class ParamHelper {
             ParamHelper.validate(jsonObject, param);
             ParamHelper.validate(param, jsonObject);
         } catch (JSONException e) {
-            throw new ParamException(1, e.getMessage());
+            throw new ParamException(Constants.Code.JSON_PARSE_ERROR, "json parse error: " + e.getMessage());
         } catch (ParamException e) {
             throw e;
         } catch (Exception e) {
