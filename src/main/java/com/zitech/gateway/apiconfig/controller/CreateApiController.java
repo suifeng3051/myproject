@@ -206,16 +206,7 @@ public class CreateApiController {
     @RequestMapping(value = "/getServeInner", produces="application/json;charset=utf-8",method= RequestMethod.GET)
     @ResponseBody
     public String getServeInner() {
-
-
-        ApiResult<String> apiResult = new ApiResult<>(0,"success");
-        apiResult.setData(JSONObject.toJSON(Constants.contextMap).toString());
+        ApiResult<Map<String, String>> apiResult = new ApiResult<>(0,"success", Constants.contextMap);
         return apiResult.toString();
-
     }
-
-
-
-
-
 }
