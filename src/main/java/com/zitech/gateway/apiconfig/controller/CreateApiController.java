@@ -154,7 +154,7 @@ public class CreateApiController {
     @ResponseBody
     public String checkApiMethodMapping(@RequestParam("namespace") String  namespace,
                                         @RequestParam("name") String name,
-                                        @RequestParam("version")  String version,
+                                        @RequestParam("version")  Integer version,
                                         @RequestParam("env") Byte env) {
 
         ApiResult<String> apiResult = new ApiResult<>(0,"success");
