@@ -14,22 +14,23 @@ $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip(); // 绑定工具提示js插件
 
     // 读取 oauthClient 列表
-    $.post('getOauthClient', function(data){
+    $.post('get/client', function(jsondata){
 
-        if(data.status === 'success'){
+        if(jsondata.code == 0){
             var html = '';
+            var data = jsondata.data;
             for(var i=0; i<data.size; i++){
                 html += '<tr>'+
-                    '<td>'+data.allOauthClient[i].clientName+'</td>'+
-                    '<td>'+data.allOauthClient[i].redirectUri+'</td>'+
-                    '<td>'+data.allOauthClient[i].grantTypes+'</td>'+
-                    '<td>'+data.allOauthClient[i].clientNum+'</td>'+
-                    '<td>'+data.allOauthClient[i].defaultScope+'</td>'+
+                    '<td>'+data.allClient[i].clientName+'</td>'+
+                    '<td>'+data.allClient[i].redirectUri+'</td>'+
+                    '<td>'+data.allClient[i].grantTypes+'</td>'+
+                    '<td>'+data.allClient[i].clientNum+'</td>'+
+                    '<td>'+data.allClient[i].defaultScope+'</td>'+
                     '<td>'+
-                    '<a data-original-title="编辑" class="needTip updateCurrentRow" href="#" OAuthClientId="'+data.allOauthClient[i].id+'" data-toggle="tooltip" data-placement="top" title="" >'+
+                    '<a data-original-title="编辑" class="needTip updateCurrentRow" href="#" OAuthClientId="'+data.allClient[i].id+'" data-toggle="tooltip" data-placement="top" title="" >'+
                     '<span version="1.0" class="glyphicon glyphicon-edit editIcon"></span>'+
                     '</a>'+
-                    '<a href="#" class="needTip deleteCurrentRow" OAuthClientId="'+data.allOauthClient[i].id+'"  data-toggle="tooltip" data-placement="top" title="删除行" style="margin-left:8px;">'+
+                    '<a href="#" class="needTip deleteCurrentRow" OAuthClientId="'+data.allClient[i].id+'"  data-toggle="tooltip" data-placement="top" title="删除行" style="margin-left:8px;">'+
                     '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>'+
                     '</a>'+
                     '</td>'+
@@ -49,9 +50,13 @@ $(document).ready(function(){
                 var OAuthName = $(this).parent().parent().find('td').eq(0).text();
 
                 if(confirm('确定删除 '+OAuthName+ ' 吗?')){
-                    $.post('deleteOauthClient', {id: OAuthClientId}, function(data){
-                        if(data === 'success'){
+                    $.post('delete/client', {id: OAuthClientId}, function(data){
+                        if(data.code == 0){
                             window.location.reload();
+                        }
+                        else
+                        {
+                            alert(data.message);
                         }
                     });
                 }
@@ -71,20 +76,20 @@ $(document).ready(function(){
 
                 $('#sureAddOAuthClient').attr('action', OAuthClientId);
 
-                $.post('getOauthClientById',{ id:OAuthClientId }, function(OAuthClientData){
+                $.post('getClientById',{ id:OAuthClientId }, function(clientData){
 
                     // 把数据塞入更新对话框 data
-                    if(OAuthClientData.status === 'success'){
-                        console.log(OAuthClientData); // 所保存的数据
+                    if(clientData.code == 0){
+                        console.log(clientData); // 所保存的数据
 
                         // 自动选中已经保存的 default_scope 选项
                         $.post('getGroupTree', function(allGroupData){
-                            if(allGroupData.status === 'success'){
+                            if(allGroupData.code == 0){
                                 console.log(allGroupData);
                                 var html = '';
-                                var scopeArr = OAuthClientData.oauthClient.defaultScope.split(' ');
+                                var scopeArr = clientData.data.defaultScope.split(' ');
 
-                                var groupTree = allGroupData.tree;
+                                var groupTree = allGroupData.data;
 
                                 html = foreachGroupTree(groupTree,html,true,scopeArr);
 
@@ -94,7 +99,7 @@ $(document).ready(function(){
 
                         // 自动选中已经保存的 GrantTypes
                         var grantTypesArr = ['authorization_code','refresh_token','implicit','client_credentials','password'];
-                        var grantTypeExists = OAuthClientData.oauthClient.grantTypes.split(' ');
+                        var grantTypeExists = clientData.data.grantTypes.split(' ');
                         var html = '';
                         for(var i=0;i<grantTypesArr.length; i++){
                             var currentGrantType = grantTypesArr[i];
@@ -105,19 +110,23 @@ $(document).ready(function(){
                         $('#grantTypesArea').html(html);
 
                         // 自动填入Cient Name、 Redirect Uri、 Client Num
-                        $('input[name="client_name"]').val(OAuthClientData.oauthClient.clientName);
-                        $('input[name="redirect_uri"]').val(OAuthClientData.oauthClient.redirectUri);
-                        $('input[name="client_num"]').val(OAuthClientData.oauthClient.clientNum);
+                        $('input[name="client_name"]').val(clientData.data.clientName);
+                        $('input[name="redirect_uri"]').val(clientData.data.redirectUri);
+                        $('input[name="client_num"]').val(clientData.data.clientNum);
 
 
 
                         $("#OAuthClientModal").modal("show");
                     } else {
-                        alert('fail');
+                        alert(clientData.message);
                     }
                 });
             });
 
+        }
+        else
+        {
+            alert(jsondata.message);
         }
     });
 
@@ -134,9 +143,9 @@ $(document).ready(function(){
         $('#OAuthClientInfo2').hide();
         $('#checkOAuthBtn').show();
          $.post('getGroupTree', function(data){
-            if(data.status === 'success'){
+            if(data.code == 0){
                 var html = '';
-                var groupTree = data.tree;
+                var groupTree = data.data;
 
                 html = foreachGroupTree(groupTree,html,false,null);
                  $('#defaultScopeArea').html(html);
@@ -169,19 +178,14 @@ $(document).ready(function(){
         var formContent = $("#OAuthClientConfig").serialize();
          if($(this).attr('action')){
             formContent += '&id='+ $(this).attr('action');
-            var url = 'updateOauthClient';
+            var url = 'update/client';
         } else {
-            var url = 'addOauthClient';
+            var url = 'add/client';
         }
 
-         $.post(url, {'oauthclient': formContent}, function(data){
-            if ( data.indexOf('fail') != -1 ) {
-                $("#OAuthClientInfo2").html("<p>失败</p>"+data)
-                    .css("display", "block")
-                    .removeClass("alert-success")
-                    .addClass("alert-danger");
-
-            } else {
+         $.post(url, {'client': formContent}, function(data){
+            if(data.code == 0)
+            {
                 $("#OAuthClientInfo2").html("<p>成功</p>")
                     .css("display", "block")
                     .removeClass("alert-danger")
@@ -190,6 +194,13 @@ $(document).ready(function(){
                 setTimeout(function(){
                     window.location.reload();
                 }, 1000);
+            }
+            else
+            {
+                $("#OAuthClientInfo2").html(data.message)
+                    .css("display", "block")
+                    .removeClass("alert-success")
+                    .addClass("alert-danger");
             }
         }, 'json'); 
     });

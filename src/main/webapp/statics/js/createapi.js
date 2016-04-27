@@ -68,38 +68,6 @@ $(document).ready(function(){
         },"json");
     });
 
-    // 给检测API是否存在按钮绑定事件
-    $(".hasApi").on("click", function () {
-        var apiNamespace = $("#namespace").val();
-        var apiName = $("#name").val();
-        var apiVersion = $("#version").val();
-        if("" == apiNamespace || "" == apiName || "" == apiVersion) {
-            $("#apiInfo").html("<p>请把参数填写完整</p>");
-            $("#apiInfo").css("display","block");
-
-            $("#apiInfo").removeClass("alert-success");
-            $("#apiInfo").addClass("alert-danger");
-            return;
-        }
-        $.post("getapi", {"namespace":apiNamespace, "name":apiName, "version":apiVersion, "env": getEnv()}, function (d) {
-            if("fail" == d) {
-                $("#apiInfo").html("<p>当前不存在此API，请继续配置</p>");
-                $("#apiInfo").css("display","block");
-
-                $("#apiInfo").removeClass("alert-danger");
-                $("#apiInfo").addClass("alert-success");
-                $(".hasApi").css("display", "none"); // 打开API检测按钮&关闭下一步按钮
-                $(".nextStep").css("display", "block");
-            } else {
-                $("#apiInfo").html("<p>此API已存在，请修改后继续配置</p>");
-                $("#apiInfo").css("display","block");
-
-                $("#apiInfo").removeClass("alert-success");
-                $("#apiInfo").addClass("alert-danger");
-            }
-        }, "json");
-    });
-
     // 给检测方法是否存在按钮绑定事件
     $(".hasMethod").on("click", function () {
         var methodNamespace = $("#namespaceMethodParam").val();
@@ -134,6 +102,8 @@ $(document).ready(function(){
 
     });
 
+
+/*
     // 给上一步按钮绑定事件
     $(".preStep").on("click", function () {
         var step = $("#configStep").val();
@@ -427,7 +397,114 @@ $(document).ready(function(){
 
             $(".parammappingconfig").css("display", "block"); //  显示参数映射配置界面
         }
+    });*/
+
+    var currentStep = 1;
+    var totalStep = $('#apiconfig-box > div').length;
+
+    $('.nextStep').click(function(){
+
+        if(currentStep == 1){ // 检测namespace是否存在
+            if($('.hasApi').attr('data-exists') == 'no'  ){ // namespace 检测不存在时
+                currentStep++;
+                changeStepTo(currentStep);
+            } else {
+                $('.hasApi').trigger('click');
+            }
+        } else {
+            currentStep++;
+
+            if(currentStep == 3 && $('#requestType').val() != 1){ // 判断是否跳过第3步
+                currentStep++;
+            }
+
+            changeStepTo(currentStep);
+        }
     });
+    $('.preStep').click(function(){
+        currentStep --;
+
+        if((currentStep == 3) && ($('#requestType').val() != 1)){ // 判断是否跳过第3步
+            currentStep--;
+        }
+
+        changeStepTo(currentStep);
+    });
+
+    function changeStepTo(step){
+
+        var stepTitle = '';
+        switch(step){
+            case 1: stepTitle = 'API接口信息配置'; break;
+            case 2: stepTitle = '内部方法&方法参数配置 ';  break;
+            case 3: stepTitle = 'JSON解析与编辑';  break;
+            case 4: stepTitle = '预览';  break;
+        }
+        $('#step-title').text(stepTitle);
+
+        $('.nextStep').show();
+        $('#save').hide();
+        if(step == 1){
+            $('.preStep').hide();
+        } else if(step == totalStep){
+            $('.nextStep').hide();
+            $('#save').show();
+        }else{
+            $('.preStep').show();
+        }
+
+        $('#step-nav-box li').eq(step-1).addClass('active').siblings().removeClass('active');
+        $('#apiconfig-box > div').eq(step-1).addClass('active').siblings().removeClass('active');
+    }
+
+    $('#namespace, #name').keyup(function(){
+        $('.hasApi').removeAttribute('data-exists');
+    });
+
+    $('#JSONparse-btn').click(function(){
+        try {
+            var json = JSON.parse( $('#json-input').val());
+        }catch (e){
+            console.log('解析JSON时发生错误：'+e);
+            var json = {};
+        }
+        window.JSONresult = $('#editor').jsonEditor(json);  // 解析JSON，生成JSON树
+    });
+
+    // 给检测API是否存在按钮绑定事件
+    $(".hasApi").on("click", function () {
+        var apiNamespace = $("#namespace").val();
+        var apiName = $("#name").val();
+        var apiVersion = $("#version").val();
+        if("" == apiNamespace || "" == apiName || "" == apiVersion) {
+            $("#apiInfo").html("<p>请把参数填写完整</p>");
+            $("#apiInfo").css("display","block");
+
+            $("#apiInfo").removeClass("alert-success");
+            $("#apiInfo").addClass("alert-danger");
+            return;
+        }
+        $.post("getapi", {"namespace":apiNamespace, "name":apiName, "version":apiVersion, "env": getEnv()}, function (d) {
+            if("fail" == d) {
+                $("#apiInfo").html("<p>当前不存在此API，请继续配置</p>");
+                $("#apiInfo").css("display","block");
+
+                $("#apiInfo").removeClass("alert-danger");
+                $("#apiInfo").addClass("alert-success");
+                $(".nextStep").css("display", "block");
+
+                $('.hasApi').attr('data-exists', 'no');
+            } else {
+                $("#apiInfo").html("<p>此API已存在，请修改后继续配置</p>");
+                $("#apiInfo").css("display","block");
+
+                $("#apiInfo").removeClass("alert-success");
+                $("#apiInfo").addClass("alert-danger");
+                $('.hasApi').attr('data-exists', 'yes');
+            }
+        }, "json");
+    });
+
 
     // 为已有的select补充完整
     function appendSelect(apiParamNames) {
@@ -1313,5 +1390,49 @@ $(document).ready(function(){
            paramNameElement,paramTypeElement,sequenceElement,isStructureElement,operate
         ] ).draw();
         $('[data-toggle="tooltip"]').tooltip();
-    }
-});
+     }
+
+     // 批量增加方法参数
+     $("#batchAddMethod").on("click", function(){
+         $("#myPHPBatchMethodModal").modal("show");
+     });
+
+     $("#sureBatchAddMethod").on("click", function(){
+             var content = $("#phpMethodCode").val();
+             if("" == content || "undefined" == typeof(content)) {
+                 return;
+             }
+             var result = content.replace(/=>/g, ":");
+             result = result.replace(/^\$[a-zA-Z]+ =/g, "'params':");
+             result = result.replace(/\[/g, "{");
+             result = result.replace(/\]/g, "}");
+             result = result.replace(/,$/, "");
+             result = result.replace(/;$/, "");
+             result = result.replace(/->/g, "");
+             result = result.replace(/\$.*,?/g, "'test',");
+             result = "{" + result + "}";
+             var jsonStr = eval("(" + result + ")");
+             var params = jsonStr.params;
+             var count = 0;
+             for(var key in params) {
+                 var values = params[key];
+                 addBatchMethodRow(key, count);
+                 count = count + 1;
+             }
+             $("#myPHPBatchMethodModal").modal("hide");
+         });
+     function addBatchMethodRow(key, count) {
+         $("#apiMethodParamsInfo").html("");
+         $("#apiMethodParamsInfo").css("display","none");
+         var operate = '<a href="#" class="needTip" data-toggle="tooltip" data-placement="top" title="编辑" style="margin-left:5px;display:none;" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span></a><a href="#" class="needTip deleteCurrentRow" flag="step4" apiIdValue="0" data-toggle="tooltip" data-placement="top" title="删除当前行" style="margin-left:5px;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>';
+         var paramNameElement = '<input style="max-width:160px;" type="text"  name="apiParamName" value="' + key + '" />';
+         var paramTypeElement = '<input style="max-width:160px;" type="text"  name="apiParamType" />';
+         var sequenceElement = '<input style="max-width:160px;" type="text"  name="sequence" value="' + count + '" />';
+         var isStructureElement = '<select style="min-width:50px;max-height: 25px;"  name="apiIsStructure" class="form-control" ><option value="0" selected>是</option><option value="1" >否</option></select><input type="hidden" name="currentId" value="0">';
+
+         carmenMethodParamTable.row.add( [
+            paramNameElement,paramTypeElement,sequenceElement,isStructureElement,operate
+         ] ).draw();
+         $('[data-toggle="tooltip"]').tooltip();
+     }
+ });

@@ -76,7 +76,7 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
-        <url-pattern>oauthclient</url-pattern>
+        <url-pattern>client</url-pattern>
     </filter-mapping>
 
     <!-- listener, substituted by DispatcherServlet -->

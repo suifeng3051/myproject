@@ -22,6 +22,15 @@ public class Service {
     private Date updatedTime;
 
     private Byte deleted;
+    private Byte env;
+
+    public Byte getEnv() {
+        return env;
+    }
+
+    public void setEnv(Byte env) {
+        this.env = env;
+    }
 
     public Integer getId() {
         return id;

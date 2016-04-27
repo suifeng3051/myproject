@@ -8,6 +8,7 @@
         <result column="method" property="method" jdbcType="VARCHAR"/>
         <result column="version" property="version" jdbcType="INTEGER"/>
         <result column="group_id" property="groupId" jdbcType="INTEGER"/>
+        <result column="request_type" property="requestType" jdbcType="TINYINT"/>
         <result column="frequency_control" property="frequencyControl" jdbcType="TINYINT"/>
         <result column="check_inner" property="checkInner" jdbcType="TINYINT"/>
         <result column="api_description" property="apiDescription" jdbcType="VARCHAR"/>
@@ -17,10 +18,11 @@
         <result column="updated_id" property="updatedId" jdbcType="INTEGER"/>
         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
         <result column="deleted" property="deleted" jdbcType="TINYINT"/>
+        <result column="env" property="env" jdbcType="TINYINT"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, namespace, method, version, group_id, frequency_control, check_inner, api_description,
-        api_scene, result_demo, created_time, updated_id, updated_time, deleted
+        id, namespace, method, version, group_id, request_type,frequency_control, check_inner, api_description,
+        api_scene, result_demo, created_time, updated_id, updated_time, deleted,env
     </sql>
     <sql id="Blob_Column_List">
         result_demo
@@ -31,24 +33,44 @@
         from t_api_n
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="getAllApiByEnv" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_api_n
+        where deleted=0 and env=#{env,jdbcType=TINYINT}
+    </select>
+    <select id="getByGroupIdAndEnv" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_api_n
+        where group_id = #{groupId,jdbcType=INTEGER} and deleted=0 and env=#{env,jdbcType=TINYINT}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from t_api_n
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.zitech.gateway.apiconfig.model.Api">
         insert into t_api_n (id, namespace, method,
-        version, group_id, frequency_control,
+        version, group_id, request_type,frequency_control,
         check_inner, api_description, api_scene,
         created_time, updated_id, updated_time,
-        deleted, result_demo)
-        values (#{id,jdbcType=INTEGER}, #{namespace,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR},
-        #{version,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER},
+        deleted, result_demo,env)
+        values (#{id,jdbcType=INTEGER},
+        #{namespace,jdbcType=VARCHAR},
+        #{method,jdbcType=VARCHAR},
+        #{version,jdbcType=INTEGER},
+        #{groupId,jdbcType=INTEGER},
+        #{requestType,jdbcType=TINYINT},
         #{frequencyControl,jdbcType=TINYINT},
-        #{checkInner,jdbcType=TINYINT}, #{apiDescription,jdbcType=VARCHAR},
+        #{checkInner,jdbcType=TINYINT},
+        #{apiDescription,jdbcType=VARCHAR},
         #{apiScene,jdbcType=VARCHAR},
-        #{createdTime,jdbcType=TIMESTAMP}, #{updatedId,jdbcType=INTEGER},
+        #{createdTime,jdbcType=TIMESTAMP},
+        #{updatedId,jdbcType=INTEGER},
         #{updatedTime,jdbcType=TIMESTAMP},
-        #{deleted,jdbcType=TINYINT}, #{resultDemo,jdbcType=LONGVARCHAR})
+        #{deleted,jdbcType=TINYINT},
+        #{resultDemo,jdbcType=LONGVARCHAR},
+        #{env,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.zitech.gateway.apiconfig.model.Api">
         insert into t_api_n
@@ -67,6 +89,9 @@
             </if>
             <if test="groupId != null">
                 group_id,
+            </if>
+            <if test="requestType != null">
+                request_type,
             </if>
             <if test="frequencyControl != null">
                 frequency_control,
@@ -95,6 +120,9 @@
             <if test="resultDemo != null">
                 result_demo,
             </if>
+            <if test="env != null">
+                env,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -111,6 +139,9 @@
             </if>
             <if test="groupId != null">
                 #{groupId,jdbcType=INTEGER},
+            </if>
+            <if test="requestType != null">
+                #{requestType,jdbcType=TINYINT},
             </if>
             <if test="frequencyControl != null">
                 #{frequencyControl,jdbcType=TINYINT},
@@ -139,6 +170,9 @@
             <if test="resultDemo != null">
                 #{resultDemo,jdbcType=LONGVARCHAR},
             </if>
+            <if test="env != null">
+                #{env,jdbcType=TINYINT},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.zitech.gateway.apiconfig.model.Api">
@@ -155,6 +189,9 @@
             </if>
             <if test="groupId != null">
                 group_id = #{groupId,jdbcType=INTEGER},
+            </if>
+            <if test="requestType != null">
+                request_type = #{requestType,jdbcType=TINYINT},
             </if>
             <if test="frequencyControl != null">
                 frequency_control = #{frequencyControl,jdbcType=TINYINT},
@@ -183,6 +220,9 @@
             <if test="resultDemo != null">
                 result_demo = #{resultDemo,jdbcType=LONGVARCHAR},
             </if>
+            <if test="env != null">
+                env = #{env,jdbcType=TINYINT},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -192,6 +232,7 @@
         method = #{method,jdbcType=VARCHAR},
         version = #{version,jdbcType=INTEGER},
         group_id = #{groupId,jdbcType=INTEGER},
+        request_type = #{requestType,jdbcType=TINYINT},
         frequency_control = #{frequencyControl,jdbcType=TINYINT},
         check_inner = #{checkInner,jdbcType=TINYINT},
         api_description = #{apiDescription,jdbcType=VARCHAR},
@@ -200,7 +241,8 @@
         updated_id = #{updatedId,jdbcType=INTEGER},
         updated_time = #{updatedTime,jdbcType=TIMESTAMP},
         deleted = #{deleted,jdbcType=TINYINT},
-        result_demo = #{resultDemo,jdbcType=LONGVARCHAR}
+        result_demo = #{resultDemo,jdbcType=LONGVARCHAR},
+        env = #{env,jdbcType=TINYINT}
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.zitech.gateway.apiconfig.model.Api">
@@ -209,6 +251,7 @@
         method = #{method,jdbcType=VARCHAR},
         version = #{version,jdbcType=INTEGER},
         group_id = #{groupId,jdbcType=INTEGER},
+        request_type = #{requestType,jdbcType=TINYINT},
         frequency_control = #{frequencyControl,jdbcType=TINYINT},
         check_inner = #{checkInner,jdbcType=TINYINT},
         api_description = #{apiDescription,jdbcType=VARCHAR},
@@ -216,7 +259,8 @@
         created_time = #{createdTime,jdbcType=TIMESTAMP},
         updated_id = #{updatedId,jdbcType=INTEGER},
         updated_time = #{updatedTime,jdbcType=TIMESTAMP},
-        deleted = #{deleted,jdbcType=TINYINT}
+        deleted = #{deleted,jdbcType=TINYINT},
+        env = #{env,jdbcType=TINYINT}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>
