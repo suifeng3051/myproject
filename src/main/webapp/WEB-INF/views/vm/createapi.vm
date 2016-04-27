@@ -283,7 +283,19 @@
                                 参数列表：
                                 <br />
 
-                                <div id="serviceParamList"></div>
+                                <div id="serviceParamList">
+                                    <div class="checkbox col-sm-2">
+                                        <label><input class="form-control" type="checkbox" value="111111" name="inner_params" >111111</label>
+                                    </div>
+
+
+                                    <div class="checkbox col-sm-2">
+                                        <label><input class="form-control" type="checkbox" value="222222" name="inner_params">222222</label>
+                                    </div>
+                                    <div class="checkbox col-sm-2">
+                                        <label><input class="form-control" type="checkbox" value="333333" name="inner_params">33333333</label>
+                                    </div>
+                                </div>
                             </div>
 
                             #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
