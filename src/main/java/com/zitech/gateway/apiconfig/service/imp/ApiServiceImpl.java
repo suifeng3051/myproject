@@ -76,6 +76,36 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
+    public void saveResult(String parseApiResult, String apiParamUpdate, String apiParamAdd, String methodResult, String methodParamUpdate, String methodParamAdd,
+                           String structureUpdate, String structureAdd, String paramMappingUpdate, String paramMappingAdd, String methodMappingId, Byte env) {
+
+        Map<String,Object> paraMap = new HashMap<>();
+        paraMap.put("parseApiResult",parseApiResult);
+        paraMap.put("apiParamUpdate",apiParamUpdate);
+        paraMap.put("apiParamAdd",apiParamAdd);
+        paraMap.put("methodResult",methodResult);
+        paraMap.put("methodParamUpdate",methodParamUpdate);
+        paraMap.put("methodParamAdd",methodParamAdd);
+        paraMap.put("structureUpdate",structureUpdate);
+        paraMap.put("structureAdd",structureAdd);
+        paraMap.put("paramMappingUpdate",paramMappingUpdate);
+        paraMap.put("paramMappingAdd",paramMappingAdd);
+        paraMap.put("methodMappingId",methodMappingId);
+        paraMap.put("env",env);
+
+        if(true){
+            //exists update
+
+        }else{
+            //add
+
+
+        }
+
+
+    }
+
+    @Override
     public List<Api> getAllByEnv(Byte env) {
         return apiDAO.getAllApiByEnv(env);
     }

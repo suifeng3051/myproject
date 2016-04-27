@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -169,7 +170,34 @@ public class CreateApiController {
     }
 
 
+    @RequestMapping(value = "/saveResult", produces="application/json;charset=utf-8",method= RequestMethod.POST)
+    @ResponseBody
+    public String saveResult(@RequestParam("parseApiResult") String  parseApiResult,
+                                        @RequestParam("apiParamUpdate") String apiParamUpdate,
+                                        @RequestParam("apiParamAdd")  String apiParamAdd,
+                                        @RequestParam("methodResult") String methodResult,
+                                        @RequestParam("methodParamUpdate") String methodParamUpdate,
+                                        @RequestParam("methodParamAdd") String methodParamAdd,
+                                        @RequestParam("structureUpdate") String structureUpdate,
+                                        @RequestParam("structureAdd") String structureAdd,
+                                        @RequestParam("paramMappingUpdate") String paramMappingUpdate,
+                                        @RequestParam("paramMappingAdd") String paramMappingAdd,
+                                        @RequestParam("methodMappingId") String methodMappingId,
+                                        @RequestParam("env") Byte env) {
 
+        ApiResult<String> apiResult = new ApiResult<>(0,"success");
+
+        try {
+            apiService.saveResult(parseApiResult,apiParamUpdate,apiParamAdd,methodResult,methodParamUpdate,methodParamAdd,
+                                  structureUpdate,structureAdd, paramMappingUpdate,paramMappingAdd,methodMappingId,env);
+        }catch (Exception e){
+            apiResult.setCode(1);
+            apiResult.setMessage("fail");
+        }
+
+        return apiResult.toString();
+
+    }
 
 
 
