@@ -27,4 +27,8 @@ public interface ApiDAO {
     List<Api> getAllApiByEnv(@Param("env")Byte env);
 
     List<Api> getByGroupIdAndEnv(@Param("groupId") Integer groupId, @Param("env")Byte env);
+
+    void saveResult(Map paraMap);
+
+
 }

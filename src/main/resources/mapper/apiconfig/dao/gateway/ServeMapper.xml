@@ -31,11 +31,11 @@
         from t_serve
         where api_id = #{apiId,jdbcType=INTEGER}
     </select>
-    <select id="selectAll" resultMap="BaseResultMap">
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="java.lang.Byte">
         select
         <include refid="Base_Column_List"/>
         from t_serve
-        where deleted=0
+        where deleted=0 and env = #{env,JdbcType=BYTE}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from t_serve

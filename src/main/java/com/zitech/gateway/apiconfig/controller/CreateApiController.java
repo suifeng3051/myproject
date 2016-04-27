@@ -1,5 +1,6 @@
 package com.zitech.gateway.apiconfig.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.apiconfig.model.Group;
 import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.apiconfig.service.ApiService;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -167,7 +169,37 @@ public class CreateApiController {
     }
 
 
+    @RequestMapping(value = "/saveResult", produces="application/json;charset=utf-8",method= RequestMethod.POST)
+    @ResponseBody
+    public String saveResult(@RequestParam("apiObj") String  apiObj,
+                             @RequestParam("serviceObj") String serviceObj,
+                             @RequestParam("paramObj")  String paramObj,
+                             @RequestParam("env") Byte env) {
 
+        int code = 0;
+        String message = "success";
+        boolean flag = false;
+        ApiResult<String> apiResult = new ApiResult<>(0,"success");
+
+        try {
+            flag = apiService.saveResult(apiObj,serviceObj,paramObj,env);
+        }catch (Exception e){
+            logger.error("保存API是出错！\r apiObj:"+apiObj+"  \r serviceObj:"+serviceObj+" \r paramObj:"+paramObj,e);
+            code=1;
+            message = "fail";
+        }
+
+        if(!flag){
+            code =1;
+            message = "fail";
+        }
+
+        apiResult.setCode(code);
+        apiResult.setMessage(message);
+
+        return apiResult.toString();
+
+    }
 
 
 
