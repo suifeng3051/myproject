@@ -108,12 +108,12 @@
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control required" name="namespace" id="namespace" placeholder="namespace" value="$!results.get('api').namespace">
                                 </div>
-                                <button class="btn hasApi" >检测</button>
+                                <input type="button" class="btn hasApi" value="检测" />
                             </div>
                             <div class="form-group">
                                 <label for="name" class="col-sm-4 control-label">method</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control required" id="name" name="name" placeholder="method" value="$!results.get('api').name">
+                                    <input type="text" class="form-control required" id="name" name="method" placeholder="method" value="$!results.get('api').name">
                                 </div>
                             </div>
 
@@ -122,7 +122,7 @@
                                 <label for="requestType" class="col-sm-4 control-label">请求方式</label>
                                 #set($!apiID=$!results.get('api').id)
                                 <div class="col-sm-6">
-                                    <select id="requestType" name="requestType" class="form-control" >#if(1 == $!results.get('api').requestType)<option value="1" selected>POST</option><option value="0" >GET</option>#else<option value="1" >POST</option><option value="0" selected>GET</option>#end</select> #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="0" > #end
+                                    <select id="requestType" name="request_type" class="form-control" >#if(1 == $!results.get('api').requestType)<option value="1" selected>POST</option><option value="0" >GET</option>#else<option value="1" >POST</option><option value="0" selected>GET</option>#end</select> #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
                                 </div>
                             </div>
 
@@ -161,7 +161,7 @@
                                 <label for="apiGroup" class="col-sm-4 control-label">API分组</label>
                                 #set($!apiID=$!results.get('api').id)
                                 <div class="col-sm-6">
-                                    <select id="apiGroup" name="apiGroup" class="form-control" >
+                                    <select id="apiGroup" name="group_id" class="form-control" >
                                         #foreach ($!group in $!results.get("grouplist"))
                                         #if($!group.alias == $!results.get('api').apiGroup)
                                         <option value="$!group.alias" selected>$!group.name</option>
@@ -181,13 +181,13 @@
                             <div class="form-group">
                                 <label for="isFreq" class="col-sm-4 control-label">频率控制</label>
                                 <div class="col-sm-6">
-                                    <select id="isFreq" name="isFreq" class="form-control" >#if(1 == $!results.get('api').enableFreq)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
+                                    <select id="isFreq" name="frequency_control" class="form-control" >#if(1 == $!results.get('api').enableFreq)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="isInnerOuter" class="col-sm-4 control-label">区分内外请求</label>
                                 <div class="col-sm-6">
-                                    <select id="isInnerOuter" name="isInnerOuter" class="form-control" >#if(1 == $!results.get('api').enableInnerOut)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
+                                    <select id="isInnerOuter" name="check_inner" class="form-control" >#if(1 == $!results.get('api').enableInnerOut)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
                                 </div>
                             </div>
 
@@ -210,14 +210,14 @@
                             <div class="form-group">
                                 <label for="describle" class="col-sm-4 control-label">功能描述</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control required" id="describle" name="describle" placeholder="API简要功能描述" value="$!results.get('api').apiDesc">
+                                    <input type="text" class="form-control required" id="describle" name="api_description" placeholder="API简要功能描述" value="$!results.get('api').apiDesc">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <!--<label for="scenarios" class="col-sm-4 control-label">使用场景</label>-->
                                 <div class="col-sm-4" style="text-align: right;">使用场景</div>
                                 <div class="col-sm-6">
-                                    <textarea  rows="3" class="form-control required" id="scenarios" name="scenarios" placeholder="API使用场景" >$!results.get('api').apiScenarios</textarea>
+                                    <textarea  rows="3" class="form-control required" id="scenarios" name="api_scene" placeholder="API使用场景" >$!results.get('api').apiScenarios</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -225,7 +225,7 @@
                                 <div class="col-sm-4" style="text-align: right;">结果示例</div>
                                 <div class="col-sm-6">
                                     <script type="text/javascript">
-                                    document.write('<textarea  rows="20" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API结果示例" >');
+                                    document.write('<textarea  rows="20" class="form-control required" id="resultDemo" name="result_demo" placeholder="API结果示例" >');
 
                                          document.write(decodeURI("$!results.get('api').resultDemo"));
 
@@ -248,22 +248,24 @@
                             <div class="form-group">
                                 <label for="namespaceMethodParam">serviceName</label>
 
-                                <input type="text" style="min-width:180px;" class="form-control required" id="namespaceMethodParam" name="namespaceMethodParam" placeholder="serviceName" value="$!results.get('method').name">
+                                <input type="text" style="min-width:180px;" class="form-control required" id="namespaceMethodParam" name="service" placeholder="serviceName" value="$!results.get('method').name">
 
                             </div>
                             <div class="form-group">
                                 <label for="nameMethodParam">method</label>
 
-                                <input type="text" class="form-control required" id="nameMethodParam"  name="nameMethodParam" placeholder="method" value="$!results.get('method').method">
+                                <input type="text" class="form-control required" id="nameMethodParam"  name="method" placeholder="method" value="$!results.get('method').method">
 
                             </div>
-                            <div class="form-group" style="display: none">
-                                <label for="versionMethodParam">version</label>
 
-                                <input type="text" class="form-control required" id="versionMethodParam" name="versionMethodParam" placeholder="version" #if(1==$!results.get('edit'))value="$!results.get('method').version"#else value="1.0"#end>
-                                #if(1 == $!results.get('edit'))<input type="hidden" name="currentId" value="$!results.get('method').id"> #else <input type="hidden" name="currentId" value="0"> #end
+                            <!--<div class="form-group" style="display: none">-->
+                                <!--<label for="versionMethodParam">version</label>-->
 
-                            </div>
+                                <!--<input type="text" class="form-control required" id="versionMethodParam" name="versionMethodParam" placeholder="version" #if(1==$!results.get('edit'))value="$!results.get('method').version"#else value="1.0"#end>-->
+                                <!--#if(1 == $!results.get('edit'))<input type="hidden" name="currentId" value="$!results.get('method').id"> #else <input type="hidden" name="currentId" value="0"> #end-->
+
+                            <!--</div>-->
+
                             <div class="form-group">
                                 <label for="url"  id="apiUrl">url</label>
 
@@ -276,54 +278,34 @@
                                     #end
 
                             </div>
+
+                            <div>
+                                参数列表：
+                                <br />
+
+                                <div id="serviceParamList"></div>
+                            </div>
+
+                            #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
                         </form>
-
                     </div>
-                    <div class="alert alert-danger" role="alert" style="margin-bottom: -1px;display:none;" id="apiMethodParamsInfo"></div>
-                    <table id="carmenMethodParam" class="table table-striped table-bordered" >
-                        <thead>
-                        <tr>
-                            <th>参数名</th>
-                            <th>参数类型</th>
-                            <th>参数次序序号</th>
-                            <th>基本类型</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody id="carmenMethodParamBody">
-                        #foreach ($!methodParam in $!results.get('methodParamList'))
-                            <tr>
-                                <td><input style="max-width:160px;" type="text"  name="apiParamName" value="$!methodParam.paramName"></td>
-                                <td>
-                                    <input style="max-width:160px;" type="text"  name="apiParamType" value="$!methodParam.paramType">
-                                </td>
-                                <td><input style="max-width:160px;" type="text"  name="sequence" value="$!methodParam.sequence"></td>
-                                <td><select style="min-width:50px;max-height: 25px;"  name="apiIsStructure" class="form-control" >#if(0 == $!methodParam.isStructure)<option value="1" selected>是</option><option value="0" >否</option> #else <option value="1" >是</option><option value="0" selected>否</option> #end </select><input type="hidden" name="currentId" value="$!methodParam.id"></td>
-                                <td>
-                                    <a href="#" class="needTip" data-toggle="tooltip" data-placement="top" title="编辑" style="margin-left:5px;display:none;" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span></a>
-                                    <a href="#" class="needTip deleteCurrentRow" flag="step4" apiIdValue="$!methodParam.id" data-toggle="tooltip" data-placement="top" title="删除当前行" style="margin-left:5px;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                                </td>
-                            </tr>
-                        #end
-                        </tbody>
-                    </table>
-                    <div style="min-height:35px;">
-                        <button type="button" id="addRow_carmenMethodParam" class="btn btn-primary" style="margin-left:10px;"><span class="glyphicon glyphicon-plus"></span>新增行</button>
-                        <button type="button" id="batchAddMethod"  class="btn btn-default" style="margin-left:10px;margin-right:10px;">批量新增</button>
-                    </div>
-
                 </div>
-
 
                 <!-- 3. JSON 解析与编辑（POST方法） -->
                 <div class="json-parse">
                     <div class="panel-body">
                         <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="jsonParseInfo"></div>
+                        <form id="jsonparseForm">
+                            <div class="col-sm-6">
+                                <input type="button" class="btn btn-primary" id="JSONparse-btn" style="margin-bottom:15px;" value="解析" />
+                                <textarea class="form-control" id="json-input" name="request_demo"></textarea>
+                            </div>
+
+                            <input type="hidden" value="" name="request_structure" id="request_structure" />
+                            #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
+                        </form>
+
                         <span>解析结果：</span>
-                        <div class="col-sm-6">
-                            <button class="btn btn-primary" id="JSONparse-btn" style="margin-bottom:15px;">解析<span class="glyphicon glyphicon-menu-right"></span></button>
-                            <textarea class="form-control" id="json-input"></textarea>
-                        </div>
                         <div class="col-sm-6">
                             <div id="editor" class="json-editor"></div>
                         </div>
@@ -337,47 +319,20 @@
 
                         <form class="form-horizontal">
 
+                            <h4 style="margin-top:50px;text-align:center;">API接口信息</h4>
+                            <div id="final-review-apiconfig"></div>
 
-                            <h4><span class="col-sm-2"></span>API接口信息</h4>
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">namespace</label>
-                                <div class="col-sm-6"><p  class="form-control-static">NAME SPACE</p></div>
+                            <h4 style="margin-top:50px;text-align:center;">内部参数</h4>
+                            <div id="final-review-method"></div>
+
+                            <div id="review-jsonparse">
+                                <h4 style="margin-top:50px;text-align:center;">JSON解析</h4>
+                                <div id="final-review-json"></div>
+
                             </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">namespace</label>
-                                <div class="col-sm-6"><p  class="form-control-static">NAME SPACE</p></div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">namespace</label>
-                                <div class="col-sm-6"><p  class="form-control-static">NAME SPACE</p></div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">namespace</label>
-                                <div class="col-sm-6"><p  class="form-control-static">NAME SPACE</p></div>
-                            </div>
-
-
-                            <h4><span class="col-sm-2"></span>内部参数</h4>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">namespace</label>
-                                <div class="col-sm-6"><p  class="form-control-static">NAME SPACE</p></div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">namespace</label>
-                                <div class="col-sm-6"><p  class="form-control-static">NAME SPACE</p></div>
-                            </div>
-
-
                         </form>
                     </div>
                 </div>
-
-
             </div>
 
         </div>
