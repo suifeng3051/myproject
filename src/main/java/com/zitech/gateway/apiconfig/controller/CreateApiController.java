@@ -7,6 +7,7 @@ import com.zitech.gateway.apiconfig.service.ApiService;
 import com.zitech.gateway.apiconfig.service.GroupService;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
+import com.zitech.gateway.gateway.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,6 +198,18 @@ public class CreateApiController {
         apiResult.setCode(code);
         apiResult.setMessage(message);
 
+        return apiResult.toString();
+
+    }
+
+
+    @RequestMapping(value = "/getServeInner", produces="application/json;charset=utf-8",method= RequestMethod.GET)
+    @ResponseBody
+    public String getServeInner() {
+
+
+        ApiResult<String> apiResult = new ApiResult<>(0,"success");
+        apiResult.setData(JSONObject.toJSON(Constants.contextMap).toString());
         return apiResult.toString();
 
     }
