@@ -813,7 +813,7 @@ $(document).ready(function(){
 
 
     // 保存所有的配置信息
-    $(".save").on("click", function () {
+    $("#save").on("click", function () {
         // 0. 检测是否填写
         var paramMappingContent = carmenParamMappingTable.$('input, select').serialize();
         $("#apiParamMappingInfo").css("display", 'none');
@@ -822,7 +822,6 @@ $(document).ready(function(){
             $("#apiParamMappingInfo").css("display", 'block');
             return;
         }
-
 
         // 1. 解析API配置的结果，转为json字符串
         var apiContent = $("#apiInterfaceConfig").serialize();

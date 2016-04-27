@@ -6,6 +6,16 @@ public class ObjectValidator implements IValidator {
 
     @Override
     public boolean v(Object object, Param param) {
-        return object instanceof JSONObject;
+        if (!param.getRequired()) {
+            if (object == null || (object instanceof JSONObject))
+                return true;
+        } else {
+            if (object == null || !(object instanceof JSONObject))
+                return false;
+            else
+                return true;
+        }
+
+        return false;
     }
 }

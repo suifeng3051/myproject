@@ -12,7 +12,7 @@ public enum ParamType {
 
     public static ParamType from(String type) {
         ParamType[] values = ParamType.values();
-        for (ParamType t: values) {
+        for (ParamType t : values) {
             if (t.name().equals(type)) {
                 return t;
             }

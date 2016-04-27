@@ -1,18 +1,19 @@
 package com.zitech.gateway.apiconfig.controller;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.apiconfig.model.Group;
 import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.apiconfig.service.ApiService;
 import com.zitech.gateway.apiconfig.service.GroupService;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
+import com.zitech.gateway.gateway.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -154,8 +155,8 @@ public class CreateApiController {
     @ResponseBody
     public String checkApiMethodMapping(@RequestParam("namespace") String  namespace,
                                         @RequestParam("name") String name,
-                                        @RequestParam("version")  String version,
-                                        @RequestParam("env") String env) {
+                                        @RequestParam("version")  Integer version,
+                                        @RequestParam("env") Byte env) {
 
         ApiResult<String> apiResult = new ApiResult<>(0,"success");
 
@@ -165,7 +166,55 @@ public class CreateApiController {
         }
 
         return apiResult.toString();
+
     }
+
+
+    @RequestMapping(value = "/saveResult", produces="application/json;charset=utf-8",method= RequestMethod.POST)
+    @ResponseBody
+    public String saveResult(@RequestParam("apiObj") String  apiObj,
+                             @RequestParam("serviceObj") String serviceObj,
+                             @RequestParam("paramObj")  String paramObj,
+                             @RequestParam("env") Byte env) {
+
+        int code = 0;
+        String message = "success";
+        boolean flag = false;
+        ApiResult<String> apiResult = new ApiResult<>(0,"success");
+
+        try {
+            flag = apiService.saveResult(apiObj,serviceObj,paramObj,env);
+        }catch (Exception e){
+            logger.error("保存API是出错！\r apiObj:"+apiObj+"  \r serviceObj:"+serviceObj+" \r paramObj:"+paramObj,e);
+            code=1;
+            message = "fail";
+        }
+
+        if(!flag){
+            code =1;
+            message = "fail";
+        }
+
+        apiResult.setCode(code);
+        apiResult.setMessage(message);
+
+        return apiResult.toString();
+
+    }
+
+
+    @RequestMapping(value = "/getServeInner", produces="application/json;charset=utf-8",method= RequestMethod.GET)
+    @ResponseBody
+    public String getServeInner() {
+
+
+        ApiResult<String> apiResult = new ApiResult<>(0,"success");
+        apiResult.setData(JSONObject.toJSON(Constants.contextMap).toString());
+        return apiResult.toString();
+
+    }
+
+
 
 
 

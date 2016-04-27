@@ -11,6 +11,8 @@ public class Api {
 
     private Integer version;
 
+    private Integer avail;
+
     private Integer groupId;
 
     private Byte requestType;
@@ -80,6 +82,14 @@ public class Api {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public Integer getAvail() {
+        return avail;
+    }
+
+    public void setAvail(Integer avail) {
+        this.avail = avail;
     }
 
     public Integer getGroupId() {

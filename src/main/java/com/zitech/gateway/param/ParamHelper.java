@@ -19,11 +19,10 @@ import java.util.List;
 
 public class ParamHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(ParamHelper.class);
-
     public static final String REQUIRED = "require";
     public static final String TYPE = "type";
     public static final String FIELDS = "fields";
+    private static final Logger logger = LoggerFactory.getLogger(ParamHelper.class);
 
     /**
      * 根据json结构字符串构造参数树 注意: 根节点不属于结构的一部分
@@ -44,8 +43,9 @@ public class ParamHelper {
 
     /**
      * parse json object
+     *
      * @param object object
-     * @param root root
+     * @param root   root
      */
     private static void parseObject(JSONObject object, Param root) {
         for (String key : object.keySet()) {
@@ -63,7 +63,7 @@ public class ParamHelper {
                 ParamHelper.parseObject(fields, param);
             } else if (param.getType() == ParamType.ARRAY) {
                 JSONArray fields = struct.getJSONArray(FIELDS);
-                if(fields.size() == 0)
+                if (fields.size() == 0)
                     throw new LogicalException(Constants.Code.NO_ARRAY_FIELD, "no array field: " + param.getName());
                 ParamHelper.parseArray((JSONObject) fields.get(0), param);
             }
@@ -72,8 +72,9 @@ public class ParamHelper {
 
     /**
      * parse json array
+     *
      * @param object object
-     * @param root root
+     * @param root   root
      */
     private static void parseArray(JSONObject object, Param root) {
         Param param = new Param();
@@ -89,7 +90,7 @@ public class ParamHelper {
             ParamHelper.parseObject(fields, param);
         } else if (param.getType() == ParamType.ARRAY) {
             JSONArray fields = object.getJSONArray(FIELDS);
-            if(fields.size() == 0)
+            if (fields.size() == 0)
                 throw new LogicalException(Constants.Code.NO_ARRAY_FIELD, "no array field: " + param.getName());
             ParamHelper.parseArray((JSONObject) fields.get(0), param);
         }
@@ -97,6 +98,7 @@ public class ParamHelper {
 
     /**
      * get validation by param type
+     *
      * @param type type
      * @return validate
      */
@@ -117,9 +119,9 @@ public class ParamHelper {
 
     /**
      * 验证参数的合法性,遍历json串,验证json的合法性
+     *
      * @param source json
-     * @param param 参数树
-     * @throws com.zitech.gateway.exception.ParamException
+     * @param param  参数树
      */
     private static void validate(JSONObject source, Param param) {
         ParamHelper.validateObject(source, param);
@@ -127,8 +129,9 @@ public class ParamHelper {
 
     /**
      * validate judging by json object
+     *
      * @param object object
-     * @param param param
+     * @param param  param
      */
     private static void validateObject(Object object, Param param) {
         JSONObject jj = (JSONObject) object;
@@ -137,20 +140,21 @@ public class ParamHelper {
 
             Param vp = ParamHelper.getParam(param, key);
             IValidator validator = vp.getValidate();
-            if(!validator.v(o, param))
-                throw new ParamException(Constants.Code.PARAM_ERROR, "param error: " + getPath(param));
+            if (!validator.v(o, vp))
+                throw new ParamException(Constants.Code.PARAM_ERROR, "param error: " + getPath(vp));
 
-            if(o instanceof JSONObject)
+            if (o instanceof JSONObject)
                 ParamHelper.validateObject(o, vp);
-            else if(o instanceof JSONArray)
+            else if (o instanceof JSONArray)
                 ParamHelper.validateArray(o, vp);
         }
     }
 
     /**
      * validate judging by json array
+     *
      * @param object object
-     * @param param param
+     * @param param  param
      */
     private static void validateArray(Object object, Param param) {
         JSONArray ja = (JSONArray) object;
@@ -169,10 +173,10 @@ public class ParamHelper {
 
     /**
      * get param from current list
+     *
      * @param param param
-     * @param name name
+     * @param name  name
      * @return param of the name
-     * @throws ParamException
      */
     private static Param getParam(Param param, String name) {
         List<Param> fields = param.getFields();
@@ -187,6 +191,7 @@ public class ParamHelper {
 
     /**
      * get parent including itself
+     *
      * @param param param
      * @return parent list
      */
@@ -195,7 +200,8 @@ public class ParamHelper {
         List<Param> paramList = new ArrayList<>();
         paramList.add(p);
         while ((p = p.getParent()) != null) {
-            paramList.add(p);
+            if(p.getName() != null)
+                paramList.add(p);
         }
 
         Collections.reverse(paramList);
@@ -203,8 +209,8 @@ public class ParamHelper {
     }
 
     /**
-     * get path from root to current param
-     * including current param
+     * get path from root to current param including current param
+     *
      * @param param param
      * @return path
      */
@@ -219,9 +225,9 @@ public class ParamHelper {
 
     /**
      * 验证参数的合法性,遍历param,检查json串的合法性
-     * @param param param
+     *
+     * @param param  param
      * @param source json
-     * @throws com.zitech.gateway.exception.ParamException
      */
     private static void validate(Param param, JSONObject source) {
         List<Param> paramList = param.getFields();
@@ -231,11 +237,11 @@ public class ParamHelper {
                 validateObject(p, so);
             else if (p.getType() == ParamType.ARRAY)
                 validateArray(p, so);
-            else{
+            else {
                 if (p.getRequired() && so == null)
                     throw new ParamException(Constants.Code.PARAM_REQUIRED, "param: " + ParamHelper.getPath(p) + " required");
 
-                if(!p.getRequired() && so == null)
+                if (!p.getRequired() && so == null)
                     continue; // some other action?
             }
         }
@@ -243,17 +249,18 @@ public class ParamHelper {
 
     /**
      * validate json object judging by param
-     * @param param param
+     *
+     * @param param  param
      * @param object object
      */
     private static void validateObject(Param param, Object object) {
         if (param.getRequired() && object == null)
             throw new ParamException(Constants.Code.PARAM_REQUIRED, "param: " + ParamHelper.getPath(param) + " required");
 
-        if(!param.getRequired() && object == null)
+        if (!param.getRequired() && object == null)
             return;
 
-        if(!(object instanceof JSONObject))
+        if (!(object instanceof JSONObject))
             throw new ParamException(Constants.Code.PARAM_SHOULD_OBJECT, "param: " + ParamHelper.getPath(param) + "not object");
 
         JSONObject source = (JSONObject) object;
@@ -264,11 +271,11 @@ public class ParamHelper {
                 validateObject(p, so);
             else if (p.getType() == ParamType.ARRAY)
                 validateArray(p, so);
-            else{
+            else {
                 if (p.getRequired() && so == null)
                     throw new ParamException(Constants.Code.PARAM_REQUIRED, "param: " + ParamHelper.getPath(p) + " required");
 
-                if(!p.getRequired() && so == null)
+                if (!p.getRequired() && so == null)
                     continue; // some other action?
             }
         }
@@ -276,17 +283,18 @@ public class ParamHelper {
 
     /**
      * validate json array judging by param
-     * @param param param
+     *
+     * @param param  param
      * @param object object
      */
     private static void validateArray(Param param, Object object) {
         if (param.getRequired() && object == null)
             throw new ParamException(Constants.Code.PARAM_REQUIRED, "param: " + ParamHelper.getPath(param) + " required");
 
-        if(!param.getRequired() && object == null)
+        if (!param.getRequired() && object == null)
             return;
 
-        if(!(object instanceof JSONArray))
+        if (!(object instanceof JSONArray))
             throw new ParamException(Constants.Code.PARAM_SHOULD_ARRAY, "param: " + ParamHelper.getPath(param) + "not array");
 
         JSONArray source = (JSONArray) object;
@@ -309,9 +317,9 @@ public class ParamHelper {
 
     /**
      * validate request params
+     *
      * @param source request json
-     * @param param param struct tree
-     * @throws ParamException
+     * @param param  param struct tree
      */
     public static void validate(String source, Param param) {
         try {
