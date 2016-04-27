@@ -15,7 +15,7 @@ import java.util.Map;
 
 
 @Service
-@Pipe(Group = 1, Order = 4)
+@Pipe(Group = 'A', Order = 4)
 public class ContextPipe extends AbstractPipe {
 
     private static final Logger logger = LoggerFactory.getLogger(ContextPipe.class);

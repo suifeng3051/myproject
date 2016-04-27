@@ -3,9 +3,9 @@ package com.zitech.gateway.gateway.exception;
 
 import com.zitech.gateway.common.BaseException;
 
-public class ValidateException extends BaseException {
+public class CacheException extends BaseException {
 
-    public ValidateException(int code, String error) {
+    public CacheException(int code, String error) {
         super(code, error);
     }
 

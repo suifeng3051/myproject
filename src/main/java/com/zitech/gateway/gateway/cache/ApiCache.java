@@ -6,6 +6,7 @@ import com.google.common.cache.CacheBuilder;
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.apiconfig.service.ApiService;
+import com.zitech.gateway.gateway.exception.CacheException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,13 +31,18 @@ public class ApiCache implements ILocalCache {
 
     private Cache<String, Api> cache = CacheBuilder.newBuilder().maximumSize(10000).build();
 
-    public Api get(String namespace, String method, Integer version) throws Exception {
-        String id = String.format("%s-%s-%s-%s", namespace, method, version, appConfig.env);
-        return cache.get(id, () -> apiService.getApi(namespace, method, version, appConfig.env));
+    public Api get(String namespace, String method, Integer version) {
+        try {
+            String id = String.format("%s-%s-%s-%s", namespace, method, version, appConfig.env);
+            return cache.get(id, () -> apiService.getApi(namespace, method, version, appConfig.env));
+        } catch (ExecutionException e) {
+            logger.info("get cache error:", e);
+            throw new CacheException(5214, "访问非法API");
+        }
     }
 
     @Override
-    public void load() throws Exception {
+    public void load() {
         List<Api> apiList = apiService.getAllByEnv(appConfig.env);
         for (Api api : apiList) {
             this.get(api.getNamespace(), api.getMethod(), api.getVersion());

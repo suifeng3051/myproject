@@ -43,7 +43,7 @@ public class AcceptorController {
 
         if (StringUtils.isEmpty(namespace) || StringUtils.isEmpty(method)) {
             ResponseEntity<String> responseEntity = new ResponseEntity<String>(
-                    String.format(Constants.ERROR_RESPONSE, 5001, "namespace or method is null"),
+                    String.format(Constants.ERROR_RESPONSE, 5213, "namespace or method is null"),
                     HttpStatus.valueOf(200));
             deferredResult.setResult(responseEntity);
             return deferredResult;
@@ -51,7 +51,7 @@ public class AcceptorController {
 
         if (StringUtils.isEmpty(request.getParameter(Constants.ACCESS_TOKEN))) {
             ResponseEntity<String> responseEntity = new ResponseEntity<String>(
-                    String.format(Constants.ERROR_RESPONSE, 5125, "no access token"),
+                    String.format(Constants.ERROR_RESPONSE, 5212, "no access token"),
                     HttpStatus.valueOf(200));
             deferredResult.setResult(responseEntity);
             return deferredResult;
@@ -81,7 +81,7 @@ public class AcceptorController {
 
         if (StringUtils.isEmpty(namespace) || StringUtils.isEmpty(method)) {
             ResponseEntity<String> responseEntity = new ResponseEntity<String>(
-                    String.format(Constants.ERROR_RESPONSE, 5001, "namespace or method is null"),
+                    String.format(Constants.ERROR_RESPONSE, 5213, "namespace or method is null"),
                     HttpStatus.valueOf(200));
             deferredResult.setResult(responseEntity);
             return deferredResult;
@@ -89,7 +89,7 @@ public class AcceptorController {
 
         if (StringUtils.isEmpty(request.getParameter(Constants.ACCESS_TOKEN))) {
             ResponseEntity<String> responseEntity = new ResponseEntity<String>(
-                    String.format(Constants.ERROR_RESPONSE, 5125, "no access token"),
+                    String.format(Constants.ERROR_RESPONSE, 5212, "no access token"),
                     HttpStatus.valueOf(200));
             deferredResult.setResult(responseEntity);
             return deferredResult;

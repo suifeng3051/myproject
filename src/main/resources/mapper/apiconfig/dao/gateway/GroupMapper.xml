@@ -43,7 +43,7 @@
         <include refid="Base_Column_List" />
         from t_api_group
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from t_api_group
         where id = #{id,jdbcType=INTEGER}
     </delete>

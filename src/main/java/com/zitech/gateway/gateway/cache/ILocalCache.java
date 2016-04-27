@@ -2,7 +2,7 @@ package com.zitech.gateway.gateway.cache;
 
 public interface ILocalCache {
 
-    void load() throws Exception;
+    void load();
 
     void clear();
 

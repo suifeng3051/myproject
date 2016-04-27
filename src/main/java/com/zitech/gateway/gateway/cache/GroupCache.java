@@ -8,6 +8,7 @@ import com.zitech.gateway.apiconfig.model.Group;
 import com.zitech.gateway.apiconfig.model.Serve;
 import com.zitech.gateway.apiconfig.service.GroupService;
 import com.zitech.gateway.apiconfig.service.ServeService;
+import com.zitech.gateway.gateway.exception.CacheException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +30,17 @@ public class GroupCache implements ILocalCache {
 
     private Cache<String, Group> cache = CacheBuilder.newBuilder().maximumSize(10000).build();
 
-    public Group get(Integer groupId) throws Exception {
-        return cache.get(String.valueOf(groupId), () -> groupService.getById(groupId));
+    public Group get(Integer groupId) {
+        try {
+            return cache.get(String.valueOf(groupId), () -> groupService.getById(groupId));
+        } catch (ExecutionException e) {
+            logger.info("get cache error:", e);
+            throw new CacheException(5214, "非法Group");
+        }
     }
 
     @Override
-    public void load() throws Exception {
+    public void load() {
         List<Group> groupList = groupService.getAll();
         for (Group group : groupList) {
             get(group.getId());

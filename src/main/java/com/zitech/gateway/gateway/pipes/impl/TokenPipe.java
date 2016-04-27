@@ -4,7 +4,7 @@ import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.apiconfig.model.Group;
 import com.zitech.gateway.gateway.cache.ClientCache;
 import com.zitech.gateway.gateway.cache.GroupCache;
-import com.zitech.gateway.gateway.exception.TokenValidateException;
+import com.zitech.gateway.gateway.exception.TokenException;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.oauth.model.AccessToken;
 import com.zitech.gateway.oauth.model.Client;
@@ -21,13 +21,10 @@ import java.util.Set;
 
 
 @Service
-@Pipe(Group = 1, Order = 2)
+@Pipe(Group = 'A', Order = 3)
 public class TokenPipe extends AbstractPipe {
 
     private static final Logger logger = LoggerFactory.getLogger(TokenPipe.class);
-
-    @Autowired
-    private ClientCache clientCache;
 
     @Autowired
     private GroupCache groupCache;
@@ -38,15 +35,8 @@ public class TokenPipe extends AbstractPipe {
         AccessToken accessToken = event.getAccessToken();
 
         if (!AppUtils.checkBefore(accessToken.getExpires())) {
-            throw new TokenValidateException(OAuthConstants.OAuthResponse.NO_OR_EXPIRED_TOKEN,
+            throw new TokenException(OAuthConstants.OAuthResponse.NO_OR_EXPIRED_TOKEN,
                     OAuthConstants.OAuthDescription.INVALID_TOKEN_EXPIRED);
-        }
-
-        String clientId = accessToken.getClientId();
-        Client client = clientCache.get(clientId);
-        if (client == null) {
-            throw new TokenValidateException(OAuthConstants.OAuthResponse.INVALID_CLIENT_NO,
-                    OAuthConstants.OAuthDescription.INVALID_CLIENT_DESCRIPTION);
         }
 
         Api api = event.getApi();
@@ -60,8 +50,7 @@ public class TokenPipe extends AbstractPipe {
         }
 
         // there may be some better ways, but...
-        throw new TokenValidateException(OAuthConstants.OAuthResponse.INVALID_TOKEN,
+        throw new TokenException(OAuthConstants.OAuthResponse.INVALID_TOKEN,
                 OAuthConstants.OAuthDescription.INVALID_RESOURCE);
     }
-
 }

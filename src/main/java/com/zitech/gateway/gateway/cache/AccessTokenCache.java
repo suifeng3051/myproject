@@ -3,10 +3,8 @@ package com.zitech.gateway.gateway.cache;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
-import com.zitech.gateway.gateway.exception.TokenValidateException;
+import com.zitech.gateway.gateway.exception.CacheException;
 import com.zitech.gateway.oauth.model.AccessToken;
-import com.zitech.gateway.oauth.oauthex.OAuthConstants;
-import com.zitech.gateway.oauth.service.AccessTokenService;
 import com.zitech.gateway.oauth.service.impl.OAuthServiceImpl;
 
 import org.slf4j.Logger;
@@ -14,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -31,8 +28,13 @@ public class AccessTokenCache implements ILocalCache {
     private Cache<String, AccessToken> cache = CacheBuilder.newBuilder().maximumSize(100000).
             expireAfterWrite(30, TimeUnit.MINUTES).build();
 
-    public AccessToken get(String accessToken) throws Exception {
-        return cache.get(accessToken, () -> oAuthService.getAccessToken(accessToken));
+    public AccessToken get(String accessToken) {
+        try {
+            return cache.get(accessToken, () -> oAuthService.getAccessToken(accessToken));
+        } catch (ExecutionException e) {
+            logger.info("get cache error:", e);
+            throw new CacheException(5214, "非法访问码");
+        }
     }
 
     @Override

@@ -2,7 +2,7 @@
  * Copyright (c) 2015-2020 by zitech
  * All rights reserved.
  */
-package com.zitech.gateway.stat.mongodb;
+package com.zitech.gateway.monitor.mongodb;
 
 import java.util.Collection;
 import java.util.List;
