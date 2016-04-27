@@ -46,7 +46,7 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public boolean checkApi(String namespace, String method, String version, String env) {
+    public boolean checkApi(String namespace, String method, String version, Byte env) {
 
         Map<String,Object> paraMap = new HashMap<>();
         paraMap.put("nameSpace",namespace);
@@ -64,7 +64,7 @@ public class ApiServiceImpl implements ApiService {
      }
 
     @Override
-    public Api getApi(String namespace, String method, String version, String env) {
+    public Api getApi(String namespace, String method, String version, Byte env) {
         Map<String,Object> paraMap = new HashMap<>();
         paraMap.put("nameSpace",namespace);
         paraMap.put("method",method);

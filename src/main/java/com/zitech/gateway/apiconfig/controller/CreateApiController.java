@@ -155,7 +155,7 @@ public class CreateApiController {
     public String checkApiMethodMapping(@RequestParam("namespace") String  namespace,
                                         @RequestParam("name") String name,
                                         @RequestParam("version")  String version,
-                                        @RequestParam("env") String env) {
+                                        @RequestParam("env") Byte env) {
 
         ApiResult<String> apiResult = new ApiResult<>(0,"success");
 
@@ -165,7 +165,13 @@ public class CreateApiController {
         }
 
         return apiResult.toString();
+
     }
+
+
+
+
+
 
 
 
