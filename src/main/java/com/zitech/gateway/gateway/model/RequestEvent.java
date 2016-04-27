@@ -36,10 +36,12 @@ public class RequestEvent {
 
     private Api api;
 
-    private TicTac ticTac = new TicTac();
-
     private String resultStr;
     private Exception exception;
+
+    private Map<String, String> contextMap = new HashMap<>();
+
+    private TicTac ticTac = new TicTac();
 
     public RequestEvent() {
     }
@@ -160,6 +162,14 @@ public class RequestEvent {
 
     public void setException(Exception exception) {
         this.exception = exception;
+    }
+
+    public Map<String, String> getContextMap() {
+        return contextMap;
+    }
+
+    public void setContextMap(Map<String, String> contextMap) {
+        this.contextMap = contextMap;
     }
 
     @Override

@@ -7,7 +7,6 @@ import com.zitech.gateway.gateway.cache.ApiCache;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.gateway.utils.IPUtil;
 import com.zitech.gateway.oauth.model.AccessToken;
-import com.zitech.gateway.utils.SpringContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @Service
+@Pipe(Group = 1, Order = 1)
 public class ParsePipe extends AbstractPipe {
 
     private static final Logger logger = LoggerFactory.getLogger(ParsePipe.class);

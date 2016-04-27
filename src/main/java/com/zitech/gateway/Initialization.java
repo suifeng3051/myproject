@@ -13,7 +13,7 @@ public class Initialization implements ApplicationListener<ContextRefreshedEvent
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
         if (event.getApplicationContext().getParent() == null) {
-            //Pipeline.getInstance().start();
+            Pipeline.getInstance().start();
             //InstanceMonitor.getInstance().start();
         }
     }

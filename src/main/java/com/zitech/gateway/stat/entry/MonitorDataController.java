@@ -2,7 +2,7 @@
  * Copyright (c) 2015-2020 by zitech
  * All rights reserved.
  */
-package com.zitech.gateway.monitor.entry;
+package com.zitech.gateway.stat.entry;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zitech.gateway.monitor.constants.GatewayConstant;
-import com.zitech.gateway.monitor.entity.CountResult;
-import com.zitech.gateway.monitor.mapreduce.MapReduceJs;
+import com.zitech.gateway.stat.constants.GatewayConstant;
+import com.zitech.gateway.stat.entity.CountResult;
+import com.zitech.gateway.stat.mapreduce.MapReduceJs;
 import com.zitech.gateway.utils.DateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 
 import com.alibaba.fastjson.JSON;
-import com.zitech.gateway.monitor.mongodb.MapReduceDao;
+import com.zitech.gateway.stat.mongodb.MapReduceDao;
 
 /** 
  * 

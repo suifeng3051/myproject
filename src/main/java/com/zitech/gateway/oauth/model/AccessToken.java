@@ -24,22 +24,6 @@ public class AccessToken implements Serializable {
 
     private String scope;
 
-    public Object getValue(String name) {
-        switch (name) {
-            case Constants.CONTEXT_ACCESS_TOKEN:
-                return accessToken;
-            case Constants.CONTEXT_CLIENT_ID:
-                if (StringUtils.isEmpty(clientId))
-                    return "0";
-                return clientId;
-            case Constants.CONTEXT_USER_ID:
-                if (userId == 0 || userId <=0)
-                    return "0";
-                return String.valueOf(userId);
-        }
-        return null;
-    }
-
     public Integer getId() {
         return id;
     }

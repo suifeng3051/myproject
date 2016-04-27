@@ -31,7 +31,7 @@ public class HttpAsyncClient {
         client.start();
     }
 
-    public static int getCpuCount() {
+    private int getCpuCount() {
         return Runtime.getRuntime().availableProcessors();
     }
 }

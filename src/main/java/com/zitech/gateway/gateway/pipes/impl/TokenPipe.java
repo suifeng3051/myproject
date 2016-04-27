@@ -21,6 +21,7 @@ import java.util.Set;
 
 
 @Service
+@Pipe(Group = 1, Order = 2)
 public class TokenPipe extends AbstractPipe {
 
     private static final Logger logger = LoggerFactory.getLogger(TokenPipe.class);

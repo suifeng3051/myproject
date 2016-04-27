@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
+@Pipe(Group = 1, Order = 3)
 public class ValidatePipe extends AbstractPipe {
 
     private static final Logger logger = LoggerFactory.getLogger(ValidatePipe.class);
