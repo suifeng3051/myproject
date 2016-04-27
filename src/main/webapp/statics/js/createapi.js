@@ -401,7 +401,18 @@ $(document).ready(function(){
 
 
     $.get('getServeInner', function(data){
-        console.log(data);
+//        console.log(data);
+        if(data.code == 0){ // 成功
+            var len = data.data.length;
+            var str = '';
+            for(name in data.data){
+                str += '<div class="checkbox col-sm-2">'+
+                    '<label><input class="form-control" type="checkbox" value="'+ data.data[name] +'" name="inner_params" >'+name+'</label>'+
+                    '</div>';
+            }
+
+            $('#serviceParamList').html(str);
+        }
     });
 
     var currentStep = 1;
@@ -525,18 +536,18 @@ $(document).ready(function(){
 
 
     var apiObj, paramObj, serviceObj;
-    $('#save').click(function(){
-
-        var saveObj = {};
-        saveObj = {
-            'apiObj': apiObj,
-            'paramObj': paramObj,
-            'serviceObj': serviceObj
-        }
-//        console.log(saveObj); // 最终需要保存的对象
-
-        //$.post(); // 保存API配置
-    });
+//    $('#save').click(function(){
+//
+//        var saveObj = {};
+//        saveObj = {
+//            'apiObj': apiObj,
+//            'paramObj': paramObj,
+//            'serviceObj': serviceObj
+//        }
+////        console.log(saveObj); // 最终需要保存的对象
+//
+//        //$.post(); // 保存API配置
+//    });
 
     function finalReview(){
 
@@ -559,17 +570,19 @@ $(document).ready(function(){
         $('#final-review-method').html( str );
 
 
-        if(apiObj.request_type === 1) {  // POST 请求方式，加入json数据
+        if(apiObj.request_type == 1) {  // 请求方式 POST，加入json数据
             paramObj = formdataToJSON($('#jsonparseForm').serializeArray());
             paramObj.request_structure = JSONresult.getJson();
-//            console.log(paramObj);
 
+//            console.log(paramObj);
             var str = objToStr(paramObj);
             $('#final-review-json').html( str );
-        } else { // GET 请求方式
+            $('#review-jsonparse').show();
+
+        } else {  // 请求方式 GET
+
             $('#review-jsonparse').hide();
         }
-
     }
 
 
@@ -814,6 +827,8 @@ $(document).ready(function(){
 
     // 保存所有的配置信息
     $("#save").on("click", function () {
+
+    /*
         // 0. 检测是否填写
         var paramMappingContent = carmenParamMappingTable.$('input, select').serialize();
         $("#apiParamMappingInfo").css("display", 'none');
@@ -822,6 +837,7 @@ $(document).ready(function(){
             $("#apiParamMappingInfo").css("display", 'block');
             return;
         }
+
 
         // 1. 解析API配置的结果，转为json字符串
         var apiContent = $("#apiInterfaceConfig").serialize();
@@ -886,44 +902,40 @@ $(document).ready(function(){
         if("" == methodMappingId) {
             methodMappingId = 0;
         }
-
+*/
 
         $("#updateStatus").html("正在保存...");
         $("#myHideModal").modal("show");
         var flag = $(this).attr("flag"); // 1代表保存， 2代表保存并继续
 
-        $.post("saveResult", {   "parseApiResult":parseApiResult,
-                                 "apiParamUpdate":apiParamUpdate,
-                                 "apiParamAdd":apiParamAdd,
-                                 "methodResult":methodResult,
-                                 "methodParamUpdate":methodParamUpdate,
-                                 "methodParamAdd":methodParamAdd,
-                                 "structureUpdate":structureUpdate,
-                                 "structureAdd":structureAdd,
-                                 "paramMappingUpdate":paramMappingUpdate,
-                                 "paramMappingAdd":paramMappingAdd,
-                                 "methodMappingId":methodMappingId,
-                                 "env":getEnv()}, function (d) {
-                                    if("success" == d) {
-                                        var env = getEnv();
-                                        if(1 == flag) { // 保存按钮跳转到首页
-                                            window.location.href = "apilist?env=" + env;
-                                        } else if(2 == flag) { // 保存并继续跳转到新建api页面
-                                            window.location.href = "createapi?env=" + env;
-                                        }
+        $.post(
+            "saveResult",
+            {
+                'apiObj': apiObj,
+                'paramObj': paramObj,
+                'serviceObj': serviceObj,
+                "env":getEnv()
+            },
+             function (d) {
+                if("success" == d) {
+                    var env = getEnv();
+                    if(1 == flag) { // 保存按钮跳转到首页
+                        window.location.href = "apilist?env=" + env;
+                    } else if(2 == flag) { // 保存并继续跳转到新建api页面
+                        window.location.href = "createapi?env=" + env;
+                    }
 
-                                        $("#updateStatus").html("保存成功");
-                                        $("#myHideModal").delay(6000);
-                                        $("#myHideModal").modal("hide");
-                                    }else {
-                                        $("#updateStatus").html("保存失败!");
-                                        $("#myHideModal").delay(6000);
-                                        $("#myHideModal").modal("hide");
-                                        $("#apiParamMappingInfo").html('<p>更新失败<br/>' + d + '</p>');
-                                        $("#apiParamMappingInfo").css("display", 'block');
-                                    }
-
-                                 });
+                    $("#updateStatus").html("保存成功");
+                    $("#myHideModal").delay(6000);
+                    $("#myHideModal").modal("hide");
+                }else {
+                    $("#updateStatus").html("保存失败!");
+                    $("#myHideModal").delay(6000);
+                    $("#myHideModal").modal("hide");
+                    $("#apiParamMappingInfo").html('<p>更新失败<br/>' + d + '</p>');
+                    $("#apiParamMappingInfo").css("display", 'block');
+                }
+            });
     });
 
 
