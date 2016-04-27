@@ -1,13 +1,11 @@
 package com.zitech.gateway.gateway.model;
 
 import com.zitech.gateway.apiconfig.model.Api;
-import com.zitech.gateway.gateway.Constants;
+import com.zitech.gateway.common.RequestType;
 import com.zitech.gateway.gateway.excutor.TicTac;
 import com.zitech.gateway.oauth.model.AccessToken;
 
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.request.async.DeferredResult;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;

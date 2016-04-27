@@ -1,5 +1,7 @@
 package com.zitech.gateway.apiconfig.model;
 
+import com.zitech.gateway.common.RequestType;
+
 import java.util.Date;
 
 public class Api {
@@ -15,7 +17,7 @@ public class Api {
 
     private Integer groupId;
 
-    private Byte requestType;
+    private RequestType requestType;
 
     private Byte frequencyControl;
 
@@ -36,11 +38,11 @@ public class Api {
     private String resultDemo;
     private Byte env;
 
-    public Byte getRequestType() {
+    public RequestType getRequestType() {
         return requestType;
     }
 
-    public void setRequestType(Byte requestType) {
+    public void setRequestType(RequestType requestType) {
         this.requestType = requestType;
     }
 

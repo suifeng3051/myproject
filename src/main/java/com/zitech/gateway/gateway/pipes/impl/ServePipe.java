@@ -7,7 +7,7 @@ import com.zitech.gateway.gateway.exception.CallException;
 import com.zitech.gateway.gateway.excutor.HttpAsyncClient;
 import com.zitech.gateway.gateway.excutor.Pipeline;
 import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.gateway.model.RequestType;
+import com.zitech.gateway.common.RequestType;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;

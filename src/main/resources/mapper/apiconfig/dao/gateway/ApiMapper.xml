@@ -9,7 +9,7 @@
         <result column="version" property="version" jdbcType="INTEGER"/>
         <result column="avail" property="avail" jdbcType="INTEGER"/>
         <result column="group_id" property="groupId" jdbcType="INTEGER"/>
-        <result column="request_type" property="requestType" jdbcType="TINYINT"/>
+        <result column="request_type" property="requestType" jdbcType="VARCHAR"/>
         <result column="frequency_control" property="frequencyControl" jdbcType="TINYINT"/>
         <result column="check_inner" property="checkInner" jdbcType="TINYINT"/>
         <result column="api_description" property="apiDescription" jdbcType="VARCHAR"/>
@@ -68,7 +68,7 @@
         #{version,jdbcType=INTEGER},
         #{avail,jdbcType=INTEGER},
         #{groupId,jdbcType=INTEGER},
-        #{requestType,jdbcType=TINYINT},
+        #{requestType,jdbcType=VARCHAR},
         #{frequencyControl,jdbcType=TINYINT},
         #{checkInner,jdbcType=TINYINT},
         #{apiDescription,jdbcType=VARCHAR},
@@ -155,7 +155,7 @@
                 #{groupId,jdbcType=INTEGER},
             </if>
             <if test="requestType != null">
-                #{requestType,jdbcType=TINYINT},
+                #{requestType,jdbcType=VARCHAR},
             </if>
             <if test="frequencyControl != null">
                 #{frequencyControl,jdbcType=TINYINT},
@@ -208,7 +208,7 @@
                 group_id = #{groupId,jdbcType=INTEGER},
             </if>
             <if test="requestType != null">
-                request_type = #{requestType,jdbcType=TINYINT},
+                request_type = #{requestType,jdbcType=VARCHAR},
             </if>
             <if test="frequencyControl != null">
                 frequency_control = #{frequencyControl,jdbcType=TINYINT},
@@ -250,7 +250,7 @@
         version = #{version,jdbcType=INTEGER},
         avail = #{avail,jdbcType=INTEGER},
         group_id = #{groupId,jdbcType=INTEGER},
-        request_type = #{requestType,jdbcType=TINYINT},
+        request_type = #{requestType,jdbcType=VARCHAR},
         frequency_control = #{frequencyControl,jdbcType=TINYINT},
         check_inner = #{checkInner,jdbcType=TINYINT},
         api_description = #{apiDescription,jdbcType=VARCHAR},
@@ -270,7 +270,7 @@
         version = #{version,jdbcType=INTEGER},
         avail = #{avail,jdbcType=INTEGER},
         group_id = #{groupId,jdbcType=INTEGER},
-        request_type = #{requestType,jdbcType=TINYINT},
+        request_type = #{requestType,jdbcType=VARCHAR},
         frequency_control = #{frequencyControl,jdbcType=TINYINT},
         check_inner = #{checkInner,jdbcType=TINYINT},
         api_description = #{apiDescription,jdbcType=VARCHAR},
