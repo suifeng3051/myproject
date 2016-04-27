@@ -2,7 +2,7 @@ package com.zitech.gateway.apiconfig.model;
 
 import java.util.Date;
 
-public class Service {
+public class Serve {
     private Integer id;
 
     private Integer apiId;

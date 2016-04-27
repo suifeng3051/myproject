@@ -12,10 +12,8 @@ public class Constants {
     public static final String CLIENTID = "clientid";
 
     public static final String ST_ALL = "st_all";
-    public static final String ST_PRE_PIPE = "st_pre_pipe";
-    public static final String ST_CALL = "st_java_call";
-    public static final String ST_JAVA_RESULT = "st_java_result";
-    public static final String ST_REDIS_TOKEN = "st_redis_call";
+    public static final String ST_PRE = "st_pre";
+    public static final String ST_CALL = "st_call";
     public static final String ST_POST = "st_post";
 
     public static final String ERROR_RESPONSE = "{\n\t\"code\": %d,\n\t\"message\": \"%s\",\n\t\"data\": \"\"\n}";

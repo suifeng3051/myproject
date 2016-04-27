@@ -3,6 +3,7 @@ package com.zitech.gateway.apiconfig.service.imp;
 import com.zitech.gateway.apiconfig.dao.gateway.ApiDAO;
 import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.apiconfig.service.ApiService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class ApiServiceImpl implements ApiService {
 
 
     @Override
-    public Api getApiByid(Integer id) {
+    public Api getApiById(Integer id) {
         return apiDAO.selectByPrimaryKey(id);
     }
 
@@ -81,7 +82,7 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public List<Api> getbyGroupIdAndEnv(Integer groupid,Byte env) {
-        return apiDAO.getByGroupIdAndEnv(groupid, env);
+    public List<Api> getByGroupIdAndEnv(Integer groupId, Byte env) {
+        return apiDAO.getByGroupIdAndEnv(groupId, env);
     }
 }
