@@ -22,7 +22,7 @@
   width: 600px;
 }
 .json-editor .property { 
-  width: 154px;
+  width: 100px;
   background-color: #B1C639;
   color: white;
   font-weight: bold;
@@ -41,6 +41,10 @@
   line-height: 20px;
   margin-top: 2px;
 }
+.json-editor .item.grey {
+    background-color:#eee;
+}
+
 .json-editor .item:last-child { 
   border-bottom: none;
 }

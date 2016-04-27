@@ -108,7 +108,7 @@
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control required" name="namespace" id="namespace" placeholder="namespace" value="$!results.get('api').namespace">
                                 </div>
-                                <button class="btn hasApi">检测</button>
+                                <button class="btn hasApi" >检测</button>
                             </div>
                             <div class="form-group">
                                 <label for="name" class="col-sm-4 control-label">method</label>
@@ -309,7 +309,7 @@
                     </table>
                     <div style="min-height:35px;">
                         <button type="button" id="addRow_carmenMethodParam" class="btn btn-primary" style="margin-left:10px;"><span class="glyphicon glyphicon-plus"></span>新增行</button>
-                        <button type="button" id="batchAddMethod"  class="btn btn-default" style="margin-left:10px;float:right;margin-right:10px;">批量新增</button>
+                        <button type="button" id="batchAddMethod"  class="btn btn-default" style="margin-left:10px;margin-right:10px;">批量新增</button>
                     </div>
 
                 </div>
@@ -319,10 +319,9 @@
                 <div class="json-parse">
                     <div class="panel-body">
                         <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="jsonParseInfo"></div>
-                        JSON 解析与编辑
-
+                        <span>解析结果：</span>
                         <div class="col-sm-6">
-                            <button class="btn btn-primary" id="JSONparse-btn" style="margin-bottom:15px;">解析</button>
+                            <button class="btn btn-primary" id="JSONparse-btn" style="margin-bottom:15px;">解析<span class="glyphicon glyphicon-menu-right"></span></button>
                             <textarea class="form-control" id="json-input"></textarea>
                         </div>
                         <div class="col-sm-6">
@@ -339,7 +338,7 @@
                         <form class="form-horizontal">
 
 
-                            <h3>API接口信息</h3>
+                            <h4><span class="col-sm-2"></span>API接口信息</h4>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">namespace</label>
                                 <div class="col-sm-6"><p  class="form-control-static">NAME SPACE</p></div>
@@ -361,7 +360,7 @@
                             </div>
 
 
-                            <h3>内部参数</h3>
+                            <h4><span class="col-sm-2"></span>内部参数</h4>
 
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">namespace</label>

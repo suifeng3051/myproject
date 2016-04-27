@@ -460,6 +460,9 @@ $(document).ready(function(){
     $('#namespace, #name').keyup(function(){
         $('.hasApi').removeAttribute('data-exists');
     });
+    $('#version').change(function(){
+        $('.hasApi').removeAttribute('data-exists');
+    });
 
     $('#JSONparse-btn').click(function(){
         try {
@@ -469,6 +472,19 @@ $(document).ready(function(){
             var json = {};
         }
         window.JSONresult = $('#editor').jsonEditor(json);  // 解析JSON，生成JSON树
+
+//        $('#editor .item').mouseenter(function(){
+//            $(this).addClass('grey');
+//        });
+//        $('#editor .item').mouseleave(function(){
+//            $(this).removeClass('grey');
+//        });
+        $('.property').mouseenter(function(){
+            $(this).parent().addClass('grey');
+        });
+        $('.property').mouseleave(function(){
+            $(this).parent().removeClass('grey');
+        });
     });
 
     // 给检测API是否存在按钮绑定事件
