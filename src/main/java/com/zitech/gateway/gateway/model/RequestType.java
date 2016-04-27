@@ -1,6 +1,6 @@
 package com.zitech.gateway.gateway.model;
 
-import com.zitech.gateway.exception.ParamException;
+import com.zitech.gateway.common.ParamException;
 
 public enum RequestType {
 

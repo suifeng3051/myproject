@@ -1,6 +1,6 @@
 package com.zitech.gateway.gateway.excutor;
 
-import com.zitech.gateway.exception.BaseException;
+import com.zitech.gateway.common.BaseException;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.gateway.pipes.IPipe;
 import com.zitech.gateway.gateway.pipes.impl.Pipe;
@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;

@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import com.zitech.gateway.exception.LogicalException;
-import com.zitech.gateway.exception.ParamException;
+import com.zitech.gateway.common.LogicalException;
+import com.zitech.gateway.common.ParamException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;

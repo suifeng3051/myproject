@@ -5,7 +5,7 @@ import com.google.common.cache.CacheBuilder;
 
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.service.ParamService;
-import com.zitech.gateway.exception.ParamException;
+import com.zitech.gateway.common.ParamException;
 import com.zitech.gateway.param.Param;
 import com.zitech.gateway.param.ParamHelper;
 

@@ -1,7 +1,7 @@
 package com.zitech.gateway.param;
 
 
-import com.zitech.gateway.exception.LogicalException;
+import com.zitech.gateway.common.LogicalException;
 
 public enum ParamType {
     ROOT,

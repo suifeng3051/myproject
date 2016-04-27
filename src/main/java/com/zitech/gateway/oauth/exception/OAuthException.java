@@ -1,6 +1,6 @@
 package com.zitech.gateway.oauth.exception;
 
-import com.zitech.gateway.exception.BaseException;
+import com.zitech.gateway.common.BaseException;
 
 /**
  * Created by bobo on 6/11/15.

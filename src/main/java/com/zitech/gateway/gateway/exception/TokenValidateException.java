@@ -1,7 +1,7 @@
 package com.zitech.gateway.gateway.exception;
 
 
-import com.zitech.gateway.exception.BaseException;
+import com.zitech.gateway.common.BaseException;
 
 public class TokenValidateException extends BaseException {
 

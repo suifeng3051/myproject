@@ -1,4 +1,4 @@
-package com.zitech.gateway.exception;
+package com.zitech.gateway.common;
 
 public class ParamException extends BaseException {
 
