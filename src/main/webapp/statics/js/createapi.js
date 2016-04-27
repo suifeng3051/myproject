@@ -399,6 +399,11 @@ $(document).ready(function(){
         }
     });*/
 
+
+    $.get('getServeInner', function(data){
+        console.log(data);
+    });
+
     var currentStep = 1;
     var totalStep = $('#apiconfig-box > div').length;
 
@@ -449,6 +454,7 @@ $(document).ready(function(){
         } else if(step == totalStep){
             $('.nextStep').hide();
             $('#save').show();
+            finalReview(); // 将所有数据展示出来
         }else{
             $('.preStep').show();
         }
@@ -458,10 +464,10 @@ $(document).ready(function(){
     }
 
     $('#namespace, #name').keyup(function(){
-        $('.hasApi').removeAttribute('data-exists');
+        $('.hasApi').removeAttr('data-exists');
     });
     $('#version').change(function(){
-        $('.hasApi').removeAttribute('data-exists');
+        $('.hasApi').removeAttr('data-exists');
     });
 
     $('#JSONparse-btn').click(function(){
@@ -473,12 +479,8 @@ $(document).ready(function(){
         }
         window.JSONresult = $('#editor').jsonEditor(json);  // 解析JSON，生成JSON树
 
-//        $('#editor .item').mouseenter(function(){
-//            $(this).addClass('grey');
-//        });
-//        $('#editor .item').mouseleave(function(){
-//            $(this).removeClass('grey');
-//        });
+        $('#request_structure').val(JSONresult.getJson());
+
         $('.property').mouseenter(function(){
             $(this).parent().addClass('grey');
         });
@@ -489,17 +491,16 @@ $(document).ready(function(){
 
     // 给检测API是否存在按钮绑定事件
     $(".hasApi").on("click", function () {
+        $("#apiInfo").css("display","none");
+
         var apiNamespace = $("#namespace").val();
         var apiName = $("#name").val();
         var apiVersion = $("#version").val();
-        if("" == apiNamespace || "" == apiName || "" == apiVersion) {
-            $("#apiInfo").html("<p>请把参数填写完整</p>");
-            $("#apiInfo").css("display","block");
-
-            $("#apiInfo").removeClass("alert-success");
-            $("#apiInfo").addClass("alert-danger");
+        if(!$("#apiInterfaceConfig").valid()) {
+            $("#apiInfo").html("<p>请把参数填写完整</p>").css("display","block").removeClass("alert-success").addClass("alert-danger");
             return;
         }
+        $("#apiInfo").html('<p>正在检查...</p>');
         $.post("checkapi", {"namespace":apiNamespace, "name":apiName, "version":apiVersion, "env": getEnv()}, function (d) {
 
             if("success" == d.message) {
@@ -521,6 +522,87 @@ $(document).ready(function(){
             }
         }, "json");
     });
+
+
+    var apiObj, paramObj, serviceObj;
+    $('#save').click(function(){
+
+        var saveObj = {};
+        saveObj = {
+            'apiObj': apiObj,
+            'paramObj': paramObj,
+            'serviceObj': serviceObj
+        }
+//        console.log(saveObj); // 最终需要保存的对象
+
+        //$.post(); // 保存API配置
+    });
+
+    function finalReview(){
+
+        // API接口信息配置
+        apiObj = formdataToJSON($('#apiInterfaceConfig').serializeArray());
+//        console.log(apiObj);
+        var str = objToStr(apiObj);
+        $('#final-review-apiconfig').html(str);
+
+        serviceObj = formdataToJSON($('#methodconfigform').serializeArray());
+
+
+        var arr = [];
+        $('#serviceParamList input[type="checkbox"]:checked').each(function(){
+            arr.push($(this).val());
+        });
+        serviceObj.inner_params = arr.join(' ');
+//        console.log(serviceObj);
+        var str = objToStr(serviceObj);
+        $('#final-review-method').html( str );
+
+
+        if(apiObj.request_type === 1) {  // POST 请求方式，加入json数据
+            paramObj = formdataToJSON($('#jsonparseForm').serializeArray());
+            paramObj.request_structure = JSONresult.getJson();
+//            console.log(paramObj);
+
+            var str = objToStr(paramObj);
+            $('#final-review-json').html( str );
+        } else { // GET 请求方式
+            $('#review-jsonparse').hide();
+        }
+
+    }
+
+
+    function formdataToJSON (arr){
+        var len = arr.length;
+        var obj = {};
+
+        for(var i=0;i<len; i++){
+            obj[arr[i].name] = arr[i].value;
+        }
+        return obj;
+    }
+
+//    function formdataToStr (arr){
+//        var len = arr.length;
+//        var str = '';
+//        for(var i=0;i<len; i++){
+//            str += '<div class="form-group"><label class="col-sm-4 control-label">'+
+//             arr[i].name+ '</label><div class="col-sm-6"><p class="form-control-static">'+
+//             arr[i].value + '</p></div></div>';
+//        }
+//        return str;
+//    }
+
+    function objToStr(obj){
+        var str = '';
+        for(o in obj){
+            str += '<div class="form-group"><label class="col-sm-4 control-label">'+
+             o + '</label><div class="col-sm-6"><p class="form-control-static">'+
+             obj[o] + '</p></div></div>';
+        }
+        return str;
+    }
 
 
     // 为已有的select补充完整
