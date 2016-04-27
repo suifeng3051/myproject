@@ -22,6 +22,18 @@
         from t_param
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="selectByApiId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_param
+        where api_id = #{apiId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_param
+        where deleted=0
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from t_param
         where id = #{id,jdbcType=INTEGER}

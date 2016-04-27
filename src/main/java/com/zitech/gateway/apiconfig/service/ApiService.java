@@ -8,7 +8,7 @@ import java.util.List;
  * Created by hy on 16-4-26.
  */
 public interface ApiService {
-    Api getApiByid(Integer id);
+    Api getApiById(Integer id);
 
     void updateApi(Api api);
 
@@ -62,5 +62,5 @@ public interface ApiService {
 
     List<Api> getAllByEnv(Byte env);
 
-    List<Api> getbyGroupIdAndEnv(Integer groupid, Byte env);
+    List<Api> getByGroupIdAndEnv(Integer groupId, Byte env);
 }

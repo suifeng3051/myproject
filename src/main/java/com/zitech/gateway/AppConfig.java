@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class AppConfig {
 
     @Value("${application.env}")
-    public byte env;
+    public Byte env;
 
     @Value("${application.name}")
     public String appName;

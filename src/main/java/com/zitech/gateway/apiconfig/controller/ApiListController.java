@@ -94,7 +94,7 @@ public class ApiListController {
             if (groupid == null || groupid == 1) {
                 list = apiService.getAllByEnv(env);
             } else {
-                list = apiService.getbyGroupIdAndEnv(groupid,env);
+                list = apiService.getByGroupIdAndEnv(groupid,env);
             }
             Collections.sort(list, new Comparator<Api>() {
                 @Override
