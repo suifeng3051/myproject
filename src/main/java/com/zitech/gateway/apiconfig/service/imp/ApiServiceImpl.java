@@ -6,7 +6,9 @@ import com.zitech.gateway.apiconfig.service.ApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by hy on 16-4-26.
@@ -44,10 +46,22 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public boolean checkApi(String namespace, String method, String version) {
+    public boolean checkApi(String namespace, String method, String version, String env) {
 
-        return false;
-    }
+        Map<String,Object> paraMap = new HashMap<>();
+        paraMap.put("nameSpace",namespace);
+        paraMap.put("method",method);
+        paraMap.put("version",version);
+        paraMap.put("env",env);
+        Api api = apiDAO.findApiForCheck(paraMap);
+
+        if(api==null){
+            return true;
+        }else{
+            return false;
+        }
+
+     }
 
     @Override
     public List<Api> getAllByEnv(Byte env) {

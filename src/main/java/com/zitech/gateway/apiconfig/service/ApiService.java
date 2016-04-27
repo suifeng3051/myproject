@@ -18,7 +18,8 @@ public interface ApiService {
 
     void deleteApiRealById(Integer id);
 
-    boolean checkApi(String namespace, String method, String version);
+    boolean checkApi(String namespace, String method, String version, String env);
+
     List<Api> getAllByEnv(Byte env);
 
     List<Api> getbyGroupIdAndEnv(Integer groupid, Byte env);

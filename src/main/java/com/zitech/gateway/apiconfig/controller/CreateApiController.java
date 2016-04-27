@@ -1,9 +1,12 @@
 package com.zitech.gateway.apiconfig.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.zitech.gateway.apiconfig.model.Group;
 import com.zitech.gateway.apiconfig.service.AdminService;
+import com.zitech.gateway.apiconfig.service.ApiService;
 import com.zitech.gateway.apiconfig.service.GroupService;
 import com.zitech.gateway.cache.RedisOperate;
+import com.zitech.gateway.common.ApiResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +37,8 @@ public class CreateApiController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private ApiService apiService;
 
 
     @RequestMapping("/createapi")
@@ -135,4 +141,32 @@ public class CreateApiController {
         results.put("group", group);
         return new ModelAndView("createapi", "results", results);
     }
+
+    /**
+     * 查询method映射是否存在
+     * @param namespace API命名空间
+     * @param name API名字
+     * @param version API版本
+     * @param env 环境，1：开发环境，2：测试，3：生产
+     * @return 有映射返回success，没有映射返回fail
+     */
+    @RequestMapping(value = "/checkapi", produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String checkApiMethodMapping(@RequestParam("namespace") String  namespace,
+                                        @RequestParam("name") String name,
+                                        @RequestParam("version")  String version,
+                                        @RequestParam("env") String env) {
+
+        ApiResult<String> apiResult = new ApiResult<>(0,"success");
+
+        if(!apiService.checkApi(namespace,name,version,env)){
+            apiResult.setCode(1);
+            apiResult.setMessage("fail");
+        }
+
+        return apiResult.toString();
+    }
+
+
+
 }

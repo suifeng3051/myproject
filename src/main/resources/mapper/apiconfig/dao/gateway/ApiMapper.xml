@@ -33,6 +33,15 @@
         from t_api_n
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <select id="findApiForCheck" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from t_api_n
+        where namespace = #{nameSpace,jdbcType=VARCHAR} and method = #{method,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and env = #{env,jdbcType=INTEGER}
+    </select>
+
+
     <select id="getAllApiByEnv" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

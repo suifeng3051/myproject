@@ -500,8 +500,9 @@ $(document).ready(function(){
             $("#apiInfo").addClass("alert-danger");
             return;
         }
-        $.post("getapi", {"namespace":apiNamespace, "name":apiName, "version":apiVersion, "env": getEnv()}, function (d) {
-            if("fail" == d) {
+        $.post("checkapi", {"namespace":apiNamespace, "name":apiName, "version":apiVersion, "env": getEnv()}, function (d) {
+
+            if("success" == d.message) {
                 $("#apiInfo").html("<p>当前不存在此API，请继续配置</p>");
                 $("#apiInfo").css("display","block");
 
