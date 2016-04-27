@@ -23,10 +23,10 @@ public class ContextPipe extends AbstractPipe {
     @Autowired
     private ClientCache clientCache;
 
-    public void onEvent(RequestEvent event) {
+    public void onEvent(RequestEvent event) throws Exception {
 
         AccessToken token = event.getAccessToken();
-        Client client = clientCache.get(event.getId(), token.getClientId());
+        Client client = clientCache.get(token.getClientId());
 
         Map<String, String> contextMap = event.getContextMap();
         contextMap.put(Constants.PARAMS_ACCESS_TOKEN, token.getAccessToken());

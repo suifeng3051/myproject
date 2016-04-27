@@ -49,7 +49,7 @@ public class ServePipe extends AbstractPipe {
     @Override
     public void onEvent(RequestEvent event) throws Exception {
 
-        Serve serve = serveCache.get(event.getId(), event.getApi().getId());
+        Serve serve = serveCache.get(event.getApi().getId());
         String url = serve.getUrl();
         if (!url.endsWith("/")) {
             url = url + "/";

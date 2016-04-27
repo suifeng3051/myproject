@@ -20,10 +20,10 @@ public class ValidatePipe extends AbstractPipe {
     @Autowired
     private ParamCache paramCache;
 
-    public void onEvent(RequestEvent event) {
+    public void onEvent(RequestEvent event) throws Exception {
 
         String body = event.getBody();
-        Param param = paramCache.get(event.getId(), event.getApi().getId());
+        Param param = paramCache.get(event.getApi().getId());
         ParamHelper.validate(body, param);
     }
 }

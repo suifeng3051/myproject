@@ -33,7 +33,7 @@ public class TokenPipe extends AbstractPipe {
     private GroupCache groupCache;
 
     @Override
-    public void onEvent(RequestEvent event) {
+    public void onEvent(RequestEvent event) throws Exception {
 
         AccessToken accessToken = event.getAccessToken();
 
@@ -43,14 +43,14 @@ public class TokenPipe extends AbstractPipe {
         }
 
         String clientId = accessToken.getClientId();
-        Client client = clientCache.get(event.getId(), clientId);
+        Client client = clientCache.get(clientId);
         if (client == null) {
             throw new TokenValidateException(OAuthConstants.OAuthResponse.INVALID_CLIENT_NO,
                     OAuthConstants.OAuthDescription.INVALID_CLIENT_DESCRIPTION);
         }
 
         Api api = event.getApi();
-        Group group = groupCache.get(event.getId(), api.getGroupId());
+        Group group = groupCache.get(api.getGroupId());
 
         Set<String> scopes = OAuthUtils.decodeScopes(accessToken.getScope());
         for (String scope : scopes) {

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
@@ -27,34 +28,16 @@ public class AccessTokenCache implements ILocalCache {
     @Autowired
     private OAuthServiceImpl oAuthService;
 
-    @Autowired
-    private AccessTokenService openOauthAccessTokensService;
-
     private Cache<String, AccessToken> cache = CacheBuilder.newBuilder().maximumSize(100000).
             expireAfterWrite(30, TimeUnit.MINUTES).build();
 
-    public AccessToken get(UUID eventId, String accessToken) throws TokenValidateException {
-        AccessToken openOauthAccessTokens = null;
-        try {
-            openOauthAccessTokens = cache.get(accessToken, () -> oAuthService.getAccessToken(accessToken));
-        } catch (Exception e) {
-            throw new TokenValidateException(OAuthConstants.OAuthResponse.NO_OR_EXPIRED_TOKEN,
-                    OAuthConstants.OAuthDescription.INVALID_TOKEN);
-        }
-        return openOauthAccessTokens;
+    public AccessToken get(String accessToken) throws Exception {
+        return cache.get(accessToken, () -> oAuthService.getAccessToken(accessToken));
     }
 
     @Override
     public void load() {
-
-        /***access token need not load***/
-
-        /*List<OpenOauthAccessTokens> list = openOauthAccessTokensService.selectValidToken();
-        if (null != list && list.size() > 0) {
-            for (OpenOauthAccessTokens token : list) {
-                get(null, token.getAccessToken());
-            }
-        }*/
+        //nothing
     }
 
     @Override

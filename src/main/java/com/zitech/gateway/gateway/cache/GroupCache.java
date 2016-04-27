@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @Component
 @LocalCache("group")
@@ -26,26 +27,17 @@ public class GroupCache implements ILocalCache {
     @Autowired
     private GroupService groupService;
 
-    @Autowired
-    private AppConfig appConfig;
-
     private Cache<String, Group> cache = CacheBuilder.newBuilder().maximumSize(10000).build();
 
-    public Group get(UUID eventId, Integer groupId) {
-        Group group = null;
-        try {
-            group = cache.get(String.valueOf(groupId), () -> groupService.getById(groupId));
-        } catch (Exception e) {
-            logger.error("error when getting cache: {}", eventId, e);
-        }
-        return group;
+    public Group get(Integer groupId) throws Exception {
+        return cache.get(String.valueOf(groupId), () -> groupService.getById(groupId));
     }
 
     @Override
-    public void load() {
+    public void load() throws Exception {
         List<Group> groupList = groupService.getAll();
         for (Group group : groupList) {
-            get(null, group.getId());
+            get(group.getId());
         }
     }
 

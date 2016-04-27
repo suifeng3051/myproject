@@ -28,14 +28,14 @@ public class ParsePipe extends AbstractPipe {
     @Autowired
     private ApiCache apiCache;
 
-    public void onEvent(RequestEvent event) {
+    public void onEvent(RequestEvent event) throws Exception {
 
         HttpServletRequest request = event.getRequest();
 
         String tokenStr = request.getParameter(Constants.ACCESS_TOKEN);
 
-        AccessToken token = tokenCache.get(event.getId(), tokenStr);
-        Api api = apiCache.get(event.getId(), event.getNamespace(), event.getMethod(), event.getVersion());
+        AccessToken token = tokenCache.get(tokenStr);
+        Api api = apiCache.get(event.getNamespace(), event.getMethod(), event.getVersion());
         String ip = IPUtil.getIp(request);
 
         event.setAccessToken(token);

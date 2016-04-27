@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @LocalCache("client")
@@ -29,21 +30,15 @@ public class ClientCache implements ILocalCache {
 
     private Cache<String, Client> cache = CacheBuilder.newBuilder().maximumSize(10000).build();
 
-    public Client get(UUID eventId, String clientId) {
-        Client clients = null;
-        try {
-            clients = cache.get(clientId, () -> oAuthService.getClientByClientId(clientId));
-        } catch (Exception e) {
-            logger.error("error when getting cache: {}", eventId, e);
-        }
-        return clients;
+    public Client get(String clientId) throws Exception {
+        return cache.get(clientId, () -> oAuthService.getClientByClientId(clientId));
     }
 
     @Override
-    public void load() {
+    public void load() throws Exception {
         List<String> clientIdList = clientsService.getClientIdList();
         for (String clientId : clientIdList) {
-            get(null, clientId);
+            get(clientId);
         }
     }
 

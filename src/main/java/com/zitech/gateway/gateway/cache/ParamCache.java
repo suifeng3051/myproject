@@ -31,27 +31,21 @@ public class ParamCache implements ILocalCache {
 
     private Cache<String, Param> cache = CacheBuilder.newBuilder().maximumSize(10000).build();
 
-    public Param get(UUID eventId, Integer apiId) {
-        Param param = null;
-        try {
-            param = cache.get(String.valueOf(apiId), () -> {
-                com.zitech.gateway.apiconfig.model.Param p = paramService.getByApiId(apiId);
-                if(p == null)
-                    throw new ParamException(5209, "no param struct");
+    public Param get(Integer apiId) throws Exception {
+        return cache.get(String.valueOf(apiId), () -> {
+            com.zitech.gateway.apiconfig.model.Param p = paramService.getByApiId(apiId);
+            if(p == null)
+                throw new ParamException(5209, "no param struct");
 
-                return ParamHelper.buildTree(p.getRequestStructure());
-            });
-        } catch (Exception e) {
-            logger.error("error when getting cache: {}", eventId, e);
-        }
-        return param;
+            return ParamHelper.buildTree(p.getRequestStructure());
+        });
     }
 
     @Override
-    public void load() {
+    public void load() throws Exception {
         List<com.zitech.gateway.apiconfig.model.Param> paramList = paramService.getAll();
         for (com.zitech.gateway.apiconfig.model.Param param : paramList) {
-            this.get(null, param.getApiId());
+            this.get(param.getApiId());
         }
     }
 

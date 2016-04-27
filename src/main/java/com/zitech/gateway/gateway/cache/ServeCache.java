@@ -30,21 +30,15 @@ public class ServeCache implements ILocalCache {
 
     private Cache<String, Serve> cache = CacheBuilder.newBuilder().maximumSize(10000).build();
 
-    public Serve get(UUID eventId, Integer apiId) {
-        Serve serve = null;
-        try {
-            serve = cache.get(String.valueOf(apiId), () -> serveService.getByApiId(apiId));
-        } catch (Exception e) {
-            logger.error("error when getting cache: {}", eventId, e);
-        }
-        return serve;
+    public Serve get(Integer apiId) throws Exception {
+        return cache.get(String.valueOf(apiId), () -> serveService.getByApiId(apiId));
     }
 
     @Override
-    public void load() {
+    public void load() throws Exception {
         List<Serve> serveList = serveService.getAll(appConfig.env);
         for (Serve serve : serveList) {
-            get(null, serve.getApiId());
+            get(serve.getApiId());
         }
     }
 
