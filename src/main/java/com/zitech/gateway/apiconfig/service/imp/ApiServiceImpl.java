@@ -64,6 +64,18 @@ public class ApiServiceImpl implements ApiService {
      }
 
     @Override
+    public Api getApi(String namespace, String method, String version, String env) {
+        Map<String,Object> paraMap = new HashMap<>();
+        paraMap.put("nameSpace",namespace);
+        paraMap.put("method",method);
+        paraMap.put("version",version);
+        paraMap.put("env",env);
+
+        return  apiDAO.findApiForCheck(paraMap);
+
+    }
+
+    @Override
     public List<Api> getAllByEnv(Byte env) {
         return apiDAO.getAllApiByEnv(env);
     }

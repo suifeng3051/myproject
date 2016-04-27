@@ -7,6 +7,7 @@
         <result column="namespace" property="namespace" jdbcType="VARCHAR"/>
         <result column="method" property="method" jdbcType="VARCHAR"/>
         <result column="version" property="version" jdbcType="INTEGER"/>
+        <result column="avail" property="avail" jdbcType="INTEGER"/>
         <result column="group_id" property="groupId" jdbcType="INTEGER"/>
         <result column="request_type" property="requestType" jdbcType="TINYINT"/>
         <result column="frequency_control" property="frequencyControl" jdbcType="TINYINT"/>
@@ -21,7 +22,7 @@
         <result column="env" property="env" jdbcType="TINYINT"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, namespace, method, version, group_id, request_type,frequency_control, check_inner, api_description,
+        id, namespace, method, version,avail, group_id, request_type,frequency_control, check_inner, api_description,
         api_scene, result_demo, created_time, updated_id, updated_time, deleted,env
     </sql>
     <sql id="Blob_Column_List">
@@ -60,7 +61,7 @@
     </delete>
     <insert id="insert" parameterType="com.zitech.gateway.apiconfig.model.Api">
         insert into t_api_n (id, namespace, method,
-        version, group_id, request_type,frequency_control,
+        version,avail, group_id, request_type,frequency_control,
         check_inner, api_description, api_scene,
         created_time, updated_id, updated_time,
         deleted, result_demo,env)
@@ -68,6 +69,7 @@
         #{namespace,jdbcType=VARCHAR},
         #{method,jdbcType=VARCHAR},
         #{version,jdbcType=INTEGER},
+        #{avail,jdbcType=INTEGER},
         #{groupId,jdbcType=INTEGER},
         #{requestType,jdbcType=TINYINT},
         #{frequencyControl,jdbcType=TINYINT},
@@ -95,6 +97,9 @@
             </if>
             <if test="version != null">
                 version,
+            </if>
+            <if test="avail != null">
+                avail,
             </if>
             <if test="groupId != null">
                 group_id,
@@ -146,6 +151,9 @@
             <if test="version != null">
                 #{version,jdbcType=INTEGER},
             </if>
+            <if test="avail != null">
+                #{avail,jdbcType=INTEGER},
+            </if>
             <if test="groupId != null">
                 #{groupId,jdbcType=INTEGER},
             </if>
@@ -196,6 +204,9 @@
             <if test="version != null">
                 version = #{version,jdbcType=INTEGER},
             </if>
+            <if test="avail != null">
+                avail = #{avail,jdbcType=INTEGER},
+            </if>
             <if test="groupId != null">
                 group_id = #{groupId,jdbcType=INTEGER},
             </if>
@@ -240,6 +251,7 @@
         set namespace = #{namespace,jdbcType=VARCHAR},
         method = #{method,jdbcType=VARCHAR},
         version = #{version,jdbcType=INTEGER},
+        avail = #{avail,jdbcType=INTEGER},
         group_id = #{groupId,jdbcType=INTEGER},
         request_type = #{requestType,jdbcType=TINYINT},
         frequency_control = #{frequencyControl,jdbcType=TINYINT},
@@ -259,6 +271,7 @@
         set namespace = #{namespace,jdbcType=VARCHAR},
         method = #{method,jdbcType=VARCHAR},
         version = #{version,jdbcType=INTEGER},
+        avail = #{avail,jdbcType=INTEGER},
         group_id = #{groupId,jdbcType=INTEGER},
         request_type = #{requestType,jdbcType=TINYINT},
         frequency_control = #{frequencyControl,jdbcType=TINYINT},

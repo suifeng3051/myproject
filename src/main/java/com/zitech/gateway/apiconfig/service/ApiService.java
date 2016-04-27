@@ -20,6 +20,8 @@ public interface ApiService {
 
     boolean checkApi(String namespace, String method, String version, String env);
 
+    Api getApi(String namespace,String method,String version,String env);
+
     List<Api> getAllByEnv(Byte env);
 
     List<Api> getbyGroupIdAndEnv(Integer groupid, Byte env);
