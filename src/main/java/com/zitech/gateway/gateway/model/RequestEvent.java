@@ -41,6 +41,8 @@ public class RequestEvent {
 
     private TicTac ticTac = new TicTac();
 
+    private Integer step = -1;
+
     public RequestEvent() {
     }
 
@@ -168,6 +170,14 @@ public class RequestEvent {
 
     public void setContextMap(Map<String, String> contextMap) {
         this.contextMap = contextMap;
+    }
+
+    public Integer getStep() {
+        return step;
+    }
+
+    public void setStep(Integer step) {
+        this.step = step;
     }
 
     @Override

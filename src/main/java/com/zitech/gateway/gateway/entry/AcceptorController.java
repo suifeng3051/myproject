@@ -99,6 +99,7 @@ public class AcceptorController {
         event.setMethod(method);
         event.setVersion(version);
         event.setBody(null);
+
         Pipeline.getInstance().process(event);
         logger.debug("a request has been putted to queue: " + event);
         return deferredResult;
