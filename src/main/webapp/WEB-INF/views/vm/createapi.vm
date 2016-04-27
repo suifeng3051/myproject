@@ -38,15 +38,20 @@
         <div>
             <div class="panel panel-primary" style="margin-top:20px;min-height:300px;">
                 <div class="panel-heading">
-                    <button type="button" class="btn btn-primary preStep"><span class="glyphicon glyphicon-menu-left"></span>上一步</button>
-                    <!--<span class="apiconfig">选择API类型</span>-->
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-primary preStep"><span class="glyphicon glyphicon-menu-left"></span>上一步</button>
+                    </div>
+                    <span id="step-title" class="col-sm-10">API接口信息配置 </span>
                     <!--<button type="button" class="btn btn-primary hasApi"><span class="glyphicon glyphicon-search"></span>检测API是否存在</button>-->
                     <!--<button type="button" class="btn btn-primary hasMethod"><span class="glyphicon glyphicon-search"></span>检测Method</button>-->
                     <!--<button type="button" id="searchMethodMapping" class="btn btn-primary hasMapping"><span class="glyphicon glyphicon-search"></span>检测映射是否存在</button>-->
+
+                    <div class="col-sm-1">
                     <button type="button" class="btn btn-primary nextStep" >下一步<span class="glyphicon glyphicon-menu-right"></span></button>
                     <!--<button type="button" class="btn btn-primary finalSave" flag="1" id="preview" >预览</button>-->
                     <button type="button" class="btn btn-primary finalSave save" flag="1" id="save" >保存</button>
                     <!--<button type="button" class="btn btn-primary finalSave save" flag="2" id="saveAndContinue" >保存&继续</button>-->
+                    </div>
                     <div class="clearfix"></div>
                 </div>
                 <!-- 选择配置JAVA还是PHP -->

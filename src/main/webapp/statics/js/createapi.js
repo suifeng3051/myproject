@@ -433,6 +433,14 @@ $(document).ready(function(){
 
     function changeStepTo(step){
 
+        var stepTitle = '';
+        switch(step){
+            case 1: stepTitle = 'API接口信息配置'; break;
+            case 2: stepTitle = '内部方法&方法参数配置 ';  break;
+            case 3: stepTitle = 'JSON解析与编辑';  break;
+            case 4: stepTitle = '预览';  break;
+        }
+        $('#step-title').text(stepTitle);
 
         $('.nextStep').show();
         $('#save').hide();
