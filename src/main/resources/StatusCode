@@ -51,4 +51,5 @@ Code    Message                         Data
 5206    param not object
 5207    param not array
 5208    json parse error
+5209    no param struct
 

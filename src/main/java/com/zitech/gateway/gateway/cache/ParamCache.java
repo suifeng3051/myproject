@@ -4,10 +4,10 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
 import com.zitech.gateway.AppConfig;
-import com.zitech.gateway.apiconfig.model.Api;
-import com.zitech.gateway.apiconfig.model.Param;
-import com.zitech.gateway.apiconfig.service.ApiService;
 import com.zitech.gateway.apiconfig.service.ParamService;
+import com.zitech.gateway.exception.ParamException;
+import com.zitech.gateway.param.Param;
+import com.zitech.gateway.param.ParamHelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,13 @@ public class ParamCache implements ILocalCache {
     public Param get(UUID eventId, Integer apiId) {
         Param param = null;
         try {
-            param = cache.get(String.valueOf(apiId), () -> paramService.getByApiId(apiId));
+            param = cache.get(String.valueOf(apiId), () -> {
+                com.zitech.gateway.apiconfig.model.Param p = paramService.getByApiId(apiId);
+                if(p == null)
+                    throw new ParamException(5209, "no param struct");
+
+                return ParamHelper.buildTree(p.getRequestStructure());
+            });
         } catch (Exception e) {
             logger.error("error when getting cache: {}", eventId, e);
         }
@@ -43,8 +49,8 @@ public class ParamCache implements ILocalCache {
 
     @Override
     public void load() {
-        List<Param> paramList = paramService.getAll();
-        for (Param param : paramList) {
+        List<com.zitech.gateway.apiconfig.model.Param> paramList = paramService.getAll();
+        for (com.zitech.gateway.apiconfig.model.Param param : paramList) {
             this.get(null, param.getApiId());
         }
     }

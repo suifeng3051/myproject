@@ -23,7 +23,7 @@ public class RequestEvent {
     private DeferredResult<Object> result;
     private HttpServletRequest request;
 
-    private String requestType;
+    private RequestType requestType;
 
     private AccessToken accessToken;
     private String ip;
@@ -47,7 +47,7 @@ public class RequestEvent {
     public RequestEvent(DeferredResult<Object> result, HttpServletRequest request) {
         this.result = result;
         this.request = request;
-        this.requestType = request.getMethod();
+        this.requestType = RequestType.from(request.getMethod());
     }
 
     public UUID getId() {
@@ -74,11 +74,11 @@ public class RequestEvent {
         this.request = request;
     }
 
-    public String getRequestType() {
+    public RequestType getRequestType() {
         return requestType;
     }
 
-    public void setRequestType(String requestType) {
+    public void setRequestType(RequestType requestType) {
         this.requestType = requestType;
     }
 

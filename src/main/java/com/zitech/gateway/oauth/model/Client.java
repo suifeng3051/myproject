@@ -29,22 +29,6 @@ public class Client implements Serializable {
 
     private String defaultScope;
 
-    public String getValue(String name) {
-        switch (name) {
-            case Constants.CONTEXT_CLIENT_NAME:
-                return clientName;
-            case Constants.CONTEXT_CLIENT_SECRET:
-                return clientSecret;
-            case Constants.CONTEXT_CLIENT_TYPE:
-                return clientType;
-            case Constants.CONTEXT_CLIENT_NUM:
-                return String.valueOf(clientNum);
-            case Constants.CONTEXT_CLIENT_SOURCE:
-                return clientSource;
-        }
-        return null;
-    }
-
     public Integer getId() {
         return id;
     }

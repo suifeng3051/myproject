@@ -3,8 +3,6 @@ package com.zitech.gateway.gateway.entry;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.excutor.Pipeline;
 import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.gateway.model.RequestState;
-import com.zitech.gateway.gateway.model.ValidateType;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -13,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -35,7 +34,8 @@ public class AcceptorController {
     public DeferredResult<Object> token(HttpServletRequest request,
                                         @PathVariable String namespace,
                                         @PathVariable Integer version,
-                                        @PathVariable String method) {
+                                        @PathVariable String method,
+                                        @RequestBody String body) {
         DeferredResult<Object> deferredResult = new DeferredResult<>();
 
         RequestEvent event = new RequestEvent(deferredResult, request);
@@ -60,6 +60,7 @@ public class AcceptorController {
         event.setNamespace(namespace);
         event.setMethod(method);
         event.setVersion(version);
+        event.setBody(body);
         Pipeline.getInstance().process(event);
         logger.debug("a request has been putted to queue: " + event);
         return deferredResult;

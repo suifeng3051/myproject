@@ -1,6 +1,10 @@
 package com.zitech.gateway.gateway;
 
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+
 public class Constants {
 
     // for token
@@ -23,8 +27,15 @@ public class Constants {
     public static final String CONTEXT_REQUEST_IP = "request_ip";
     public static final String CONTEXT_CLIENT_ID = "client_id";
     public static final String CONTEXT_CLIENT_NAME = "client_name";
-    public static final String CONTEXT_CLIENT_SECRET = "client_secret";
-    public static final String CONTEXT_CLIENT_TYPE = "client_type";
     public static final String CONTEXT_CLIENT_NUM = "client_num";
-    public static final String CONTEXT_CLIENT_SOURCE = "client_source";
+
+    public static Map<String, String> contextMap = new TreeMap<>();
+
+    static {
+        contextMap.put("Token", CONTEXT_ACCESS_TOKEN);
+        contextMap.put("用户ID", CONTEXT_USER_ID);
+        contextMap.put("用户IP", CONTEXT_REQUEST_IP);
+        contextMap.put("客户端ID", CONTEXT_CLIENT_ID);
+        contextMap.put("客户端名称", CONTEXT_CLIENT_NAME);
+    }
 }
