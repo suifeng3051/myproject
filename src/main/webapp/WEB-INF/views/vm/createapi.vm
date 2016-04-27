@@ -13,6 +13,7 @@
 <link href="/statics/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="/statics/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen"/>
 <link href="/statics/css/createapi.css" rel="stylesheet"/>
+<link href="/statics/css/jsoneditor.css" rel="stylesheet"/>
 <link href="/statics/images/favicon.ico"  rel="Shortcut Icon"/>
 
 </head>
@@ -26,14 +27,11 @@
 <div class="container-fluid center-content">
     <!-- 进度提示条 -->
     <div class="row">
-        <ul class="nav nav-wizard">
+        <ul class="nav nav-wizard" id="step-nav-box">
             <li step="1" class="active"><a href="#">步骤一</a></li>
             <li step="2"><a href="#">步骤二</a></li>
             <li step="3"><a href="#">步骤三</a></li>
             <li step="4"><a href="#">步骤四</a></li>
-            <li step="5"><a href="#">步骤五</a></li>
-            <li step="6"><a href="#">步骤六</a></li>
-            <li step="7" id="lastLi"><a href="#">步骤七</a></li>
         </ul>
     </div>
     <div class="row">
@@ -41,268 +39,203 @@
             <div class="panel panel-primary" style="margin-top:20px;min-height:300px;">
                 <div class="panel-heading">
                     <button type="button" class="btn btn-primary preStep"><span class="glyphicon glyphicon-menu-left"></span>上一步</button>
-                    <span class="apiconfig">选择API类型</span>
-                    <button type="button" class="btn btn-primary hasApi"><span class="glyphicon glyphicon-search"></span>检测API是否存在</button>
-                    <button type="button" class="btn btn-primary hasMethod"><span class="glyphicon glyphicon-search"></span>检测Method</button>
-                    <button type="button" id="searchMethodMapping" class="btn btn-primary hasMapping"><span class="glyphicon glyphicon-search"></span>检测映射是否存在</button>
+                    <!--<span class="apiconfig">选择API类型</span>-->
+                    <!--<button type="button" class="btn btn-primary hasApi"><span class="glyphicon glyphicon-search"></span>检测API是否存在</button>-->
+                    <!--<button type="button" class="btn btn-primary hasMethod"><span class="glyphicon glyphicon-search"></span>检测Method</button>-->
+                    <!--<button type="button" id="searchMethodMapping" class="btn btn-primary hasMapping"><span class="glyphicon glyphicon-search"></span>检测映射是否存在</button>-->
                     <button type="button" class="btn btn-primary nextStep" >下一步<span class="glyphicon glyphicon-menu-right"></span></button>
-                    <button type="button" class="btn btn-primary finalSave" flag="1" id="preview" >预览</button>
+                    <!--<button type="button" class="btn btn-primary finalSave" flag="1" id="preview" >预览</button>-->
                     <button type="button" class="btn btn-primary finalSave save" flag="1" id="save" >保存</button>
-                    <button type="button" class="btn btn-primary finalSave save" flag="2" id="saveAndContinue" >保存&继续</button>
+                    <!--<button type="button" class="btn btn-primary finalSave save" flag="2" id="saveAndContinue" >保存&继续</button>-->
+                    <div class="clearfix"></div>
                 </div>
                 <!-- 选择配置JAVA还是PHP -->
-                <div class="page-header cut">
-                    <h3><small>1. API服务类型</small></h3>
-                </div>
-                <form class="form-inline apiType" id="apiType">
-                    <div class="form-group">
+                <!--<div class="page-header cut">-->
+                    <!--<h3><small>1. API服务类型</small></h3>-->
+                <!--</div>-->
+                <!--<form class="form-inline apiType" id="apiType">-->
+                    <!--<div class="form-group">-->
+
+                        <!--
+
                         #if(2 == $!results.get('apiType'))
                             #if(0 == $!results.get('edit'))
-                                <!-- 
-                                <input type="radio" class="apiTypeLi" flag="JAVA" name="apiType" value="1"   />
-                                <label><p class="text-primary">Dubbo</p></label> -->
                                 <input type="radio" class="apiTypeLi" flag="PHP" name="apiType" value="2" checked/>
                                 <label><p class="text-primary">JAVA</p></label>
                             #else
-                            	<!-- 
-                                <input type="radio" class="apiTypeLi" flag="JAVA" name="apiType" value="1"   disabled/>
-                                <label><p class="text-primary">Dubbo</p></label>-->
                                 <input type="radio" class="apiTypeLi" flag="PHP" name="apiType" value="2" checked disabled/>
                                 <label><p class="text-primary">JAVA</p></label>
                             #end
                         #else
                             #if(0 == $!results.get('edit'))
-                            	<!-- 
-                                <input type="radio" class="apiTypeLi" flag="JAVA" name="apiType" value="1"  checked />
-                                <label><p class="text-primary ">Dubbo</p></label>-->
                                 <input type="radio" class="apiTypeLi" flag="PHP" name="apiType" value="2" />
                                 <label><p class="text-primary">JAVA</p></label>
                             #else
-                            	<!-- 
-                                <input type="radio" class="apiTypeLi" flag="JAVA" name="apiType" value="1"  checked disabled/>
-                                <label><p class="text-primary ">Dubbo</p></label>-->
                                 <input type="radio" class="apiTypeLi" flag="PHP" name="apiType" value="2" disabled/>
                                 <label><p class="text-primary">JAVA</p></label>
                             #end
                         #end
+                        -->
 
-                    </div>
-                </form>
-                <div class="page-header cut">
-                    <h3><small>2. API接口配置信息</small></h3>
-                </div>
+                        <!--<label class="control-label" style="margin-right:50px;">-->
+                            <!--<input type="radio"  name="apiType" value="post" checked="checked" /> POST-->
+                        <!--</label>-->
+                        <!--<label class="control-label">-->
+                            <!--<input type="radio"  name="apiType" value="post"/> GET-->
+                        <!--</label>-->
+
+                    <!--</div>-->
+                <!--</form>-->
+                <!--<div class="page-header cut">-->
+                    <!--<h3><small>2. API接口配置信息</small></h3>-->
+                <!--</div>-->
+
+
+
+                <div id="apiconfig-box">
                 <!-- 1. API接口配置 -->
-                <div class="apiconfig1">
+                <div class="apiconfig1 active">
                     <div class="panel-body">
-                        <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="apiInfo"></div>
+                        <div class="alert alert-danger" role="alert" style="display:none;" id="apiInfo"></div>
                         <form class="form-horizontal" id="apiInterfaceConfig">
                             <div class="form-group">
-                                <label for="namespace" class="col-sm-2 control-label">namespace</label>
+                                <label for="namespace" class="col-sm-4 control-label">namespace</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control required" name="namespace" id="namespace" placeholder="namespace" value="$!results.get('api').namespace">
                                 </div>
+                                <button class="btn hasApi">检测</button>
                             </div>
                             <div class="form-group">
-                                <label for="name" class="col-sm-2 control-label">method</label>
+                                <label for="name" class="col-sm-4 control-label">method</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control required" id="name" name="name" placeholder="method" value="$!results.get('api').name">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="version" class="col-sm-2 control-label">version</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control required"  name="version" id="version" placeholder="version(example:1.0)" value="$!results.get('api').version">
-                                </div>
-                                <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="margin-top:10px;" class="needTip" data-toggle="tooltip" data-placement="top" title="版本号格式x.x.x"></span>
-                            </div>
-                            <div class="form-group" id="appNameContent">
-                                <label for="appName" class="col-sm-2 control-label">APP Name</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" name="appName" id="appName" placeholder="appName" value="$!results.get('api').appName">
-                                </div>
-                            </div>
+
 
                             <div class="form-group">
-                                <label for="isLog" class="col-sm-2 control-label">开启日志</label>
-                                <div class="col-sm-6">
-                                    <select id="isLog" name="isLog" class="form-control" >#if(1 == $!results.get('api').enableLog)<option value="1" selected>是</option><option value="0">否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="isFreq" class="col-sm-2 control-label">频率控制</label>
-                                <div class="col-sm-6">
-                                    <select id="isFreq" name="isFreq" class="form-control" >#if(1 == $!results.get('api').enableFreq)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="isInnerOuter" class="col-sm-2 control-label">区分内外请求</label>
-                                <div class="col-sm-6">
-                                    <select id="isInnerOuter" name="isInnerOuter" class="form-control" >#if(1 == $!results.get('api').enableInnerOut)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="requestType" class="col-sm-2 control-label">请求方式</label>
+                                <label for="requestType" class="col-sm-4 control-label">请求方式</label>
                                 #set($!apiID=$!results.get('api').id)
                                 <div class="col-sm-6">
                                     <select id="requestType" name="requestType" class="form-control" >#if(1 == $!results.get('api').requestType)<option value="1" selected>POST</option><option value="0" >GET</option>#else<option value="1" >POST</option><option value="0" selected>GET</option>#end</select> #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="0" > #end
                                 </div>
                             </div>
+
                             <div class="form-group">
-                                <label for="apiGroup" class="col-sm-2 control-label">API分类</label>
+                                <label for="version" class="col-sm-4 control-label">version</label>
+                                <div class="col-sm-6">
+                                    <!--<input type="text" class="form-control required"  name="version" id="version" placeholder="version(example:1.0)" value="$!results.get('api').version">-->
+                                    <select name="version" class="form-control" id="version">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                                <!--<span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="margin-top:10px;" class="needTip" data-toggle="tooltip" data-placement="top" title="版本号格式x.x.x"></span>-->
+                            </div>
+
+
+                            <!--<div class="form-group" id="appNameContent">-->
+                                <!--<label for="appName" class="col-sm-4 control-label">APP Name</label>-->
+                                <!--<div class="col-sm-6">-->
+                                    <!--<input type="text" class="form-control" name="appName" id="appName" placeholder="appName" value="$!results.get('api').appName">-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                            <!--<div class="form-group">-->
+                                <!--<label for="isLog" class="col-sm-4 control-label">开启日志</label>-->
+                                <!--<div class="col-sm-6">-->
+                                    <!--<select id="isLog" name="isLog" class="form-control" >#if(1 == $!results.get('api').enableLog)<option value="1" selected>是</option><option value="0">否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+
+                            <div class="form-group">
+                                <label for="apiGroup" class="col-sm-4 control-label">API分组</label>
                                 #set($!apiID=$!results.get('api').id)
                                 <div class="col-sm-6">
                                     <select id="apiGroup" name="apiGroup" class="form-control" >
                                         #foreach ($!group in $!results.get("grouplist"))
-                                            #if($!group.alias == $!results.get('api').apiGroup)
-                                                <option value="$!group.alias" selected>$!group.name</option>
-                                            #else
-                                                #if($!results.get('group') != "all" && $!group.alias == $!results.get('group'))
-                                                    <option value="$!group.alias" selected>$!group.name</option>
-                                                #else
-                                                    <option value="$!group.alias">$!group.name</option>
-                                                #end
-                                            #end
+                                        #if($!group.alias == $!results.get('api').apiGroup)
+                                        <option value="$!group.alias" selected>$!group.name</option>
+                                        #else
+                                        #if($!results.get('group') != "all" && $!group.alias == $!results.get('group'))
+                                        <option value="$!group.alias" selected>$!group.name</option>
+                                        #else
+                                        <option value="$!group.alias">$!group.name</option>
+                                        #end
+                                        #end
                                         #end
 
                                     </select>
                                 </div>
                             </div>
+
                             <div class="form-group">
-                                <label for="sessionFlag" class="col-sm-2 control-label">需要登录态</label>
-                                #set($!apiID=$!results.get('api').id)
+                                <label for="isFreq" class="col-sm-4 control-label">频率控制</label>
                                 <div class="col-sm-6">
-                                    <select id="sessionFlag" name="sessionFlag" class="form-control" >
-                                        #if(1 == $!results.get('api').sessionFlag)
-                                            <option value="1" selected>是</option>
-                                            <option value="0" >否</option>
-                                        #else
-                                            <option value="1" >是</option>
-                                            <option value="0" selected>否</option>
-                                        #end
-                                    </select>
+                                    <select id="isFreq" name="isFreq" class="form-control" >#if(1 == $!results.get('api').enableFreq)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="describle" class="col-sm-2 control-label">功能描述</label>
+                                <label for="isInnerOuter" class="col-sm-4 control-label">区分内外请求</label>
+                                <div class="col-sm-6">
+                                    <select id="isInnerOuter" name="isInnerOuter" class="form-control" >#if(1 == $!results.get('api').enableInnerOut)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
+                                </div>
+                            </div>
+
+                            <!--<div class="form-group">-->
+                                <!--<label for="sessionFlag" class="col-sm-4 control-label">需要登录态</label>-->
+                                <!--#set($!apiID=$!results.get('api').id)-->
+                                <!--<div class="col-sm-6">-->
+                                    <!--<select id="sessionFlag" name="sessionFlag" class="form-control" >-->
+                                        <!--#if(1 == $!results.get('api').sessionFlag)-->
+                                            <!--<option value="1" selected>是</option>-->
+                                            <!--<option value="0" >否</option>-->
+                                        <!--#else-->
+                                            <!--<option value="1" >是</option>-->
+                                            <!--<option value="0" selected>否</option>-->
+                                        <!--#end-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                            <div class="form-group">
+                                <label for="describle" class="col-sm-4 control-label">功能描述</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control required" id="describle" name="describle" placeholder="API简要功能描述" value="$!results.get('api').apiDesc">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <!--<label for="scenarios" class="col-sm-2 control-label">使用场景</label>-->
-                                <div class="col-sm-2" style="text-align: right;">使用场景</div>
+                                <!--<label for="scenarios" class="col-sm-4 control-label">使用场景</label>-->
+                                <div class="col-sm-4" style="text-align: right;">使用场景</div>
                                 <div class="col-sm-6">
                                     <textarea  rows="3" class="form-control required" id="scenarios" name="scenarios" placeholder="API使用场景" >$!results.get('api').apiScenarios</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <!--<label for="resultDemo" class="col-sm-2 control-label">示例</label>-->
-                                <div class="col-sm-2" style="text-align: right;">示例</div>
+                                <!--<label for="resultDemo" class="col-sm-4 control-label">示例</label>-->
+                                <div class="col-sm-4" style="text-align: right;">结果示例</div>
                                 <div class="col-sm-6">
                                     <script type="text/javascript">
-                                    document.write('<textarea  rows="20" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API示例" >');
+                                    document.write('<textarea  rows="20" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API结果示例" >');
 
-                                             document.write(decodeURI("$!results.get('api').resultDemo"));
+                                         document.write(decodeURI("$!results.get('api').resultDemo"));
 
-                                        document.write('</textarea>');
+                                    document.write('</textarea>');
                                     </script>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-                <!-- 2. API 参数配置 -->
-                <div class="page-header cut">
-                    <h3><small>3. API参数配置信息</small></h3>
-                </div>
-                <div class="apiconfig2">
-                    <div class="alert alert-danger" role="alert" style="margin-bottom: -1px;display:none;" id="apiParamInfo"></div>
-                    <table id="carmenParam" class="table table-striped table-bordered" >
-                        <thead>
-                        <tr>
-                            <th>参数名</th>
-                            <th>类型</th>
-                            <th>注释</th>
-                            <th>必填</th>
-                            <th>校验规则</th>
-                            <th>基本类型</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody id="carmenParamBody">
-                        #foreach ($!item in $!results.get("apiParamList"))
-                            <tr>
-                                <td>
-                                    <input style="max-width:160px;" type="text"  name="apiParamName" value="$!item.paramName">
-                                </td>
-                                <td>
-                                    <!--<input style="max-width:160px;" type="text"  name="apiParamType" value="$!item.paramType">-->
-                                    <select style="max-width:150px;max-height: 25px;"  name="apiParamType" class="form-control apiParamType" >
-                                        #if("Number" == $!item.paramType || "number" == $!item.paramType)
-                                        <option value="Number" selected>Number</option>
-                                        #else
-                                        <option value="Number" >Number</option>
-                                        #end
-                                        #if("String" == $!item.paramType || "string" == $!item.paramType)
-                                        <option value="String" selected>String</option>
-                                        #else
-                                        <option value="String" >String</option>
-                                        #end
-                                        #if("Price" == $!item.paramType || "price" == $!item.paramType)
-                                        <option value="Price" selected>Price</option>
-                                        #else
-                                        <option value="Price" >Price</option>
-                                        #end
-                                        #if("Boolean" == $!item.paramType || "boolean" == $!item.paramType)
-                                        <option value="Boolean" selected>Boolean</option>
-                                        #else
-                                        <option value="Boolean" >Boolean</option>
-                                        #end
-                                        #if("Date" == $!item.paramType || "date" == $!item.paramType)
-                                        <option value="Date" selected>Date</option>
-                                        #else
-                                        <option value="Date" >Date</option>
-                                        #end
-                                        #if("byte[]" == $!item.paramType)
-                                        <option value="byte[]" selected>byte[]</option>
-                                        #else
-                                        <option value="byte[]" >byte[]</option>
-                                        #end
 
-                                    </select>
-                                </td>
-                                <td>
-                                    <input style="max-width:100px;" type="text"  name="describle" value="$!item.describle">
-                                </td>
-                                <td>
-                                    <select style="min-width:50px;max-height: 25px;"  name="apiIsRequired" class="form-control" >#if(1 == $!item.isRequired)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
-                                </td>
-                                <td>
-                                    <input style="max-width:140px;" type="text"  name="rule" value="$!item.rule">
-                                </td>
-                                <td>
-                                    <select style="min-width:50px;max-height: 25px;"  name="apiIsStructure" class="form-control" >#if(0 == $!item.isStructure)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
-                                    <input type="hidden" name="currentId" value="$!item.id" >
-                                    <input type="hidden" name="currentSequence" value="$!item.sequence" >
-                                </td>
-                                <td>
-                                    <a href="#" class="needTip" data-toggle="tooltip" data-placement="top" title="编辑" style="margin-left:5px;display:none;" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span></a><a href="#" class="needTip deleteCurrentRow" flag="step2" apiIdValue="$!item.id" data-toggle="tooltip" data-placement="top" title="删除当前行" style="margin-left:5px;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                                </td>
-                            </tr>
-                        #end
-                        </tbody>
-                    </table>
-                    <div style="min-height:35px;">
-                        <button type="button" id="addRow_carmenParam" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span>新增行</button>
-                        <button type="button" id="batchAdd"  class="btn btn-default" style="margin-left:10px;float:right;margin-right:10px;">批量新增</button>
-                    </div>
+                <!-- 2. API 参数配置 （已去掉） -->
 
-                </div>
+                <!-- 2. 方法&参数配置 -->
 
-                <!-- 3. 方法&参数配置 -->
-                <div class="page-header cut">
-                    <h3><small>4. 内部方法&参数配置信息</small></h3>
-                </div>
                 <div class="methodconfig">
                     <div class="panel-body">
                         <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="apiMethodInfo"></div>
@@ -375,280 +308,74 @@
                     </div>
 
                 </div>
-                <!-- 4. 结构配置 -->
-                <div class="page-header cut " id="previewStep5">
-                    <h3><small>5. 结构配置信息</small></h3>
-                </div>
-                <div class="structureconfig">
-                    <div class="alert alert-danger" role="alert" style="margin-bottom: -1px;display:none;" id="apiStructureInfo"></div>
-                    <table id="carmenStructure" class="table table-striped table-bordered">
-                        <thead>
-                        <tr>
-                            <th>类名</th>
-                            <th>属性名</th>
-                            <th>属性类型</th>
-                            <th>基本类型</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody id="carmenStructureBody">
-                        #foreach ($!structure in $!results.get("structure"))
-                            <tr>
-                                <td><input style="max-width:160px;" type="text"  name="apiParamName" value="$!structure.className"></td>
-                                <td><input style="max-width:160px;" type="text"  name="apiParamType" value="$!structure.fieldName"></td>
-                                <td><input style="max-width:160px;" type="text"  name="sequence" value="$!structure.fieldType"></td>
-                                <td><select style="min-width:50px;max-height: 25px;"  name="apiIsStructure" class="form-control" >#if(1==$!structure.isStructure)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select><input type="hidden" name="currentId" value="$!structure.id"></td>
-                                <td>
-                                    <a href="#" class="needTip" data-toggle="tooltip" data-placement="top" title="编辑" style="margin-left:5px;display:none;" >
-                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span>
-                                    </a>
-                                    <a href="#" class="needTip deleteCurrentRow" flag="step5" apiIdValue="$!structure.id" data-toggle="tooltip" data-placement="top" title="删除当前行" style="margin-left:5px;">
-                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                    </a>
-                                </td>
-                            </tr>
-                        #end
-                        </tbody>
-                    </table>
-                    <div style="min-height:35px;">
-                        <button type="button" id="addRow_carmenStructure" class="btn btn-primary" style="margin-left:10px;"><span class="glyphicon glyphicon-plus"></span>新增行</button>
-                    </div>
 
-                </div>
 
-                <!-- 5. 方法映射 -->
-                <div class="page-header cut">
-                    <h3><small><span id="previewStep6">6</span>. 方法映射</small></h3>
-                </div>
-                <div class="methodmappingconfig" methodMapping="$!results.get('methodMapping').id">
+                <!-- 3. JSON 解析与编辑（POST方法） -->
+                <div class="json-parse">
                     <div class="panel-body">
-                        <form class="form-inline">
-                            <div class="form-group">
-                                <label for="namespaceMethodMappingApi">API Service: </label>
-                                <!--<input type="text" class="form-control" id="namespaceMethodMappingApi" placeholder="api_namespace">-->
-                                <p class="form-control-static" id="namespaceMethodMappingApi"></p>
-                            </div>
-                            <div class="form-group" style="display:none;">
-                                <label for="nameMethodMappingApi">method: </label>
-                                <!--<input type="text" class="form-control" id="nameMethodMappingApi" placeholder="api_method">-->
-                                <p class="form-control-static" id="nameMethodMappingApi"></p>
-                            </div>
-                            <div class="form-group" style="display:none;">
-                                <label for="versionMethodMappingApi">version: </label>
-                                <p class="form-control-static" id="versionMethodMappingApi"></p>
-                                <!--<input type="text" class="form-control" id="versionMethodMappingApi" placeholder="api_version">-->
-                            </div>
-                        </form>
-                        <form class="form-inline" style="margin-top:6px;">
-                            <div class="form-group">
-                                <label for="namespaceMethodMapping">Inner Service: </label>
-                                <p class="form-control-static" id="namespaceMethodMapping"></p>
-                                <!--<input type="text" class="form-control" id="namespaceMethodMapping" placeholder="serviceName">-->
-                            </div>
-                            <div class="form-group" style="display:none;">
-                                <label for="nameMethodMapping">method: </label>
-                                <p class="form-control-static" id="nameMethodMapping"></p>
-                                <!--<input type="text" class="form-control" id="nameMethodMapping" placeholder="method">-->
-                            </div>
-                            <div class="form-group" style="display:none;">
-                                <label for="versionMethodMapping">version: </label>
-                                <p class="form-control-static" id="versionMethodMapping"></p>
-                                <!--<input type="text" class="form-control" id="versionMethodMapping" placeholder="version">-->
-                            </div>
-                        </form>
-                    </div>
-                    <div class="alert alert-danger" role="alert" style="margin-bottom: -1px;display:none;" id="apiMethodMappingInfo"></div>
-                </div>
+                        <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="jsonParseInfo"></div>
+                        JSON 解析与编辑
 
-                <!-- 参数映射配置 -->
-                <div class="page-header cut">
-                    <h3><small><span id="previewStep7">7</span>. 参数映射配置信息</small></h3>
-                </div>
-                <div class="parammappingconfig">
-                    <div class="alert alert-danger" role="alert" style="margin-bottom: -1px;display:none;height:100px;overflow:auto;" id="apiParamMappingInfo"></div>
-                    <table id="carmenParamMapping" class="table table-striped table-bordered">
-                        <thead>
-                        <tr>
-                            <th>参数来源</th>
-                            <th id="fieldTitle">参数名</th>
-                            <th id="fieldType">参数类型</th>
-                            <th>api参数名</th>
-                            <th>方法参数映射</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody id="carmenParamMappingBody">
-                        #foreach($!paramMapping in $!results.get('paramMapping'))
-                            <tr>
-                                <td>
-                                    <select style="min-width:50px;max-height: 25px;" id="dataFrom" name="dateFrom" class="form-control" >
-                                    #if("OUTER"==$!paramMapping.dataFrom.name())
-                                        <option value="OUTER" selected>API参数</option>
-                                        <option value="INNER" >内部参数</option>
-                                        <option value="FREE" >自定义参数</option>
-                                    #elseif("INNER"==$!paramMapping.dataFrom.name())
-                                        <option value="OUTER" >API参数</option>
-                                        <option value="INNER" selected>内部参数</option>
-                                        <option value="FREE" >自定义参数</option>
-                                    #else
-                                        <option value="OUTER" >API参数</option>
-                                        <option value="INNER" >内部参数</option>
-                                        <option value="FREE" selected>自定义参数</option>
-                                    #end
-                                    </select>
-                                </td>
-                                <td>
-                                    #if("INNER"==$!paramMapping.dataFrom.name())
-                                        <select id="innerParam" style="max-width:150px;max-height: 25px;" name="innerParam" class="form-control innerParam" >
-                                            #if("user_id" == $!paramMapping.fieldName)
-                                                <option value="user_id" selected>user_id</option>
-                                            #else
-                                                <option value="user_id" >user_id</option>
-                                            #end
-                                            #if("client_id" == $!paramMapping.fieldName)
-                                                <option value="client_id" selected>client_id</option>
-                                            #else
-                                                <option value="client_id" >client_id</option>
-                                            #end
-                                            #if("client_name" == $!paramMapping.fieldName)
-                                                <option value="client_name" selected>client_name</option>
-                                            #else
-                                                <option value="client_name" >client_name</option>
-                                            #end
-                                            #if("client_secret" == $!paramMapping.fieldName)
-                                                <option value="client_secret" selected>client_secret</option>
-                                            #else
-                                                <option value="client_secret" >client_secret</option>
-                                            #end
-                                            #if("client_source" == $!paramMapping.fieldName)
-                                                <option value="client_source" selected>client_source</option>
-                                            #else
-                                                <option value="client_source" >client_source</option>
-                                            #end
-                                            #if("client_num" == $!paramMapping.fieldName)
-                                                <option value="client_num" selected>client_num</option>
-                                            #else
-                                                <option value="client_num" >client_num</option>
-                                            #end
-                                            #if("client_type" == $!paramMapping.fieldName)
-                                                <option value="client_type" selected>client_type</option>
-                                            #else
-                                                <option value="client_type" >client_type</option>
-                                            #end
-                                            #if("access_token" == $!paramMapping.fieldName)
-                                                <option value="access_token" selected>access_token</option>
-                                            #else
-                                                <option value="access_token" >access_token</option>
-                                            #end
-                                            #if("request_ip" == $!paramMapping.fieldName)
-                                                <option value="request_ip" selected>request_ip</option>
-                                            #else
-                                                <option value="request_ip" >request_ip</option>
-                                            #end
-                                        </select>
-                                        <input style="max-width:160px;display:none;" type="text"  name="fieldName" value="$!paramMapping.fieldName" >
-                                    #else
-                                        <select id="innerParam" style="max-width:150px;max-height: 25px;display:none;" name="innerParam" class="form-control innerParam" >
-                                            #if("user_id" == $!paramMapping.fieldName)
-                                                <option value="user_id" selected>user_id</option>
-                                            #else
-                                                <option value="user_id" >user_id</option>
-                                            #end
-                                            #if("client_id" == $!paramMapping.fieldName)
-                                                <option value="client_id" selected>client_id</option>
-                                            #else
-                                                <option value="client_id" >client_id</option>
-                                            #end
-                                            #if("client_name" == $!paramMapping.fieldName)
-                                                <option value="client_name" selected>client_name</option>
-                                            #else
-                                                <option value="client_name" >client_name</option>
-                                            #end
-                                            #if("client_secret" == $!paramMapping.fieldName)
-                                                <option value="client_secret" selected>client_secret</option>
-                                            #else
-                                                <option value="client_secret" >client_secret</option>
-                                            #end
-                                            #if("client_source" == $!paramMapping.fieldName)
-                                                <option value="client_source" selected>client_source</option>
-                                            #else
-                                                <option value="client_source" >client_source</option>
-                                            #end
-                                            #if("client_num" == $!paramMapping.fieldName)
-                                                <option value="client_num" selected>client_num</option>
-                                            #else
-                                                <option value="client_num" >client_num</option>
-                                            #end
-                                            #if("client_type" == $!paramMapping.fieldName)
-                                                <option value="client_type" selected>client_type</option>
-                                            #else
-                                                <option value="client_type" >client_type</option>
-                                            #end
-                                            #if("access_token" == $!paramMapping.fieldName)
-                                                <option value="access_token" selected>access_token</option>
-                                            #else
-                                                <option value="access_token" >access_token</option>
-                                            #end
-                                            #if("request_ip" == $!paramMapping.fieldName)
-                                                <option value="request_ip" selected>request_ip</option>
-                                            #else
-                                                <option value="request_ip" >request_ip</option>
-                                            #end
-                                         </select>
-                                         <input style="max-width:160px;" type="text"  name="fieldName" value="$!paramMapping.fieldName">
-                                    #end
-                                </td>
-                                <td><input style="max-width:160px;" type="text"  name="fieldType" value="$!paramMapping.fieldType"></td>
-                                <td>
-                                    #if("OUTER"==$!paramMapping.dataFrom.name())
-                                        <select style="max-width:150px;max-height: 25px;" name="innerParam" class="form-control apiParamsSelect" >
-                                            <option value="$!paramMapping.apiParamName" selected>$!paramMapping.apiParamName</option>
-                                        </select>
-                                        <input style="max-width:160px;display:none;" type="text"  name="apiParamName" value="" />
-                                    #elseif("INNER"==$!paramMapping.dataFrom.name())
-                                        <select style="max-width:150px;max-height:25px;display:none;" name="innerParam" class="form-control apiParamsSelect" >
-                                            <option value="default" selected>default</option>
-                                        </select>
-                                        <input style="max-width:160px;" type="text"  name="apiParamName" readonly='readonly' value="$!paramMapping.apiParamName" />
-                                    #else
-                                        <select style="max-width:150px;max-height:25px;display:none;" name="innerParam" class="form-control apiParamsSelect" >
-                                            <option value="default" selected>default</option>
-                                        </select>
-                                        <input style="max-width:160px;" type="text"  name="apiParamName" value="$!paramMapping.apiParamName" />
-                                    #end
-                                </td>
-                                <td>
-                                    #if("OUTER"==$!paramMapping.dataFrom.name())
-                                        <select style="max-width:150px;max-height:25px;" name="methodParamRef" class="form-control methodParamSelect" >
-                                            <option value="$!paramMapping.methodParamRef" selected>$!paramMapping.methodParamRef</option>
-                                        </select>
-                                        <input style="max-width:160px;display:none;" type="text"  name="methodParamRef" value="" />
-                                    #elseif("INNER"==$!paramMapping.dataFrom.name())
-                                        <select style="max-width:150px;max-height:25px;display:none;" name="methodParamRef" class="form-control methodParamSelect" >
-                                            <option value="default" selected>default</option>
-                                        </select>
-                                        <input style="max-width:160px;" type="text"  name="methodParamRef" readonly='readonly' value="$!paramMapping.methodParamRef" />
-                                    #else
-                                        <select style="max-width:150px;max-height:25px;display:none;" name="methodParamRef" class="form-control methodParamSelect" >
-                                            <option value="default" selected>default</option>
-                                        </select>
-                                        <input style="max-width:160px;" type="text"  name="methodParamRef" value="$!paramMapping.methodParamRef" />
-                                    #end
-
-
-                                    <input type="hidden" name="currentId" value="$!paramMapping.id" />
-                                    <input type="hidden" name="currentSequence" value="$!paramMapping.sequence" />
-                                </td>
-                                <td><a href="#" class="needTip" data-toggle="tooltip" data-placement="top" title="编辑" style="margin-left:5px;display:none;" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span></a><a href="#" class="needTip deleteCurrentRow" flag="step7" apiIdValue="$!paramMapping.id" data-toggle="tooltip" data-placement="top" title="删除当前行" style="margin-left:5px;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
-                            </tr>
-                        #end
-                        </tbody>
-                    </table>
-                    <div style="min-height:45px;">
-                        <button type="button" id="addRow_carmenParamMapping" class="btn btn-primary" style="margin-left:10px;"><span class="glyphicon glyphicon-plus"></span>新增行</button>
+                        <div class="col-sm-6">
+                            <button class="btn btn-primary" id="JSONparse-btn" style="margin-bottom:15px;">解析</button>
+                            <textarea class="form-control" id="json-input"></textarea>
+                        </div>
+                        <div class="col-sm-6">
+                            <div id="editor" class="json-editor"></div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- 4. 预览 最后一步 -->
+                <div class="data-review">
+                    <div class="panel-body">
+                        <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="dataReviewInfo"></div>
+
+                        <form class="form-horizontal">
+
+
+                            <h3>API接口信息</h3>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">namespace</label>
+                                <div class="col-sm-6"><p  class="form-control-static">NAME SPACE</p></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">namespace</label>
+                                <div class="col-sm-6"><p  class="form-control-static">NAME SPACE</p></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">namespace</label>
+                                <div class="col-sm-6"><p  class="form-control-static">NAME SPACE</p></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">namespace</label>
+                                <div class="col-sm-6"><p  class="form-control-static">NAME SPACE</p></div>
+                            </div>
+
+
+                            <h3>内部参数</h3>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">namespace</label>
+                                <div class="col-sm-6"><p  class="form-control-static">NAME SPACE</p></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">namespace</label>
+                                <div class="col-sm-6"><p  class="form-control-static">NAME SPACE</p></div>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+
+
             </div>
+
         </div>
     </div>
 </div>
@@ -701,7 +428,7 @@
     </div>
 </div>
 
-<input type="hidden" id="configStep" value="0"/>
+<input type="hidden" id="configStep" value="1"/>
 <input type="hidden" id="userName" value="$!results.get('user')"/>
 <input type="hidden" id="edit" value="$!results.get('edit')" />
 <input type="hidden" id="initApiType" value="$!results.get('apiType')" />
@@ -719,6 +446,7 @@
 <script src="/statics/js/highcharts.js"></script>
 <script src="/statics/js/jquery.dataTables.min.js"></script>
 <script src="/statics/js/createapi.js"></script>
+<script src="/statics/js/jquery.jsoneditor.js"></script>
 <script src="/statics/js/base.js"></script>
 <footer style="margin-top:50px;">
     <hr>
