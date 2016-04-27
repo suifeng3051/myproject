@@ -42,7 +42,7 @@ public class ServeCache implements ILocalCache {
 
     @Override
     public void load() {
-        List<Serve> serveList = serveService.getAll();
+        List<Serve> serveList = serveService.getAll(appConfig.env);
         for (Serve serve : serveList) {
             get(null, serve.getApiId());
         }

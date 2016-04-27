@@ -54,10 +54,7 @@ public interface ApiService {
      * @param methodMappingId
      * @param env
      */
-    void saveResult(String parseApiResult,String apiParamUpdate,String apiParamAdd,String methodResult,
-                    String methodParamUpdate,String methodParamAdd,String structureUpdate,String structureAdd,
-                    String paramMappingUpdate,String paramMappingAdd,String methodMappingId,Byte env);
-
+    boolean  saveResult(String apiObj,String serviceObj,String paramObj,Byte env);
 
 
     List<Api> getAllByEnv(Byte env);

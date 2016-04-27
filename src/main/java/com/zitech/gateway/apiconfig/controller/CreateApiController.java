@@ -1,5 +1,6 @@
 package com.zitech.gateway.apiconfig.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.apiconfig.model.Group;
 import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.apiconfig.service.ApiService;
@@ -170,28 +171,31 @@ public class CreateApiController {
 
     @RequestMapping(value = "/saveResult", produces="application/json;charset=utf-8",method= RequestMethod.POST)
     @ResponseBody
-    public String saveResult(@RequestParam("parseApiResult") String  parseApiResult,
-                                        @RequestParam("apiParamUpdate") String apiParamUpdate,
-                                        @RequestParam("apiParamAdd")  String apiParamAdd,
-                                        @RequestParam("methodResult") String methodResult,
-                                        @RequestParam("methodParamUpdate") String methodParamUpdate,
-                                        @RequestParam("methodParamAdd") String methodParamAdd,
-                                        @RequestParam("structureUpdate") String structureUpdate,
-                                        @RequestParam("structureAdd") String structureAdd,
-                                        @RequestParam("paramMappingUpdate") String paramMappingUpdate,
-                                        @RequestParam("paramMappingAdd") String paramMappingAdd,
-                                        @RequestParam("methodMappingId") String methodMappingId,
-                                        @RequestParam("env") Byte env) {
+    public String saveResult(@RequestParam("apiObj") String  apiObj,
+                             @RequestParam("serviceObj") String serviceObj,
+                             @RequestParam("paramObj")  String paramObj,
+                             @RequestParam("env") Byte env) {
 
+        int code = 0;
+        String message = "success";
+        boolean flag = false;
         ApiResult<String> apiResult = new ApiResult<>(0,"success");
 
         try {
-            apiService.saveResult(parseApiResult,apiParamUpdate,apiParamAdd,methodResult,methodParamUpdate,methodParamAdd,
-                                  structureUpdate,structureAdd, paramMappingUpdate,paramMappingAdd,methodMappingId,env);
+            flag = apiService.saveResult(apiObj,serviceObj,paramObj,env);
         }catch (Exception e){
-            apiResult.setCode(1);
-            apiResult.setMessage("fail");
+            logger.error("保存API是出错！\r apiObj:"+apiObj+"  \r serviceObj:"+serviceObj+" \r paramObj:"+paramObj,e);
+            code=1;
+            message = "fail";
         }
+
+        if(!flag){
+            code =1;
+            message = "fail";
+        }
+
+        apiResult.setCode(code);
+        apiResult.setMessage(message);
 
         return apiResult.toString();
 

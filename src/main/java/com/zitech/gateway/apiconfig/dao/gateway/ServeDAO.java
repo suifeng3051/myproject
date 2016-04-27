@@ -16,7 +16,7 @@ public interface ServeDAO {
 
     Serve selectByApiId(Integer apiId);
 
-    List<Serve> selectAll();
+    List<Serve> selectAll(Byte env);
 
     int updateByPrimaryKeySelective(Serve record);
 

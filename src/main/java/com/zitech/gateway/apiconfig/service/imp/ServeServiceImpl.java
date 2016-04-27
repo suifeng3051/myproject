@@ -27,7 +27,7 @@ public class ServeServiceImpl implements ServeService {
     }
 
     @Override
-    public List<Serve> getAll() {
-        return serveDAO.selectAll();
+    public List<Serve> getAll(Byte env) {
+        return serveDAO.selectAll(env);
     }
 }

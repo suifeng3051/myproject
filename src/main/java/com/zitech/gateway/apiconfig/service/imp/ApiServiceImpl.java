@@ -1,11 +1,19 @@
 package com.zitech.gateway.apiconfig.service.imp;
 
+import com.alibaba.fastjson.JSON;
 import com.zitech.gateway.apiconfig.dao.gateway.ApiDAO;
+import com.zitech.gateway.apiconfig.dao.gateway.ParamDAO;
+import com.zitech.gateway.apiconfig.dao.gateway.ServeDAO;
 import com.zitech.gateway.apiconfig.model.Api;
+import com.zitech.gateway.apiconfig.model.Param;
+import com.zitech.gateway.apiconfig.model.Serve;
 import com.zitech.gateway.apiconfig.service.ApiService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +27,10 @@ public class ApiServiceImpl implements ApiService {
 
     @Autowired
     private ApiDAO apiDAO;
+    @Autowired
+    private ServeDAO serveDAO;
+    @Autowired
+    private ParamDAO paramDAO;
 
 
     @Override
@@ -76,34 +88,67 @@ public class ApiServiceImpl implements ApiService {
 
     }
 
+    @Transactional
     @Override
-    public void saveResult(String parseApiResult, String apiParamUpdate, String apiParamAdd, String methodResult, String methodParamUpdate, String methodParamAdd,
-                           String structureUpdate, String structureAdd, String paramMappingUpdate, String paramMappingAdd, String methodMappingId, Byte env) {
+    public boolean saveResult(String apiObj,String serviceObj,String paramObj,Byte env){
 
-        Map<String,Object> paraMap = new HashMap<>();
-        paraMap.put("parseApiResult",parseApiResult);
-        paraMap.put("apiParamUpdate",apiParamUpdate);
-        paraMap.put("apiParamAdd",apiParamAdd);
-        paraMap.put("methodResult",methodResult);
-        paraMap.put("methodParamUpdate",methodParamUpdate);
-        paraMap.put("methodParamAdd",methodParamAdd);
-        paraMap.put("structureUpdate",structureUpdate);
-        paraMap.put("structureAdd",structureAdd);
-        paraMap.put("paramMappingUpdate",paramMappingUpdate);
-        paraMap.put("paramMappingAdd",paramMappingAdd);
-        paraMap.put("methodMappingId",methodMappingId);
-        paraMap.put("env",env);
+        Api apiModel;
+        Serve serveModel;
+        Param paramModel;
 
-        if(true){
-            //exists update
+            try {
+                apiModel = JSON.parseObject(apiObj, Api.class);
+                apiModel.setEnv(env);
+                apiModel.setAvail(1);
+                //apiModel.setUpdatedId();
+            } catch (Exception e) {
+                return false;
+            }
 
-        }else{
-            //add
+            if (checkApi(apiModel.getNamespace(), apiModel.getMethod(), apiModel.getVersion(), env) || apiModel.getId() != -1) {
+                //exists update
+                apiDAO.updateByPrimaryKeySelective(apiModel);
+            } else {
+                //add
+                apiDAO.insertSelective(apiModel);
+                apiModel = getApi(apiModel.getNamespace(), apiModel.getMethod(), apiModel.getVersion(), env);
+            }
+
+            try {
+                serveModel = JSON.parseObject(apiObj, Serve.class);
+                serveModel.setApiId(apiModel.getId());
+                serveModel.setEnv(env);
+            } catch (Exception e) {
+                return false;
+            }
+
+            if (serveModel.getId() != -1) {
+                //exists update
+                serveDAO.updateByPrimaryKey(serveModel);
+            } else {
+                //add
+                serveDAO.insertSelective(serveModel);
+            }
+
+            try {
+                paramModel = JSON.parseObject(apiObj, Param.class);
+                paramModel.setApiId(apiModel.getId());
+                paramModel.setEnv(env);
+            } catch (Exception e) {
+                return false;
+            }
+
+            if (paramModel.getId() != -1) {
+                //exists update
+                paramDAO.updateByPrimaryKey(paramModel);
+            } else {
+                //add
+                paramDAO.insertSelective(paramModel);
+            }
 
 
-        }
 
-
+        return true;
     }
 
     @Override

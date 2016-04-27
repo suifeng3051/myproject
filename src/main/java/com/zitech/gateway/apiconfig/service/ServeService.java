@@ -9,5 +9,5 @@ public interface ServeService {
 
     Serve getByApiId(Integer apiId);
 
-    List<Serve> getAll();
+    List<Serve> getAll(Byte env);
 }
