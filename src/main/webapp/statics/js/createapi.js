@@ -581,7 +581,7 @@ $(document).ready(function(){
             $('#review-jsonparse').show();
 
         } else {  // 请求方式 GET
-
+            paramObj = '';
             $('#review-jsonparse').hide();
         }
     }
@@ -912,12 +912,13 @@ $(document).ready(function(){
         $.post(
             "saveResult",
             {
-                'apiObj': apiObj,
-                'paramObj': paramObj,
-                'serviceObj': serviceObj,
+                'apiObj': JSON.stringify( apiObj ),
+                'paramObj': JSON.stringify(paramObj),
+                'serviceObj': JSON.stringify(serviceObj),
                 "env":getEnv()
             },
              function (d) {
+                 console.log(d);
                 if("success" == d) {
                     var env = getEnv();
                     if(1 == flag) { // 保存按钮跳转到首页

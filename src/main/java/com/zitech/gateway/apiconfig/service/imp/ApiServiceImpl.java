@@ -91,62 +91,33 @@ public class ApiServiceImpl implements ApiService {
 
     @Transactional
     @Override
-    public boolean saveResult(String apiObj,String serviceObj,String paramObj,Byte env){
+    public boolean saveResult(Api apiObj,Serve serviceObj,Param paramObj,Byte env){
 
-        Api apiModel;
-        Serve serveModel;
-        Param paramModel;
 
-            try {
-                apiModel = JSON.parseObject(apiObj, Api.class);
-                apiModel.setEnv(env);
-                apiModel.setAvail(1);
-                //apiModel.setUpdatedId();
-            } catch (Exception e) {
-                return false;
-            }
+        if(apiObj.getId()!=-1){
 
-            if (checkApi(apiModel.getNamespace(), apiModel.getMethod(), apiModel.getVersion(), env) || apiModel.getId() != -1) {
+            apiDAO.updateByPrimaryKeySelective(apiObj);
+        }else{
+
+            apiDAO.insertSelective(apiObj);
+        }
+
+            if (serviceObj.getId() != -1) {
                 //exists update
-                apiDAO.updateByPrimaryKeySelective(apiModel);
+                serveDAO.updateByPrimaryKey(serviceObj);
             } else {
                 //add
-                apiDAO.insertSelective(apiModel);
-                apiModel = getApi(apiModel.getNamespace(), apiModel.getMethod(), apiModel.getVersion(), env);
+                serveDAO.insertSelective(serviceObj);
             }
 
-            try {
-                serveModel = JSON.parseObject(serviceObj, Serve.class);
-                serveModel.setApiId(apiModel.getId());
-                serveModel.setEnv(env);
-            } catch (Exception e) {
-                return false;
-            }
 
-            if (serveModel.getId() != -1) {
+        if(paramObj!=null) {
+            if (paramObj.getId() != -1) {
                 //exists update
-                serveDAO.updateByPrimaryKey(serveModel);
+                paramDAO.updateByPrimaryKey(paramObj);
             } else {
                 //add
-                serveDAO.insertSelective(serveModel);
-            }
-
-        if(StringUtils.isNotBlank(paramObj)) {
-
-            try {
-                paramModel = JSON.parseObject(paramObj, Param.class);
-                paramModel.setApiId(apiModel.getId());
-                paramModel.setEnv(env);
-            } catch (Exception e) {
-                return false;
-            }
-
-            if (paramModel.getId() != -1) {
-                //exists update
-                paramDAO.updateByPrimaryKey(paramModel);
-            } else {
-                //add
-                paramDAO.insertSelective(paramModel);
+                paramDAO.insertSelective(paramObj);
             }
         }
 
