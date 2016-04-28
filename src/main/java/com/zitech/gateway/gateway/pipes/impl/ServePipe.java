@@ -82,7 +82,7 @@ public class ServePipe extends AbstractPipe {
 
     private List<Header> createHeaders(RequestEvent event, Serve serve) {
         List<Header> headerList = new ArrayList<>();
-        String[] names = serve.getInnerParams().split(",");
+        String[] names = serve.getInnerParams().split(" ");
         Map<String, String> contextMap = event.getContextMap();
         for (String name : names) {
             Header header = new BasicHeader(name, contextMap.get(name));
