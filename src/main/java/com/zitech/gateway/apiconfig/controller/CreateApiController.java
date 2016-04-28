@@ -1,6 +1,5 @@
 package com.zitech.gateway.apiconfig.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.apiconfig.model.Group;
@@ -10,7 +9,6 @@ import com.zitech.gateway.apiconfig.service.*;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
 import com.zitech.gateway.gateway.Constants;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,8 +65,13 @@ public class CreateApiController {
         Serve serveModel = serveService.getByApiId(apiId);
         Param paramModel = paramService.getByApiId(apiId);
 
+        if(apiModel!=null){
+            results.put("edit","1");
+        }else{
+            results.put("edit","0");
+        }
+
         results.put("user", userName);
-        results.put("edit","0");
         results.put("apiType","1");
         results.put("env", env);
         results.put("api", apiModel);
@@ -190,58 +193,28 @@ public class CreateApiController {
     public String saveResult(@RequestParam("apiObj") String  apiObj,
                              @RequestParam("serviceObj") String serviceObj,
                              @RequestParam("paramObj")  String paramObj,
-                             @RequestParam("env") Byte env) {
+                             @RequestParam("env") Integer env) {
 
         int code = 0;
         String message = "success";
         boolean flag = false;
         ApiResult<String> apiResult = new ApiResult<>(0,"success");
-        Api apiModel ;
-        Serve serveModel;
-        Param paramModel;
-
         try {
-            apiModel = JSON.parseObject(apiObj, Api.class);
-            apiModel.setEnv(env);
-            apiModel.setAvail(1);
-            //apiModel.setUpdatedId();
-        } catch (Exception e) {
-            apiResult.setCode(0);
-            apiResult.setMessage("fail");
-            return apiResult.toString();
+            flag = apiService.saveResult(apiObj,serviceObj,paramObj, (byte) 1);
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.error("保存API是出错！\r apiObj:"+apiObj+"  \r serviceObj:"+serviceObj+" \r paramObj:"+paramObj,e);
+            code=1;
+            message = "fail";
         }
 
-        try {
-            serveModel = JSON.parseObject(serviceObj, Serve.class);
-            serveModel.setApiId(apiModel.getId());
-            serveModel.setEnv(env);
-        } catch (Exception e) {
-            apiResult.setCode(0);
-            apiResult.setMessage("fail");
-            return apiResult.toString();
+        if(!flag){
+            code =1;
+            message = "fail";
         }
 
-
-
-/*        if(StringUtils.isNotBlank(paramObj)) {
-
-            try {
-                paramModel = JSON.parseObject(paramObj, Param.class);
-                paramModel.setApiId(apiModel.getId());
-                paramModel.setEnv(env);
-            } catch (Exception e) {
-                return false;
-            }
-
-            if (paramModel.getId() != -1) {
-                //exists update
-                paramDAO.updateByPrimaryKey(paramModel);
-            } else {
-                //add
-                paramDAO.insertSelective(paramModel);
-            }
-        }*/
-
+        apiResult.setCode(code);
+        apiResult.setMessage(message);
 
         return apiResult.toString();
 

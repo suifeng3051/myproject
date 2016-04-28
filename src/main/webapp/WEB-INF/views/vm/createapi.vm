@@ -113,7 +113,7 @@
                             <div class="form-group">
                                 <label for="name" class="col-sm-4 control-label">method</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control required" id="name" name="method" placeholder="method" value="$!results.get('api').name">
+                                    <input type="text" class="form-control required" id="name" name="method" placeholder="method" value="$!results.get('api').method">
                                 </div>
                             </div>
 
@@ -122,7 +122,7 @@
                                 <label for="requestType" class="col-sm-4 control-label">请求方式</label>
                                 #set($!apiID=$!results.get('api').id)
                                 <div class="col-sm-6">
-                                    <select id="requestType" name="requestType" class="form-control" >#if(1 == $!results.get('api').requestType)<option value="post" selected>POST</option><option value="get" >GET</option>#else<option value="post" >POST</option><option value="get" selected>GET</option>#end</select> #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
+                                    <select id="requestType" name="requestType" class="form-control" >#if(1 == $!results.get('api').requestType)<option value="POST" selected>POST</option><option value="GET" >GET</option>#else<option value="POST" >POST</option><option value="GET" selected>GET</option>#end</select> #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
                                 </div>
                             </div>
 
@@ -141,22 +141,6 @@
                                 <!--<span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="margin-top:10px;" class="needTip" data-toggle="tooltip" data-placement="top" title="版本号格式x.x.x"></span>-->
                             </div>
 
-
-                            <!--<div class="form-group" id="appNameContent">-->
-                                <!--<label for="appName" class="col-sm-4 control-label">APP Name</label>-->
-                                <!--<div class="col-sm-6">-->
-                                    <!--<input type="text" class="form-control" name="appName" id="appName" placeholder="appName" value="$!results.get('api').appName">-->
-                                <!--</div>-->
-                            <!--</div>-->
-
-                            <!--<div class="form-group">-->
-                                <!--<label for="isLog" class="col-sm-4 control-label">开启日志</label>-->
-                                <!--<div class="col-sm-6">-->
-                                    <!--<select id="isLog" name="isLog" class="form-control" >#if(1 == $!results.get('api').enableLog)<option value="1" selected>是</option><option value="0">否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>-->
-                                <!--</div>-->
-                            <!--</div>-->
-
-
                             <div class="form-group">
                                 <label for="apiGroup" class="col-sm-4 control-label">API分组</label>
                                 #set($!apiID=$!results.get('api').id)
@@ -164,12 +148,12 @@
                                     <select id="apiGroup" name="groupId" class="form-control" >
                                         #foreach ($!group in $!results.get("grouplist"))
                                         #if($!group.alias == $!results.get('api').apiGroup)
-                                        <option value="$!group.alias" selected>$!group.name</option>
+                                        <option value="$!group.id" selected>$!group.name</option>
                                         #else
                                         #if($!results.get('group') != "all" && $!group.alias == $!results.get('group'))
-                                        <option value="$!group.alias" selected>$!group.name</option>
+                                        <option value="$!group.id" selected>$!group.name</option>
                                         #else
-                                        <option value="$!group.alias">$!group.name</option>
+                                        <option value="$!group.id">$!group.name</option>
                                         #end
                                         #end
                                         #end
@@ -181,27 +165,27 @@
                             <div class="form-group">
                                 <label for="isFreq" class="col-sm-4 control-label">频率控制</label>
                                 <div class="col-sm-6">
-                                    <select id="isFreq" name="frequencyControl" class="form-control" >#if(1 == $!results.get('api').enableFreq)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
+                                    <select id="isFreq" name="frequencyControl" class="form-control" >#if(1 == $!results.get('api').frequencyControl)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="isInnerOuter" class="col-sm-4 control-label">区分内外请求</label>
                                 <div class="col-sm-6">
-                                    <select id="isInnerOuter" name="checkInner" class="form-control" >#if(1 == $!results.get('api').enableInnerOut)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
+                                    <select id="isInnerOuter" name="checkInner" class="form-control" >#if(1 == $!results.get('api').checkInner)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="describle" class="col-sm-4 control-label">功能描述</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control required" id="describle" name="apiDescription" placeholder="API简要功能描述" value="$!results.get('api').apiDesc">
+                                    <input type="text" class="form-control required" id="describle" name="apiDescription" placeholder="API简要功能描述" value="$!results.get('api').apiDescription">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <!--<label for="scenarios" class="col-sm-4 control-label">使用场景</label>-->
                                 <div class="col-sm-4" style="text-align: right;">使用场景</div>
                                 <div class="col-sm-6">
-                                    <textarea  rows="3" class="form-control required" id="scenarios" name="apiScene" placeholder="API使用场景" >$!results.get('api').apiScenarios</textarea>
+                                    <textarea  rows="3" class="form-control required" id="scenarios" name="apiScene" placeholder="API使用场景" >$!results.get('api').apiScene</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -218,7 +202,7 @@
                                 </div>
                             </div>
 
-    #if(!$!results.get('api').id)
+    #if($!results.get('api').id)
         <input type="hidden"  name="id"   value="$!results.get('api').id" />
     #else
         <input type="hidden"  name="id"   value="-1" />
@@ -238,24 +222,23 @@
                             <div class="form-group">
                                 <label for="namespaceMethodParam">serviceName</label>
 
-                                <input type="text" style="min-width:180px;" class="form-control required" id="namespaceMethodParam" name="service" placeholder="serviceName" value="$!results.get('method').name">
+                                <input type="text" style="min-width:180px;" class="form-control required" id="namespaceMethodParam" name="service" placeholder="serviceName" value="$!results.get('serve').service">
 
                             </div>
                             <div class="form-group">
                                 <label for="nameMethodParam">method</label>
 
-                                <input type="text" class="form-control required" id="nameMethodParam"  name="method" placeholder="method" value="$!results.get('method').method">
+                                <input type="text" class="form-control required" id="nameMethodParam"  name="method" placeholder="method" value="$!results.get('serve').method">
 
                             </div>
 
                             <div class="form-group">
                                 <label for="url"  id="apiUrl">url</label>
 
-                                    <!--<input type="text" class="form-control required" name="url" id="url" placeholder="url" value="$!results.get('api').addressUrl">-->
-                                    #if(!$!results.get('method').addressUrl)
+                                    #if(!$!results.get('serve').url)
                                         <input type="text" class="form-control" style="min-width:280px" name="url" id="url" placeholder="url" value="http://study.zitech.com">
                                     #else
-                                        <input type="text" class="form-control required " style="min-width:280px" name="url" id="url" placeholder="url" value="$!results.get('method').addressUrl">
+                                        <input type="text" class="form-control required " style="min-width:280px" name="url" id="url" placeholder="url" value="$!results.get('serve').url">
 
                                     #end
 
@@ -272,7 +255,7 @@
                                 </div>
                             </div>
 
-                            #if(!$!results.get('serve').id)
+                            #if($!results.get('serve').id)
                                 <input type="hidden"  name="id"   value="$!results.get('serve').id" />
                             #else
                                 <input type="hidden"  name="id"   value="-1" />
@@ -288,11 +271,12 @@
                         <form id="jsonparseForm">
                             <div class="col-sm-6">
                                 <input type="button" class="btn btn-primary" id="JSONparse-btn" style="margin-bottom:15px;" value="解析" />
-                                <textarea class="form-control" id="json-input" name="requestDemo"></textarea>
+                                <textarea class="form-control" id="json-input" name="requestDemo">$!results.get('param').requestDemo</textarea>
                             </div>
 
-                            <input type="hidden" value="" name="requestStructure" id="requestStructure" />
-                            #if(!$!results.get('param').id)
+                            <input type="hidden" value="$!results.get('param').requestStructure" name="requestStructure" id="requestStructure" />
+
+                            #if($!results.get('param').id)
                                 <input type="hidden"  name="id"   value="$!results.get('param').id" />
                             #else
                                 <input type="hidden"  name="id"   value="-1" />
@@ -387,6 +371,7 @@
 <input type="hidden" id="initApiType" value="$!results.get('apiType')" />
 <input type="hidden" id="apiParamNames" value="" />
 <input type="hidden" id="methodParamNames" value="" />
+<input type="hidden" id="innerParams" value="$!results.get('serve').innerParams" />
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="/statics/js/jquery.js"></script>

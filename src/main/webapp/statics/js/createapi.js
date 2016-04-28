@@ -571,7 +571,7 @@ $(document).ready(function(){
         $('#final-review-method').html( str );
 
 
-        if(apiObj.requestType == 1) {  // 请求方式 POST，加入json数据
+        if(apiObj.requestType == 'post') {  // 请求方式 POST，加入json数据
             paramObj = formdataToJSON($('#jsonparseForm').serializeArray());
             paramObj.requestStructure = JSONresult.getJson();
 
@@ -581,7 +581,7 @@ $(document).ready(function(){
             $('#review-jsonparse').show();
 
         } else {  // 请求方式 GET
-            paramObj = '';
+            paramObj = null;
             $('#review-jsonparse').hide();
         }
     }
@@ -734,6 +734,7 @@ $(document).ready(function(){
         language: {"infoEmpty": "","info": ""}
     });
 
+/*
     $("#addRow_carmenMethodParam").on("click", function () {
         $("#apiMethodParamsInfo").html("");
         $("#apiMethodParamsInfo").css("display","none");
@@ -823,7 +824,7 @@ $(document).ready(function(){
            dateFromElement, fieldNameElement, fieldTypeElement, apiParamNameElement, methodParamRefElement, operate
         ] ).draw();
         $('[data-toggle="tooltip"]').tooltip();
-    });
+    });*/
 
 
     // 保存所有的配置信息
@@ -940,7 +941,7 @@ $(document).ready(function(){
             });
     });
 
-
+/*
     //  解析API接口配置的内容
     function parseApi(content) {
         var cells = content.split("&");
@@ -1133,7 +1134,7 @@ $(document).ready(function(){
         var parseAddResult = JSON.stringify(addArray);
         var totalResult = parseUpdateResult + ";" + parseAddResult;
         return totalResult;
-    }
+    }*/
 
 
     // 获取环境变量的值
@@ -1144,7 +1145,7 @@ $(document).ready(function(){
         return envValue;
     }
 
-
+/*
     // 绑定删除行事件，这么写是因为要给还未添加的DOM元素绑定事件
     $('body').on('click', '.deleteCurrentRow', function(e) {
         e.preventDefault();
@@ -1383,7 +1384,7 @@ $(document).ready(function(){
             $(this).parent().next().next().next().next().children()[1].removeAttribute("readonly");
 
         }
-    });
+    });*/
 
 /*
     initWidth();
