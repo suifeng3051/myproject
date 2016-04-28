@@ -412,7 +412,18 @@ $(document).ready(function(){
                     '</div>';
             }
 
-            $('#serviceParamList').html(str);
+            $('#serviceParamList').html(str); // 写入之后再根据，注入的id为innerParams的input的值
+
+            var defaultInnerParams = $('#innerParams').val().split(' ');
+
+            $('#serviceParamList input[type="checkbox"]').each(function(){
+                if($.inArray($(this).val(), defaultInnerParams) == 0 ){
+                    $(this).prop('checked', true);
+                }
+            });
+
+
+
         }
     });
 
@@ -422,16 +433,17 @@ $(document).ready(function(){
     $('.nextStep').click(function(){
 
         if(currentStep == 1){ // 检测namespace是否存在
-            if($('.hasApi').attr('data-exists') == 'no'  ){ // namespace 检测不存在时
+            if( ($('.hasApi').attr('data-exists') == 'no') || ($('#edit').val() == 1)  ){ // namespace 检测不存在时（没有冲突），或者在编辑而不是在新建
                 currentStep++;
                 changeStepTo(currentStep);
             } else {
+
                 $('.hasApi').trigger('click');
             }
         } else {
             currentStep++;
 
-            if(currentStep == 3 && $('#requestType').val() != 'post'){ // 选择请求方式为 GET，跳过第3步
+            if(currentStep == 3 && $('#requestType').val() != 'POST'){ // 选择请求方式为 GET，跳过第3步
                 currentStep++;
             }
 
@@ -441,7 +453,7 @@ $(document).ready(function(){
     $('.preStep').click(function(){
         currentStep --;
 
-        if((currentStep == 3) && ($('#requestType').val() != 'post')){ // 选择请求方式为 GET，跳过第3步
+        if((currentStep == 3) && ($('#requestType').val() != 'POST')){ // 选择请求方式为 GET，跳过第3步
             currentStep--;
         }
 
@@ -469,6 +481,10 @@ $(document).ready(function(){
             finalReview(); // 将所有数据展示出来
         }else{
             $('.preStep').show();
+        }
+
+        if(step == 3 && $('#edit').val() == 1) {
+            $('#JSONparse-btn').trigger('click');
         }
 
         $('#step-nav-box li').eq(step-1).addClass('active').siblings().removeClass('active');
@@ -571,7 +587,8 @@ $(document).ready(function(){
         $('#final-review-method').html( str );
 
 
-        if(apiObj.requestType == 'post') {  // 请求方式 POST，加入json数据
+        if(apiObj.requestType == 'POST'  ) {  // 请求方式 POST，加入json数据
+
             paramObj = formdataToJSON($('#jsonparseForm').serializeArray());
             paramObj.requestStructure = JSONresult.getJson();
 
@@ -581,7 +598,7 @@ $(document).ready(function(){
             $('#review-jsonparse').show();
 
         } else {  // 请求方式 GET
-            paramObj = null;
+            paramObj = '';
             $('#review-jsonparse').hide();
         }
     }
@@ -922,15 +939,8 @@ $(document).ready(function(){
                  console.log(d);
                 if("success" == d) {
                     var env = getEnv();
-                    if(1 == flag) { // 保存按钮跳转到首页
-                        window.location.href = "apilist?env=" + env;
-                    } else if(2 == flag) { // 保存并继续跳转到新建api页面
-                        window.location.href = "createapi?env=" + env;
-                    }
-
-                    $("#updateStatus").html("保存成功");
-                    $("#myHideModal").delay(6000);
-                    $("#myHideModal").modal("hide");
+                    window.location.href = "apilist?env=" + env;
+                    return;
                 }else {
                     $("#updateStatus").html("保存失败!");
                     $("#myHideModal").delay(6000);

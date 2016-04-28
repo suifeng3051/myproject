@@ -122,7 +122,16 @@
                                 <label for="requestType" class="col-sm-4 control-label">请求方式</label>
                                 #set($!apiID=$!results.get('api').id)
                                 <div class="col-sm-6">
-                                    <select id="requestType" name="requestType" class="form-control" >#if(1 == $!results.get('api').requestType)<option value="POST" selected>POST</option><option value="GET" >GET</option>#else<option value="POST" >POST</option><option value="GET" selected>GET</option>#end</select> #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
+                                    <select id="requestType" name="requestType" class="form-control" >
+                                        #if('POST' == $!results.get('api').requestType)
+                                            <option value="POST" selected>POST</option>
+                                            <option value="GET" >GET</option>
+                                        #else
+                                            <option value="POST" >POST</option>
+                                            <option value="GET" selected>GET</option>
+                                        #end
+                                    </select>
+                                    #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
                                 </div>
                             </div>
 
