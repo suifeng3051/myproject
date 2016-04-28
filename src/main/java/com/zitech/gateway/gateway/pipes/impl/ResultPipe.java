@@ -1,7 +1,7 @@
 package com.zitech.gateway.gateway.pipes.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zitech.gateway.gateway.Util;
+import com.zitech.gateway.gateway.PipeHelper;
 import com.zitech.gateway.gateway.exception.PipeException;
 import com.zitech.gateway.gateway.model.ApiResponse;
 import com.zitech.gateway.gateway.model.RequestEvent;
@@ -33,7 +33,7 @@ public class ResultPipe extends AbstractPipe {
         String result = event.getResultStr();
         if (!StringUtils.isEmpty(result)) {
             ApiResponse apiResponse = JSONObject.parseObject(result, ApiResponse.class);
-            HttpHeaders headers = Util.getHeaders(event);
+            HttpHeaders headers = PipeHelper.getHeaders(event);
             if (apiResponse.getCode() == 0) {
                 ResponseEntity<String> responseEntity = new ResponseEntity<>(result,
                         headers, HttpStatus.valueOf(200));

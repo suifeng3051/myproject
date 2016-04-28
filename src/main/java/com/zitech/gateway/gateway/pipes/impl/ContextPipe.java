@@ -34,5 +34,6 @@ public class ContextPipe extends AbstractPipe {
         contextMap.put(Constants.PARAMS_CLIENT_ID, client.getClientId());
         contextMap.put(Constants.PARAMS_CLIENT_NAME, client.getClientName());
         contextMap.put(Constants.PARAMS_REQUEST_IP, event.getIp());
+        contextMap.put(Constants.PARAMS_EVENT_ID, event.uuid.toString());
     }
 }
