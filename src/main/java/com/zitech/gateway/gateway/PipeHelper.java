@@ -5,7 +5,10 @@ import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.utils.SpringContext;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpHeaders;
+
+import java.util.Stack;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,5 +36,41 @@ public class PipeHelper {
             httpHeaders.add(Constants.PARAMS_EVENT_ID, event.uuid.toString());
         }
         return httpHeaders;
+    }
+
+    public static String removeSpaces(String json) {
+        if(StringUtils.isEmpty(json))
+            return "";
+
+        char[] charArray = json.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        Stack<Integer> stack = new Stack<>();
+
+        int i = 0;
+        char c;
+        while (i < charArray.length) {
+            c = charArray[i];
+            switch (c) {
+                case '"':
+                case '\'':
+                case '\\':
+                    stack.push(1);
+                    sb.append(c);
+                    break;
+                case ' ':
+                case '\t':
+                case '\r':
+                case '\n':
+                    if(stack.size() % 2 == 1)
+                        sb.append(c);
+                    break;
+                default: {
+                    sb.append(c);
+                }
+            }
+            ++i;
+        }
+
+        return sb.toString();
     }
 }

@@ -82,7 +82,7 @@ public class Pipeline {
     private void processException(String pipe, RequestEvent event, Exception e) {
         DeferredResult<Object> deferredResult = event.getResult();
         if (deferredResult.isSetOrExpired()) {
-            logger.error("an request expired in {}: {}", pipe, event, e);
+            logger.error("an request expired in {}, event: {}", pipe, event, e);
             return;
         }
 
@@ -90,10 +90,10 @@ public class Pipeline {
         if (e instanceof BaseException) {
             BaseException be = (BaseException) e;
             msg = String.format(Constants.ERROR_RESPONSE, be.getCode(), be.getDescription());
-            logger.info("an error happened in {}", pipe, e);
+            logger.info("an error happened in {}, event: {}", pipe, event, e);
         } else {
             msg = String.format(Constants.ERROR_RESPONSE, -1, "unknown error: " + e.getMessage());
-            logger.error("an unexpected error happened in {}", pipe, e);
+            logger.error("an unexpected error happened in {}, event: {}", pipe, event, e);
         }
         HttpHeaders headers = PipeHelper.getHeaders(event);
         ResponseEntity<String> responseEntity = new ResponseEntity<>(msg,
