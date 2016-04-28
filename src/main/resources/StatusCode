@@ -31,4 +31,5 @@ Code    Message                         Data
 5213    namespace or method is null
 5214    get cache error
 5215    pipe error
+5216    serve error
 
