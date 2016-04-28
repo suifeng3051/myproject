@@ -6,6 +6,7 @@ import com.zitech.gateway.gateway.PipeHelper;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.gateway.pipes.IPipe;
 import com.zitech.gateway.gateway.pipes.impl.Pipe;
+import com.zitech.gateway.gateway.pipes.impl.ServePipe;
 import com.zitech.gateway.utils.ClassUtils;
 import com.zitech.gateway.utils.SpringContext;
 
@@ -172,16 +173,24 @@ public class Pipeline {
         return instance;
     }
 
-    public int getPreThreadCount() {
-        return 0;
+    public int getThreadCount() {
+        int count = 0;
+        for (Map.Entry<Integer, ThreadPoolExecutor> entry : executors.entrySet()) {
+            count += entry.getValue().getActiveCount();
+        }
+        return count;
     }
 
-    public int getPreTaskCount() {
-        return 0;
+    public int getTaskCount() {
+        int count = 0;
+        for (Map.Entry<Integer, ThreadPoolExecutor> entry : executors.entrySet()) {
+            count += entry.getValue().getTaskCount();
+        }
+        return count;
     }
 
     public int getHttpAsyncTask() {
-        return 0;
+        return ServePipe.getRequestNum().get();
     }
 
 }

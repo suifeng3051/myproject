@@ -1,9 +1,10 @@
 package com.zitech.gateway.gateway.pipes.impl;
 
+import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.excutor.TicTac;
 import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.monitor.constants.GatewayConstant;
+import com.zitech.gateway.gateway.model.ServeResponse;
 import com.zitech.gateway.monitor.service.MonitorService;
 
 import org.slf4j.Logger;
@@ -11,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -27,23 +27,27 @@ public class StatPipe extends AbstractPipe {
     public void onEvent(RequestEvent event) {
 
         long all = 0;
-        long pre = 0;
         long call = 0;
 
         TicTac ticTac = event.getTicTac();
-        Map<String, Long> perfMap = new HashMap<>();
+        Map<String, TicTac.STEntry> ticTacEntryMap = ticTac.getEntryMap();
 
-        for (Map.Entry<String, TicTac.STEntry> entry : ticTac.getEntryMap().entrySet()) {
+        for (Map.Entry<String, TicTac.STEntry> entry : ticTacEntryMap.entrySet()) {
            if (entry.getKey().equals(Constants.ST_ALL)) {
                 all = entry.getValue().getElapsed();
             } else if (entry.getKey().equals(Constants.ST_CALL)) {
                 call = entry.getValue().getElapsed();
             }
-            perfMap.put(entry.getKey(), entry.getValue().getElapsed());
         }
 
+        String stat = ticTacEntryMap.toString();
 
-        String isSuccess = GatewayConstant.TRUE;
-        monitor.saveMonitorData(event, all, call, pre, 0, isSuccess, "");
+        if (all > 0) {
+            ServeResponse response = event.getServeResponse();
+            String path = event.getNamespace() + "/" + event.getVersion() + "/" + event.getMethod();
+            monitor.saveMonitorData(path, all, call, response.getCode(), stat);
+        }
+
+        logger.info("performance of {}: {}", event.uuid, stat);
     }
 }

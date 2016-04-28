@@ -1,16 +1,16 @@
 package com.zitech.gateway.gateway.model;
 
-public class ApiResponse {
+public class ServeResponse {
 
     private int code;
     private String message;
     private String data;
 
-    public ApiResponse() {
+    public ServeResponse() {
 
     }
 
-    public ApiResponse(int code, String data) {
+    public ServeResponse(int code, String data) {
         this.code = code;
         this.message = "";
         this.data = data;

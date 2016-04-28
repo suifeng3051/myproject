@@ -38,6 +38,7 @@ public class RequestEvent {
 
     private String resultStr;
     private Exception exception;
+    private ServeResponse serveResponse;
 
     private Map<String, String> contextMap = new HashMap<>();
 
@@ -156,6 +157,18 @@ public class RequestEvent {
 
     public void setException(Exception exception) {
         this.exception = exception;
+    }
+
+    public ServeResponse getServeResponse() {
+        return serveResponse;
+    }
+
+    public void setServeResponse(ServeResponse serveResponse) {
+        this.serveResponse = serveResponse;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     public Map<String, String> getContextMap() {

@@ -3,7 +3,7 @@ package com.zitech.gateway.gateway.pipes.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.gateway.PipeHelper;
 import com.zitech.gateway.gateway.exception.PipeException;
-import com.zitech.gateway.gateway.model.ApiResponse;
+import com.zitech.gateway.gateway.model.ServeResponse;
 import com.zitech.gateway.gateway.model.RequestEvent;
 
 import org.slf4j.Logger;
@@ -32,23 +32,21 @@ public class ResultPipe extends AbstractPipe {
 
         String result = event.getResultStr();
         if (!StringUtils.isEmpty(result)) {
-            ApiResponse apiResponse = JSONObject.parseObject(result, ApiResponse.class);
+            ServeResponse serveResponse = JSONObject.parseObject(result, ServeResponse.class);
+            event.setServeResponse(serveResponse);
+
             HttpHeaders headers = PipeHelper.getHeaders(event);
-            if (apiResponse.getCode() == 0) {
-                ResponseEntity<String> responseEntity = new ResponseEntity<>(result,
-                        headers, HttpStatus.valueOf(200));
-                eventResult.setResult(responseEntity);
+
+            ResponseEntity<String> responseEntity = new ResponseEntity<>(result,
+                    headers, HttpStatus.valueOf(200));
+            eventResult.setResult(responseEntity);
+
+            if (serveResponse.getCode() == 0) {
                 logger.info("get correct response, event: {}, result: {}", event, result);
-            } else if (apiResponse.getCode() == -1) {
-                ResponseEntity<String> responseEntity = new ResponseEntity<>(result,
-                        headers, HttpStatus.valueOf(200));
-                eventResult.setResult(responseEntity);
-                logger.error("get error response, event: {}, result: {}", event, result);
+            } else if (serveResponse.getCode() > 0) {
+                logger.info("get error response, event: {}, result: {}", event, result);
             } else {
-                ResponseEntity<String> responseEntity = new ResponseEntity<>(result,
-                        headers, HttpStatus.valueOf(200));
-                eventResult.setResult(responseEntity);
-                logger.info("get unexpected response, event: {}, result: {}", event, result);
+                logger.error("get unexpected response, event: {}, result: {}", event, result);
             }
         } else {
             throw new PipeException(5215, "没有获得结果");

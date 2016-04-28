@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.zitech.gateway.monitor.constants.GatewayConstant;
 import com.zitech.gateway.monitor.entity.CountResult;
 import com.zitech.gateway.monitor.mapreduce.MapReduceJs;
 import com.zitech.gateway.utils.DateUtil;
@@ -36,7 +35,10 @@ import com.zitech.gateway.monitor.mongodb.MapReduceDao;
  */
 @Controller
 public class MonitorDataController {
+
 	private static final Logger logger = LoggerFactory.getLogger(MonitorDataController.class);
+
+    private static final String DB_NAME = "gateway";
 
 	@Autowired
 	MapReduceDao mapReduceDao;
@@ -46,14 +48,10 @@ public class MonitorDataController {
 	 * 	
 	 * @Description: (方法职责详细描述,可空)  
 	 * @Title: rtCount 
-	 * @param request
 	 * @return
 	 * @date 2015年11月27日 下午2:20:26  
 	 * @author ws
-	 * @param api2 
-	 * @param host2 
-	 * @param group2 
-	 * @param metric 
+	 * @param metric
 	 * @param etime 
 	 * @param stime 
 	 */
@@ -71,7 +69,7 @@ public class MonitorDataController {
 
 		Query query = creatQueryConditions(beginTime, endTime, group, api, host);
 		
-		String inputCollectionName = GatewayConstant.DB_NAME;
+		String inputCollectionName = DB_NAME;
 		String mapFunction = MapReduceJs.MAP_FAILURE_COUNT;
 		String reduceFunction = MapReduceJs.REDUCE_FAILURE_COUNT;
 		
@@ -116,7 +114,7 @@ public class MonitorDataController {
 		/*******最大rt时间********/
 		result = new ArrayList<Object>();
 		resMap = new HashMap<String, Object>();
-		inputCollectionName = GatewayConstant.DB_NAME;
+		inputCollectionName = DB_NAME;
 		mapFunction = MapReduceJs.MAP_RT_MAX;
 		reduceFunction = MapReduceJs.REDUCE_RT_MAX;
 		rtResult = mapReduceDao.command(query
@@ -153,7 +151,7 @@ public class MonitorDataController {
 		/*******调用次数********/
 		result = new ArrayList<Object>();
 		resMap = new HashMap<String, Object>();
-		inputCollectionName = GatewayConstant.DB_NAME;
+		inputCollectionName = DB_NAME;
 		mapFunction = MapReduceJs.MAP_REQUEST_COUNT;
 		reduceFunction = MapReduceJs.REDUCE_REQUEST_COUNT;
 		rtResult = mapReduceDao.command(query

@@ -34,7 +34,6 @@ public class TicTac {
             logger.error(name + " does not exist");
             return;
         }
-        entry.setEndThreadId(Thread.currentThread().getId());
         entry.setEnd(System.currentTimeMillis());
     }
 
@@ -68,16 +67,12 @@ public class TicTac {
     }
 
     public class STEntry {
-
-        private long startThreadId;
-        private long endThreadId;
         private long start;
         private long end;
 
         public STEntry(long start, long end) {
             this.start = start;
             this.end = end;
-            this.startThreadId = Thread.currentThread().getId();
         }
 
         public long getElapsed() {
@@ -85,10 +80,6 @@ public class TicTac {
                 return -1;
             }
             return end - start;
-        }
-
-        public void setEndThreadId(long endThreadId) {
-            this.endThreadId = endThreadId;
         }
 
         public long getStart() {
