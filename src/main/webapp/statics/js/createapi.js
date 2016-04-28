@@ -414,16 +414,16 @@ $(document).ready(function(){
 
             $('#serviceParamList').html(str); // 写入之后再根据，注入的id为innerParams的input的值
 
-            var defaultInnerParams = $('#innerParams').val().split(' ');
+            setTimeout(function(){
+                var defaultInnerParams = $('#innerParams').val().split(' ');
 
-            $('#serviceParamList input[type="checkbox"]').each(function(){
-                if($.inArray($(this).val(), defaultInnerParams) == 0 ){
-                    $(this).prop('checked', true);
-                }
-            });
+                $('#serviceParamList input[type="checkbox"]').each(function(){
 
-
-
+                    if($.inArray($(this).val(), defaultInnerParams) != -1 ){
+                        $(this).prop('checked', true);
+                    }
+                });
+            }, 1000);
         }
     });
 
@@ -570,7 +570,6 @@ $(document).ready(function(){
 
         // API接口信息配置
         apiObj = formdataToJSON($('#apiInterfaceConfig').serializeArray());
-//        console.log(apiObj);
         var str = objToStr(apiObj);
         $('#final-review-apiconfig').html(str);
 
@@ -937,7 +936,7 @@ $(document).ready(function(){
             },
              function (d) {
                  console.log(d);
-                if("success" == d) {
+                if("success" == d.message) {
                     var env = getEnv();
                     window.location.href = "apilist?env=" + env;
                     return;
