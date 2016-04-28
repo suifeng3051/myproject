@@ -66,9 +66,9 @@ public class CreateApiController {
         Param paramModel = paramService.getByApiId(apiId);
 
         if(apiModel!=null){
-            results.put("edit","0");
-        }else{
             results.put("edit","1");
+        }else{
+            results.put("edit","0");
         }
 
         results.put("user", userName);
