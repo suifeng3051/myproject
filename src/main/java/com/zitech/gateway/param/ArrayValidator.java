@@ -8,7 +8,7 @@ public class ArrayValidator implements IValidator {
     @Override
     public boolean v(Object object, Param param) {
         if (!param.getRequired()) {
-            if (object == null || (object instanceof JSONArray))
+            if (!(object == null || (object instanceof JSONArray)))
                 throw new ParamException(Constants.Code.PARAM_ERROR,
                         param.getName() + " should be an array or null");
         } else {
