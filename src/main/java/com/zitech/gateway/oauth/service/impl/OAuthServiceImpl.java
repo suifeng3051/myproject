@@ -362,13 +362,11 @@ public class OAuthServiceImpl implements OAuthService {
     public AccessToken getAccessToken(String token) {
         String key = String.format(Constants.CACHE_TOKEN_KEY_PATTERN, token);
         String content = redis.getStringByKey(key);
-        logger.info("get token from redis: {}", content);
         if (!StringUtils.isEmpty(content)) {
             return JSON.parseObject(content, AccessToken.class);
         }
         AccessToken tokens = accessTokenService
                 .getByToken(token);
-        logger.info("get token from db: {}", tokens);
         if (tokens != null)
             redis.set(key, JSON.toJSONString(tokens));
         return tokens;

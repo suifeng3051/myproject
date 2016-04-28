@@ -1,8 +1,6 @@
 package com.zitech.gateway.apiconfig.service;
 
 import com.zitech.gateway.apiconfig.model.Api;
-import com.zitech.gateway.apiconfig.model.Param;
-import com.zitech.gateway.apiconfig.model.Serve;
 
 import java.util.List;
 
@@ -26,7 +24,7 @@ public interface ApiService {
      * @param method
      * @param version
      * @param env
-     * @return
+     * @return  不存在就是true 存在就是false
      */
     boolean checkApi(String namespace, String method, Integer version, Byte env);
 
@@ -56,7 +54,7 @@ public interface ApiService {
      * @param methodMappingId
      * @param env
      */
-    boolean saveResult(Api apiObj, Serve serviceObj, Param paramObj, Byte env);
+    boolean  saveResult(String apiObj,String serviceObj,String paramObj,Byte env);
 
 
     List<Api> getAllByEnv(Byte env);

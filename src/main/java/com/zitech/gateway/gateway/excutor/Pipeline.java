@@ -2,7 +2,7 @@ package com.zitech.gateway.gateway.excutor;
 
 import com.zitech.gateway.common.BaseException;
 import com.zitech.gateway.gateway.Constants;
-import com.zitech.gateway.gateway.Util;
+import com.zitech.gateway.gateway.PipeHelper;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.gateway.pipes.IPipe;
 import com.zitech.gateway.gateway.pipes.impl.Pipe;
@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +52,8 @@ public class Pipeline {
         if(group == null)
             return;
 
+        String groupName = String.format("group-%c", group);
+
         executors.get(group).execute(() -> {
             if (event.getException() != null) {
                 processException("pipeline", event, event.getException());
@@ -60,7 +61,7 @@ public class Pipeline {
             }
 
             TicTac ticTac = event.getTicTac();
-            ticTac.tac("group-" + group);
+            ticTac.tic(groupName);
             List<IPipe> pipes = groupPipes.get(group);
             for (IPipe pipe : pipes) {
                 String name = pipeNames.get(pipe);
@@ -74,7 +75,7 @@ public class Pipeline {
                     logger.info("end of {}: {}", name, event.uuid);
                 }
             }
-            ticTac.tic("group-" + group);
+            ticTac.tac(groupName);
         });
     }
 
@@ -94,7 +95,7 @@ public class Pipeline {
             msg = String.format(Constants.ERROR_RESPONSE, -1, "unknown error: " + e.getMessage());
             logger.error("an unexpected error happened in {}", pipe, e);
         }
-        HttpHeaders headers = Util.getHeaders(event);
+        HttpHeaders headers = PipeHelper.getHeaders(event);
         ResponseEntity<String> responseEntity = new ResponseEntity<>(msg,
                 headers, HttpStatus.valueOf(200));
         deferredResult.setResult(responseEntity);

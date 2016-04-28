@@ -5,7 +5,7 @@ import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.cache.AccessTokenCache;
 import com.zitech.gateway.gateway.cache.ApiCache;
 import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.gateway.Util;
+import com.zitech.gateway.gateway.PipeHelper;
 import com.zitech.gateway.oauth.model.AccessToken;
 
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class ParsePipe extends AbstractPipe {
 
         AccessToken token = tokenCache.get(tokenStr);
         Api api = apiCache.get(event.getNamespace(), event.getMethod(), event.getVersion());
-        String ip = Util.getIp(request);
+        String ip = PipeHelper.getIp(request);
 
         event.setAccessToken(token);
         event.setApi(api);
