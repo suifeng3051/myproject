@@ -3,10 +3,8 @@ package com.zitech.gateway.gateway.cache;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
-import com.zitech.gateway.gateway.exception.TokenValidateException;
+import com.zitech.gateway.gateway.exception.CacheException;
 import com.zitech.gateway.oauth.model.AccessToken;
-import com.zitech.gateway.oauth.oauthex.OAuthConstants;
-import com.zitech.gateway.oauth.service.AccessTokenService;
 import com.zitech.gateway.oauth.service.impl.OAuthServiceImpl;
 
 import org.slf4j.Logger;
@@ -14,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
@@ -27,34 +25,21 @@ public class AccessTokenCache implements ILocalCache {
     @Autowired
     private OAuthServiceImpl oAuthService;
 
-    @Autowired
-    private AccessTokenService openOauthAccessTokensService;
-
     private Cache<String, AccessToken> cache = CacheBuilder.newBuilder().maximumSize(100000).
             expireAfterWrite(30, TimeUnit.MINUTES).build();
 
-    public AccessToken get(UUID eventId, String accessToken) throws TokenValidateException {
-        AccessToken openOauthAccessTokens = null;
+    public AccessToken get(String accessToken) {
         try {
-            openOauthAccessTokens = cache.get(accessToken, () -> oAuthService.getAccessToken(accessToken));
-        } catch (Exception e) {
-            throw new TokenValidateException(OAuthConstants.OAuthResponse.NO_OR_EXPIRED_TOKEN,
-                    OAuthConstants.OAuthDescription.INVALID_TOKEN);
+            return cache.get(accessToken, () -> oAuthService.getAccessToken(accessToken));
+        } catch (ExecutionException e) {
+            logger.info("get cache error:", e);
+            throw new CacheException(5214, "非法访问码");
         }
-        return openOauthAccessTokens;
     }
 
     @Override
     public void load() {
-
-        /***access token need not load***/
-
-        /*List<OpenOauthAccessTokens> list = openOauthAccessTokensService.selectValidToken();
-        if (null != list && list.size() > 0) {
-            for (OpenOauthAccessTokens token : list) {
-                get(null, token.getAccessToken());
-            }
-        }*/
+        //nothing
     }
 
     @Override

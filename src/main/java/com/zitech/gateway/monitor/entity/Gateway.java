@@ -2,7 +2,7 @@
  * Copyright (c) 2015-2020 by zitech
  * All rights reserved.
  */
-package com.zitech.gateway.stat.entity;
+package com.zitech.gateway.monitor.entity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 

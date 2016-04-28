@@ -3,9 +3,9 @@ package com.zitech.gateway.gateway.exception;
 
 import com.zitech.gateway.common.BaseException;
 
-public class CallException extends BaseException {
+public class ServeException extends BaseException {
 
-    public CallException(int code, String error) {
+    public ServeException(int code, String error) {
         super(code, error);
     }
 

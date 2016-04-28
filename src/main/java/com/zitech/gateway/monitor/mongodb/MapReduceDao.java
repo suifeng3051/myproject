@@ -2,9 +2,9 @@
  * Copyright (c) 2015-2020 by zitech
  * All rights reserved.
  */
-package com.zitech.gateway.stat.mongodb;
+package com.zitech.gateway.monitor.mongodb;
 
-import com.zitech.gateway.stat.entity.CountResult;
+import com.zitech.gateway.monitor.entity.CountResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;

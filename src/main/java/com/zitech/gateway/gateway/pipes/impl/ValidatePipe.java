@@ -1,5 +1,6 @@
 package com.zitech.gateway.gateway.pipes.impl;
 
+import com.zitech.gateway.common.RequestType;
 import com.zitech.gateway.gateway.cache.ParamCache;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.param.Param;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-@Pipe(Group = 1, Order = 3)
+@Pipe(Group = 'A', Order = 2)
 public class ValidatePipe extends AbstractPipe {
 
     private static final Logger logger = LoggerFactory.getLogger(ValidatePipe.class);
@@ -20,10 +21,12 @@ public class ValidatePipe extends AbstractPipe {
     @Autowired
     private ParamCache paramCache;
 
-    public void onEvent(RequestEvent event) {
+    public void onEvent(RequestEvent event) throws Exception {
 
-        String body = event.getBody();
-        Param param = paramCache.get(event.getId(), event.getApi().getId());
-        ParamHelper.validate(body, param);
+        if (event.getRequestType() == RequestType.POST) {
+            String body = event.getBody();
+            Param param = paramCache.get(event.getApi().getId());
+            ParamHelper.validate(body, param);
+        }
     }
 }

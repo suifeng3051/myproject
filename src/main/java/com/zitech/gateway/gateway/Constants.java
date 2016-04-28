@@ -7,18 +7,10 @@ import java.util.TreeMap;
 
 public class Constants {
 
-    // for token
     public static final String ACCESS_TOKEN = "access_token";
-    public static final String METHOD = "method";
-
-    // for secret
-    public static final String SIGN = "sign";
-    public static final String CLIENTID = "clientid";
 
     public static final String ST_ALL = "st_all";
-    public static final String ST_PRE = "st_pre";
     public static final String ST_CALL = "st_call";
-    public static final String ST_POST = "st_post";
 
     public static final String ERROR_RESPONSE = "{\n\t\"code\": %d,\n\t\"message\": \"%s\",\n\t\"data\": \"\"\n}";
 
@@ -27,6 +19,8 @@ public class Constants {
     public static final String PARAMS_CLIENT_ID = "PARAMS-CLIENT-ID";
     public static final String PARAMS_CLIENT_NAME = "PARAMS-CLIENT-NAME";
     public static final String PARAMS_REQUEST_IP = "PARAMS-REQUEST-IP";
+
+    public static final String REQUEST_EVENT_ID = "X-REQUEST-EVENT-ID";
 
     public static Map<String, String> contextMap = new TreeMap<>();
 

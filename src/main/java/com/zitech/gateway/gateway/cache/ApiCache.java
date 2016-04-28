@@ -6,6 +6,7 @@ import com.google.common.cache.CacheBuilder;
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.apiconfig.service.ApiService;
+import com.zitech.gateway.gateway.exception.CacheException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @LocalCache("api")
@@ -29,22 +31,21 @@ public class ApiCache implements ILocalCache {
 
     private Cache<String, Api> cache = CacheBuilder.newBuilder().maximumSize(10000).build();
 
-    public Api get(UUID eventId, String namespace, String method, Integer version) {
-        Api api = null;
+    public Api get(String namespace, String method, Integer version) {
         try {
             String id = String.format("%s-%s-%s-%s", namespace, method, version, appConfig.env);
-            api = cache.get(id, () -> apiService.getApi(namespace, method, version, appConfig.env));
-        } catch (Exception e) {
-            logger.error("error when getting cache: {}", eventId, e);
+            return cache.get(id, () -> apiService.getApi(namespace, method, version, appConfig.env));
+        } catch (ExecutionException e) {
+            logger.info("get cache error:", e);
+            throw new CacheException(5214, "访问非法API");
         }
-        return api;
     }
 
     @Override
     public void load() {
         List<Api> apiList = apiService.getAllByEnv(appConfig.env);
         for (Api api : apiList) {
-            this.get(null, api.getNamespace(), api.getMethod(), api.getVersion());
+            this.get(api.getNamespace(), api.getMethod(), api.getVersion());
         }
     }
 

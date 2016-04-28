@@ -2,7 +2,7 @@
  * Copyright (c) 2015-2020 by zitech
  * All rights reserved.
  */
-package com.zitech.gateway.stat.mapreduce;
+package com.zitech.gateway.monitor.mapreduce;
 
 /** 
  * 

@@ -5,7 +5,7 @@ import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.cache.AccessTokenCache;
 import com.zitech.gateway.gateway.cache.ApiCache;
 import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.gateway.utils.IPUtil;
+import com.zitech.gateway.gateway.Util;
 import com.zitech.gateway.oauth.model.AccessToken;
 
 import org.slf4j.Logger;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @Service
-@Pipe(Group = 1, Order = 1)
+@Pipe(Group = 'A', Order = 1)
 public class ParsePipe extends AbstractPipe {
 
     private static final Logger logger = LoggerFactory.getLogger(ParsePipe.class);
@@ -28,15 +28,15 @@ public class ParsePipe extends AbstractPipe {
     @Autowired
     private ApiCache apiCache;
 
-    public void onEvent(RequestEvent event) {
+    public void onEvent(RequestEvent event) throws Exception {
 
         HttpServletRequest request = event.getRequest();
 
         String tokenStr = request.getParameter(Constants.ACCESS_TOKEN);
 
-        AccessToken token = tokenCache.get(event.getId(), tokenStr);
-        Api api = apiCache.get(event.getId(), event.getNamespace(), event.getMethod(), event.getVersion());
-        String ip = IPUtil.getIp(request);
+        AccessToken token = tokenCache.get(tokenStr);
+        Api api = apiCache.get(event.getNamespace(), event.getMethod(), event.getVersion());
+        String ip = Util.getIp(request);
 
         event.setAccessToken(token);
         event.setApi(api);

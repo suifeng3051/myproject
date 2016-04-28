@@ -117,7 +117,6 @@ public class AuthorizeController extends BaseController {
             }
 
             oAuthAuthzParameters.setUserId((Integer) session.getAttribute(Constants.USER_ID));
-            //oAuthAuthzParameters.setKdtId((Integer) session.getAttribute(Constants.KDT_ID));
             if (StringUtils.isEmpty(oAuthAuthzParameters.getScope())) {
                 oAuthAuthzParameters.setScope(openOauthClients.getDefaultScope());
             } else {
@@ -145,18 +144,15 @@ public class AuthorizeController extends BaseController {
                     }
                 }
             }
-//            if (!flag) {
-//                OAuthResponse response = OAuthASResponseEx
-//                        .errorResponse(HttpServletResponse.SC_OK)
-//                        .setError(String.valueOf(OAuthConstants.OAuthResponse.INVALID_REQUEST))
-//                        .setErrorDescription(OAuthConstants.OAuthDescription.INVALID_REDIRECT_URI)
-//                        .buildJSONMessage();
-//                logger.info("top domain does not conform with each other: {} and {}", oAuthAuthzParameters.getRedirectUri(), redirectUri);
-//                return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
-//            }
-
-            // clear some sessions
-            //session.setAttribute(Constants.KDT_ID, null);
+            if (!flag) {
+                OAuthResponse response = OAuthASResponseEx
+                        .errorResponse(HttpServletResponse.SC_OK)
+                        .setError(String.valueOf(OAuthConstants.OAuthResponse.INVALID_REQUEST))
+                        .setErrorDescription(OAuthConstants.OAuthDescription.INVALID_REDIRECT_URI)
+                        .buildJSONMessage();
+                logger.info("top domain does not conform with each other: {} and {}", oAuthAuthzParameters.getRedirectUri(), redirectUri);
+                return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
+            }
 
             // build response
             OAuthIssuerImpl oauthIssuerImpl = new OAuthIssuerImpl(new UUIDValueGeneratorEx());

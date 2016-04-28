@@ -3,7 +3,7 @@ package com.zitech.gateway.gateway.pipes.impl;
 import com.zitech.gateway.apiconfig.model.Serve;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.cache.ServeCache;
-import com.zitech.gateway.gateway.exception.CallException;
+import com.zitech.gateway.gateway.exception.ServeException;
 import com.zitech.gateway.gateway.excutor.HttpAsyncClient;
 import com.zitech.gateway.gateway.excutor.Pipeline;
 import com.zitech.gateway.gateway.model.RequestEvent;
@@ -11,6 +11,7 @@ import com.zitech.gateway.common.RequestType;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.concurrent.FutureCallback;
@@ -32,7 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Service
-@Pipe(Group = 1, Order = 5)
+@Pipe(Group = 'A', Order = 5)
 public class ServePipe extends AbstractPipe {
 
     private final static Logger logger = LoggerFactory.getLogger(ServePipe.class);
@@ -49,7 +50,7 @@ public class ServePipe extends AbstractPipe {
     @Override
     public void onEvent(RequestEvent event) throws Exception {
 
-        Serve serve = serveCache.get(event.getId(), event.getApi().getId());
+        Serve serve = serveCache.get(event.getApi().getId());
         String url = serve.getUrl();
         if (!url.endsWith("/")) {
             url = url + "/";
@@ -60,22 +61,20 @@ public class ServePipe extends AbstractPipe {
 
         List<Header> headerList = createHeaders(event, serve);
 
+        String contentType = event.getRequest().getContentType();
         if (event.getRequestType() == RequestType.POST) {
             HttpPost httpPost = new HttpPost(requestUrl);
-
             StringEntity entity = new StringEntity(event.getBody(), "utf-8");
-            entity.setContentType("application/json;charset=utf-8");
+            entity.setContentType(contentType);
             httpPost.setEntity(entity);
-
             headerList.forEach(httpPost::setHeader);
-
+            httpPost.setHeader("Content-Type", contentType);
             HttpAsyncClient.client.execute(httpPost, new HttpAsyncCallback(event));
         } else if (event.getRequestType() == RequestType.GET) {
             HttpGet httpGet = new HttpGet();
             httpGet.setURI(new URI(requestUrl));
-
             headerList.forEach(httpGet::setHeader);
-
+            httpGet.setHeader("Content-Type", contentType);
             HttpAsyncClient.client.execute(httpGet, new HttpAsyncCallback(event));
         }
     }
@@ -105,8 +104,15 @@ public class ServePipe extends AbstractPipe {
             requestNum.decrementAndGet();
             this.event.getTicTac().tac(Constants.ST_CALL);
             try {
-                String resultStr = EntityUtils.toString(result.getEntity());
-                event.setResultStr(resultStr);
+                int code = result.getStatusLine().getStatusCode();
+                if (code >= HttpStatus.SC_BAD_REQUEST && code < HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+                    event.setException(new ServeException(5210, "serve not found"));
+                } else if (code >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+                    event.setException(new ServeException(5211, "server internal error"));
+                } else {
+                    String resultStr = EntityUtils.toString(result.getEntity());
+                    event.setResultStr(resultStr);
+                }
                 Pipeline.getInstance().process(event);
             } catch (IOException e) {
                 event.setException(e);
@@ -116,19 +122,19 @@ public class ServePipe extends AbstractPipe {
 
         @Override
         public void failed(Exception ex) {
-            logger.error("http client call error: {}", event.getId(), ex);
+            logger.error("http client call error: {}", event.uuid, ex);
             requestNum.decrementAndGet();
             this.event.getTicTac().tac(Constants.ST_CALL);
-            event.setException(new CallException(5016, "async http client exception :" + ex.toString()));
+            event.setException(new ServeException(5016, "async http client exception :" + ex.toString()));
             Pipeline.getInstance().process(event);
         }
 
         @Override
         public void cancelled() {
-            logger.error("http client call cancelled: {}", event.getId());
+            logger.error("http client call cancelled: {}", event.uuid);
             requestNum.decrementAndGet();
             this.event.getTicTac().tac(Constants.ST_CALL);
-            event.setException(new CallException(5015, "request is cancelled"));
+            event.setException(new ServeException(5015, "request is cancelled"));
             Pipeline.getInstance().process(event);
         }
     }

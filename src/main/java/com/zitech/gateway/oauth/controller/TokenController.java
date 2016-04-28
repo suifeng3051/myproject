@@ -489,22 +489,7 @@ public class TokenController {
     public Object password(HttpServletRequest request)
             throws URISyntaxException, OAuthSystemException {
         try {
-//            String type = request.getParameter("type");
-//            LoginType loginType = LoginType2EnumUtils.getLoginTypeByStr(type);
-//
-//            if (loginType == null) //登录类型不正确
-//            {
-//                OAuthResponse response = OAuthASResponseEx
-//                        .errorResponse(HttpServletResponse.SC_OK)
-//                        .setError(String.valueOf(OAuthConstants.OAuthResponse.INVALID_TYPE))
-//                        .setErrorDescription(OAuthConstants.OAuthDescription.INVALID_GRANT_TYPE)
-//                        .buildJSONMessage();
-//                logger.info("invalid type, context: {}", type);
-//                return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
-//            }
-
             OAuthPasswordRequest oauthRequest = new OAuthPasswordRequest(request);
-            //OAuthAuthzParameters参数对象
             OAuthAuthzParameters oAuthAuthzParameters = new OAuthAuthzParameters(oauthRequest);//参数类型决定构造函数的调用
 
             //验证GRANT_TYPE
@@ -567,7 +552,6 @@ public class TokenController {
 
             Account user = null;
             try {
-//                user = oAuthService.login(oAuthAuthzParameters.getUserName(),oAuthAuthzParameters.getPassword(), Integer.valueOf(type));
                 user = oAuthService.login(oAuthAuthzParameters, request);
             } catch (Exception e) {
                 logger.info("login error", e);
@@ -594,25 +578,6 @@ public class TokenController {
                 oAuthAuthzParameters.setScope(openOauthClients.getDefaultScope());
             }
 
-            // remove by pxl 网关权限暂时只到client级别
-            /*else {
-                // add by panxl 若该用户已被分配了权限，则写入其被分配的权限,否则就是写入该client所拥有的默认权限
-                String scope_userHas = user.getScope();
-                if(StringUtils.isNotBlank(scope_userHas)){
-                    oAuthAuthzParameters.setScope(scope_userHas.trim());
-                }else{
-                    oAuthAuthzParameters.setScope(
-                            OAuthUtils.encodeScopes(
-                                    oAuthService.getRetainScopes(
-                                            openOauthClients.getDefaultScope(),
-                                            oAuthAuthzParameters.getScope()
-                                    )
-                            )
-                    );
-                }//end else StringUtils.isNotBlank(scope_userHas)
-
-            }//end else StringUtils.isEmpty(oAuthAuthzParameters.getScope()
-*/
             /**
              * limit client access token number
              */
