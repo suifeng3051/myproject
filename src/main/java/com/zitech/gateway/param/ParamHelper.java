@@ -114,6 +114,8 @@ public class ParamHelper {
                 return new ArrayValidator();
             case OBJECT:
                 return new ObjectValidator();
+            case BOOL:
+                return new BoolValidator();
         }
 
         throw new LogicalException(Constants.Code.UNKNOWN_PARAM_TYPE,

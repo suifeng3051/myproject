@@ -94,6 +94,10 @@ public class Pipeline {
             BaseException be = (BaseException) e;
             msg = String.format(Constants.ERROR_RESPONSE, be.getCode(), be.getDescription());
             logger.info("an error happened in {}, event: {}", pipe, event, e);
+        } else if(e.getCause() instanceof BaseException) {
+            BaseException be = (BaseException) e.getCause();
+            msg = String.format(Constants.ERROR_RESPONSE, be.getCode(), be.getDescription());
+            logger.info("an error happened in {}, event: {}", pipe, event, e);
         } else {
             msg = String.format(Constants.ERROR_RESPONSE, -1, "unknown error: " + e.getMessage());
             logger.error("an unexpected error happened in {}, event: {}", pipe, event, e);

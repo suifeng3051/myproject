@@ -8,7 +8,8 @@ public enum ParamType {
     INT,
     STRING,
     OBJECT,
-    ARRAY;
+    ARRAY,
+    BOOL;
 
     public static ParamType from(String type) {
         ParamType[] values = ParamType.values();
@@ -18,7 +19,7 @@ public enum ParamType {
             }
         }
 
-        throw new LogicalException(1, "unknown param type");
+        throw new LogicalException(1, "unknown param type: " + type);
     }
 
 }
