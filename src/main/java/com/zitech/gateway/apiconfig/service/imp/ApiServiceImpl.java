@@ -106,7 +106,7 @@ public class ApiServiceImpl implements ApiService {
                 return false;
             }
 
-            if (!checkApi(apiModel.getNamespace(), apiModel.getMethod(), apiModel.getVersion(), env) || apiModel.getId() != -1) {
+            if (apiModel.getId() != -1 || !checkApi(apiModel.getNamespace(), apiModel.getMethod(), apiModel.getVersion(), env) ) {
                 //exists update
                 apiDAO.updateByPrimaryKeySelective(apiModel);
             } else {
