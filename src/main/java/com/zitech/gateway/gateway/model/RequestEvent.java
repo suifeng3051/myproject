@@ -2,6 +2,8 @@ package com.zitech.gateway.gateway.model;
 
 import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.common.RequestType;
+import com.zitech.gateway.gateway.Constants;
+import com.zitech.gateway.gateway.PipeHelper;
 import com.zitech.gateway.gateway.excutor.TicTac;
 import com.zitech.gateway.oauth.model.AccessToken;
 
@@ -177,12 +179,12 @@ public class RequestEvent {
         return "{" +
                 "uuid=" + uuid +
                 ", requestType=" + requestType +
-                ", accessToken=" + accessToken.getAccessToken() +
+                ", accessToken=" + request.getParameter(Constants.ACCESS_TOKEN) +
                 ", ip='" + (ip == null ? "" : ip) + '\'' +
                 ", path='" + namespace + "/" + version + "/" + method + '\'' +
                 ", step=" + step +
-                ", body='" + (body == null ? "" : body.replaceAll("\r|\n|", "")) + '\'' +
-                ", resultStr='" + (resultStr == null ? "" : resultStr.replaceAll("\r|\n|", "")) + '\'' +
+                ", body='" + PipeHelper.removeSpaces(body) + '\'' +
+                ", resultStr='" + PipeHelper.removeSpaces(resultStr) + '\'' +
                 ", exception=" + (exception == null ? "" : exception.getMessage()) +
                 '}';
     }
