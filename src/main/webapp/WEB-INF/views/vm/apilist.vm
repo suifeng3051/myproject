@@ -186,15 +186,15 @@
                                         POST
                                     #end</span>
                                     <a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="$!apiElement.id" class="glyphicon glyphicon-trash deleteIcon"></span></a>
-                                    <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id"  class="glyphicon glyphicon-eye-open apimonitor"></span></a>
-                                    #if(1==$!apiElement.validFlag)
-                                        <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="禁用" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id" flag="1" class="glyphicon glyphicon-remove-circle disableIcon"></span></a>
+                                    <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="$!apiElement.namespace" method="$!apiElement.method" version="$!apiElement.version" apiID="$!apiElement.id"  class="glyphicon glyphicon-eye-open apimonitor"></span></a>
+                                    #if(1==$!apiElement.avail)
+                                        <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="禁用" namespace="$!apiElement.namespace" method="$!apiElement.method" version="$!apiElement.version" apiID="$!apiElement.id" flag="1" class="glyphicon glyphicon-remove-circle disableIcon"></span></a>
                                     #else
-                                        <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="启用" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiID="$!apiElement.id" flag="0" class="glyphicon glyphicon-ok-circle disableIcon"></span></a>
+                                        <a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="启用" namespace="$!apiElement.namespace" method="$!apiElement.method" version="$!apiElement.version" apiID="$!apiElement.id" flag="0" class="glyphicon glyphicon-ok-circle disableIcon"></span></a>
                                     #end
 ##                                        <a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>
 ##                                        <a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="$!apiElement.id" namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" class="glyphicon glyphicon-wrench testApi"></span></a>
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="$!apiElement.namespace" name="$!apiElement.name" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-edit editIcon"></span></a>
+                                        <a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="$!apiElement.namespace" method="$!apiElement.method" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-edit editIcon"></span></a>
                                 </li>
 ##                            #end
                         #end

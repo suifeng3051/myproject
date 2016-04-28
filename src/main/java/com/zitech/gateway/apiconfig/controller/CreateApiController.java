@@ -193,19 +193,20 @@ public class CreateApiController {
     public String saveResult(@RequestParam("apiObj") String  apiObj,
                              @RequestParam("serviceObj") String serviceObj,
                              @RequestParam("paramObj")  String paramObj,
-                             @RequestParam("env") Integer env) {
+                             @RequestParam("env") Byte env) {
 
         int code = 0;
         String message = "success";
         boolean flag = false;
         ApiResult<String> apiResult = new ApiResult<>(0,"success");
         try {
-            flag = apiService.saveResult(apiObj,serviceObj,paramObj, (byte) 1);
+            flag = apiService.saveResult(apiObj,serviceObj,paramObj, env);
         }catch (Exception e){
             e.printStackTrace();
             logger.error("保存API是出错！\r apiObj:"+apiObj+"  \r serviceObj:"+serviceObj+" \r paramObj:"+paramObj,e);
             code=1;
             message = "fail";
+            apiResult.setData("请检查对象传值是否正确！");
         }
 
         if(!flag){
@@ -227,4 +228,32 @@ public class CreateApiController {
         ApiResult<Map<String, String>> apiResult = new ApiResult<>(0,"success", Constants.contextMap);
         return apiResult.toString();
     }
+
+    @RequestMapping(value = "/uptAvail", produces="application/json;charset=utf-8",method= RequestMethod.POST)
+    @ResponseBody
+    public String uptAvail(@RequestParam("update") String  update) {
+
+
+        JSONObject obj = JSONObject.parseObject(update);
+
+        if(!obj.containsKey("id")||!obj.containsKey("avail")||!obj.containsKey("env")){
+
+            return  new ApiResult<>(1,"更新失败！传值不完成！").toString();
+        }
+
+
+        if(apiService.uptAvail(obj.getInteger("id"),obj.getInteger("avail"),obj.getByte("env")) ){
+            return  new ApiResult<>(0,"success").toString();
+        }else{
+            return  new ApiResult<>(1,"更新失败！").toString();
+        }
+
+
+
+    }
+
+
+
+
+
 }

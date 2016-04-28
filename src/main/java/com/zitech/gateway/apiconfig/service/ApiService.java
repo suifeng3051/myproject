@@ -57,6 +57,9 @@ public interface ApiService {
     boolean  saveResult(String apiObj,String serviceObj,String paramObj,Byte env);
 
 
+    boolean uptAvail(int apiId,int avail,Byte env);
+
+
     List<Api> getAllByEnv(Byte env);
 
     List<Api> getByGroupIdAndEnv(Integer groupId, Byte env);
