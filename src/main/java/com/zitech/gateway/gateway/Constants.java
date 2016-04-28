@@ -19,8 +19,7 @@ public class Constants {
     public static final String PARAMS_CLIENT_ID = "PARAMS-CLIENT-ID";
     public static final String PARAMS_CLIENT_NAME = "PARAMS-CLIENT-NAME";
     public static final String PARAMS_REQUEST_IP = "PARAMS-REQUEST-IP";
-
-    public static final String REQUEST_EVENT_ID = "X-REQUEST-EVENT-ID";
+    public static final String PARAMS_EVENT_ID = "PARAMS-EVENT-ID";
 
     public static Map<String, String> contextMap = new TreeMap<>();
 
@@ -30,5 +29,6 @@ public class Constants {
         contextMap.put("客户端ID", PARAMS_CLIENT_ID);
         contextMap.put("客户端名称", PARAMS_CLIENT_NAME);
         contextMap.put("用户IP", PARAMS_REQUEST_IP);
+        contextMap.put("事件ID", PARAMS_EVENT_ID);
     }
 }

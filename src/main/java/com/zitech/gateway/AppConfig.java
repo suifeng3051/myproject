@@ -40,4 +40,8 @@ public class AppConfig {
         return env == 1;
     }
 
+    public boolean isPrdMode() {
+        return env == 3;
+    }
+
 }

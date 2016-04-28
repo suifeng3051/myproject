@@ -174,12 +174,16 @@ public class RequestEvent {
 
     @Override
     public String toString() {
-        return "[ " + uuid + " " + requestType + " " + this.getNamespace() + " " + this.getMethod() + " " + this.getVersion() + " " + " ] {" +
-                ", accessToken='" + accessToken + '\'' +
-                ", body='" + body + '\'' +
-                ", exception=" + (exception == null ? "" : exception.toString()) +
-                ", clientIp = '" + (getIp() == null ? "" : getIp()) + '\'' +
+        return "{" +
+                "uuid=" + uuid +
+                ", requestType=" + requestType +
+                ", accessToken=" + accessToken.getAccessToken() +
+                ", ip='" + (ip == null ? "" : ip) + '\'' +
+                ", path='" + namespace + "/" + version + "/" + method + '\'' +
+                ", step=" + step +
+                ", body='" + (body == null ? "" : body.replaceAll("\r|\n|", "")) + '\'' +
+                ", resultStr='" + (resultStr == null ? "" : resultStr.replaceAll("\r|\n|", "")) + '\'' +
+                ", exception=" + (exception == null ? "" : exception.getMessage()) +
                 '}';
     }
-
 }

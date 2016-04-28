@@ -9,7 +9,7 @@ import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class Util {
+public class PipeHelper {
 
     public static final AppConfig appConfig = SpringContext.getBean(AppConfig.class);
 
@@ -29,8 +29,8 @@ public class Util {
 
     public static HttpHeaders getHeaders(RequestEvent event) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        if (appConfig.isDevMode()) {
-            httpHeaders.add(Constants.REQUEST_EVENT_ID, event.uuid.toString());
+        if (!appConfig.isPrdMode()) {
+            httpHeaders.add(Constants.PARAMS_EVENT_ID, event.uuid.toString());
         }
         return httpHeaders;
     }
