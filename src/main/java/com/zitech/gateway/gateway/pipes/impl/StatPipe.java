@@ -2,6 +2,7 @@ package com.zitech.gateway.gateway.pipes.impl;
 
 import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.gateway.Constants;
+import com.zitech.gateway.gateway.excutor.Pipeline;
 import com.zitech.gateway.gateway.excutor.TicTac;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.gateway.model.ServeResponse;
@@ -28,6 +29,17 @@ public class StatPipe extends AbstractPipe {
 
         long all = 0;
         long call = 0;
+
+        Pipeline pipeline = Pipeline.getInstance();
+        if (pipeline.checkLastStep(event)) {
+            Integer group = pipeline.getGroup(event);
+            String groupName = String.format("group-%c", group);
+
+            TicTac ticTac = event.getTicTac();
+            ticTac.tac(groupName);
+
+            ticTac.tac(Constants.ST_ALL);
+        }
 
         TicTac ticTac = event.getTicTac();
         Map<String, TicTac.STEntry> ticTacEntryMap = ticTac.getEntryMap();

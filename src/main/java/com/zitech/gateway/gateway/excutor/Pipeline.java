@@ -57,7 +57,7 @@ public class Pipeline {
 
         executors.get(group).execute(() -> {
             if (event.getException() != null) {
-                processException("pipeline", event, event.getException());
+                processException("pipeline", event);
                 return;
             }
 
@@ -70,7 +70,8 @@ public class Pipeline {
                     logger.info("begin of {}: {}", name, event.uuid);
                     pipe.onEvent(event);
                 } catch (Exception e) {
-                    processException(name, event, e);
+                    event.setException(e);
+                    processException(name, event);
                     break;
                 } finally {
                     logger.info("end of {}: {}", name, event.uuid);
@@ -80,7 +81,8 @@ public class Pipeline {
         });
     }
 
-    private void processException(String pipe, RequestEvent event, Exception e) {
+    private void processException(String pipe, RequestEvent event) {
+        Exception e = event.getException();
         DeferredResult<Object> deferredResult = event.getResult();
         if (deferredResult.isSetOrExpired()) {
             logger.error("an request expired in {}, event: {}", pipe, event, e);
@@ -113,7 +115,22 @@ public class Pipeline {
             }
             ++i;
         }
+        return null;
+    }
 
+    public boolean checkLastStep(RequestEvent event) {
+        return event.getStep().equals(executors.size() - 1);
+    }
+
+    public Integer getGroup(RequestEvent event) {
+        int step = event.getStep();
+        int i = 0;
+        for (Map.Entry<Integer, ThreadPoolExecutor> entry : executors.entrySet()) {
+            if (step == i) {
+                return entry.getKey();
+            }
+            ++i;
+        }
         return null;
     }
 
