@@ -597,7 +597,7 @@ $(document).ready(function(){
             $('#review-jsonparse').show();
 
         } else {  // 请求方式 GET
-            paramObj = '';
+            paramObj = null;
             $('#review-jsonparse').hide();
         }
     }
