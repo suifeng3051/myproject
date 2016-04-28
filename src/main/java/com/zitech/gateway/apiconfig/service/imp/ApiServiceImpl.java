@@ -9,6 +9,7 @@ import com.zitech.gateway.apiconfig.model.Param;
 import com.zitech.gateway.apiconfig.model.Serve;
 import com.zitech.gateway.apiconfig.service.ApiService;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +116,7 @@ public class ApiServiceImpl implements ApiService {
             }
 
             try {
-                serveModel = JSON.parseObject(apiObj, Serve.class);
+                serveModel = JSON.parseObject(serviceObj, Serve.class);
                 serveModel.setApiId(apiModel.getId());
                 serveModel.setEnv(env);
             } catch (Exception e) {
@@ -130,8 +131,10 @@ public class ApiServiceImpl implements ApiService {
                 serveDAO.insertSelective(serveModel);
             }
 
+        if(StringUtils.isNotBlank(paramObj)) {
+
             try {
-                paramModel = JSON.parseObject(apiObj, Param.class);
+                paramModel = JSON.parseObject(paramObj, Param.class);
                 paramModel.setApiId(apiModel.getId());
                 paramModel.setEnv(env);
             } catch (Exception e) {
@@ -145,7 +148,7 @@ public class ApiServiceImpl implements ApiService {
                 //add
                 paramDAO.insertSelective(paramModel);
             }
-
+        }
 
 
         return true;

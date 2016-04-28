@@ -1,10 +1,11 @@
 package com.zitech.gateway.apiconfig.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.apiconfig.model.Group;
-import com.zitech.gateway.apiconfig.service.AdminService;
-import com.zitech.gateway.apiconfig.service.ApiService;
-import com.zitech.gateway.apiconfig.service.GroupService;
+import com.zitech.gateway.apiconfig.model.Param;
+import com.zitech.gateway.apiconfig.model.Serve;
+import com.zitech.gateway.apiconfig.service.*;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
 import com.zitech.gateway.gateway.Constants;
@@ -40,13 +41,17 @@ public class CreateApiController {
 
     @Autowired
     private ApiService apiService;
+    @Autowired
+    private ServeService serveService;
+    @Autowired
+    private ParamService paramService;
 
 
     @RequestMapping("/createapi")
     public ModelAndView createApi(@RequestParam(value = "env", defaultValue="1") Byte env,
                                   @RequestParam("group") String group,
                                   @RequestParam(value = "edit", required = false, defaultValue = "0") Integer edit,
-                                  @RequestParam(value = "apiId", required = false) Long apiId,
+                                  @RequestParam(value = "apiId", required = false) Integer apiId,
                                   HttpServletRequest request,
                                   HttpServletResponse response) {
         String userName = adminService.getUserNameFromSessionAndRedis(request);
@@ -55,10 +60,18 @@ public class CreateApiController {
         }
 
         Map<String, Object> results = new HashMap<>();
+
+        Api apiModel = apiService.getApiById(apiId);
+        Serve serveModel = serveService.getByApiId(apiId);
+        Param paramModel = paramService.getByApiId(apiId);
+
         results.put("user", userName);
         results.put("edit","0");
         results.put("apiType","1");
         results.put("env", env);
+        results.put("api", apiModel);
+        results.put("serve", serveModel);
+        results.put("param", paramModel);
         List<Group> groupList = null;
         try {
             groupList = groupService.getAll();
