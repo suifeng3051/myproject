@@ -179,10 +179,10 @@
 ##                            #else
                                 <li class="list-group-item apiElement">
                                     <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.method</a>
-                                    <span style="position: absolute;left:400px;color:#929292;">$!apiElement.api_description</span>
-                                    <span style="position: absolute;right:200px;color:#929292;">#if(0 == $!apiElement.requestType)
+                                    <span style="position: absolute;left:400px;color:#929292;">$!apiElement.apiDescription</span>
+                                    <span style="position: absolute;right:200px;color:#929292;">#if('GET' == $!apiElement.requestType)
                                         GET
-                                    #elseif(1 == $!apiElement.requestType)
+                                    #elseif('POST' == $!apiElement.requestType)
                                         POST
                                     #end</span>
                                     <a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="$!apiElement.id" class="glyphicon glyphicon-trash deleteIcon"></span></a>
