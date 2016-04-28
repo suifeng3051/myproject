@@ -122,7 +122,7 @@
                                 <label for="requestType" class="col-sm-4 control-label">请求方式</label>
                                 #set($!apiID=$!results.get('api').id)
                                 <div class="col-sm-6">
-                                    <select id="requestType" name="request_type" class="form-control" >#if(1 == $!results.get('api').requestType)<option value="1" selected>POST</option><option value="0" >GET</option>#else<option value="1" >POST</option><option value="0" selected>GET</option>#end</select> #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
+                                    <select id="requestType" name="requestType" class="form-control" >#if(1 == $!results.get('api').requestType)<option value="post" selected>POST</option><option value="get" >GET</option>#else<option value="post" >POST</option><option value="get" selected>GET</option>#end</select> #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
                                 </div>
                             </div>
 
@@ -161,7 +161,7 @@
                                 <label for="apiGroup" class="col-sm-4 control-label">API分组</label>
                                 #set($!apiID=$!results.get('api').id)
                                 <div class="col-sm-6">
-                                    <select id="apiGroup" name="group_id" class="form-control" >
+                                    <select id="apiGroup" name="groupId" class="form-control" >
                                         #foreach ($!group in $!results.get("grouplist"))
                                         #if($!group.alias == $!results.get('api').apiGroup)
                                         <option value="$!group.alias" selected>$!group.name</option>
@@ -181,43 +181,27 @@
                             <div class="form-group">
                                 <label for="isFreq" class="col-sm-4 control-label">频率控制</label>
                                 <div class="col-sm-6">
-                                    <select id="isFreq" name="frequency_control" class="form-control" >#if(1 == $!results.get('api').enableFreq)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
+                                    <select id="isFreq" name="frequencyControl" class="form-control" >#if(1 == $!results.get('api').enableFreq)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="isInnerOuter" class="col-sm-4 control-label">区分内外请求</label>
                                 <div class="col-sm-6">
-                                    <select id="isInnerOuter" name="check_inner" class="form-control" >#if(1 == $!results.get('api').enableInnerOut)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
+                                    <select id="isInnerOuter" name="checkInner" class="form-control" >#if(1 == $!results.get('api').enableInnerOut)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>
                                 </div>
                             </div>
-
-                            <!--<div class="form-group">-->
-                                <!--<label for="sessionFlag" class="col-sm-4 control-label">需要登录态</label>-->
-                                <!--#set($!apiID=$!results.get('api').id)-->
-                                <!--<div class="col-sm-6">-->
-                                    <!--<select id="sessionFlag" name="sessionFlag" class="form-control" >-->
-                                        <!--#if(1 == $!results.get('api').sessionFlag)-->
-                                            <!--<option value="1" selected>是</option>-->
-                                            <!--<option value="0" >否</option>-->
-                                        <!--#else-->
-                                            <!--<option value="1" >是</option>-->
-                                            <!--<option value="0" selected>否</option>-->
-                                        <!--#end-->
-                                    <!--</select>-->
-                                <!--</div>-->
-                            <!--</div>-->
 
                             <div class="form-group">
                                 <label for="describle" class="col-sm-4 control-label">功能描述</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control required" id="describle" name="api_description" placeholder="API简要功能描述" value="$!results.get('api').apiDesc">
+                                    <input type="text" class="form-control required" id="describle" name="apiDescription" placeholder="API简要功能描述" value="$!results.get('api').apiDesc">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <!--<label for="scenarios" class="col-sm-4 control-label">使用场景</label>-->
                                 <div class="col-sm-4" style="text-align: right;">使用场景</div>
                                 <div class="col-sm-6">
-                                    <textarea  rows="3" class="form-control required" id="scenarios" name="api_scene" placeholder="API使用场景" >$!results.get('api').apiScenarios</textarea>
+                                    <textarea  rows="3" class="form-control required" id="scenarios" name="apiScene" placeholder="API使用场景" >$!results.get('api').apiScenarios</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -225,7 +209,7 @@
                                 <div class="col-sm-4" style="text-align: right;">结果示例</div>
                                 <div class="col-sm-6">
                                     <script type="text/javascript">
-                                    document.write('<textarea  rows="20" class="form-control required" id="resultDemo" name="result_demo" placeholder="API结果示例" >');
+                                    document.write('<textarea  rows="20" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API结果示例" >');
 
                                          document.write(decodeURI("$!results.get('api').resultDemo"));
 
@@ -233,6 +217,12 @@
                                     </script>
                                 </div>
                             </div>
+
+    #if(!$!results.get('api').id)
+        <input type="hidden"  name="id"   value="$!results.get('api').id" />
+    #else
+        <input type="hidden"  name="id"   value="-1" />
+    #end
                         </form>
                     </div>
                 </div>
@@ -258,14 +248,6 @@
 
                             </div>
 
-                            <!--<div class="form-group" style="display: none">-->
-                                <!--<label for="versionMethodParam">version</label>-->
-
-                                <!--<input type="text" class="form-control required" id="versionMethodParam" name="versionMethodParam" placeholder="version" #if(1==$!results.get('edit'))value="$!results.get('method').version"#else value="1.0"#end>-->
-                                <!--#if(1 == $!results.get('edit'))<input type="hidden" name="currentId" value="$!results.get('method').id"> #else <input type="hidden" name="currentId" value="0"> #end-->
-
-                            <!--</div>-->
-
                             <div class="form-group">
                                 <label for="url"  id="apiUrl">url</label>
 
@@ -284,21 +266,17 @@
                                 <br />
 
                                 <div id="serviceParamList">
-                                    <div class="checkbox col-sm-2">
-                                        <label><input class="form-control" type="checkbox" value="111111" name="inner_params" >111111</label>
-                                    </div>
-
-
-                                    <div class="checkbox col-sm-2">
-                                        <label><input class="form-control" type="checkbox" value="222222" name="inner_params">222222</label>
-                                    </div>
-                                    <div class="checkbox col-sm-2">
-                                        <label><input class="form-control" type="checkbox" value="333333" name="inner_params">33333333</label>
-                                    </div>
+                                    <!--<div class="checkbox col-sm-2">-->
+                                        <!--<label><input type="checkbox" value="111111" name="innerParams" >111111</label>-->
+                                    <!--</div>-->
                                 </div>
                             </div>
 
-                            #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
+                            #if(!$!results.get('serve').id)
+                                <input type="hidden"  name="id"   value="$!results.get('serve').id" />
+                            #else
+                                <input type="hidden"  name="id"   value="-1" />
+                            #end
                         </form>
                     </div>
                 </div>
@@ -310,11 +288,15 @@
                         <form id="jsonparseForm">
                             <div class="col-sm-6">
                                 <input type="button" class="btn btn-primary" id="JSONparse-btn" style="margin-bottom:15px;" value="解析" />
-                                <textarea class="form-control" id="json-input" name="request_demo"></textarea>
+                                <textarea class="form-control" id="json-input" name="requestDemo"></textarea>
                             </div>
 
-                            <input type="hidden" value="" name="request_structure" id="request_structure" />
-                            #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
+                            <input type="hidden" value="" name="requestStructure" id="requestStructure" />
+                            #if(!$!results.get('param').id)
+                                <input type="hidden"  name="id"   value="$!results.get('param').id" />
+                            #else
+                                <input type="hidden"  name="id"   value="-1" />
+                            #end
                         </form>
 
                         <span>解析结果：</span>
