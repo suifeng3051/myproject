@@ -753,7 +753,7 @@ $(document).ready(function(){
         e.preventDefault();
         var apiId = $(this).attr("apiID");
         var namespace = $(this).attr("namespace");
-        var name = $(this).attr("name");
+        var method = $(this).attr("method");
         var version = $(this).attr("version");
         var timestamp = (new Date()).valueOf();
         $(this).attr("timestamp", timestamp);
@@ -761,19 +761,20 @@ $(document).ready(function(){
         var update = new Object();
         update.id = apiId;
         update.namespace = namespace;
-        update.name = name;
+        update.method = method;
         update.version = version;
         update.env = getEnv();
         var flag = $(this).attr("flag");
         if (1 == flag) {
-            update.validFlag = 0;
+            update.avail = 0;
         } else {
-            update.validFlag = 1;
+            update.avail = 1;
         }
         update.modifier = $("#user").val();
 
-        $.post("disableapi", {"update": JSON.stringify(update)}, function (d) {
-            if ("success" == d) {
+        $.post("uptAvail", {"update": JSON.stringify(update)}, function (d) {
+          //  console.log(d);
+            if ( 0 == d.code) {
                 var currentTimestamp = $("#resourceTimeStamp").val();
                 var flag = $(".disableIcon[timestamp=" + currentTimestamp + "]").attr("flag");
                 if (1 == flag) { // 1表示当前是禁用状态
@@ -793,6 +794,12 @@ $(document).ready(function(){
                 $('[data-toggle="tooltip"]').tooltip(); // 绑定工具提示js插件
 
 
+            }else{
+                if(1==flag){
+                    alert("启用失败！");
+                }else{
+                    alert("禁用失败！");
+                }
             }
         });
     });

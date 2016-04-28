@@ -1,6 +1,7 @@
 package com.zitech.gateway.apiconfig.service.imp;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.CalendarCodec;
 import com.zitech.gateway.apiconfig.dao.gateway.ApiDAO;
 import com.zitech.gateway.apiconfig.dao.gateway.ParamDAO;
 import com.zitech.gateway.apiconfig.dao.gateway.ServeDAO;
@@ -16,9 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by hy on 16-4-26.
@@ -97,11 +97,15 @@ public class ApiServiceImpl implements ApiService {
         Serve serveModel;
         Param paramModel;
 
+        Date now = Calendar.getInstance().getTime();
+
             try {
                 apiModel = JSON.parseObject(apiObj, Api.class);
                 apiModel.setEnv(env);
                 apiModel.setAvail(1);
-                //apiModel.setUpdatedId();
+                apiModel.setUpdatedId(0);
+                apiModel.setDeleted((byte) 0);
+                apiModel.setUpdatedTime(now);
             } catch (Exception e) {
                 return false;
             }
@@ -120,6 +124,9 @@ public class ApiServiceImpl implements ApiService {
                 serveModel = JSON.parseObject(serviceObj, Serve.class);
                 serveModel.setApiId(apiModel.getId());
                 serveModel.setEnv(env);
+                serveModel.setUpdatedId(0);
+                serveModel.setDeleted((byte) 0);
+                serveModel.setUpdatedTime(now);
             } catch (Exception e) {
                 return false;
             }
@@ -130,6 +137,7 @@ public class ApiServiceImpl implements ApiService {
             } else {
                 //add
                 serveModel.setId(null);
+                serveModel.setCreatedTime(now);
                 serveDAO.insertSelective(serveModel);
             }
 
@@ -139,6 +147,9 @@ public class ApiServiceImpl implements ApiService {
                 paramModel = JSON.parseObject(paramObj, Param.class);
                 paramModel.setApiId(apiModel.getId());
                 paramModel.setEnv(env);
+                paramModel.setUpdatedId(0);
+                paramModel.setDeleted((byte) 0);
+                paramModel.setUpdatedTime(now);
             } catch (Exception e) {
                 return false;
             }
@@ -146,13 +157,30 @@ public class ApiServiceImpl implements ApiService {
             if (paramModel.getId() != -1) {
                 //exists update
                 paramDAO.updateByPrimaryKey(paramModel);
-            } else {
+             } else {
                 //add
+                paramModel.setCreatedTime(now);
                 paramModel.setId(null);
                 paramDAO.insertSelective(paramModel);
             }
         }
 
+
+        return true;
+    }
+
+    @Override
+    public boolean uptAvail(int apiId, int avail,Byte env) {
+
+        Api apiModel = new Api();
+        apiModel.setId(apiId);
+        apiModel.setAvail(avail);
+        apiModel.setEnv(env);
+        try{
+            apiDAO.updateByPrimaryKeySelective(apiModel);
+        }catch (Exception e){
+            return false;
+        }
 
         return true;
     }
