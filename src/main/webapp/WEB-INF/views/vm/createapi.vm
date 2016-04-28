@@ -122,7 +122,7 @@
                                 <label for="requestType" class="col-sm-4 control-label">请求方式</label>
                                 #set($!apiID=$!results.get('api').id)
                                 <div class="col-sm-6">
-                                    <select id="requestType" name="requestType" class="form-control" >#if(1 == $!results.get('api').requestType)<option value="1" selected>POST</option><option value="0" >GET</option>#else<option value="1" >POST</option><option value="0" selected>GET</option>#end</select> #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
+                                    <select id="requestType" name="requestType" class="form-control" >#if(1 == $!results.get('api').requestType)<option value="post" selected>POST</option><option value="get" >GET</option>#else<option value="post" >POST</option><option value="get" selected>GET</option>#end</select> #if(1 == $!results.get('edit'))<input type="hidden" name="currentId"  value="$!results.get('api').id" > #else <input type="hidden" name="currentId"  value="-1" > #end
                                 </div>
                             </div>
 
@@ -285,7 +285,7 @@
 
                                 <div id="serviceParamList">
                                     <!--<div class="checkbox col-sm-2">-->
-                                        <!--<label><input class="form-control" type="checkbox" value="111111" name="inner_params" >111111</label>-->
+                                        <!--<label><input type="checkbox" value="111111" name="innerParams" >111111</label>-->
                                     <!--</div>-->
                                 </div>
                             </div>

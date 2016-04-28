@@ -408,7 +408,7 @@ $(document).ready(function(){
             var str = '';
             for(name in data.data){
                 str += '<div class="checkbox col-sm-2">'+
-                    '<label><input class="form-control" type="checkbox" value="'+ data.data[name] +'" name="innerParams" >'+name+'</label>'+
+                    '<label><input type="checkbox" value="'+ data.data[name] +'" name="innerParams" >'+name+'</label>'+
                     '</div>';
             }
 
@@ -431,7 +431,7 @@ $(document).ready(function(){
         } else {
             currentStep++;
 
-            if(currentStep == 3 && $('#requestType').val() != 1){ // 选择请求方式为 GET，跳过第3步
+            if(currentStep == 3 && $('#requestType').val() != 'post'){ // 选择请求方式为 GET，跳过第3步
                 currentStep++;
             }
 
@@ -441,7 +441,7 @@ $(document).ready(function(){
     $('.preStep').click(function(){
         currentStep --;
 
-        if((currentStep == 3) && ($('#requestType').val() != 1)){ // 选择请求方式为 GET，跳过第3步
+        if((currentStep == 3) && ($('#requestType').val() != 'post')){ // 选择请求方式为 GET，跳过第3步
             currentStep--;
         }
 
