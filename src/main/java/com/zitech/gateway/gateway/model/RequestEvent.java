@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class RequestEvent {
 
-    private UUID id = UUID.randomUUID();
+    public final UUID uuid = UUID.randomUUID();
 
     private DeferredResult<Object> result;
     private HttpServletRequest request;
@@ -41,6 +41,8 @@ public class RequestEvent {
 
     private TicTac ticTac = new TicTac();
 
+    private Integer step = -1;
+
     public RequestEvent() {
     }
 
@@ -48,14 +50,6 @@ public class RequestEvent {
         this.result = result;
         this.request = request;
         this.requestType = RequestType.from(request.getMethod());
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public DeferredResult<Object> getResult() {
@@ -170,9 +164,17 @@ public class RequestEvent {
         this.contextMap = contextMap;
     }
 
+    public Integer getStep() {
+        return step;
+    }
+
+    public void setStep(Integer step) {
+        this.step = step;
+    }
+
     @Override
     public String toString() {
-        return "[ " + id + " " + requestType + " " + this.getNamespace() + " " + this.getMethod() + " " + this.getVersion() + " " + " ] {" +
+        return "[ " + uuid + " " + requestType + " " + this.getNamespace() + " " + this.getMethod() + " " + this.getVersion() + " " + " ] {" +
                 ", accessToken='" + accessToken + '\'' +
                 ", body='" + body + '\'' +
                 ", exception=" + (exception == null ? "" : exception.toString()) +

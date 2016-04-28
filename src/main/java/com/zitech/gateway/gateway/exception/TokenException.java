@@ -3,9 +3,9 @@ package com.zitech.gateway.gateway.exception;
 
 import com.zitech.gateway.common.BaseException;
 
-public class ResultException extends BaseException {
+public class TokenException extends BaseException {
 
-    public ResultException(int code, String error) {
+    public TokenException(int code, String error) {
         super(code, error);
     }
 

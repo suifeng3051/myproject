@@ -18,28 +18,29 @@ $(document).ready(function(){
 
     $("#methodconfigform").validate();
 
-    $(".apiTypeLi").on("click", function () {
-        var apiType = $(this).attr("flag");
-        if("JAVA" == apiType) {
-            $("#lastLi").css("display", "block");
-            $("ul.nav-wizard li").css("padding", "0 30px 0 40px");
-        } else {
-            $("#lastLi").css("display", "none");
-            $("ul.nav-wizard li").css("padding", "0 40px 0 50px");
-        }
-    });
+//    $(".apiTypeLi").on("click", function () {
+//        var apiType = $(this).attr("flag");
+//        if("JAVA" == apiType) {
+//            $("#lastLi").css("display", "block");
+//            $("ul.nav-wizard li").css("padding", "0 30px 0 40px");
+//        } else {
+//            $("#lastLi").css("display", "none");
+//            $("ul.nav-wizard li").css("padding", "0 40px 0 50px");
+//        }
+//    });
 
-    initApiTypeTab();
-    function initApiTypeTab() {
-        var apiType = $("#initApiType").val();
-        if(2 == apiType) { //PHP
-            $("#lastLi").css("display", "none");
-            $("ul.nav-wizard li").css("padding", "0 40px 0 50px");
-        } else if(1 == apiType) {
-            $("#lastLi").css("display", "block");
-            $("ul.nav-wizard li").css("padding", "0 30px 0 40px");
-        }
-    }
+//    initApiTypeTab();
+//    function initApiTypeTab() {
+//        var apiType = $("#initApiType").val();
+//        if(2 == apiType) { //PHP
+//            $("#lastLi").css("display", "none");
+//            $("ul.nav-wizard li").css("padding", "0 40px 0 50px");
+//        } else if(1 == apiType) {
+//            $("#lastLi").css("display", "block");
+//            $("ul.nav-wizard li").css("padding", "0 30px 0 40px");
+//        }
+//    }
+
     $(".hasMapping").on("click", function () {
         //  获取前面填写的namespace等
         var apiNamespace = $("#namespace").val();
@@ -407,7 +408,7 @@ $(document).ready(function(){
             var str = '';
             for(name in data.data){
                 str += '<div class="checkbox col-sm-2">'+
-                    '<label><input class="form-control" type="checkbox" value="'+ data.data[name] +'" name="inner_params" >'+name+'</label>'+
+                    '<label><input class="form-control" type="checkbox" value="'+ data.data[name] +'" name="innerParams" >'+name+'</label>'+
                     '</div>';
             }
 
@@ -430,7 +431,7 @@ $(document).ready(function(){
         } else {
             currentStep++;
 
-            if(currentStep == 3 && $('#requestType').val() != 1){ // 判断是否跳过第3步
+            if(currentStep == 3 && $('#requestType').val() != 1){ // 选择请求方式为 GET，跳过第3步
                 currentStep++;
             }
 
@@ -440,7 +441,7 @@ $(document).ready(function(){
     $('.preStep').click(function(){
         currentStep --;
 
-        if((currentStep == 3) && ($('#requestType').val() != 1)){ // 判断是否跳过第3步
+        if((currentStep == 3) && ($('#requestType').val() != 1)){ // 选择请求方式为 GET，跳过第3步
             currentStep--;
         }
 
@@ -490,7 +491,7 @@ $(document).ready(function(){
         }
         window.JSONresult = $('#editor').jsonEditor(json);  // 解析JSON，生成JSON树
 
-        $('#request_structure').val(JSONresult.getJson());
+        $('#requestStructure').val(JSONresult.getJson());
 
         $('.property').mouseenter(function(){
             $(this).parent().addClass('grey');
@@ -564,15 +565,15 @@ $(document).ready(function(){
         $('#serviceParamList input[type="checkbox"]:checked').each(function(){
             arr.push($(this).val());
         });
-        serviceObj.inner_params = arr.join(' ');
+        serviceObj.innerParams = arr.join(' ');
 //        console.log(serviceObj);
         var str = objToStr(serviceObj);
         $('#final-review-method').html( str );
 
 
-        if(apiObj.request_type == 1) {  // 请求方式 POST，加入json数据
+        if(apiObj.requestType == 1) {  // 请求方式 POST，加入json数据
             paramObj = formdataToJSON($('#jsonparseForm').serializeArray());
-            paramObj.request_structure = JSONresult.getJson();
+            paramObj.requestStructure = JSONresult.getJson();
 
 //            console.log(paramObj);
             var str = objToStr(paramObj);
@@ -952,7 +953,7 @@ $(document).ready(function(){
         updateObject.enableLog = cells[4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.enableFreq = cells[5].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.enableInnerOuter = cells[6].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.apiType = getAPIType();
+//        updateObject.apiType = getAPIType();
         updateObject.requestType = cells[7].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.id = cells[8].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
         updateObject.apiGroup = cells[9].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
@@ -1248,19 +1249,20 @@ $(document).ready(function(){
             $(".apiconfig1").css("display", "block");
             $(".apiconfig2").css("display", "block");
             $(".methodconfig").css("display", "block");
-            var apiType = getAPIType();
-            if(2 == apiType) { // 当前是PHP配置
-                $(".structureconfig").css("display", "none");
-                $("#previewStep5").css("display", "none");
-                $("#previewStep6").html("5");
-                $("#previewStep7").html("6");
 
-            } else { // JAVA配置
-                $(".structureconfig").css("display", "block");
-                $("#previewStep5").css("display", "block");
-                $("#previewStep6").html("6");
-                $("#previewStep7").html("7");
-            }
+//            var apiType = getAPIType();
+//            if(2 == apiType) { // 当前是PHP配置
+//                $(".structureconfig").css("display", "none");
+//                $("#previewStep5").css("display", "none");
+//                $("#previewStep6").html("5");
+//                $("#previewStep7").html("6");
+//
+//            } else { // JAVA配置
+//                $(".structureconfig").css("display", "block");
+//                $("#previewStep5").css("display", "block");
+//                $("#previewStep6").html("6");
+//                $("#previewStep7").html("7");
+//            }
 
             $(".methodmappingconfig").css("display", "block");
             $(".parammappingconfig").css("display", "block");
@@ -1280,7 +1282,7 @@ $(document).ready(function(){
 
             $(".cut").css("display", "none");
 
-            $("#apiType").css("display", "none");
+//            $("#apiType").css("display", "none");
             $(".apiconfig1").css("display", "none");
             $(".apiconfig2").css("display", "none");
             $(".methodconfig").css("display", "none");
@@ -1292,11 +1294,12 @@ $(document).ready(function(){
             $("#addRow_carmenMethodParam").css("display", "block");
             $("#addRow_carmenStructure").css("display", "block");
             $("#addRow_carmenParamMapping").css("display", "block");
-            var apiType = getAPIType();
-            if(2 == apiType) {
-                $("#batchAdd").css("display", "block");
-                $("#batchAddMethod").css("display", "block");
-            }
+
+//            var apiType = getAPIType();
+//            if(2 == apiType) {
+//                $("#batchAdd").css("display", "block");
+//                $("#batchAddMethod").css("display", "block");
+//            }
 
 
         }
@@ -1381,6 +1384,7 @@ $(document).ready(function(){
         }
     });
 
+/*
     initWidth();
     function initWidth() {
         var width = window.innerWidth;
@@ -1408,7 +1412,7 @@ $(document).ready(function(){
 
              }
         }
-    }
+    }*/
 
     // 批量增加API参数
     $("#batchAdd").on("click", function(){

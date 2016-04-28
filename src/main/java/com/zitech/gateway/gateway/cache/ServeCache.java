@@ -7,6 +7,7 @@ import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.apiconfig.model.Serve;
 import com.zitech.gateway.apiconfig.service.ServeService;
+import com.zitech.gateway.gateway.exception.CacheException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @Component
 @LocalCache("serve")
@@ -30,21 +32,20 @@ public class ServeCache implements ILocalCache {
 
     private Cache<String, Serve> cache = CacheBuilder.newBuilder().maximumSize(10000).build();
 
-    public Serve get(UUID eventId, Integer apiId) {
-        Serve serve = null;
+    public Serve get(Integer apiId) {
         try {
-            serve = cache.get(String.valueOf(apiId), () -> serveService.getByApiId(apiId));
-        } catch (Exception e) {
-            logger.error("error when getting cache: {}", eventId, e);
+            return cache.get(String.valueOf(apiId), () -> serveService.getByApiId(apiId));
+        } catch (ExecutionException e) {
+            logger.info("get cache error:", e);
+            throw new CacheException(5214, "非法服务配置");
         }
-        return serve;
     }
 
     @Override
     public void load() {
         List<Serve> serveList = serveService.getAll(appConfig.env);
         for (Serve serve : serveList) {
-            get(null, serve.getApiId());
+            get(serve.getApiId());
         }
     }
 

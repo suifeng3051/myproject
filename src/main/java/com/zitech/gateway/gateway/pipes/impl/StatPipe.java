@@ -3,8 +3,8 @@ package com.zitech.gateway.gateway.pipes.impl;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.excutor.TicTac;
 import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.stat.constants.GatewayConstant;
-import com.zitech.gateway.stat.service.MonitorService;
+import com.zitech.gateway.monitor.constants.GatewayConstant;
+import com.zitech.gateway.monitor.service.MonitorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ import java.util.Map;
 
 
 @Service
-@Pipe(Group = 2, Order = 2)
+@Pipe(Group = 'B', Order = 2)
 public class StatPipe extends AbstractPipe {
 
     private static final Logger logger = LoggerFactory.getLogger(StatPipe.class);
