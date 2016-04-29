@@ -230,14 +230,14 @@ public class CreateApiController {
         return apiResult.toString();
     }
 
-    @RequestMapping(value = "/validateJsonStr", produces="application/json;charset=utf-8",method= RequestMethod.GET)
+    @RequestMapping(value = "/validateJsonStr", produces="application/json;charset=utf-8",method= RequestMethod.POST)
     @ResponseBody
     public String validateJsonStr(@RequestParam("jsonStr") String  jsonStr,
                                   @RequestParam("struct") String  struct) {
 
         int code = 0;
         String message = "success";
-        String data = "";
+        String data = "json验证通过！";
 
         try{
             ParamHelper.validate(jsonStr, ParamHelper.buildTree(struct));
