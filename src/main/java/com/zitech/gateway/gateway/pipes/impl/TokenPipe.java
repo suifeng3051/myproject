@@ -2,12 +2,10 @@ package com.zitech.gateway.gateway.pipes.impl;
 
 import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.apiconfig.model.Group;
-import com.zitech.gateway.gateway.cache.ClientCache;
 import com.zitech.gateway.gateway.cache.GroupCache;
 import com.zitech.gateway.gateway.exception.TokenException;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.oauth.model.AccessToken;
-import com.zitech.gateway.oauth.model.Client;
 import com.zitech.gateway.oauth.oauthex.OAuthConstants;
 import com.zitech.gateway.utils.AppUtils;
 

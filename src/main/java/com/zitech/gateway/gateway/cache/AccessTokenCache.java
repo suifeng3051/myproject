@@ -30,10 +30,15 @@ public class AccessTokenCache implements ILocalCache {
 
     public AccessToken get(String accessToken) {
         try {
-            return cache.get(accessToken, () -> oAuthService.getAccessToken(accessToken));
+            return cache.get(accessToken, () -> {
+                AccessToken token = oAuthService.getAccessToken(accessToken);
+                if (token == null)
+                    throw new CacheException(5214, "非法访问码");
+                return token;
+            });
         } catch (ExecutionException e) {
-            logger.info("get cache error:", e);
-            throw new CacheException(5214, "非法访问码");
+            logger.error("get cache error:", e);
+            throw new CacheException(5217, "execution abort");
         }
     }
 

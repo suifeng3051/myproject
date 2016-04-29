@@ -3,8 +3,8 @@ package com.zitech.gateway.gateway.pipes.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.gateway.PipeHelper;
 import com.zitech.gateway.gateway.exception.PipeException;
-import com.zitech.gateway.gateway.model.ServeResponse;
 import com.zitech.gateway.gateway.model.RequestEvent;
+import com.zitech.gateway.gateway.model.ServeResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

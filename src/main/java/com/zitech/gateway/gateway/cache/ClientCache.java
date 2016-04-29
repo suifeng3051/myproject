@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -33,10 +32,15 @@ public class ClientCache implements ILocalCache {
 
     public Client get(String clientId) {
         try {
-            return cache.get(clientId, () -> oAuthService.getClientByClientId(clientId));
+            return cache.get(clientId, () -> {
+                Client client = oAuthService.getClientByClientId(clientId);
+                if (client == null)
+                    throw new CacheException(5214, "非法Client");
+                return client;
+            });
         } catch (ExecutionException e) {
             logger.info("get cache error:", e);
-            throw new CacheException(5214, "非法Client");
+            throw new CacheException(5217, "execution abort");
         }
     }
 

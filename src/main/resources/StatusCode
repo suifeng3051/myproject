@@ -24,12 +24,12 @@ Code    Message                         Data
 5206    param not object
 5207    param not array
 5208    json parse error
-5209    no param struct
 5210    serve not found
-5211    server internal error
+5211    serve internal error
 5212    no access token
 5213    namespace or method is null
 5214    get cache error
 5215    pipe error
 5216    serve error
+5217    execution abort
 
