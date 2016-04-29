@@ -230,7 +230,7 @@ public class CreateApiController {
         return apiResult.toString();
     }
 
-    @RequestMapping(value = "/validateJsonStr", produces="application/json;charset=utf-8",method= RequestMethod.GET)
+    @RequestMapping(value = "/validateJsonStr", produces="application/json;charset=utf-8",method= RequestMethod.POST)
     @ResponseBody
     public String validateJsonStr(@RequestParam("jsonStr") String  jsonStr,
                                   @RequestParam("struct") String  struct) {
