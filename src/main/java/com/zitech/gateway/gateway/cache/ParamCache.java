@@ -5,7 +5,6 @@ import com.google.common.cache.CacheBuilder;
 
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.service.ParamService;
-import com.zitech.gateway.common.ParamException;
 import com.zitech.gateway.gateway.exception.CacheException;
 import com.zitech.gateway.param.Param;
 import com.zitech.gateway.param.ParamHelper;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -37,14 +35,13 @@ public class ParamCache implements ILocalCache {
         try {
             return cache.get(String.valueOf(apiId), () -> {
                 com.zitech.gateway.apiconfig.model.Param p = paramService.getByApiId(apiId);
-                if(p == null)
-                    throw new ParamException(5209, "no param struct");
-
+                if (p == null)
+                    throw new CacheException(5214, "非法API参数配置");
                 return ParamHelper.buildTree(p.getRequestStructure());
             });
         } catch (ExecutionException e) {
             logger.info("get cache error:", e);
-            throw new CacheException(5214, "非法API参数配置");
+            throw new CacheException(5217, "execution abort");
         }
     }
 
