@@ -538,9 +538,9 @@ $(document).ready(function(){
             case 3:
                 stepTitle = 'JSON解析与编辑';
 
-                $('#json-input').val(formatJson($('#json-input').val()));  // 自动格式化输入框中的 json 字符串
 
-                if($('#editor').html().length){
+                if($('#json-input').val().length){
+                    $('#json-input').val(formatJson($('#json-input').val()));  // 自动格式化输入框中的 json 字符串
                     window.JSONresult = $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );  // 将保存的数据取出来解析成“树”进行修改
                 }
 
