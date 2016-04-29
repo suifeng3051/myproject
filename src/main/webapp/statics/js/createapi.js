@@ -454,7 +454,8 @@ $(document).ready(function(){
                  }
             break;
             case 3:  // 验证类型选择，是否为空；若为空，则提示用户
-                if(validJSONTree()) return;  // 如果数据类型没有选择，阻止跳转
+
+                if(validJSON()) return;  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
             break;
         }
         currentStep++;
@@ -464,7 +465,7 @@ $(document).ready(function(){
     $('.preStep').click(function(){
         switch(currentStep){
             case 3:
-                if(validJSONTree()) return;  // 如果数据类型没有选择，阻止跳转
+                if(validJSON()) return;  // 如果数据类型没有选择，阻止跳转
             break;
             case 4:
                  if(($('#requestType').val() != 'POST')){  // 如果是GET 方式则路过第 3 步
@@ -476,7 +477,11 @@ $(document).ready(function(){
         changeStepTo(currentStep);
     });
 
-    function validJSONTree(){  // 对JSON解析树进行表单验证
+    function validJSON(){
+
+        var errorInfo = '';
+
+        // 对JSON解析树进行表单验证
         var error = false;
         $('#editor select').each(function(){
             if(!$(this).val()){
@@ -487,12 +492,37 @@ $(document).ready(function(){
             }
         });
 
+        if(error) { errorInfo += ' 未选择所有数据类型 '; }
+
+//        $.post(
+//            '',
+//            $('#json-input').val(),
+//            function(data){
+//                console.log(data);
+//                if(data.message == 'fail'){
+//                    $('#json-input').addClass('error');
+//                    error = true;
+//                    errorInfo += ' JSON格式不正确 ';
+//                } else {
+//                    $('#json-input').removeClass('error');
+//                }
+//            }
+//        );
+
+//        $.post(
+//            '',
+//            $('#parsedJSON').val(),
+//            function(data){
+//                console.log(data);
+//                error = true;
+//            }
+//        );
+
         if(error){
-            $('#jsonParseInfo').html('<p>请选择全部的数据类型</p>').show();
+            $('#jsonParseInfo').html('<p>'+ errorInfo +'</p>').show();
         } else {
             $('#jsonParseInfo').hide();
         }
-
         return error;
     }
 
@@ -513,9 +543,15 @@ $(document).ready(function(){
                     $('#JSONparse-btn').trigger('click');  // 则自动触发一次点击
                 }
 
-                $('#json-input').val(formatJson($('#json-input').val())); // 自动格式化输入框中的 json 字符串
+                $('#json-input').val(formatJson($('#json-input').val()));  // 自动格式化输入框中的 json 字符串
 
-                $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );  //
+                $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );  // 将保存的数据取出来解析成“树”进行修改
+                $('.item .property').mouseenter(function(){
+                    $(this).parent().addClass('grey');
+                });
+                $('.item .property').mouseleave(function(){
+                    $(this).parent().removeClass('grey');
+                });
 
             break;
             case 4: stepTitle = '预览'; break;
@@ -533,8 +569,6 @@ $(document).ready(function(){
         }else{
             $('.preStep').show();
         }
-
-
 
         $('#step-nav-box li').eq(step-1).addClass('active').siblings().removeClass('active');
         $('#apiconfig-box > div').eq(step-1).addClass('active').siblings().removeClass('active');
@@ -565,16 +599,16 @@ $(document).ready(function(){
 
         window.JSONresult = $('#editor').jsonEditor(json);  // 解析JSON，生成JSON树
 
-        setTimeout(function(){
-            $('#editor .item').addClass('expanded');
-        }, 200);
+//        setTimeout(function(){
+//            $('#editor .item').addClass('expanded');
+//        }, 200);
 
         //$('#requestStructure').val(JSONresult.getJson());
 
-        $('.property').mouseenter(function(){
+        $('.item .property').mouseenter(function(){
             $(this).parent().addClass('grey');
         });
-        $('.property').mouseleave(function(){
+        $('.item .property').mouseleave(function(){
             $(this).parent().removeClass('grey');
         });
     });
