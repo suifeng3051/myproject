@@ -201,13 +201,7 @@
                                 <!--<label for="resultDemo" class="col-sm-4 control-label">示例</label>-->
                                 <div class="col-sm-4" style="text-align: right;">结果示例</div>
                                 <div class="col-sm-6">
-                                    <script type="text/javascript">
-                                    document.write('<textarea  rows="20" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API结果示例" >');
-
-                                         document.write(decodeURI("$!results.get('api').resultDemo"));
-
-                                    document.write('</textarea>');
-                                    </script>
+                                    <textarea  rows="20" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API结果示例" >$!results.get('api').resultDemo</textarea>
                                 </div>
                             </div>
 
