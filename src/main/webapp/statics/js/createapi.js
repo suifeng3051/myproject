@@ -501,7 +501,7 @@ $(document).ready(function(){
         var stepTitle = '';
         switch(step){
             case 1: stepTitle = 'API接口信息配置'; break;
-            case 2: stepTitle = '内部方法&方法参数配置 ';  break;
+            case 2: stepTitle = '内部方法&方法参数配置 '; break;
             case 3:
                 stepTitle = 'JSON解析与编辑';
 
@@ -512,9 +512,13 @@ $(document).ready(function(){
                 ){
                     $('#JSONparse-btn').trigger('click');  // 则自动触发一次点击
                 }
+
                 $('#json-input').val(formatJson($('#json-input').val())); // 自动格式化输入框中的 json 字符串
+
+                $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );  //
+
             break;
-            case 4: stepTitle = '预览';  break;
+            case 4: stepTitle = '预览'; break;
         }
         $('#step-title').text(stepTitle);
 

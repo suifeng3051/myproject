@@ -283,7 +283,7 @@
                                 <textarea class="form-control" id="json-input" name="requestDemo">$!results.get('param').requestDemo</textarea>
                             </div>
 
-                            <input type="hidden" value="$!results.get('param').requestStructure" name="requestStructure" id="requestStructure" />
+                            <input type="hidden" value="" name="requestStructure" id="requestStructure" />
 
                             #if($!results.get('param').id)
                                 <input type="hidden"  name="id"   value="$!results.get('param').id" />
@@ -299,7 +299,7 @@
                             </div>
 
                             <form id="editor" class="json-editor expanded"></form>
-                            <textarea id="parsedJSON"></textarea><!--  编辑时，在这里保存数据库中取出来的，解析之后的JSON字符串  -->
+                            <textarea id="parsedJSON" style="display:none">$!results.get('param').requestStructure</textarea><!--  编辑时，在这里保存数据库中取出来的，解析之后的JSON字符串  -->
                         </div>
                     </div>
                 </div>
