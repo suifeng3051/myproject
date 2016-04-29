@@ -500,7 +500,9 @@ $(document).ready(function(){
 
         if(window.JSONerror) { errorInfo += ' 未选择所有数据类型 '; }
 
-        $('#parsedJSON').text(JSON.stringify(JSONresult.getJson()));  // 将修改后的树数据放入隐藏textarea
+        if($('#editor').html().length) {
+            $('#parsedJSON').text(JSON.stringify(JSONresult.getJson()));  // 将修改后的树数据放入隐藏textarea
+        }
 
         $.post(
             '/validateJsonStr',
@@ -546,7 +548,9 @@ $(document).ready(function(){
 
                 $('#json-input').val(formatJson($('#json-input').val()));  // 自动格式化输入框中的 json 字符串
 
-                window.JSONresult = $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );  // 将保存的数据取出来解析成“树”进行修改
+                if($('#parsedJSON').val()){
+                    window.JSONresult = $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );  // 将保存的数据取出来解析成“树”进行修改
+                }
 
                 $('.item .property').mouseenter(function(){
                     $(this).parent().addClass('grey');
