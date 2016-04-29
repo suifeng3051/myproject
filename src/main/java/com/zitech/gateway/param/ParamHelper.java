@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.zitech.gateway.common.BaseException;
 import com.zitech.gateway.common.LogicalException;
 import com.zitech.gateway.common.ParamException;
 
@@ -53,7 +54,14 @@ public class ParamHelper {
             Param param = new Param();
             param.setName(key);
             param.setRequired(struct.getBoolean(REQUIRED));
-            param.setType(ParamType.from(struct.getString(TYPE)));
+
+            try {
+                param.setType(ParamType.from(struct.getString(TYPE)));
+            } catch (BaseException e) {
+                logger.error("unknown param type: ", e);
+                throw new ParamException(e.getCode(), "field: " + param.getName() + ", " + e.getDescription());
+            }
+
             param.setValidate(getValidate(param.getType()));
             param.setParent(root);
             root.getFields().add(param);
@@ -81,7 +89,14 @@ public class ParamHelper {
         Param param = new Param();
         param.setName(null);
         param.setRequired(object.getBoolean(REQUIRED));
-        param.setType(ParamType.from(object.getString(TYPE)));
+
+        try {
+            param.setType(ParamType.from(object.getString(TYPE)));
+        } catch (BaseException e) {
+            logger.error("unknown param type: ", e);
+            throw new ParamException(e.getCode(), "field: " + param.getName() + ", " + e.getDescription());
+        }
+
         param.setValidate(getValidate(param.getType()));
         param.setParent(root);
         root.getFields().add(param);
@@ -114,6 +129,8 @@ public class ParamHelper {
                 return new ArrayValidator();
             case OBJECT:
                 return new ObjectValidator();
+            case BOOL:
+                return new BoolValidator();
         }
 
         throw new LogicalException(Constants.Code.UNKNOWN_PARAM_TYPE,

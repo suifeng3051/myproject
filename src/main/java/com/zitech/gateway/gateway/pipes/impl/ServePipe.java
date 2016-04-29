@@ -10,6 +10,7 @@ import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.common.RequestType;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
@@ -81,7 +82,7 @@ public class ServePipe extends AbstractPipe {
 
     private List<Header> createHeaders(RequestEvent event, Serve serve) {
         List<Header> headerList = new ArrayList<>();
-        String[] names = serve.getInnerParams().split(",");
+        String[] names = serve.getInnerParams().split(" ");
         Map<String, String> contextMap = event.getContextMap();
         for (String name : names) {
             Header header = new BasicHeader(name, contextMap.get(name));
@@ -110,11 +111,17 @@ public class ServePipe extends AbstractPipe {
                 } else if (code >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
                     event.setException(new ServeException(5211, "server internal error"));
                 } else {
-                    String resultStr = EntityUtils.toString(result.getEntity());
-                    event.setResultStr(resultStr);
+                    HttpEntity entity = result.getEntity();
+                    if (entity != null) {
+                        String resultStr = EntityUtils.toString(entity);
+                        event.setResultStr(resultStr);
+                    } else {
+                        event.setException(new ServeException(5216, "empty response from serve"));
+                        Pipeline.getInstance().process(event);
+                    }
                 }
                 Pipeline.getInstance().process(event);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 event.setException(e);
                 Pipeline.getInstance().process(event);
             }

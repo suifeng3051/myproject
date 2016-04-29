@@ -198,7 +198,7 @@ public class RequestEvent {
                 ", step=" + step +
                 ", body='" + PipeHelper.removeSpaces(body) + '\'' +
                 ", resultStr='" + PipeHelper.removeSpaces(resultStr) + '\'' +
-                ", exception=" + (exception == null ? "" : exception.getMessage()) +
+                ", exception=" + (exception == null ? "" : exception.toString()) +
                 '}';
     }
 }
