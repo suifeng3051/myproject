@@ -300,6 +300,7 @@
 
                             <form id="editor" class="json-editor expanded"></form>
                             <textarea id="parsedJSON" style="display:none">$!results.get('param').requestStructure</textarea><!--  编辑时，在这里保存数据库中取出来的，解析之后的JSON字符串  -->
+                            <input type="hidden" id="jsonChecked" value="" />
                         </div>
                     </div>
                 </div>

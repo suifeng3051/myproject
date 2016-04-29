@@ -454,8 +454,10 @@ $(document).ready(function(){
                  }
             break;
             case 3:  // 验证类型选择，是否为空；若为空，则提示用户
-
-                if(validJSON()) return;  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
+                if($('#jsonChecked').val() == '') {
+                    validJSON();
+                    return;  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
+                }
             break;
         }
         currentStep++;
@@ -465,7 +467,10 @@ $(document).ready(function(){
     $('.preStep').click(function(){
         switch(currentStep){
             case 3:
-                if(validJSON()) return;  // 如果数据类型没有选择，阻止跳转
+            if($('#jsonChecked').val() == '') {
+                validJSON();
+                return;  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
+            }
             break;
             case 4:
                  if(($('#requestType').val() != 'POST')){  // 如果是GET 方式则路过第 3 步
@@ -482,18 +487,18 @@ $(document).ready(function(){
         var errorInfo = '';
 
         // 对JSON解析树进行表单验证
-        var error = false;
+        window.JSONerror = false;
         $('#editor select').each(function(){
             if(!$(this).val()){
                 $(this).addClass('error');
-                error = true;
+                window.JSONerror = true;
             } else {
                 $(this).removeClass('error');
             }
         });
 
-        if(error) { errorInfo += ' 未选择所有数据类型 '; }
 
+        if(window.JSONerror) { errorInfo += ' 未选择所有数据类型 '; }
 
         $('#parsedJSON').text(JSON.stringify(JSONresult.getJson()));  // 将修改后的树数据放入隐藏textarea
 
@@ -504,32 +509,22 @@ $(document).ready(function(){
                 'struct': $('#parsedJSON').val()
             },
             function(data){
-                console.log(data);
                 if(data.code == 1){
                     $('#json-input').addClass('error');
-                    error = true;
+                    $('#jsonChecked').val('');
                     errorInfo += data.data;
-                } else if(data.code == 0) {
+                    window.JSONerror = true;
+                } else {
+                    $('#jsonChecked').val('checked');
                     $('#json-input').removeClass('error');
+                }
+                if(window.JSONerror){
+                    $('#jsonParseInfo').html('<p>'+ errorInfo +'</p>').show();
+                } else {
+                    $('#jsonParseInfo').hide();
                 }
             }
         );
-
-//        $.post(
-//            '',
-//            $('#parsedJSON').val(),
-//            function(data){
-//                console.log(data);
-//                error = true;
-//            }
-//        );
-
-        if(error){
-            $('#jsonParseInfo').html('<p>'+ errorInfo +'</p>').show();
-        } else {
-            $('#jsonParseInfo').hide();
-        }
-        return error;
     }
 
     function changeStepTo(step){  // 跳转到指定页面
