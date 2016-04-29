@@ -107,7 +107,7 @@ public class ApiListController {
             });
             apiResult.setData(list);
         } catch (Exception e) {
-            logger.info("根据grupid获取api发生异常",e);
+            logger.info("根据groupid获取api发生异常",e);
             apiResult.setCode(9000);
             apiResult.setMessage("根据grupid获取api发生异常");
         }
