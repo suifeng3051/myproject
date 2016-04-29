@@ -500,7 +500,7 @@ $(document).ready(function(){
 
         if(window.JSONerror) { errorInfo += ' 未选择所有数据类型 '; }
 
-        if($('#editor').html().length) {
+        if($('#editor').html().length){
             $('#parsedJSON').text(JSON.stringify(JSONresult.getJson()));  // 将修改后的树数据放入隐藏textarea
         }
 
@@ -523,7 +523,7 @@ $(document).ready(function(){
                 if(window.JSONerror){
                     $('#jsonParseInfo').html('<p>'+ errorInfo +'</p>').show();
                 } else {
-                    $('#jsonParseInfo').hide();
+                    $('#jsonParseInfo').removeClass('alert-danger').addClass('alert-success').html('<p>'+ data.data +'</p>').show();
                 }
             }
         );
@@ -538,17 +538,9 @@ $(document).ready(function(){
             case 3:
                 stepTitle = 'JSON解析与编辑';
 
-//                if(
-//                    $('#edit').val() == 1 // 编辑状态
-//                     // &&  $('#json-input').val().length < 1  // 有JSON输入（POST 请求方式需要进入输入不进行检测）
-//                     && $('#editor').html().length < 1  // 但没有解析
-//                ){
-//                    $('#JSONparse-btn').trigger('click');  // 则自动触发一次点击
-//                }
-
                 $('#json-input').val(formatJson($('#json-input').val()));  // 自动格式化输入框中的 json 字符串
 
-                if($('#parsedJSON').val()){
+                if($('#editor').html().length){
                     window.JSONresult = $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );  // 将保存的数据取出来解析成“树”进行修改
                 }
 
