@@ -401,8 +401,9 @@ $(document).ready(function(){
     });*/
 
 
+    // 获取第 2 步的多选数据
     $.get('getServeInner', function(data){
-//        console.log(data);
+
         if(data.code == 0){ // 成功
             var len = data.data.length;
             var str = '';
@@ -432,41 +433,87 @@ $(document).ready(function(){
 
     $('.nextStep').click(function(){
 
-        if(currentStep == 1){ // 检测namespace是否存在
-            if( ($('.hasApi').attr('data-exists') == 'no') || ($('#edit').val() == 1)  ){ // namespace 检测不存在时（没有冲突），或者在编辑而不是在新建
-                currentStep++;
-                changeStepTo(currentStep);
-            } else {
+        switch(currentStep) {
+            case 1:  // 检测namespace是否存在
+                if(
+                    ($('.hasApi').attr('data-exists') == 'no')  // 没有冲突，是新建
+                    ||
+                    (($('.hasApi').attr('data-exists') == 'yes') && ($('#edit').val() == 1)) // 已经存在并正在修改
+                ){  // namespace 检测不存在时（没有冲突）
 
-                $('.hasApi').trigger('click');
-            }
-        } else {
-            currentStep++;
+                    // 跳转到下一步
 
-            if(currentStep == 3 && $('#requestType').val() != 'POST'){ // 选择请求方式为 GET，跳过第3步
-                currentStep++;
-            }
-
-            changeStepTo(currentStep);
+                }else {  // 未检测
+                    $('.hasApi').trigger('click');
+                    return;
+                }
+            break;
+            case 2:
+                 if($('#requestType').val() != 'POST'){  // 如果是GET 方式则路过第 3 步
+                    currentStep++;
+                 }
+            break;
+            case 3:  // 验证类型选择，是否为空；若为空，则提示用户
+                if(validJSONTree()) return;  // 如果数据类型没有选择，阻止跳转
+            break;
         }
-    });
-    $('.preStep').click(function(){
-        currentStep --;
-
-        if((currentStep == 3) && ($('#requestType').val() != 'POST')){ // 选择请求方式为 GET，跳过第3步
-            currentStep--;
-        }
-
+        currentStep++;
         changeStepTo(currentStep);
     });
 
-    function changeStepTo(step){
+    $('.preStep').click(function(){
+        switch(currentStep){
+            case 3:
+                if(validJSONTree()) return;  // 如果数据类型没有选择，阻止跳转
+            break;
+            case 4:
+                 if(($('#requestType').val() != 'POST')){  // 如果是GET 方式则路过第 3 步
+                    currentStep--;
+                 }
+            break;
+        }
+        currentStep --;
+        changeStepTo(currentStep);
+    });
+
+    function validJSONTree(){  // 对JSON解析树进行表单验证
+        var error = false;
+        $('#editor select').each(function(){
+            if(!$(this).val()){
+                $(this).addClass('error');
+                error = true;
+            } else {
+                $(this).removeClass('error');
+            }
+        });
+
+        if(error){
+            $('#jsonParseInfo').html('<p>请选择全部的数据类型</p>').show();
+        } else {
+            $('#jsonParseInfo').hide();
+        }
+
+        return error;
+    }
+
+    function changeStepTo(step){  // 跳转到指定页面
 
         var stepTitle = '';
         switch(step){
             case 1: stepTitle = 'API接口信息配置'; break;
             case 2: stepTitle = '内部方法&方法参数配置 ';  break;
-            case 3: stepTitle = 'JSON解析与编辑';  break;
+            case 3:
+                stepTitle = 'JSON解析与编辑';
+
+                if(
+                    $('#edit').val() == 1 // 编辑状态
+                     // &&  $('#json-input').val().length < 1  // 有JSON输入（POST 请求方式需要进入输入不进行检测）
+                     && $('#editor').html().length < 1  // 但没有解析
+                ){
+                    $('#JSONparse-btn').trigger('click');  // 则自动触发一次点击
+                }
+                $('#json-input').val(formatJson($('#json-input').val())); // 自动格式化输入框中的 json 字符串
+            break;
             case 4: stepTitle = '预览';  break;
         }
         $('#step-title').text(stepTitle);
@@ -483,9 +530,7 @@ $(document).ready(function(){
             $('.preStep').show();
         }
 
-        if(step == 3 && $('#edit').val() == 1) {
-            $('#JSONparse-btn').trigger('click');
-        }
+
 
         $('#step-nav-box li').eq(step-1).addClass('active').siblings().removeClass('active');
         $('#apiconfig-box > div').eq(step-1).addClass('active').siblings().removeClass('active');
@@ -498,16 +543,29 @@ $(document).ready(function(){
         $('.hasApi').removeAttr('data-exists');
     });
 
+    $('#json-input').blur(function(){  // 自动格式化JSON字符串
+        $(this).val(formatJson($(this).val()));
+    });
+
     $('#JSONparse-btn').click(function(){
         try {
             var json = JSON.parse( $('#json-input').val());
         }catch (e){
-            console.log('解析JSON时发生错误：'+e);
-            var json = {};
+            $('#json-input').addClass('error');
+            $('#jsonParseInfo').html('<p>解析JSON时发生错误：'+e+'</p>').show();
+            return;
         }
+
+        $('#json-input').removeClass('error');
+        $('#jsonParseInfo').hide();
+
         window.JSONresult = $('#editor').jsonEditor(json);  // 解析JSON，生成JSON树
 
-        $('#requestStructure').val(JSONresult.getJson());
+        setTimeout(function(){
+            $('#editor .item').addClass('expanded');
+        }, 200);
+
+        //$('#requestStructure').val(JSONresult.getJson());
 
         $('.property').mouseenter(function(){
             $(this).parent().addClass('grey');

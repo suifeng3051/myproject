@@ -276,10 +276,10 @@
                 <!-- 3. JSON 解析与编辑（POST方法） -->
                 <div class="json-parse">
                     <div class="panel-body">
-                        <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="jsonParseInfo"></div>
+                        <div class="alert alert-danger" role="alert" style="margin-bottom:20px;display:none;" id="jsonParseInfo"></div>
                         <form id="jsonparseForm">
-                            <div class="col-sm-6">
-                                <input type="button" class="btn btn-primary" id="JSONparse-btn" style="margin-bottom:15px;" value="解析" />
+                            <div class="col-sm-4">
+                                <input type="button" class="btn btn-success" id="JSONparse-btn" style="margin-bottom:15px;" value="解析" />
                                 <textarea class="form-control" id="json-input" name="requestDemo">$!results.get('param').requestDemo</textarea>
                             </div>
 
@@ -292,9 +292,14 @@
                             #end
                         </form>
 
-                        <span>解析结果：</span>
-                        <div class="col-sm-6">
-                            <div id="editor" class="json-editor"></div>
+                        <div class="col-sm-8">
+                        解析结果
+                            <div style="color:#aaa;border-bottom: 1px solid rgb(221, 221, 221); padding-bottom: 10px;">
+                                *注：&nbsp;&nbsp;&nbsp;<input type="checkbox" disabled  />是否必填&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" disabled/>描述&nbsp;&nbsp;&nbsp;&nbsp;<select disabled></select>数据类型
+                            </div>
+
+                            <form id="editor" class="json-editor expanded"></form>
+                            <textarea id="parsedJSON"></textarea><!--  编辑时，在这里保存数据库中取出来的，解析之后的JSON字符串  -->
                         </div>
                     </div>
                 </div>
@@ -392,6 +397,7 @@
 <script src="/statics/js/locales/bootstrap-datetimepicker.fr.js"></script>
 <script src="/statics/js/highcharts.js"></script>
 <script src="/statics/js/jquery.dataTables.min.js"></script>
+<script src="/statics/js/jsonformat.js"></script>
 <script src="/statics/js/createapi.js"></script>
 <script src="/statics/js/jquery.jsoneditor.js"></script>
 <script src="/statics/js/base.js"></script>
