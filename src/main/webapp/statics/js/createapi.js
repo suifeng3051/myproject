@@ -494,20 +494,26 @@ $(document).ready(function(){
 
         if(error) { errorInfo += ' 未选择所有数据类型 '; }
 
-//        $.post(
-//            '',
-//            $('#json-input').val(),
-//            function(data){
-//                console.log(data);
-//                if(data.message == 'fail'){
-//                    $('#json-input').addClass('error');
-//                    error = true;
-//                    errorInfo += ' JSON格式不正确 ';
-//                } else {
-//                    $('#json-input').removeClass('error');
-//                }
-//            }
-//        );
+
+        $('#parsedJSON').text(JSON.stringify(JSONresult.getJson()));  // 将修改后的树数据放入隐藏textarea
+
+        $.post(
+            '/validateJsonStr',
+            {
+                'jsonStr': $('#json-input').val(),
+                'struct': $('#parsedJSON').val()
+            },
+            function(data){
+                console.log(data);
+                if(data.code == 1){
+                    $('#json-input').addClass('error');
+                    error = true;
+                    errorInfo += data.data;
+                } else if(data.code == 0) {
+                    $('#json-input').removeClass('error');
+                }
+            }
+        );
 
 //        $.post(
 //            '',
@@ -535,17 +541,18 @@ $(document).ready(function(){
             case 3:
                 stepTitle = 'JSON解析与编辑';
 
-                if(
-                    $('#edit').val() == 1 // 编辑状态
-                     // &&  $('#json-input').val().length < 1  // 有JSON输入（POST 请求方式需要进入输入不进行检测）
-                     && $('#editor').html().length < 1  // 但没有解析
-                ){
-                    $('#JSONparse-btn').trigger('click');  // 则自动触发一次点击
-                }
+//                if(
+//                    $('#edit').val() == 1 // 编辑状态
+//                     // &&  $('#json-input').val().length < 1  // 有JSON输入（POST 请求方式需要进入输入不进行检测）
+//                     && $('#editor').html().length < 1  // 但没有解析
+//                ){
+//                    $('#JSONparse-btn').trigger('click');  // 则自动触发一次点击
+//                }
 
                 $('#json-input').val(formatJson($('#json-input').val()));  // 自动格式化输入框中的 json 字符串
 
-                $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );  // 将保存的数据取出来解析成“树”进行修改
+                window.JSONresult = $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );  // 将保存的数据取出来解析成“树”进行修改
+
                 $('.item .property').mouseenter(function(){
                     $(this).parent().addClass('grey');
                 });

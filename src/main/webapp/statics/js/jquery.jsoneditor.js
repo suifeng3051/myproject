@@ -75,6 +75,7 @@
             }
             property.val(key).attr('title', key);
             descInput.val(json[key].des);
+            json[key].require ? requireCheckBox.attr('checked', 'true') : requireCheckBox.removeAttr('checked');
             typeSelect.append(typeValue).val(json[key].type);
             item.append(property).append(descInput).append(requireCheckBox).append(typeSelect);
             root.append(item);
