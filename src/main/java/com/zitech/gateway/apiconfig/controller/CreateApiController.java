@@ -9,6 +9,7 @@ import com.zitech.gateway.apiconfig.service.*;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
 import com.zitech.gateway.gateway.Constants;
+import com.zitech.gateway.param.ParamHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -229,6 +230,27 @@ public class CreateApiController {
         return apiResult.toString();
     }
 
+    @RequestMapping(value = "/validateJsonStr", produces="application/json;charset=utf-8",method= RequestMethod.GET)
+    @ResponseBody
+    public String validateJsonStr(@RequestParam("jsonStr") String  jsonStr,
+                                  @RequestParam("struct") String  struct) {
+
+        int code = 0;
+        String message = "success";
+        String data = "";
+
+        try{
+            ParamHelper.validate(jsonStr, ParamHelper.buildTree(struct));
+        }catch (Exception e) {
+            e.printStackTrace();
+            code = 1;
+            message = "fail";
+            data = e.getMessage();
+        }
+
+        return  new ApiResult<>(code,message,data).toString();
+    }
+
     @RequestMapping(value = "/uptAvail", produces="application/json;charset=utf-8",method= RequestMethod.POST)
     @ResponseBody
     public String uptAvail(@RequestParam("update") String  update) {
@@ -247,8 +269,6 @@ public class CreateApiController {
         }else{
             return  new ApiResult<>(1,"更新失败！").toString();
         }
-
-
 
     }
 
