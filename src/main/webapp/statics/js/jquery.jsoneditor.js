@@ -74,8 +74,9 @@
                 addExpander(item);
             }
             property.val(key).attr('title', key);
+            descInput.val(json[key].des);
             typeSelect.append(typeValue).val(json[key].type);
-            item.append(property).append(typeSelect).append(requireCheckBox).append(descInput);
+            item.append(property).append(descInput).append(requireCheckBox).append(typeSelect);
             root.append(item);
 
             typeSelect.change(typeChanged(treeJson));
@@ -89,7 +90,7 @@
 
     function typeChanged(json) {
         return function() {
-            var key = $(this).prev().val(),
+            var key = $(this).prev().prev().prev().val(),
                 val = $(this).find('option:selected').val(),
                 item = $(this).parent(),
                 path = item.data('path');
@@ -109,7 +110,7 @@
 
     function descChanged(json){
         return function() {
-            var key = $(this).prev().prev().prev().val(),
+            var key = $(this).prev().val(),
                 val = $(this).val(),
                 item = $(this).parent(),
                 path = item.data('path');

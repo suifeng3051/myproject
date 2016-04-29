@@ -295,7 +295,7 @@
                         <div class="col-sm-8">
                         解析结果
                             <div style="color:#aaa;border-bottom: 1px solid rgb(221, 221, 221); padding-bottom: 10px;">
-                                *注：&nbsp;&nbsp;&nbsp;<input type="checkbox" disabled  />是否必填&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" disabled/>描述&nbsp;&nbsp;&nbsp;&nbsp;<select disabled></select>数据类型
+                                *注：&nbsp;&nbsp;&nbsp;&nbsp;<select disabled></select>数据类型&nbsp;&nbsp;&nbsp;<input type="checkbox" disabled  />是否必填&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" disabled/>描述
                             </div>
 
                             <form id="editor" class="json-editor expanded"></form>
