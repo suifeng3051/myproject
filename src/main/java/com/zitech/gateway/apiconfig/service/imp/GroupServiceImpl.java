@@ -22,9 +22,8 @@ public class GroupServiceImpl implements GroupService {
     private GroupDAO groupDAO;
 
     @Override
-    public int insert(Group config) {
+    public void insert(Group config) {
         groupDAO.insert(config);
-        return config.getId();
     }
 
     @Override
