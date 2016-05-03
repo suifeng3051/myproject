@@ -11,7 +11,7 @@ public interface GroupService {
 
     String prefix = "api_group_";
 
-    int insert(Group config);
+    void insert(Group config);
 
     void update(Group config);
 

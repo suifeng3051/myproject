@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -34,10 +33,15 @@ public class ApiCache implements ILocalCache {
     public Api get(String namespace, String method, Integer version) {
         try {
             String id = String.format("%s-%s-%s-%s", namespace, method, version, appConfig.env);
-            return cache.get(id, () -> apiService.getApi(namespace, method, version, appConfig.env));
+            return cache.get(id, () -> {
+                Api api = apiService.getApi(namespace, method, version, appConfig.env);
+                if (api == null)
+                    throw new CacheException(5214, "访问非法API");
+                return api;
+            });
         } catch (ExecutionException e) {
             logger.info("get cache error:", e);
-            throw new CacheException(5214, "访问非法API");
+            throw new CacheException(5217, "execution abort");
         }
     }
 

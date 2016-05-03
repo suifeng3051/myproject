@@ -4,7 +4,6 @@ import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.utils.SpringContext;
 
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpHeaders;
 
@@ -39,7 +38,7 @@ public class PipeHelper {
     }
 
     public static String removeSpaces(String json) {
-        if(StringUtils.isEmpty(json))
+        if (StringUtils.isEmpty(json))
             return "";
 
         char[] charArray = json.toCharArray();
@@ -61,7 +60,7 @@ public class PipeHelper {
                 case '\t':
                 case '\r':
                 case '\n':
-                    if(stack.size() % 2 == 1)
+                    if (stack.size() % 2 == 1)
                         sb.append(c);
                     break;
                 default: {

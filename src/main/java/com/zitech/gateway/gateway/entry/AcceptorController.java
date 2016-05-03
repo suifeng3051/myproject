@@ -32,10 +32,10 @@ public class AcceptorController {
             produces = "application/json;charset=utf-8",
             method = {RequestMethod.POST})
     public DeferredResult<Object> token_POST(HttpServletRequest request,
-                                        @PathVariable String namespace,
-                                        @PathVariable Integer version,
-                                        @PathVariable String method,
-                                        @RequestBody String body) {
+                                             @PathVariable String namespace,
+                                             @PathVariable Integer version,
+                                             @PathVariable String method,
+                                             @RequestBody String body) {
         DeferredResult<Object> deferredResult = new DeferredResult<>();
 
         RequestEvent event = new RequestEvent(deferredResult, request);
@@ -71,9 +71,9 @@ public class AcceptorController {
             produces = "application/json;charset=utf-8",
             method = {RequestMethod.GET})
     public DeferredResult<Object> token_GET(HttpServletRequest request,
-                                             @PathVariable String namespace,
-                                             @PathVariable Integer version,
-                                             @PathVariable String method) {
+                                            @PathVariable String namespace,
+                                            @PathVariable Integer version,
+                                            @PathVariable String method) {
         DeferredResult<Object> deferredResult = new DeferredResult<>();
 
         RequestEvent event = new RequestEvent(deferredResult, request);

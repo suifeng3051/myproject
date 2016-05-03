@@ -375,8 +375,12 @@ $(document).ready(function(){
         $("#apiResourceInfo").css("display", "none");
         var resourceGroupParent = $(".affixGroup.current");
         var resourceGroupParentAlias = resourceGroupParent.attr("group");
+        var resourceGroupParentId = resourceGroupParent.attr("groupid");
+
         var text = resourceGroupParent.text();
         $("#resourceGroupParentAlias").attr("group",resourceGroupParentAlias);
+        $("#resourceGroupParentAlias").attr("groupid",resourceGroupParentId);
+
        // $("#resourceGroupParentAlias").attr("placeholder",text);
         $("#resourceGroupParentAlias").attr("value",text.trim());
         $("#myResourceModal").modal("show");
@@ -724,7 +728,12 @@ $(document).ready(function(){
         insert.name = fields[1].split("=")[1];
         insert.alias = fields[2].split("=")[1];
         insert.level = fields[3].split("=")[1];
+        insert.parentId = $("#resourceGroupParentAlias").attr("groupid");
         insert.pAlias = $("#resourceGroupParentAlias").attr("group");
+
+   //     console.log(insert);
+
+
         $.post("insertresourcegroup", {"insert": JSON.stringify(insert)}, function (d) {
             re = /^fail/;
             if (re.test(d)) {

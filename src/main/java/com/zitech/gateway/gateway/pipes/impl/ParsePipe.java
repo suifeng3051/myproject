@@ -2,10 +2,10 @@ package com.zitech.gateway.gateway.pipes.impl;
 
 import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.gateway.Constants;
+import com.zitech.gateway.gateway.PipeHelper;
 import com.zitech.gateway.gateway.cache.AccessTokenCache;
 import com.zitech.gateway.gateway.cache.ApiCache;
 import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.gateway.PipeHelper;
 import com.zitech.gateway.oauth.model.AccessToken;
 
 import org.slf4j.Logger;

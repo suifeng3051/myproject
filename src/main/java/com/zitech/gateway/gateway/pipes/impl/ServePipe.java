@@ -1,13 +1,13 @@
 package com.zitech.gateway.gateway.pipes.impl;
 
 import com.zitech.gateway.apiconfig.model.Serve;
+import com.zitech.gateway.common.RequestType;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.cache.ServeCache;
 import com.zitech.gateway.gateway.exception.ServeException;
 import com.zitech.gateway.gateway.excutor.HttpAsyncClient;
 import com.zitech.gateway.gateway.excutor.Pipeline;
 import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.common.RequestType;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,10 +105,13 @@ public class ServePipe extends AbstractPipe {
             this.event.getTicTac().tac(Constants.ST_CALL);
             try {
                 int code = result.getStatusLine().getStatusCode();
+
                 if (code >= HttpStatus.SC_BAD_REQUEST && code < HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-                    event.setException(new ServeException(5210, "serve not found"));
+                    logger.info(EntityUtils.toString(result.getEntity()));
+                    event.setException(new ServeException(5210, "serve not found, code:"+code));
                 } else if (code >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-                    event.setException(new ServeException(5211, "server internal error"));
+                    logger.info(EntityUtils.toString(result.getEntity()));
+                    event.setException(new ServeException(5211, "serve internal error, code:"+code));
                 } else {
                     HttpEntity entity = result.getEntity();
                     if (entity != null) {
