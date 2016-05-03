@@ -537,7 +537,10 @@ $(document).ready(function(){
     if($('#detail').val() == 1){
         changeStepTo(4);
         $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );
-        $('#step-nav-box, .preStep, #save').hide();
+        $('#step-nav-box, #save').hide();
+        $('.preStep').show().click(function(){
+            window.history.back();
+        });
     }
 
     function changeStepTo(step){  // 跳转到指定页面
