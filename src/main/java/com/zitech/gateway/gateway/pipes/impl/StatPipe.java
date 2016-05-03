@@ -1,6 +1,5 @@
 package com.zitech.gateway.gateway.pipes.impl;
 
-import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.excutor.Pipeline;
 import com.zitech.gateway.gateway.excutor.TicTac;
@@ -12,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 
 @Service
@@ -42,24 +39,16 @@ public class StatPipe extends AbstractPipe {
         }
 
         TicTac ticTac = event.getTicTac();
-        Map<String, TicTac.STEntry> ticTacEntryMap = ticTac.getEntryMap();
 
-        for (Map.Entry<String, TicTac.STEntry> entry : ticTacEntryMap.entrySet()) {
-           if (entry.getKey().equals(Constants.ST_ALL)) {
-                all = entry.getValue().getElapsed();
-            } else if (entry.getKey().equals(Constants.ST_CALL)) {
-                call = entry.getValue().getElapsed();
-            }
-        }
-
-        String stat = ticTacEntryMap.toString();
+        all = ticTac.elapsed(Constants.ST_ALL);
+        call = ticTac.elapsed(Constants.ST_CALL);
 
         if (all > 0) {
             ServeResponse response = event.getServeResponse();
             String path = event.getNamespace() + "/" + event.getVersion() + "/" + event.getMethod();
-            monitor.saveMonitorData(path, all, call, response.getCode(), stat);
+            monitor.saveMonitorData(path, all, call, response.getCode(), ticTac.toString());
         }
 
-        logger.info("performance of {}: {}", event.uuid, stat);
+        logger.info("performance of {}: {}", event.uuid, ticTac.toString());
     }
 }

@@ -58,7 +58,7 @@ public class ParamHelper {
             try {
                 param.setType(ParamType.from(struct.getString(TYPE)));
             } catch (BaseException e) {
-                logger.error("unknown param type: ", e);
+                logger.info("unknown param type: ", e);
                 throw new ParamException(e.getCode(), "field: " + param.getName() + ", " + e.getDescription());
             }
 
@@ -73,7 +73,7 @@ public class ParamHelper {
                 JSONArray fields = struct.getJSONArray(FIELDS);
                 if (fields.size() == 0)
                     throw new LogicalException(Constants.Code.NO_ARRAY_FIELD,
-                            "no array field: " + param.getName());
+                            "no array field for " + param.getName());
                 ParamHelper.parseArray((JSONObject) fields.get(0), param);
             }
         }
@@ -93,7 +93,7 @@ public class ParamHelper {
         try {
             param.setType(ParamType.from(object.getString(TYPE)));
         } catch (BaseException e) {
-            logger.error("unknown param type: ", e);
+            logger.info("unknown param type: ", e);
             throw new ParamException(e.getCode(), "field: " + param.getName() + ", " + e.getDescription());
         }
 
@@ -108,7 +108,7 @@ public class ParamHelper {
             JSONArray fields = object.getJSONArray(FIELDS);
             if (fields.size() == 0)
                 throw new LogicalException(Constants.Code.NO_ARRAY_FIELD,
-                        "no array field: " + param.getName());
+                        "no array field for " + param.getName());
             ParamHelper.parseArray((JSONObject) fields.get(0), param);
         }
     }
@@ -202,8 +202,13 @@ public class ParamHelper {
             }
         }
 
+        String path = getPath(param);
+        if(StringUtils.isEmpty(path))
+            path = name;
+        else
+            path = path + "/" + name;
         throw new ParamException(Constants.Code.UNKNOWN_PARAM,
-                "unknown param: " + getPath(param));
+                "unknown param " + path);
     }
 
     /**
@@ -257,7 +262,7 @@ public class ParamHelper {
             else {
                 if (p.getRequired() && so == null)
                     throw new ParamException(Constants.Code.PARAM_REQUIRED,
-                            "param: " + ParamHelper.getPath(p) + " required");
+                            "param " + ParamHelper.getPath(p) + " required");
 
                 if (!p.getRequired() && so == null)
                     continue; // some other action?
@@ -274,14 +279,14 @@ public class ParamHelper {
     private static void validateObject(Param param, Object object) {
         if (param.getRequired() && object == null)
             throw new ParamException(Constants.Code.PARAM_REQUIRED,
-                    "param: " + ParamHelper.getPath(param) + " required");
+                    "param " + ParamHelper.getPath(param) + " required");
 
         if (!param.getRequired() && object == null)
             return;
 
         if (!(object instanceof JSONObject))
             throw new ParamException(Constants.Code.PARAM_SHOULD_OBJECT,
-                    "param: " + ParamHelper.getPath(param) + "not object");
+                    "param " + ParamHelper.getPath(param) + " not an object");
 
         JSONObject source = (JSONObject) object;
         List<Param> paramList = param.getFields();
@@ -294,7 +299,7 @@ public class ParamHelper {
             else {
                 if (p.getRequired() && so == null)
                     throw new ParamException(Constants.Code.PARAM_REQUIRED,
-                            "param: " + ParamHelper.getPath(p) + " required");
+                            "param " + ParamHelper.getPath(p) + " required");
 
                 if (!p.getRequired() && so == null)
                     continue; // some other action?
@@ -311,14 +316,14 @@ public class ParamHelper {
     private static void validateArray(Param param, Object object) {
         if (param.getRequired() && object == null)
             throw new ParamException(Constants.Code.PARAM_REQUIRED,
-                    "param: " + ParamHelper.getPath(param) + " required");
+                    "param " + ParamHelper.getPath(param) + " required");
 
         if (!param.getRequired() && object == null)
             return;
 
         if (!(object instanceof JSONArray))
             throw new ParamException(Constants.Code.PARAM_SHOULD_ARRAY,
-                    "param: " + ParamHelper.getPath(param) + "not array");
+                    "param " + ParamHelper.getPath(param) + " not an array");
 
         JSONArray source = (JSONArray) object;
         for (Param p : param.getFields()) { // only one parameter
@@ -330,7 +335,7 @@ public class ParamHelper {
                 else {
                     if (param.getRequired() && so == null)
                         throw new ParamException(Constants.Code.PARAM_REQUIRED,
-                                "param: " + ParamHelper.getPath(param) + " required");
+                                "param " + ParamHelper.getPath(param) + " required");
 
                     if (!param.getRequired() && so == null)
                         continue; // some other action?

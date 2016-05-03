@@ -44,13 +44,17 @@ public class Pipeline {
         this.initialExecutors();
     }
 
+    public static Pipeline getInstance() {
+        return instance;
+    }
+
     public void start() {
         //nothing to do
     }
 
     public void process(RequestEvent event) {
         Integer group = getNextGroup(event);
-        if(group == null)
+        if (group == null)
             return;
 
         String groupName = String.format("group-%c", group);
@@ -89,19 +93,29 @@ public class Pipeline {
             return;
         }
 
-        String msg;
+        String msg = null;
         if (e instanceof BaseException) {
             BaseException be = (BaseException) e;
             msg = String.format(Constants.ERROR_RESPONSE, be.getCode(), be.getDescription());
             logger.info("an error happened in {}, event: {}", pipe, event, e);
-        } else if(e.getCause() instanceof BaseException) {
-            BaseException be = (BaseException) e.getCause();
-            msg = String.format(Constants.ERROR_RESPONSE, be.getCode(), be.getDescription());
-            logger.info("an error happened in {}, event: {}", pipe, event, e);
         } else {
+            Throwable t = e;
+            while ((t = t.getCause()) != null) {
+                if (t instanceof BaseException) {
+                    BaseException be = (BaseException) t;
+                    msg = String.format(Constants.ERROR_RESPONSE, be.getCode(), be.getDescription());
+                    logger.info("an error happened in {}, event: {}", pipe, event, e);
+                    break;
+                }
+            }
+        }
+
+        // unknown exception
+        if (msg == null) {
             msg = String.format(Constants.ERROR_RESPONSE, -1, "unknown error: " + e.getMessage());
             logger.error("an unexpected error happened in {}, event: {}", pipe, event, e);
         }
+
         HttpHeaders headers = PipeHelper.getHeaders(event);
         ResponseEntity<String> responseEntity = new ResponseEntity<>(msg,
                 headers, HttpStatus.valueOf(200));
@@ -143,7 +157,7 @@ public class Pipeline {
         List<Class> allPipes = ClassUtils.getAllClassByInterface(IPipe.class);
         for (Class clazz : allPipes) {
             Pipe pipe = (Pipe) clazz.getAnnotation(Pipe.class);
-            if(pipe == null)
+            if (pipe == null)
                 continue;
 
             Integer group = pipe.Group();
@@ -175,6 +189,7 @@ public class Pipeline {
             executor.prestartAllCoreThreads();
             executor.setThreadFactory(new ThreadFactory() {
                 private AtomicInteger count = new AtomicInteger(0);
+
                 public Thread newThread(Runnable r) {
                     String name = String.format("Thread-Group-%d-%d", group, count.getAndDecrement());
                     Thread thread = new Thread();
@@ -188,10 +203,6 @@ public class Pipeline {
 
     private int getCpuCount() {
         return Runtime.getRuntime().availableProcessors();
-    }
-
-    public static Pipeline getInstance() {
-        return instance;
     }
 
     public int getThreadCount() {

@@ -3,11 +3,8 @@ package com.zitech.gateway.gateway.cache;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
-import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.Group;
-import com.zitech.gateway.apiconfig.model.Serve;
 import com.zitech.gateway.apiconfig.service.GroupService;
-import com.zitech.gateway.apiconfig.service.ServeService;
 import com.zitech.gateway.gateway.exception.CacheException;
 
 import org.slf4j.Logger;
@@ -16,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 @Component
@@ -32,10 +28,15 @@ public class GroupCache implements ILocalCache {
 
     public Group get(Integer groupId) {
         try {
-            return cache.get(String.valueOf(groupId), () -> groupService.getById(groupId));
+            return cache.get(String.valueOf(groupId), () -> {
+                Group group = groupService.getById(groupId);
+                if (group == null)
+                    throw new CacheException(5214, "非法Group");
+                return group;
+            });
         } catch (ExecutionException e) {
             logger.info("get cache error:", e);
-            throw new CacheException(5214, "非法Group");
+            throw new CacheException(5217, "execution abort");
         }
     }
 
