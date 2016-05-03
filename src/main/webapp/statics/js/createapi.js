@@ -18,6 +18,9 @@ $(document).ready(function(){
 
     $("#methodconfigform").validate();
 
+
+
+
 //    $(".apiTypeLi").on("click", function () {
 //        var apiType = $(this).attr("flag");
 //        if("JAVA" == apiType) {
@@ -41,6 +44,7 @@ $(document).ready(function(){
 //        }
 //    }
 
+/*
     $(".hasMapping").on("click", function () {
         //  获取前面填写的namespace等
         var apiNamespace = $("#namespace").val();
@@ -104,7 +108,6 @@ $(document).ready(function(){
     });
 
 
-/*
     // 给上一步按钮绑定事件
     $(".preStep").on("click", function () {
         var step = $("#configStep").val();
@@ -482,6 +485,7 @@ $(document).ready(function(){
         changeStepTo(currentStep);
     });
 
+
     function validJSON(){
 
         var errorInfo = '';
@@ -529,6 +533,13 @@ $(document).ready(function(){
         );
     }
 
+    // API 详情页面
+    if($('#detail').val()){
+        changeStepTo(4);
+        $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );
+        $('#step-nav-box, .preStep, #save').hide();
+    }
+
     function changeStepTo(step){  // 跳转到指定页面
 
         var stepTitle = '';
@@ -552,7 +563,17 @@ $(document).ready(function(){
                 });
 
             break;
-            case 4: stepTitle = '预览'; break;
+            case 4:
+                stepTitle = '预览';
+                $('#step-title').text(stepTitle);
+                $('#apiconfig-box .alert').hide();
+                $('#step-nav-box li').eq(step-1).addClass('active').siblings().removeClass('active');
+                $('#apiconfig-box > div').addClass('active').eq(step-1).removeClass('active');
+                $('.data-review').show();
+                $('.nextStep').hide();
+                $('#save').show();
+                return;
+            break;
         }
         $('#step-title').text(stepTitle);
 
@@ -560,16 +581,15 @@ $(document).ready(function(){
         $('#save').hide();
         if(step == 1){
             $('.preStep').hide();
-        } else if(step == totalStep){
-            $('.nextStep').hide();
-            $('#save').show();
+        } else if (step == totalStep){
             finalReview(); // 将所有数据展示出来
         }else{
             $('.preStep').show();
         }
-
+        $('.data-review').hide();
         $('#step-nav-box li').eq(step-1).addClass('active').siblings().removeClass('active');
         $('#apiconfig-box > div').eq(step-1).addClass('active').siblings().removeClass('active');
+
     }
 
     $('#namespace, #name').keyup(function(){
@@ -679,8 +699,7 @@ $(document).ready(function(){
         var str = objToStr(serviceObj);
         $('#final-review-method').html( str );
 
-
-        if(apiObj.requestType == 'POST'  ) {  // 请求方式 POST，加入json数据
+        if( apiObj.requestType == 'POST' ) {  // 请求方式 POST，加入json数据
 
             paramObj = formdataToJSON($('#jsonparseForm').serializeArray());
             paramObj.requestStructure = JSONresult.getJson();
@@ -707,6 +726,7 @@ $(document).ready(function(){
         return obj;
     }
 
+
 //    function formdataToStr (arr){
 //        var len = arr.length;
 //        var str = '';
@@ -727,6 +747,10 @@ $(document).ready(function(){
         }
         return str;
     }
+
+
+
+
 
 
     // 为已有的select补充完整

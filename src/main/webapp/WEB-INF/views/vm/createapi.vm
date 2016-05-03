@@ -301,7 +301,7 @@
 
                 <!-- 4. 预览 最后一步 -->
                 <div class="data-review">
-                    <div class="panel-body">
+                    <!-- <div class="panel-body">
                         <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="dataReviewInfo"></div>
 
                         <form class="form-horizontal">
@@ -318,7 +318,7 @@
 
                             </div>
                         </form>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -377,6 +377,7 @@
 <input type="hidden" id="configStep" value="1"/>
 <input type="hidden" id="userName" value="$!results.get('user')"/>
 <input type="hidden" id="edit" value="$!results.get('edit')" />
+<input type="hidden" id="detail" value="1" />
 <input type="hidden" id="initApiType" value="$!results.get('apiType')" />
 <input type="hidden" id="apiParamNames" value="" />
 <input type="hidden" id="methodParamNames" value="" />
