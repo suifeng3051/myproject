@@ -377,7 +377,7 @@
 <input type="hidden" id="configStep" value="1"/>
 <input type="hidden" id="userName" value="$!results.get('user')"/>
 <input type="hidden" id="edit" value="$!results.get('edit')" />
-<input type="hidden" id="detail" value="1" />
+<input type="hidden" id="detail" value="$!results.get('detail')" />
 <input type="hidden" id="initApiType" value="$!results.get('apiType')" />
 <input type="hidden" id="apiParamNames" value="" />
 <input type="hidden" id="methodParamNames" value="" />

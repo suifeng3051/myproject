@@ -178,7 +178,7 @@
 ##                                </li>
 ##                            #else
                                 <li class="list-group-item apiElement">
-                                    <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.method</a>
+                                    <a href="#" class="apidetail" apiId="$!apiElement.id" namespace="$!apiElement.namespace" method="$!apiElement.method" version="$!apiElement.version" > $!apiElement.namespace/$!apiElement.version/$!apiElement.method </a>
                                     <span style="position: absolute;left:400px;color:#929292;">$!apiElement.apiDescription</span>
                                     <span style="position: absolute;right:200px;color:#929292;">#if('GET' == $!apiElement.requestType)
                                         GET

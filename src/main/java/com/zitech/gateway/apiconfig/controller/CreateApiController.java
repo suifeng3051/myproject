@@ -52,6 +52,7 @@ public class CreateApiController {
     public ModelAndView createApi(@RequestParam(value = "env", defaultValue="1") Byte env,
                                   @RequestParam("group") String group,
                                   @RequestParam(value = "edit", required = false, defaultValue = "0") Integer edit,
+                                  @RequestParam(value = "detail", required = false, defaultValue = "0") Integer detail,
                                   @RequestParam(value = "apiId", required = false) Integer apiId,
                                   HttpServletRequest request,
                                   HttpServletResponse response) {
@@ -78,6 +79,7 @@ public class CreateApiController {
         results.put("api", apiModel);
         results.put("serve", serveModel);
         results.put("param", paramModel);
+        results.put("detail", detail);
         List<Group> groupList = null;
         try {
             groupList = groupService.getAll();

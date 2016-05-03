@@ -75,6 +75,17 @@ $(document).ready(function(){
 
     $('[data-toggle="tooltip"]').tooltip(); // 绑定工具提示js插件
 
+    // 给详情页面绑定点击事件
+    $('body').on('click', '.apidetail', function (e) {
+        e.preventDefault();
+        var namespace = $(this).attr("namespace");
+        var name = $(this).attr("name");
+        var version = $(this).attr("version");
+        var apiId = $(this).attr("apiId");
+        var group = $("#currentGroup").val();
+        var content = "createapi?edit=1&group=" + group + "&env=" + getEnv() + "&apiId=" + apiId;
+        window.location.href = "createapi?edit=1&group=" + group + "&env=" + getEnv() + "&apiId=" + apiId+"&detail=1";
+    });
 
     // 给API的编辑接口绑定事件
     $('body').on('click', '.editIcon', function (e) {
@@ -965,34 +976,34 @@ $(document).ready(function(){
         }, "json");
     });
 
-    // 获取API详情
-    $("body").on("click", ".apidetail", function (e) {
-        e.preventDefault();
-        var apiId = $(this).attr("apiId");
-        var env = getEnv();
-        var mapForm = document.createElement("form");
-        mapForm.target = "_self";
-        mapForm.method = "POST";
-        mapForm.action = "apidetail";
+    /*// 获取API详情
+     $("body").on("click", ".apidetail", function (e) {
+     e.preventDefault();
+     var apiId = $(this).attr("apiId");
+     var env = getEnv();
+     var mapForm = document.createElement("form");
+     mapForm.target = "_self";
+     mapForm.method = "POST";
+     mapForm.action = "apidetail";
 
-        var mapInput = document.createElement('input');
-        mapInput.type = "text";
-        mapInput.name = 'id';
-        mapInput.value = apiId;
+     var mapInput = document.createElement('input');
+     mapInput.type = "text";
+     mapInput.name = 'id';
+     mapInput.value = apiId;
 
-        var mapInput1 = document.createElement('input');
-        mapInput1.type = "text";
-        mapInput1.name = 'env';
-        mapInput1.value = env;
+     var mapInput1 = document.createElement('input');
+     mapInput1.type = "text";
+     mapInput1.name = 'env';
+     mapInput1.value = env;
 
-        mapForm.appendChild(mapInput);
-        mapForm.appendChild(mapInput1);
+     mapForm.appendChild(mapInput);
+     mapForm.appendChild(mapInput1);
 
-        document.body.appendChild(mapForm);
+     document.body.appendChild(mapForm);
 
-        mapForm.submit();
+     mapForm.submit();
 
-    });
+     });*/
 
     // 通过API链接到监控数据
     $("body").on("click", ".apimonitor", function (e) {

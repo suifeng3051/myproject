@@ -534,7 +534,7 @@ $(document).ready(function(){
     }
 
     // API 详情页面
-    if($('#detail').val()){
+    if($('#detail').val() == 1){
         changeStepTo(4);
         $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );
         $('#step-nav-box, .preStep, #save').hide();
