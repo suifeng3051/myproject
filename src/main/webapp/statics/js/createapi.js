@@ -501,7 +501,6 @@ $(document).ready(function(){
             }
         });
 
-
         if(window.JSONerror) { errorInfo += ' 未选择所有数据类型 '; }
 
         if($('#editor').html().length){
