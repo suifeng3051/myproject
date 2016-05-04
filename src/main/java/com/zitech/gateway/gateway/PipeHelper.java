@@ -34,7 +34,6 @@ public class PipeHelper {
         if (!appConfig.isPrdMode()) {
             httpHeaders.add(Constants.PARAMS_EVENT_ID, event.uuid.toString());
         }
-        httpHeaders.add("Content-Type", event.getRequest().getContentType());
         return httpHeaders;
     }
 
