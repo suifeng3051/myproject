@@ -1120,7 +1120,7 @@ $(document).ready(function(){
         var firstGroup = $(this).parent().parent().parent().children('a').text();
 
         if(firstGroup!=''){
-            $("#breadcrumb").html("<span style='font-size: 14px'>"+firstGroup+">>"+lastGroup+"</span>");
+            $("#breadcrumb").html("<span style='font-size: 14px'>"+firstGroup+" > "+lastGroup+"</span>");
         }else {
             $("#breadcrumb").html("<span style='font-size: 14px'>" + lastGroup + "</span>");
         }
