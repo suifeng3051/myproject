@@ -216,7 +216,10 @@ public class Pipeline {
     public int getTaskCount() {
         int count = 0;
         for (Map.Entry<Integer, ThreadPoolExecutor> entry : executors.entrySet()) {
-            count += entry.getValue().getTaskCount();
+            ThreadPoolExecutor executor = entry.getValue();
+            long cur = executor.getTaskCount() - executor.getCompletedTaskCount();
+            if(cur >= 0)
+                count += cur;
         }
         return count;
     }
