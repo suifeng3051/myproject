@@ -142,6 +142,8 @@ public class ReleaseController {
             try {
                 byte[] bytes = file.getBytes();
 
+                String uploadStr = new String(bytes);
+                JSONArray array = JSONArray.parseArray(uploadStr);
 
 
              } catch (Exception e) {
