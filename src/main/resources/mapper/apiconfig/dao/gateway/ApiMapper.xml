@@ -42,7 +42,6 @@
         and method = #{method,jdbcType=VARCHAR}
         and version = #{version,jdbcType=INTEGER}
         and env = #{env,jdbcType=INTEGER}
-        and deleted = 0
     </select>
     <select id="getAllApiByEnv" resultMap="BaseResultMap">
         select
@@ -55,6 +54,12 @@
         <include refid="Base_Column_List"/>
         from t_api_n
         where group_id = #{groupId,jdbcType=INTEGER} and deleted=0 and env=#{env,jdbcType=TINYINT}
+    </select>
+    <select id="getDeletedApi" resultType="com.zitech.gateway.apiconfig.model.Api">
+        select
+        <include refid="Base_Column_List"/>
+        from t_api_n
+        where deleted=1
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from t_api_n

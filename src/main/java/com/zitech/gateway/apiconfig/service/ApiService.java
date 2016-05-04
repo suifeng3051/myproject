@@ -63,4 +63,6 @@ public interface ApiService {
     List<Api> getAllByEnv(Byte env);
 
     List<Api> getByGroupIdAndEnv(Integer groupId, Byte env);
+
+    List<Api> getDeletedApi();
 }

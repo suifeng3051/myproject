@@ -40,4 +40,14 @@ public class ServeServiceImpl implements ServeService {
         serve.setDeleted((byte)1);
         serveDAO.updateByPrimaryKeySelective(serve);
     }
+
+    @Override
+    public void updateServe(Serve serve) {
+        serveDAO.updateByPrimaryKeySelective(serve);
+    }
+
+    @Override
+    public void deleteServeRealById(Integer id) {
+        serveDAO.deleteByPrimaryKey(id);
+    }
 }

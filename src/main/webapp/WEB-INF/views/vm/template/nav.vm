@@ -35,7 +35,7 @@
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">RecoverApi</a></li>
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">Client</a></li>
                         #end
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Safety</a></li>
+##                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Safety</a></li>
                     </ul>
                 </li>
             </ul>
