@@ -156,7 +156,7 @@ $(document).ready(function(){
         var apiId = $("#deleteApiId").val();
         $.post("deleteapi", {"id": apiId}, function (d) {
             console.log("apiResult: " + d);
-            if ("success" == d) {
+            if (d.code == 0) {
                 $("#myDeleteModal").modal('hide');
             } else {
                 $("#deleteApiTip").html("删除失败，请联系管理员~~");
