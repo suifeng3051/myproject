@@ -36,7 +36,6 @@ public class ResultPipe extends AbstractPipe {
             event.setServeResponse(serveResponse);
 
             HttpHeaders headers = PipeHelper.getHeaders(event);
-
             ResponseEntity<String> responseEntity = new ResponseEntity<>(result,
                     headers, HttpStatus.valueOf(200));
             eventResult.setResult(responseEntity);

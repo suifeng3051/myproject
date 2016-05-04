@@ -9,6 +9,7 @@ import com.zitech.gateway.oauth.Constants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,8 +34,9 @@ public class CacheManageController {
     // Resource 默认按照名称进行装配
     @Resource
     RedisOperate redisOperate;
-    @Resource
-    AdminService iCarmenUserService;
+
+    @Autowired
+    private AdminService adminService;
 
     /**
      * 管理cache
@@ -45,14 +47,17 @@ public class CacheManageController {
     @RequestMapping("/cachemanage")
     public ModelAndView cacheManage(@RequestParam("env") String env,
                                     HttpServletRequest request) {
-        String userName = null;
+
         Map<String, Object> hashMap = new HashMap();
         hashMap.put("env", env);
         try {
             // 获取用户名
-            String userKey = request.getSession().getAttribute("username").toString();
-            userName = redisOperate.getStringByKey(userKey);
-            redisOperate.set("username", userName, 60*60); // 一小时
+            String userName = adminService.getUserNameFromSessionAndRedis(request);
+            if(null == userName) {
+                return new ModelAndView("redirect:/unifyerror", "cause", "userName is null.");
+            }
+            hashMap.put("isAdmin", adminService.isAdmin(userName));
+            hashMap.put("user", userName);
             hashMap.put("data", userName);
             CacheManager cacheManager = CacheManager.getInstance();
             Map<String, String> allCacheNames = cacheManager.readNodes();
@@ -67,29 +72,12 @@ public class CacheManageController {
         } catch (Exception e) {
             logger.warn("fail to get session", e);
         }
-        if(null == userName) {
-            return new ModelAndView("redirect:/unifyerror", "cause", "userName is null.");
-        }
-        Boolean isAdmin = isAdministrator(userName);
-        hashMap.put("isAdmin", isAdmin);
-        hashMap.put("user", userName);
+
+
         return new ModelAndView("cachemanage", "results", hashMap);
     }
 
-    public Boolean isAdministrator(String userName) {
 
-        try {
-            List<Admin> user = iCarmenUserService.getByUserName(userName);
-            for(Admin carmenUser : user) {
-                if(1 == carmenUser.getUserGroup()) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            logger.error("can not get uesrs.", e);
-        }
-        return false;
-    }
 
     /**
      * 清除对应实例的缓存
@@ -102,6 +90,7 @@ public class CacheManageController {
         String status = "fail";
         String[] allNames = names.split(",");
         List<String> instance = Arrays.asList(allNames);
+        logger.info(names);
         try {
             if(null != instance && instance.size() > 0) {
                 if(instance.contains(Constants.CACHE_NAME_ACCESS_TOKEN)) {

@@ -537,7 +537,10 @@ $(document).ready(function(){
     if($('#detail').val() == 1){
         changeStepTo(4);
         $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );
-        $('#step-nav-box, .preStep, #save').hide();
+        $('#step-nav-box, #save').hide();
+        $('.preStep').show().click(function(){
+            window.history.back();
+        });
     }
 
     function changeStepTo(step){  // 跳转到指定页面
@@ -572,6 +575,7 @@ $(document).ready(function(){
                 $('.data-review').show();
                 $('.nextStep').hide();
                 $('#save').show();
+                finalReview();
                 return;
             break;
         }
@@ -581,9 +585,9 @@ $(document).ready(function(){
         $('#save').hide();
         if(step == 1){
             $('.preStep').hide();
-        } else if (step == totalStep){
+        }/* else if (step == totalStep){
             finalReview(); // 将所有数据展示出来
-        }else{
+        }*/ else{
             $('.preStep').show();
         }
         $('.data-review').hide();
