@@ -775,6 +775,7 @@ $(document).ready(function(){
 
                 setTimeout(function (){
                     $("#myResourceModal").modal('hide');
+                    window.location.href="";
                 }, 1500);
 
 
