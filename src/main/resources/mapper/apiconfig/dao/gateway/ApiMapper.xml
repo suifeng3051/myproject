@@ -38,7 +38,11 @@
         select
         <include refid="Base_Column_List"/>
         from t_api_n
-        where namespace = #{nameSpace,jdbcType=VARCHAR} and method = #{method,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and env = #{env,jdbcType=INTEGER}
+        where namespace = #{nameSpace,jdbcType=VARCHAR}
+        and method = #{method,jdbcType=VARCHAR}
+        and version = #{version,jdbcType=INTEGER}
+        and env = #{env,jdbcType=INTEGER}
+        and deleted = 0
     </select>
     <select id="getAllApiByEnv" resultMap="BaseResultMap">
         select
