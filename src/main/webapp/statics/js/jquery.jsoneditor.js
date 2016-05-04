@@ -102,7 +102,7 @@
     function requireChanged(json) {
         return function() {
             var key = $(this).prev().prev().val(),
-                val = $(this).children('input').is(':checked') ? 1 : 0,
+                val = $(this).prop('checked') ? 1 : 0,
                 item = $(this).parent(),
                 path = item.data('path');
             feed(json, (path ? path + '.' : '') + key, 'require', val);

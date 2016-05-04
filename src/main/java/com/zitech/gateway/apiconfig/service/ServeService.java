@@ -10,4 +10,6 @@ public interface ServeService {
     Serve getByApiId(Integer apiId);
 
     List<Serve> getAll(Byte env);
+
+    void deleteServeByApiId(Integer apiId, Integer userid);
 }

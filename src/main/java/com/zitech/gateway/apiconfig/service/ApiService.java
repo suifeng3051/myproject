@@ -14,7 +14,7 @@ public interface ApiService {
 
     void insertApi(Api api);
 
-    void deleteApiById(Integer id);
+    void deleteApiById(Integer id, Integer userid);
 
     void deleteApiRealById(Integer id);
 

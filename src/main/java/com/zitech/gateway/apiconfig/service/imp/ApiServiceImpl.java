@@ -50,8 +50,12 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public void deleteApiById(Integer id) {
-
+    public void deleteApiById(Integer id, Integer userid) {
+        Api api = apiDAO.selectByPrimaryKey(id);
+        api.setDeleted((byte)1);
+        api.setUpdatedId(userid);
+        api.setUpdatedTime(new Date());
+        apiDAO.updateByPrimaryKeySelective(api);
     }
 
     @Override

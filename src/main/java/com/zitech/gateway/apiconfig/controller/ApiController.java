@@ -1,15 +1,13 @@
 package com.zitech.gateway.apiconfig.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zitech.gateway.apiconfig.model.Api;
-import com.zitech.gateway.apiconfig.model.Group;
-import com.zitech.gateway.apiconfig.model.Param;
-import com.zitech.gateway.apiconfig.model.Serve;
+import com.zitech.gateway.apiconfig.model.*;
 import com.zitech.gateway.apiconfig.service.*;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.param.ParamHelper;
+import org.omg.CORBA.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +26,8 @@ import java.util.*;
  * Created by hy on 16-4-26.
  */
 @Controller
-public class CreateApiController {
-    private final static Logger logger = LoggerFactory.getLogger(CreateApiController.class);
+public class ApiController {
+    private final static Logger logger = LoggerFactory.getLogger(ApiController.class);
 
     @Autowired
     private RedisOperate redisOperate;
@@ -274,8 +272,48 @@ public class CreateApiController {
 
     }
 
+    @RequestMapping(value = "/deleteapi", produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String uptAvail(@RequestParam(value="id",required = true) Integer apiId,
+                           HttpServletRequest request) {
+
+        ApiResult<Boolean> apiResult = new ApiResult<>(0, "success");
+
+        try {
+            String userName = adminService.getUserNameFromSessionAndRedis(request);
+            if(null == userName) {
+                apiResult.setCode(2);
+                apiResult.setMessage("未查询到用户信息");
+                return apiResult.toString();
+            }
+            List<Admin> byUserName = adminService.getByUserName(userName);
+            if (byUserName.size() == 0) {
+                apiResult.setCode(3);
+                apiResult.setMessage("未查询到用户信息");
+                return apiResult.toString();
+            }
+            Integer userid = byUserName.get(0).getId();
+
+            Api api = apiService.getApiById(apiId);
+            if (api != null) {
+                apiService.deleteApiById(apiId, userid);
+            }
+            Serve serve = serveService.getByApiId(apiId);
+            if (serve != null) {
+                serveService.deleteServeByApiId(apiId, userid);
+            }
+            Param param = paramService.getByApiId(apiId);
+            if (param != null) {
+                paramService.deleteParamByApiId(apiId, userid);
+            }
+        } catch (Exception e) {
+            logger.info("删除api发生异常",e);
+            apiResult.setCode(1);
+            apiResult.setMessage("删除api发生异常");
+        }
 
 
-
+        return apiResult.toString();
+    }
 
 }
