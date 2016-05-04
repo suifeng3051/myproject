@@ -106,9 +106,9 @@ public class ServePipe extends AbstractPipe {
             try {
                 int code = result.getStatusLine().getStatusCode();
                 if (code >= HttpStatus.SC_BAD_REQUEST && code < HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-                    event.setException(new ServeException(5210, "serve not found"));
+                    event.setException(new ServeException(5210, "serve not found: " + code));
                 } else if (code >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-                    event.setException(new ServeException(5211, "serve internal error"));
+                    event.setException(new ServeException(5211, "serve internal error: " + code));
                 } else {
                     HttpEntity entity = result.getEntity();
                     if (entity != null) {
