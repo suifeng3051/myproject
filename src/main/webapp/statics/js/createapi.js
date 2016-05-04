@@ -501,7 +501,6 @@ $(document).ready(function(){
             }
         });
 
-
         if(window.JSONerror) { errorInfo += ' 未选择所有数据类型 '; }
 
         if($('#editor').html().length){
@@ -575,6 +574,7 @@ $(document).ready(function(){
                 $('.data-review').show();
                 $('.nextStep').hide();
                 $('#save').show();
+                finalReview();
                 return;
             break;
         }
@@ -584,9 +584,9 @@ $(document).ready(function(){
         $('#save').hide();
         if(step == 1){
             $('.preStep').hide();
-        } else if (step == totalStep){
+        }/* else if (step == totalStep){
             finalReview(); // 将所有数据展示出来
-        }else{
+        }*/ else{
             $('.preStep').show();
         }
         $('.data-review').hide();

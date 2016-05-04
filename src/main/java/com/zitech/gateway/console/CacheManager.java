@@ -31,9 +31,9 @@ public class CacheManager {
 
     private static CacheManager cacheManager = null;
 
-    private String cacheNode = "/cache/api/config";
+    private String cacheNode = "/cache";
 
-    private String preCacheNodePrefix = "/preCache";
+    private String preCacheNodePrefix = "/precache";
 
     private Map<String, ILocalCache> cacheMap = new HashMap<>();
 

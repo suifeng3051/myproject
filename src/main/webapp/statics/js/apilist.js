@@ -4,6 +4,18 @@ $(document).ready(function(){
     $("#apiResourceGroupConfig").validate();
 
 
+    var groupId_show = getCookie("groupId_show");
+    setTimeout(function(){
+       // console.log(groupId_show);
+        if($('.affixGroup[groupid='+groupId_show+']').parent().parent().children('i').length){
+            $('.affixGroup[groupid='+groupId_show+']').parent().parent().children('i').trigger('click');
+            $('.affixGroup[groupid='+groupId_show+'] a').trigger("click");
+        }
+    }, 500);
+
+
+
+
     $("#newCreateTask").click("click", function () {
         var group = $("#currentGroup").val();
         window.location.href = "createapi?env=" + getEnv() + "&group=" + group;
@@ -69,7 +81,7 @@ $(document).ready(function(){
     function getEnv() {
         var env = $("#env").serialize();
         var envValue = env.split("=")[1];
-        console.log("value: " + envValue);
+        //console.log("value: " + envValue);
         return envValue;
     }
 
@@ -976,34 +988,6 @@ $(document).ready(function(){
         }, "json");
     });
 
-    /*// 获取API详情
-     $("body").on("click", ".apidetail", function (e) {
-     e.preventDefault();
-     var apiId = $(this).attr("apiId");
-     var env = getEnv();
-     var mapForm = document.createElement("form");
-     mapForm.target = "_self";
-     mapForm.method = "POST";
-     mapForm.action = "apidetail";
-
-     var mapInput = document.createElement('input');
-     mapInput.type = "text";
-     mapInput.name = 'id';
-     mapInput.value = apiId;
-
-     var mapInput1 = document.createElement('input');
-     mapInput1.type = "text";
-     mapInput1.name = 'env';
-     mapInput1.value = env;
-
-     mapForm.appendChild(mapInput);
-     mapForm.appendChild(mapInput1);
-
-     document.body.appendChild(mapForm);
-
-     mapForm.submit();
-
-     });*/
 
     // 通过API链接到监控数据
     $("body").on("click", ".apimonitor", function (e) {
@@ -1076,6 +1060,16 @@ $(document).ready(function(){
 
     });
 
+    //设置cookie
+    function setCookie(c_name, value, expireDays){
+        var exTime=new Date();
+        exTime.setHours(exTime.getHours() + expireDays);
+        document.cookie=c_name+ "=" + escape(value) + ((expireDays==null) ? "" : ";expires="+exTime.toGMTString());
+    }
+
+
+
+    //获取cookie
     function getCookie(c_name) {
         if (document.cookie.length > 0) {
             c_start = document.cookie.indexOf(c_name + "=")
@@ -1110,7 +1104,14 @@ $(document).ready(function(){
         $(this).parent().addClass("current");
         var group = $(this).parent().attr("group").trim();
         var groupid = $(this).parent().attr("groupid").trim();
-         var env = getEnv();
+
+        //此处记录点击的行为(存入cookie) add by pxl
+        console.log(getCookie("groupId_show"));
+        delCookie("groupId_show");
+        setCookie("groupId_show",groupid,6);
+
+
+        var env = getEnv();
         $(".apiElement").remove(); // 清除之前所有的API列表
         $("#currentGroup").val(group); // 设置当前的group,以便新建的时候去的取到当前的group
         $("#currentGroupid").val(groupid); // 设置当前的group,以便新建的时候去的取到当前的group
@@ -1173,7 +1174,7 @@ $(document).ready(function(){
 
 
     $('#resourceGroupTabBtn').trigger('click');
-    $('.affixGroup[group*=all]').trigger('click');
+    //$('.affixGroup[group*=all]').trigger('click');
 
 
     // 左导航菜单收缩展开效果
