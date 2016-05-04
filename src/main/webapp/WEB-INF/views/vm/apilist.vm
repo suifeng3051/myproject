@@ -69,82 +69,13 @@
                     </li>
 
                     </ul>
-                    #* <li  class="affixGroup" group="$!groupTree.alias">
-                            <a href="#">测试组D</a>
-
-                            <i class="icon-chevron-right"></i>
-                            <ul class="nav nav-list bs-docs-sidenav" >
-                                <li class="affixGroup"> <a href="#">子选项1</a> </li>
-                                <li class="affixGroup">
-                                    <a href="#">子选项2</a> <i class="icon-chevron-right"></i>
-
-                                    <ul class="nav nav-list bs-docs-sidenav" >
-                                        <li class="affixGroup"> <a href="#">子选项1</a> </li>
-                                        <li class="affixGroup"> <a href="#">子选项2</a> </li>
-                                        <li class="affixGroup"> <a href="#">子选项3</a> </li>
-                                    </ul>
-                                </li>
-
-                                <li  class="affixGroup"> <a href="#">子选项3</a> </li>
-                            </ul>
-
-                        </li>*#
-
-
-
-
-
-
-
-
-
-
-#*                <ul class="nav nav-list bs-docs-sidenav" id="navbarLeft">
-                    <li class="affixGroup current" group="all"><a href="#">所有</a></li>
-                    <li  class="affixGroup" group="testD">
-                        <a href="#">测试组D</a> <i class="icon-chevron-right"></i>
-                        <ul class="nav nav-list bs-docs-sidenav" >
-                            <li class="affixGroup"> <a href="#">子选项1</a> </li>
-                            <li class="affixGroup">
-                                <a href="#">子选项2</a> <i class="icon-chevron-right"></i>
-
-                                <ul class="nav nav-list bs-docs-sidenav" >
-                                    <li class="affixGroup"> <a href="#">子选项1</a> </li>
-                                    <li class="affixGroup"> <a href="#">子选项2</a> </li>
-                                    <li class="affixGroup"> <a href="#">子选项3</a> </li>
-                                </ul>
-                            </li>
-
-                            <li  class="affixGroup"> <a href="#">子选项3</a> </li>
-                        </ul>
-
-                    </li>
-                    <li  class="affixGroup" group="testB"> <a href="#">测试组B</a> </li>
-                    <li  class="affixGroup" group="testc"> <a href="#">测试组C</a> </li>
-                    <li  class="affixGroup" group="testA"> <a href="#">测试组A</a> </li>
-                    <li  class="affixGroup" group="scene"> <a href="#">场景</a> </li>
-                </ul>*#
-
-
-
-
-
-
-
-
-
-
 
         </div>
         </div>
         <div class="col-md-9">
-            <section class="content-header">
-                <h2 id="breadcrumb">
-                </h2>
-            </section>
-            <div class="panel panel-primary" style="margin-top:10px;min-height:460px;">
+            <div class="panel panel-primary" style="margin-top:60px;min-height:460px;">
 
-                <div class="panel-heading">API 列表
+                <div class="panel-heading"><small id="breadcrumb" ></small>
 
                     <button type="button" class="btn btn-primary" id="newCreateTask" style="float:right;margin:-5px 0 0 0; border:0px;">
                         <span class="glyphicon glyphicon-plus"></span>新建API
