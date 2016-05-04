@@ -219,7 +219,7 @@ public class Pipeline {
             ThreadPoolExecutor executor = entry.getValue();
             long cur = executor.getTaskCount() - executor.getCompletedTaskCount();
             if(cur >= 0)
-                count += executor.getTaskCount();
+                count += cur;
         }
         return count;
     }
