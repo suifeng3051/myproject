@@ -18,6 +18,9 @@ $(document).ready(function(){
 
     $("#methodconfigform").validate();
 
+
+
+
 //    $(".apiTypeLi").on("click", function () {
 //        var apiType = $(this).attr("flag");
 //        if("JAVA" == apiType) {
@@ -41,6 +44,7 @@ $(document).ready(function(){
 //        }
 //    }
 
+/*
     $(".hasMapping").on("click", function () {
         //  获取前面填写的namespace等
         var apiNamespace = $("#namespace").val();
@@ -104,7 +108,6 @@ $(document).ready(function(){
     });
 
 
-/*
     // 给上一步按钮绑定事件
     $(".preStep").on("click", function () {
         var step = $("#configStep").val();
@@ -401,8 +404,9 @@ $(document).ready(function(){
     });*/
 
 
+    // 获取第 2 步的多选数据
     $.get('getServeInner', function(data){
-//        console.log(data);
+
         if(data.code == 0){ // 成功
             var len = data.data.length;
             var str = '';
@@ -432,42 +436,147 @@ $(document).ready(function(){
 
     $('.nextStep').click(function(){
 
-        if(currentStep == 1){ // 检测namespace是否存在
-            if( ($('.hasApi').attr('data-exists') == 'no') || ($('#edit').val() == 1)  ){ // namespace 检测不存在时（没有冲突），或者在编辑而不是在新建
-                currentStep++;
-                changeStepTo(currentStep);
-            } else {
+        switch(currentStep) {
+            case 1:  // 检测namespace是否存在
+                if(
+                    ($('.hasApi').attr('data-exists') == 'no')  // 没有冲突，是新建
+                    ||
+                    (($('.hasApi').attr('data-exists') == 'yes') && ($('#edit').val() == 1)) // 已经存在并正在修改
+                ){  // namespace 检测不存在时（没有冲突）
 
-                $('.hasApi').trigger('click');
-            }
-        } else {
-            currentStep++;
+                    // 跳转到下一步
 
-            if(currentStep == 3 && $('#requestType').val() != 'POST'){ // 选择请求方式为 GET，跳过第3步
-                currentStep++;
-            }
-
-            changeStepTo(currentStep);
+                }else {  // 未检测
+                    $('.hasApi').trigger('click');
+                    return;
+                }
+            break;
+            case 2:
+                 if($('#requestType').val() != 'POST'){  // 如果是GET 方式则路过第 3 步
+                    currentStep++;
+                 }
+            break;
+            case 3:  // 验证类型选择，是否为空；若为空，则提示用户
+                if($('#jsonChecked').val() == '') {
+                    validJSON();
+                    return;  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
+                }
+            break;
         }
-    });
-    $('.preStep').click(function(){
-        currentStep --;
-
-        if((currentStep == 3) && ($('#requestType').val() != 'POST')){ // 选择请求方式为 GET，跳过第3步
-            currentStep--;
-        }
-
+        currentStep++;
         changeStepTo(currentStep);
     });
 
-    function changeStepTo(step){
+    $('.preStep').click(function(){
+        switch(currentStep){
+            case 3:
+            if($('#jsonChecked').val() == '') {
+                validJSON();
+                return;  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
+            }
+            break;
+            case 4:
+                 if(($('#requestType').val() != 'POST')){  // 如果是GET 方式则路过第 3 步
+                    currentStep--;
+                 }
+            break;
+        }
+        currentStep --;
+        changeStepTo(currentStep);
+    });
+
+
+    function validJSON(){
+
+        var errorInfo = '';
+
+        // 对JSON解析树进行表单验证
+        window.JSONerror = false;
+        $('#editor select').each(function(){
+            if(!$(this).val()){
+                $(this).addClass('error');
+                window.JSONerror = true;
+            } else {
+                $(this).removeClass('error');
+            }
+        });
+
+
+        if(window.JSONerror) { errorInfo += ' 未选择所有数据类型 '; }
+
+        if($('#editor').html().length){
+            $('#parsedJSON').text(JSON.stringify(JSONresult.getJson()));  // 将修改后的树数据放入隐藏textarea
+        }
+
+        $.post(
+            '/validateJsonStr',
+            {
+                'jsonStr': $('#json-input').val(),
+                'struct': $('#parsedJSON').val()
+            },
+            function(data){
+                if(data.code == 1){
+                    $('#json-input').addClass('error');
+                    $('#jsonChecked').val('');
+                    errorInfo += data.data;
+                    window.JSONerror = true;
+                } else {
+                    $('#jsonChecked').val('checked');
+                    $('#json-input').removeClass('error');
+                }
+                if(window.JSONerror){
+                    $('#jsonParseInfo').html('<p>'+ errorInfo +'</p>').show();
+                } else {
+                    $('#jsonParseInfo').removeClass('alert-danger').addClass('alert-success').html('<p>'+ data.data +'</p>').show();
+                }
+            }
+        );
+    }
+
+    // API 详情页面
+    if($('#detail').val() == 1){
+        changeStepTo(4);
+        $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );
+        $('#step-nav-box, #save').hide();
+        $('.preStep').show().click(function(){
+            window.history.back();
+        });
+    }
+
+    function changeStepTo(step){  // 跳转到指定页面
 
         var stepTitle = '';
         switch(step){
             case 1: stepTitle = 'API接口信息配置'; break;
-            case 2: stepTitle = '内部方法&方法参数配置 ';  break;
-            case 3: stepTitle = 'JSON解析与编辑';  break;
-            case 4: stepTitle = '预览';  break;
+            case 2: stepTitle = '内部方法&方法参数配置 '; break;
+            case 3:
+                stepTitle = 'JSON解析与编辑';
+
+
+                if($('#json-input').val().length){
+                    $('#json-input').val(formatJson($('#json-input').val()));  // 自动格式化输入框中的 json 字符串
+                    window.JSONresult = $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );  // 将保存的数据取出来解析成“树”进行修改
+                }
+
+                $('.item .property').mouseenter(function(){
+                    $(this).parent().addClass('grey');
+                });
+                $('.item .property').mouseleave(function(){
+                    $(this).parent().removeClass('grey');
+                });
+
+            break;
+            case 4:
+                stepTitle = '预览';
+                $('#step-title').text(stepTitle);
+                $('#apiconfig-box .alert').hide();
+                $('#step-nav-box li').eq(step-1).addClass('active').siblings().removeClass('active');
+                $('#apiconfig-box > div').addClass('active').eq(step-1).removeClass('active');
+                $('.data-review').show();
+                $('.nextStep').hide();
+                $('#save').show();
+                return;
+            break;
         }
         $('#step-title').text(stepTitle);
 
@@ -475,20 +584,15 @@ $(document).ready(function(){
         $('#save').hide();
         if(step == 1){
             $('.preStep').hide();
-        } else if(step == totalStep){
-            $('.nextStep').hide();
-            $('#save').show();
+        } else if (step == totalStep){
             finalReview(); // 将所有数据展示出来
         }else{
             $('.preStep').show();
         }
-
-        if(step == 3 && $('#edit').val() == 1) {
-            $('#JSONparse-btn').trigger('click');
-        }
-
+        $('.data-review').hide();
         $('#step-nav-box li').eq(step-1).addClass('active').siblings().removeClass('active');
         $('#apiconfig-box > div').eq(step-1).addClass('active').siblings().removeClass('active');
+
     }
 
     $('#namespace, #name').keyup(function(){
@@ -498,21 +602,34 @@ $(document).ready(function(){
         $('.hasApi').removeAttr('data-exists');
     });
 
+    $('#json-input').blur(function(){  // 自动格式化JSON字符串
+        $(this).val(formatJson($(this).val()));
+    });
+
     $('#JSONparse-btn').click(function(){
         try {
             var json = JSON.parse( $('#json-input').val());
         }catch (e){
-            console.log('解析JSON时发生错误：'+e);
-            var json = {};
+            $('#json-input').addClass('error');
+            $('#jsonParseInfo').html('<p>解析JSON时发生错误：'+e+'</p>').show();
+            return;
         }
+
+        $('#json-input').removeClass('error');
+        $('#jsonParseInfo').hide();
+
         window.JSONresult = $('#editor').jsonEditor(json);  // 解析JSON，生成JSON树
 
-        $('#requestStructure').val(JSONresult.getJson());
+//        setTimeout(function(){
+//            $('#editor .item').addClass('expanded');
+//        }, 200);
 
-        $('.property').mouseenter(function(){
+        //$('#requestStructure').val(JSONresult.getJson());
+
+        $('.item .property').mouseenter(function(){
             $(this).parent().addClass('grey');
         });
-        $('.property').mouseleave(function(){
+        $('.item .property').mouseleave(function(){
             $(this).parent().removeClass('grey');
         });
     });
@@ -585,8 +702,7 @@ $(document).ready(function(){
         var str = objToStr(serviceObj);
         $('#final-review-method').html( str );
 
-
-        if(apiObj.requestType == 'POST'  ) {  // 请求方式 POST，加入json数据
+        if( apiObj.requestType == 'POST' ) {  // 请求方式 POST，加入json数据
 
             paramObj = formdataToJSON($('#jsonparseForm').serializeArray());
             paramObj.requestStructure = JSONresult.getJson();
@@ -613,6 +729,7 @@ $(document).ready(function(){
         return obj;
     }
 
+
 //    function formdataToStr (arr){
 //        var len = arr.length;
 //        var str = '';
@@ -633,6 +750,10 @@ $(document).ready(function(){
         }
         return str;
     }
+
+
+
+
 
 
     // 为已有的select补充完整

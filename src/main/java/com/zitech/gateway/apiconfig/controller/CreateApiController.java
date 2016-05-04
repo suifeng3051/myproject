@@ -9,6 +9,7 @@ import com.zitech.gateway.apiconfig.service.*;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
 import com.zitech.gateway.gateway.Constants;
+import com.zitech.gateway.param.ParamHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class CreateApiController {
     public ModelAndView createApi(@RequestParam(value = "env", defaultValue="1") Byte env,
                                   @RequestParam("group") String group,
                                   @RequestParam(value = "edit", required = false, defaultValue = "0") Integer edit,
+                                  @RequestParam(value = "detail", required = false, defaultValue = "0") Integer detail,
                                   @RequestParam(value = "apiId", required = false) Integer apiId,
                                   HttpServletRequest request,
                                   HttpServletResponse response) {
@@ -77,6 +79,7 @@ public class CreateApiController {
         results.put("api", apiModel);
         results.put("serve", serveModel);
         results.put("param", paramModel);
+        results.put("detail", detail);
         List<Group> groupList = null;
         try {
             groupList = groupService.getAll();
@@ -229,6 +232,27 @@ public class CreateApiController {
         return apiResult.toString();
     }
 
+    @RequestMapping(value = "/validateJsonStr", produces="application/json;charset=utf-8",method= RequestMethod.POST)
+    @ResponseBody
+    public String validateJsonStr(@RequestParam("jsonStr") String  jsonStr,
+                                  @RequestParam("struct") String  struct) {
+
+        int code = 0;
+        String message = "success";
+        String data = "json验证通过！";
+
+        try{
+            ParamHelper.validate(jsonStr, ParamHelper.buildTree(struct));
+        }catch (Exception e) {
+            e.printStackTrace();
+            code = 1;
+            message = "fail";
+            data = e.getMessage();
+        }
+
+        return  new ApiResult<>(code,message,data).toString();
+    }
+
     @RequestMapping(value = "/uptAvail", produces="application/json;charset=utf-8",method= RequestMethod.POST)
     @ResponseBody
     public String uptAvail(@RequestParam("update") String  update) {
@@ -247,8 +271,6 @@ public class CreateApiController {
         }else{
             return  new ApiResult<>(1,"更新失败！").toString();
         }
-
-
 
     }
 

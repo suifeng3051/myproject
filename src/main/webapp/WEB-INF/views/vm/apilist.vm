@@ -178,7 +178,7 @@
 ##                                </li>
 ##                            #else
                                 <li class="list-group-item apiElement">
-                                    <a href="#" class="apidetail" apiId="$!apiElement.id">$!apiElement.namespace/$!apiElement.version/$!apiElement.method</a>
+                                    <a href="#" class="apidetail" apiId="$!apiElement.id" namespace="$!apiElement.namespace" method="$!apiElement.method" version="$!apiElement.version" > $!apiElement.namespace/$!apiElement.version/$!apiElement.method </a>
                                     <span style="position: absolute;left:400px;color:#929292;">$!apiElement.apiDescription</span>
                                     <span style="position: absolute;right:200px;color:#929292;">#if('GET' == $!apiElement.requestType)
                                         GET
@@ -389,7 +389,7 @@
                         <div class="form-group">
                             <label for="resourceGroupName" class="col-sm-3 control-label">资源所属组</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control required" name="resourceGroupParentAlias" id="resourceGroupParentAlias" placeholder="" value="" readOnly="true" group="" >
+                                <input type="text" class="form-control required" name="resourceGroupParentAlias" id="resourceGroupParentAlias" placeholder="" value="" readOnly="true" group="" groupid="" >
                             </div>
                             <div class="col-sm-3"><span class="glyphicon glyphicon-ok" style="top:8px;"></span></div>
                         </div>                        <div class="form-group">

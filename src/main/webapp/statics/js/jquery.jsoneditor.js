@@ -27,6 +27,12 @@
         return jsonTree;
     };
 
+     $.fn.jsonEditorByTreeJson = function(json) {
+        treeJson=json;
+        JSONEditor($(this), treeJson);
+        return jsonTree;
+    };
+
     jsonTree.getJson = function() {
         return treeJson;
     }
@@ -40,7 +46,7 @@
         }
         for (var key in json) {
             if (!json.hasOwnProperty(key)) continue;
-            json[key] = { 'require': 1, 'type': assignType(json[key]), 'fields': getTreeJsonByDataJson(json[key]) }
+            json[key] = { 'require': 1, 'type': assignType(json[key]),'des':"", 'fields': getTreeJsonByDataJson(json[key]) }
         }
         return json;
     }
@@ -62,19 +68,21 @@
                 property = $('<input>', { 'class': 'property', 'readonly': 'true' }),
                 typeSelect = $('<select>', { 'class': 'type' }),
                 typeValue = $('<option value="INT">INT</option><option value="STRING">STRING</option><option value="BOOL">BOOL</option><option value="OBJECT">OBJECT</option><option value="ARRAY">ARRAY</option>'),
-                requireCheckBox = $('<label><input type="checkbox" value="" checked="true"/>必填</label>');
+                requireCheckBox = $('<input type="checkbox" value="" checked="true"/>'),
+                descInput=$('<input type="text" />');
             if (isObject(json[key].fields) || isArray(json[key].fields)) {
                 addExpander(item);
             }
-
             property.val(key).attr('title', key);
+            descInput.val(json[key].des);
+            json[key].require ? requireCheckBox.attr('checked', 'true') : requireCheckBox.removeAttr('checked');
             typeSelect.append(typeValue).val(json[key].type);
-            item.append(property).append(requireCheckBox).append(typeSelect);
+            item.append(property).append(descInput).append(requireCheckBox).append(typeSelect);
             root.append(item);
 
             typeSelect.change(typeChanged(treeJson));
             requireCheckBox.change(requireChanged(treeJson));
-
+            descInput.change(descChanged(treeJson));
             if (json[key].fields != undefined && json[key].fields != '') {
                 construct(item, json[key].fields, (path ? path + '.' : '') + key);
             }
@@ -83,7 +91,7 @@
 
     function typeChanged(json) {
         return function() {
-            var key = $(this).prev().val(),
+            var key = $(this).prev().prev().prev().val(),
                 val = $(this).find('option:selected').val(),
                 item = $(this).parent(),
                 path = item.data('path');
@@ -98,6 +106,16 @@
                 item = $(this).parent(),
                 path = item.data('path');
             feed(json, (path ? path + '.' : '') + key, 'require', val);
+        }
+    }
+
+    function descChanged(json){
+        return function() {
+            var key = $(this).prev().val(),
+                val = $(this).val(),
+                item = $(this).parent(),
+                path = item.data('path');
+            feed(json, (path ? path + '.' : '') + key, 'des', val);
         }
     }
 

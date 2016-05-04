@@ -75,6 +75,17 @@ $(document).ready(function(){
 
     $('[data-toggle="tooltip"]').tooltip(); // 绑定工具提示js插件
 
+    // 给详情页面绑定点击事件
+    $('body').on('click', '.apidetail', function (e) {
+        e.preventDefault();
+        var namespace = $(this).attr("namespace");
+        var name = $(this).attr("name");
+        var version = $(this).attr("version");
+        var apiId = $(this).attr("apiId");
+        var group = $("#currentGroup").val();
+        var content = "createapi?edit=1&group=" + group + "&env=" + getEnv() + "&apiId=" + apiId;
+        window.location.href = "createapi?edit=1&group=" + group + "&env=" + getEnv() + "&apiId=" + apiId+"&detail=1";
+    });
 
     // 给API的编辑接口绑定事件
     $('body').on('click', '.editIcon', function (e) {
@@ -375,8 +386,12 @@ $(document).ready(function(){
         $("#apiResourceInfo").css("display", "none");
         var resourceGroupParent = $(".affixGroup.current");
         var resourceGroupParentAlias = resourceGroupParent.attr("group");
+        var resourceGroupParentId = resourceGroupParent.attr("groupid");
+
         var text = resourceGroupParent.text();
         $("#resourceGroupParentAlias").attr("group",resourceGroupParentAlias);
+        $("#resourceGroupParentAlias").attr("groupid",resourceGroupParentId);
+
        // $("#resourceGroupParentAlias").attr("placeholder",text);
         $("#resourceGroupParentAlias").attr("value",text.trim());
         $("#myResourceModal").modal("show");
@@ -724,7 +739,12 @@ $(document).ready(function(){
         insert.name = fields[1].split("=")[1];
         insert.alias = fields[2].split("=")[1];
         insert.level = fields[3].split("=")[1];
+        insert.parentId = $("#resourceGroupParentAlias").attr("groupid");
         insert.pAlias = $("#resourceGroupParentAlias").attr("group");
+
+   //     console.log(insert);
+
+
         $.post("insertresourcegroup", {"insert": JSON.stringify(insert)}, function (d) {
             re = /^fail/;
             if (re.test(d)) {
@@ -956,34 +976,34 @@ $(document).ready(function(){
         }, "json");
     });
 
-    // 获取API详情
-    $("body").on("click", ".apidetail", function (e) {
-        e.preventDefault();
-        var apiId = $(this).attr("apiId");
-        var env = getEnv();
-        var mapForm = document.createElement("form");
-        mapForm.target = "_self";
-        mapForm.method = "POST";
-        mapForm.action = "apidetail";
+    /*// 获取API详情
+     $("body").on("click", ".apidetail", function (e) {
+     e.preventDefault();
+     var apiId = $(this).attr("apiId");
+     var env = getEnv();
+     var mapForm = document.createElement("form");
+     mapForm.target = "_self";
+     mapForm.method = "POST";
+     mapForm.action = "apidetail";
 
-        var mapInput = document.createElement('input');
-        mapInput.type = "text";
-        mapInput.name = 'id';
-        mapInput.value = apiId;
+     var mapInput = document.createElement('input');
+     mapInput.type = "text";
+     mapInput.name = 'id';
+     mapInput.value = apiId;
 
-        var mapInput1 = document.createElement('input');
-        mapInput1.type = "text";
-        mapInput1.name = 'env';
-        mapInput1.value = env;
+     var mapInput1 = document.createElement('input');
+     mapInput1.type = "text";
+     mapInput1.name = 'env';
+     mapInput1.value = env;
 
-        mapForm.appendChild(mapInput);
-        mapForm.appendChild(mapInput1);
+     mapForm.appendChild(mapInput);
+     mapForm.appendChild(mapInput1);
 
-        document.body.appendChild(mapForm);
+     document.body.appendChild(mapForm);
 
-        mapForm.submit();
+     mapForm.submit();
 
-    });
+     });*/
 
     // 通过API链接到监控数据
     $("body").on("click", ".apimonitor", function (e) {
@@ -1121,24 +1141,24 @@ $(document).ready(function(){
                     //    //operate += '<a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiId="' + results[item].id + '" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>';
                     //    operate += '<a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="' + results[item].id + '"namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" class="glyphicon glyphicon-wrench testApi"></span></a><a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiId="' + results[item].id + '" class="glyphicon glyphicon-edit editIcon"></span></a></li>';
                     //} else {
-                        operate += '<li class="list-group-item  apiElement"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' + results[item].version + '/' + results[item].name + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
-                        operate += '<span style="position: absolute;left:400px;color:#929292;">' + results[item].apiDesc + '</span>';
+                        operate += '<li class="list-group-item  apiElement"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' + results[item].version + '/' + results[item].method + '</a><a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" ><span apiID="' + results[item].id + '" class="glyphicon glyphicon-trash deleteIcon"></span></a>';
+                        operate += '<span style="position: absolute;left:400px;color:#929292;">' + results[item].apiDescription + '</span>';
                         operate += '<span style="position: absolute;right:200px;color:#929292;">';
-                        if (0 == results[item].requestType) {
+                        if ("GET" == results[item].requestType) {
                             operate += 'GET';
                         }
-                        else if (1 == results[item].requestType) {
+                        else if ("POST" == results[item].requestType) {
                             operate += 'POST';
                         }
                         operate += '</span>';
-                        operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiID="' + results[item].id + '" class="glyphicon glyphicon-eye-open apimonitor"></span></a>';
-                        if (1 == results[item].validFlag) {
-                            operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="禁用" namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiID="' + results[item].id + '" flag="1" class="glyphicon glyphicon-remove-circle disableIcon"></span></a>';
+                        operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="监控数据" namespace="' + results[item].namespace + '" method="' + results[item].method + '" version="' + results[item].version + '" apiID="' + results[item].id + '" class="glyphicon glyphicon-eye-open apimonitor"></span></a>';
+                        if (1 == results[item].avail) {
+                            operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="禁用" namespace="' + results[item].namespace + '" method="' + results[item].method + '" version="' + results[item].version + '" apiID="' + results[item].id + '" flag="1" class="glyphicon glyphicon-remove-circle disableIcon"></span></a>';
                         } else {
-                            operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="启用" namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiID="' + results[item].id + '" flag="0" class="glyphicon glyphicon-ok-circle disableIcon"></span></a>';
+                            operate += '<a href="#" style="float:right" ><span data-toggle="tooltip" data-placement="top" title="启用" namespace="' + results[item].namespace + '" method="' + results[item].method + '" version="' + results[item].version + '" apiID="' + results[item].id + '" flag="0" class="glyphicon glyphicon-ok-circle disableIcon"></span></a>';
                         }
                         //operate += '<a href="#" data-toggle="tooltip" data-placement="top" title="修改白名单" style="float:right"><span namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiId="' + results[item].id + '" class="glyphicon glyphicon-cog modifyWhiteList"></span></a>';
-                        operate += '<a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiId="' + results[item].id + '" class="glyphicon glyphicon-edit editIcon"></span></a></li>';
+                        operate += '<a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="' + results[item].namespace + '" method="' + results[item].method + '" version="' + results[item].version + '" apiId="' + results[item].id + '" class="glyphicon glyphicon-edit editIcon"></span></a></li>';
                     //}
                     //var operate = "<a href='#' data-toggle='tooltip' data-placement='top' title='编辑' style='float:right'><span class='glyphicon glyphicon-edit editIcon'></span></a><a href='#' data-toggle='tooltip' data-placement='top' title='删除' style='float:right'><span class='glyphicon glyphicon-trash deleteIcon'></span></a>" + "</li>";
                     //var insertObject = "<li class='list-group-item apiElement'><a href='#'>" + results[item].namespace + "." + results[item].name + "." + results[item].version + "</a>";
