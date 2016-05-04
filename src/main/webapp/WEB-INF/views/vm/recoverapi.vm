@@ -19,7 +19,7 @@
 
 #parse("template/nav.vm")
 
-s
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2">
@@ -30,13 +30,14 @@ s
                 <div class="panel-heading">API 列表
                     <button type="button" class="btn btn-primary" flag="1" id="selectAll" style="float:right;margin:-7px -15px 0 0; border:0px;">全选</button>
                     <button type="button" class="btn btn-primary" id="recoverDeleteApi" style="float:right;margin:-7px -1px 0 0; border:0px;">恢复</button>
+                    <button type="button" class="btn btn-primary" id="deleteAll" style="float:right;margin:-7px -1px 0 0; border:0px;">物理删除</button>
                 </div>
                 <!-- List group -->
                 <ul class="list-group" id="listAPI">
                     #foreach ($!apiElement in $!results.get("apilists"))
                         <li class="list-group-item apiElement ">
-                        <a href="#">$!apiElement.namespace.$!apiElement.name.$!apiElement.version</a>
-                        <input style="float:right" class="select" apiContent="$!{apiElement.namespace}.$!{apiElement.name}.$!{apiElement.version}" flag="1" apiId="$!apiElement.id" type="checkbox">
+                        <a href="#">$!{apiElement.namespace}/$!{apiElement.version}/$!{apiElement.method}</a>
+                        <input style="float:right" class="select" apiContent="$!{apiElement.namespace}/$!{apiElement.version}/$!{apiElement.method}" flag="1" apiId="$!apiElement.id" type="checkbox">
 
                     </li>
                     #end

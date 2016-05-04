@@ -1120,11 +1120,10 @@ $(document).ready(function(){
         var firstGroup = $(this).parent().parent().parent().children('a').text();
 
         if(firstGroup!=''){
-            $("#breadcrumb").html("<span style='font-size: x-large'>"+firstGroup+"</span>"+""+"<small> > "+lastGroup+"</small>");
-        }else{
-            $("#breadcrumb").html("<span style='font-size: x-large'>"+lastGroup+"</span>");
+            $("#breadcrumb").html("<span style='font-size: 14px'>"+firstGroup+">>"+lastGroup+"</span>");
+        }else {
+            $("#breadcrumb").html("<span style='font-size: 14px'>" + lastGroup + "</span>");
         }
-
 
         var env = getEnv();
         $(".apiElement").remove(); // 清除之前所有的API列表

@@ -60,7 +60,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public void deleteApiRealById(Integer id) {
-
+        apiDAO.deleteByPrimaryKey(id);
     }
 
     @Override
@@ -197,5 +197,10 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public List<Api> getByGroupIdAndEnv(Integer groupId, Byte env) {
         return apiDAO.getByGroupIdAndEnv(groupId, env);
+    }
+
+    @Override
+    public List<Api> getDeletedApi() {
+        return apiDAO.getDeletedApi();
     }
 }

@@ -90,7 +90,7 @@ $(document).ready(function () {
     function getEnv() {
         var env = $("#env").serialize();
         var envValue = env.split("=")[1];
-        console.log("value: " + envValue);
+       // console.log("value: " + envValue);
         return envValue;
     }
 
@@ -184,8 +184,9 @@ $(document).ready(function () {
     // 确定发布
     $("#sureRelease").on("click", function () {
         var ids = getIds();
+        console.log(ids);
         if("" == ids) {
-            $("#apiRelease1Info").html("<p>Sorry，你没有勾选任何API，本次发布无效。</p>");
+            $("#apiRelease1Info").html("<p>Sorry，你没有勾选任何API!</p>");
             $("#apiRelease1Info").css("display", "block");
             return;
         } else {
@@ -207,7 +208,7 @@ $(document).ready(function () {
         var mapForm = document.createElement("form");
         mapForm.target = "_self";
         mapForm.method = "POST";
-        mapForm.action = "download";
+        mapForm.action = "releasedownload";
 
         var mapInput = document.createElement('input');
         mapInput.type = "text";

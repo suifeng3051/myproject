@@ -27,7 +27,7 @@ public class MonitorController {
     @Resource
     RedisOperate redisOperate;
     @Resource
-    AdminService iCarmenUserService;
+    private AdminService adminService;
 
     /**
      * 监控页面
@@ -43,41 +43,22 @@ public class MonitorController {
         String userName = null;
         Map<String, Object> results = new HashMap<>();
         try {
-            String userKey = request.getSession().getAttribute("username").toString();
-            userName = redisOperate.getStringByKey(userKey);
-            redisOperate.set("username", userName, 60*60); // 一小时
+            userName = adminService.getUserNameFromSessionAndRedis(request);
+            if (userName == null) {
+                return new ModelAndView("redirect:/unifyerror", "cause", "test");
+            }
             results.put("data", userName);
             if(!StringUtils.isEmpty(namespace)) {
                 String api = namespace + "." + name + "." + version;
                 results.put("apiName", api);
             }
-
-
         } catch (Exception e) {
             logger.warn("fail to get session", e);
         }
-        if(null == userName) {
-            return new ModelAndView("redirect:/unifyerror", "cause", "test");
-        }
+
         results.put("env", env);
-        Boolean isAdmin = isAdministrator(userName);
-        results.put("isAdmin", isAdmin);
+        results.put("isAdmin", adminService.isAdmin(userName));
         results.put("user", userName);
         return new ModelAndView("monitor", "results", results);
-    }
-
-    public Boolean isAdministrator(String userName) {
-
-        try {
-            List<Admin> user = iCarmenUserService.getByUserName(userName);
-            for(Admin carmenUser : user) {
-                if(1 == carmenUser.getUserGroup()) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            logger.error("can not get uesrs.", e);
-        }
-        return false;
     }
 }

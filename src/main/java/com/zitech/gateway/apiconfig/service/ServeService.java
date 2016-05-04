@@ -12,4 +12,8 @@ public interface ServeService {
     List<Serve> getAll(Byte env);
 
     void deleteServeByApiId(Integer apiId, Integer userid);
+
+    void updateServe(Serve serve);
+
+    void deleteServeRealById(Integer id);
 }
