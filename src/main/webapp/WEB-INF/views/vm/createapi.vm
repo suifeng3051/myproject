@@ -108,7 +108,7 @@
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control required" name="namespace" id="namespace" placeholder="namespace" value="$!results.get('api').namespace">
                                 </div>
-                                <input type="button" class="btn hasApi" value="检测" />
+                                <input type="button" class="btn hasApi" value="检测" style="display:none" />
                             </div>
                             <div class="form-group">
                                 <label for="name" class="col-sm-4 control-label">method</label>
@@ -293,10 +293,10 @@
                         <div class="col-sm-8">
                         解析结果
                             <div style="color:#aaa;border-bottom: 1px solid rgb(221, 221, 221); padding-bottom: 3px;text-align:right;">
-                                <span style="margin-right:15px">数据类型</span><span style="margin-right:46px">是否必填</span><span style="margin-right:74px">描述</span>
+                                <span style="margin-right:15px">数据类型</span><span style="margin-right:46px">是否必填</span><span style="margin-right:94px">描述</span>
                             </div>
 
-                            <form id="editor" class="json-editor expanded"></form>
+                            <form id="editor" class="json-editor expanded "></form>
                             <textarea id="parsedJSON" style="display:none">$!results.get('param').requestStructure</textarea><!--  编辑时，在这里保存数据库中取出来的，解析之后的JSON字符串  -->
                             <input type="hidden" id="jsonChecked" value="" />
                         </div>

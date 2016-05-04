@@ -75,7 +75,7 @@
         <div class="col-md-9">
             <div class="panel panel-primary" style="margin-top:60px;min-height:460px;">
 
-                <div class="panel-heading"><small id="breadcrumb" ></small>
+                <div class="panel-heading"><span id="breadcrumb" >所有</span>
 
                     <button type="button" class="btn btn-primary" id="newCreateTask" style="float:right;margin:-5px 0 0 0; border:0px;">
                         <span class="glyphicon glyphicon-plus"></span>新建API
