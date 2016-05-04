@@ -11,4 +11,10 @@ public interface ParamService {
     Param getByApiId(Integer apiId);
 
     List<Param> getAll();
+
+    void deleteParamByApiId(Integer apiId, Integer userid);
+
+    void updateParam(Param param);
+
+    void deleteParamRealById(Integer id);
 }

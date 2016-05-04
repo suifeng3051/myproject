@@ -28,7 +28,9 @@ public interface ApiDAO {
 
     List<Api> getByGroupIdAndEnv(@Param("groupId") Integer groupId, @Param("env")Byte env);
 
-    void saveResult(Map paraMap);
+    List<Api> getDeletedApi();
+
+//    void saveResult(Map paraMap);
 
 
 }

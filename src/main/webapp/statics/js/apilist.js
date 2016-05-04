@@ -6,12 +6,15 @@ $(document).ready(function(){
 
     var groupId_show = getCookie("groupId_show");
     setTimeout(function(){
-       // console.log(groupId_show);
-        if($('.affixGroup[groupid='+groupId_show+']').parent().parent().children('i').length){
+        console.log(groupId_show);
+        console.log($('.affixGroup[groupid='+groupId_show+']').attr("group"));
+
+        if($('.affixGroup[groupid='+groupId_show+']').parent().parent().children('a').text()!="所有"){
             $('.affixGroup[groupid='+groupId_show+']').parent().parent().children('i').trigger('click');
-            $('.affixGroup[groupid='+groupId_show+'] a').trigger("click");
         }
-    }, 500);
+        $('.affixGroup[groupid='+groupId_show+']>a').trigger("click");
+
+    }, 200);
 
 
 
@@ -155,7 +158,7 @@ $(document).ready(function(){
         var apiId = $("#deleteApiId").val();
         $.post("deleteapi", {"id": apiId}, function (d) {
             console.log("apiResult: " + d);
-            if ("success" == d) {
+            if (d.code == 0) {
                 $("#myDeleteModal").modal('hide');
             } else {
                 $("#deleteApiTip").html("删除失败，请联系管理员~~");
@@ -772,6 +775,7 @@ $(document).ready(function(){
 
                 setTimeout(function (){
                     $("#myResourceModal").modal('hide');
+                    window.location.href="";
                 }, 1500);
 
 
@@ -1106,9 +1110,20 @@ $(document).ready(function(){
         var groupid = $(this).parent().attr("groupid").trim();
 
         //此处记录点击的行为(存入cookie) add by pxl
-        console.log(getCookie("groupId_show"));
+        //console.log(getCookie("groupId_show"));
         delCookie("groupId_show");
         setCookie("groupId_show",groupid,6);
+
+        //$('.affixGroup[groupid='+groupId_show+']').parent().parent().children('i').length
+
+        var lastGroup = $(this).text();
+        var firstGroup = $(this).parent().parent().parent().children('a').text();
+
+        if(firstGroup!=''){
+            $("#breadcrumb").html("<span style='font-size: x-large'>"+firstGroup+"</span>"+""+"<small>>>"+lastGroup+"</small>");
+        }else{
+            $("#breadcrumb").html("<span style='font-size: x-large'>"+lastGroup+"</span>");
+        }
 
 
         var env = getEnv();

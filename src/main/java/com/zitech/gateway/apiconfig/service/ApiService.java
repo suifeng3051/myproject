@@ -14,7 +14,7 @@ public interface ApiService {
 
     void insertApi(Api api);
 
-    void deleteApiById(Integer id);
+    void deleteApiById(Integer id, Integer userid);
 
     void deleteApiRealById(Integer id);
 
@@ -63,4 +63,6 @@ public interface ApiService {
     List<Api> getAllByEnv(Byte env);
 
     List<Api> getByGroupIdAndEnv(Integer groupId, Byte env);
+
+    List<Api> getDeletedApi();
 }

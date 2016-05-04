@@ -50,13 +50,17 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public void deleteApiById(Integer id) {
-
+    public void deleteApiById(Integer id, Integer userid) {
+        Api api = apiDAO.selectByPrimaryKey(id);
+        api.setDeleted((byte)1);
+        api.setUpdatedId(userid);
+        api.setUpdatedTime(new Date());
+        apiDAO.updateByPrimaryKeySelective(api);
     }
 
     @Override
     public void deleteApiRealById(Integer id) {
-
+        apiDAO.deleteByPrimaryKey(id);
     }
 
     @Override
@@ -193,5 +197,10 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public List<Api> getByGroupIdAndEnv(Integer groupId, Byte env) {
         return apiDAO.getByGroupIdAndEnv(groupId, env);
+    }
+
+    @Override
+    public List<Api> getDeletedApi() {
+        return apiDAO.getDeletedApi();
     }
 }
