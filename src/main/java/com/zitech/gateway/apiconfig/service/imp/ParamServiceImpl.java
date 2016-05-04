@@ -36,4 +36,14 @@ public class ParamServiceImpl implements ParamService {
         param.setDeleted((byte) 1);
         paramDAO.updateByPrimaryKeySelective(param);
     }
+
+    @Override
+    public void updateParam(Param param) {
+        paramDAO.updateByPrimaryKeySelective(param);
+    }
+
+    @Override
+    public void deleteParamRealById(Integer id) {
+        paramDAO.deleteByPrimaryKey(id);
+    }
 }
