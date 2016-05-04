@@ -1,6 +1,6 @@
 .json-editor { 
   margin-left: 10px;
-  padding: 20px;
+  padding: 10px 0;
 }
 
 .json-editor.expanded .item { 

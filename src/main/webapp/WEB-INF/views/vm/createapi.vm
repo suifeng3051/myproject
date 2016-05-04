@@ -221,37 +221,41 @@
                 <div class="methodconfig">
                     <div class="panel-body">
                         <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="apiMethodInfo"></div>
-                        <form class="form-inline" id="methodconfigform">
+                        <form class="form-horizontal" id="methodconfigform">
                             <div class="form-group">
-                                <label for="namespaceMethodParam">serviceName</label>
+                                <label class="col-sm-4 control-label" for="namespaceMethodParam">serviceName</label>
 
-                                <input type="text" style="min-width:180px;" class="form-control required" id="namespaceMethodParam" name="service" placeholder="serviceName" value="$!results.get('serve').service">
+                                <div  class="col-sm-6">
+                                    <input type="text" style="min-width:180px;" class="form-control required" id="namespaceMethodParam" name="service" placeholder="serviceName" value="$!results.get('serve').service">
+                                </div>
 
                             </div>
                             <div class="form-group">
-                                <label for="nameMethodParam">method</label>
+                                <label class="col-sm-4 control-label" for="nameMethodParam">method</label>
 
-                                <input type="text" class="form-control required" id="nameMethodParam"  name="method" placeholder="method" value="$!results.get('serve').method">
+                                <div  class="col-sm-6">
+                                    <input type="text" class="form-control required" id="nameMethodParam"  name="method" placeholder="method" value="$!results.get('serve').method">
+                                </div>
 
                             </div>
 
                             <div class="form-group">
-                                <label for="url"  id="apiUrl">url</label>
+                                <label for="url" class="col-sm-4 control-label"  id="apiUrl">url</label>
+                                    <div  class="col-sm-6">
+                                        #if(!$!results.get('serve').url)
+                                            <input type="text" class="form-control" style="min-width:280px" name="url" id="url" placeholder="url" value="http://study.zitech.com">
+                                        #else
+                                            <input type="text" class="form-control required " style="min-width:280px" name="url" id="url" placeholder="url" value="$!results.get('serve').url">
 
-                                    #if(!$!results.get('serve').url)
-                                        <input type="text" class="form-control" style="min-width:280px" name="url" id="url" placeholder="url" value="http://study.zitech.com">
-                                    #else
-                                        <input type="text" class="form-control required " style="min-width:280px" name="url" id="url" placeholder="url" value="$!results.get('serve').url">
-
-                                    #end
+                                        #end
+                                    </div>
 
                             </div>
 
                             <div>
-                                参数列表：
-                                <br />
+                                <label class="col-sm-4 control-label"  id="apiUrl">内部参数：</label>
 
-                                <div id="serviceParamList">
+                                <div id="serviceParamList" class="col-sm-6">
                                     <!--<div class="checkbox col-sm-2">-->
                                         <!--<label><input type="checkbox" value="111111" name="innerParams" >111111</label>-->
                                     <!--</div>-->
@@ -277,7 +281,7 @@
                                 <textarea class="form-control" id="json-input" name="requestDemo">$!results.get('param').requestDemo</textarea>
                             </div>
 
-                            <input type="hidden" value="" name="requestStructure" id="requestStructure" />
+                            <textarea style="display:none" name="requestStructure" id="requestStructure"></textarea>
 
                             #if($!results.get('param').id)
                                 <input type="hidden"  name="id"   value="$!results.get('param').id" />
@@ -288,8 +292,8 @@
 
                         <div class="col-sm-8">
                         解析结果
-                            <div style="color:#aaa;border-bottom: 1px solid rgb(221, 221, 221); padding-bottom: 10px;">
-                                *注：&nbsp;&nbsp;&nbsp;&nbsp;<select disabled></select>数据类型&nbsp;&nbsp;&nbsp;<input type="checkbox" disabled  />是否必填&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" disabled/>描述
+                            <div style="color:#aaa;border-bottom: 1px solid rgb(221, 221, 221); padding-bottom: 3px;text-align:right;">
+                                <span style="margin-right:15px">数据类型</span><span style="margin-right:46px">是否必填</span><span style="margin-right:74px">描述</span>
                             </div>
 
                             <form id="editor" class="json-editor expanded"></form>
@@ -301,24 +305,23 @@
 
                 <!-- 4. 预览 最后一步 -->
                 <div class="data-review">
-                    <!-- <div class="panel-body">
+                    <div class="panel-body">
                         <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="dataReviewInfo"></div>
 
                         <form class="form-horizontal">
 
-                            <h4 style="margin-top:50px;text-align:center;">API接口信息</h4>
+                            <h4 style="margin-top:50px;text-align:center;">API接口配置</h4>
                             <div id="final-review-apiconfig"></div>
 
-                            <h4 style="margin-top:50px;text-align:center;">内部参数</h4>
+                            <h4 style="margin-top:50px;text-align:center;">内部方法及参数配置</h4>
                             <div id="final-review-method"></div>
 
                             <div id="review-jsonparse">
-                                <h4 style="margin-top:50px;text-align:center;">JSON解析</h4>
+                                <h4 style="margin-top:50px;text-align:center;">参数配置</h4>
                                 <div id="final-review-json"></div>
-
                             </div>
                         </form>
-                    </div> -->
+                    </div>
                 </div>
             </div>
 
