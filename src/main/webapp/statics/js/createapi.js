@@ -176,7 +176,6 @@ $(document).ready(function(){
             case 3:
                 stepTitle = '参数配置';
 
-
                 if($('#json-input').val().length > 0){
                     $('#json-input').val(formatJson($('#json-input').val()));  // 自动格式化输入框中的 json 字符串
                     window.JSONresult = $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );  // 将保存的数据取出来解析成“树”进行修改
@@ -301,7 +300,6 @@ $(document).ready(function(){
 
     function finalReview(){
 
-
         // API接口信息配置
         apiObj = formdataToJSON($('#apiInterfaceConfig').serializeArray());
         var str = objToStr(apiObj);
@@ -341,15 +339,19 @@ $(document).ready(function(){
                 $('#requestStructureJson').before(treeHead);
             }
 
-            jsonProcess('requestDemoJson', $('#json-input').text());
+            setTimeout(function(){
+                jsonProcess('requestDemoJson', $('#json-input').text());
+            }, 800);
 
         } else {  // 请求方式 GET
             paramObj = null;
             $('#review-jsonparse').hide();
         }
 
-        // 增加 JSON格式和着色
-        jsonProcess('resultDemo-finalView', $('#resultDemo-finalView').text());
+        setTimeout(function(){
+            // 增加 JSON格式和着色
+            jsonProcess('resultDemo-finalView', $('#resultDemo-finalView').text());
+        }, 800);
 
     }
 
