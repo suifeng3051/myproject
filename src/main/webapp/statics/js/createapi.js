@@ -1,405 +1,23 @@
 $(document).ready(function(){
 
-    // DataTable关闭一些默认配置
-    $.extend($.fn.dataTable.defaults, {
-        searching: false,
-        ordering: false
-    });
-
-    //  给API配置DIV绑定dataTable插件
-    var carmenApiTable = $("#carmenApi").DataTable({
-        paging: false,
-        language: {"infoEmpty": "","info": ""}
-        //info: false
-        //info: false
-    });
-
-    $("#apiInterfaceConfig").validate();
-
-    $("#methodconfigform").validate();
-
-//    $(".apiTypeLi").on("click", function () {
-//        var apiType = $(this).attr("flag");
-//        if("JAVA" == apiType) {
-//            $("#lastLi").css("display", "block");
-//            $("ul.nav-wizard li").css("padding", "0 30px 0 40px");
-//        } else {
-//            $("#lastLi").css("display", "none");
-//            $("ul.nav-wizard li").css("padding", "0 40px 0 50px");
-//        }
+//    // DataTable关闭一些默认配置
+//    $.extend($.fn.dataTable.defaults, {
+//        searching: false,
+//        ordering: false
 //    });
 
-//    initApiTypeTab();
-//    function initApiTypeTab() {
-//        var apiType = $("#initApiType").val();
-//        if(2 == apiType) { //PHP
-//            $("#lastLi").css("display", "none");
-//            $("ul.nav-wizard li").css("padding", "0 40px 0 50px");
-//        } else if(1 == apiType) {
-//            $("#lastLi").css("display", "block");
-//            $("ul.nav-wizard li").css("padding", "0 30px 0 40px");
-//        }
-//    }
-
-    $(".hasMapping").on("click", function () {
-        //  获取前面填写的namespace等
-        var apiNamespace = $("#namespace").val();
-        var apiName = $("#name").val();
-        var apiVersion = $("#version").val();
-        var methodNamespace = $("#namespaceMethodParam").val();
-        var methodName = $("#nameMethodParam").val();
-        var methodVersion = $("#versionMethodParam").val();
-        $.post("checkapimethodmapping", {"apiNamespace":apiNamespace, "apiName":apiName, "apiVersion":apiVersion, "namespace":methodNamespace, "name":methodName, "version":methodVersion, "env":getEnv()}, function (d) {
-            if("success" == d) {
-                $("#apiMethodMappingInfo").html("<p>已存在映射关系，请修改API继续配置</p>");
-                $("#apiMethodMappingInfo").css("display","block");
-                $("#apiMethodMappingInfo").removeClass("alert-success");
-                $("#apiMethodMappingInfo").addClass("alert-danger");
-            } else {
-                // 参数映射检测成功之后才能继续
-                $(".nextStep").css("display", "block");
-                $(".hasMapping").css("display", "none");
-
-                $("#apiMethodMappingInfo").html("<p>当前不存在映射关系，请继续配置</p>");
-                $("#apiMethodMappingInfo").css("display","block");
-
-                $("#apiMethodMappingInfo").removeClass("alert-danger");
-                $("#apiMethodMappingInfo").addClass("alert-success");
-            }
-        },"json");
-    });
-
-/*
-    // 给检测方法是否存在按钮绑定事件
-    $(".hasMethod").on("click", function () {
-        var methodNamespace = $("#namespaceMethodParam").val();
-        var methodName = $("#nameMethodParam").val();
-        var methodVersion = $("#versionMethodParam").val();
-        if("" == methodNamespace || "" == methodName || "" == methodVersion) {
-            $("#apiMethodInfo").html("<p>请把参数填写完整</p>");
-            $("#apiMethodInfo").css("display","block");
-
-            $("#apiMethodInfo").removeClass("alert-success");
-            $("#apiMethodInfo").addClass("alert-danger");
-            return;
-        }
-
-        $.post("getapimethod", {"namespace":methodNamespace, "name":methodName, "version":methodVersion, "env":getEnv()}, function (d) {
-            if("fail" == d) {
-                $("#apiMethodInfo").html("<p>当前不存在此API，请继续配置</p>");
-                $("#apiMethodInfo").css("display","block");
-
-                $("#apiMethodInfo").removeClass("alert-danger");
-                $("#apiMethodInfo").addClass("alert-success");
-                $(".hasMethod").css("display", "none"); // 打开API检测按钮&关闭下一步按钮
-                $(".nextStep").css("display", "block");
-            } else {
-                $("#apiMethodInfo").html("<p>此API已存在，请修改后继续配置</p>");
-                $("#apiMethodInfo").css("display","block");
-
-                $("#apiMethodInfo").removeClass("alert-success");
-                $("#apiMethodInfo").addClass("alert-danger");
-            }
-        }, "json");
-
-    });
-
-
-    // 给上一步按钮绑定事件
-    $(".preStep").on("click", function () {
-        var step = $("#configStep").val();
-        if( step > 0 ) { // 步骤从0开始
-            step = parseInt(step) - 1;
-            var apiTypeValue = getAPIType();
-            if(4 == step && 2 == apiTypeValue) { //如果是配置PHP接口，那么跳过结构配置
-                step = parseInt(step) - 1;
-            }
-            $("#configStep").val(step);
-        }
-        if(0 == step) { // 第0步，隐藏“上一步”按钮
-            $("li[step=2]").removeClass("active");
-            $("li[step=1]").addClass("active");
-            $("#apiInfo").css("display","none");
-            $(".hasApi").css("display", "none"); // 打开API检测按钮&关闭下一步按钮
-            $(".nextStep").css("display", "block");
-            $(".apiconfig").css("margin-left","350px");
-            $(".apiconfig").html("选择API类型");
-            $(".preStep").css("display", "none");
-            $(".apiType").css("display", "block"); // 显示API类型选择界面
-            $(".apiconfig1").css("display", "none"); //  隐藏API配置界面
-        } else if(1 == step) {
-            $("li[step=3]").removeClass("active");
-            $("li[step=2]").addClass("active");
-            $("#apiInfo").html("");
-            $("#apiInfo").css("display","none");
-            var edit = $("#edit").val();
-            if(1 != edit) { // 新建任务场景
-                $(".hasApi").css("display", "block"); // 打开API检测按钮&关闭下一步按钮
-                $(".nextStep").css("display", "none");
-            } else { //编辑任务场景
-                $(".hasApi").css("display", "none"); // 打开API检测按钮&关闭下一步按钮
-                $(".nextStep").css("display", "block");
-            }
-
-
-            $(".apiconfig").html("API接口信息配置");
-            $(".apiconfig1").css("display", "block"); //  显示API配置界面
-            $(".apiconfig2").css("display", "none"); // 隐藏API参数配置界面
-        } else if(2 == step) {
-            $("li[step=4]").removeClass("active");
-            $("li[step=3]").addClass("active");
-            $("#apiMethodInfo").css("display","none");
-            $(".apiconfig").html("API参数配置");
-            $(".apiconfig2").css("display", "block"); // 显示API参数配置界面
-            $(".methodconfig").css("display", "none"); // 隐藏方法&方法参数配置界面
-            $(".nextStep").css("display", "block");
-            $(".hasMethod").css("display", "none");
-        } else if(3 == step) {
-            $("li[step=5]").removeClass("active");
-            $("li[step=4]").addClass("active");
-            $(".apiconfig").html("内部方法&方法参数配置");
-            $(".methodconfig").css("display", "block"); // 隐藏方法&方法参数配置界面
-            $(".structureconfig").css("display", "none"); // 显示结构配置界面
-            $(".methodmappingconfig").css("display", "none"); // 显示方法映射的配置界面
-            var edit = $("#edit").val();
-            if(1 == edit) { // 编辑场景
-                $(".nextStep").css("display", "block");
-                $(".hasMethod").css("display", "none");
-            } else { // 新增场景
-                $(".nextStep").css("display", "none");
-                $(".hasMethod").css("display", "block");
-            }
-
-            $(".hasMapping").css("display", "none");
-            $("#apiMethodInfo").css("display","none");
-        } else if(4 == step) {
-            $("li[step=6]").removeClass("active");
-            $("li[step=5]").addClass("active");
-            $("#apiMethodMappingInfo").css("display","none"); // 关闭上一步的提示
-            // 关闭检测按钮，打开下一步按钮
-             $(".hasMapping").css("display", "none");
-            $(".nextStep").css("display", "block");
-
-
-            $(".apiconfig").html("方法参数中的结构配置");
-            $(".structureconfig").css("display", "block"); // 隐藏结构配置界面
-            $(".methodmappingconfig").css("display", "none"); // 显示方法映射的配置界面
-        } else if(5 == step) { // 第5步，显示被隐藏的“下一步”按钮
-            if("2" == getAPIType()) {
-                $("li[step=6]").removeClass("active");
-                $("li[step=5]").addClass("active");
-            } else {
-                $("li[step=7]").removeClass("active");
-                $("li[step=6]").addClass("active");
-            }
-
-            $(".finalSave").css("display", "none");
-            var edit = $("#edit").val();
-            if(1 == edit) { // 编辑场景
-                $(".nextStep").css("display", "block");
-                $(".hasMapping").css("display", "none");
-            } else { // 新增场景
-                $(".nextStep").css("display", "none");
-                $(".hasMapping").css("display", "block");
-            }
-            $(".apiconfig").html("方法映射配置");
-            $(".methodmappingconfig").css("display", "block"); // 隐藏方法映射的配置界面
-            $(".parammappingconfig").css("display", "none"); //  显示参数映射配置界面
-
-            $("#apiParamMappingInfo").css("display", 'none');
-        }
-    });
-
-    function getAPIType() {
-        // 获取环境变量的值
-        var apiType = $('[name="apiType"]:checked').val();
-        return apiType;
-    }
-
-    // 给下一步按钮绑定事件
-    $(".nextStep").on("click", function () {
-        var step = $("#configStep").val();
-        if(1 == step) {
-            var flag = $("#apiInterfaceConfig").valid(); // 检测API的配置是否填写完整
-            if(1 == flag) {
-                //console.log("yes");
-                $("#apiInfo").css("display","none");
-            } else {
-                $("label.error").css("color", "#FF0000");
-                $("#apiInfo").html("<p>参数配置不完整，请检查~~</p>");
-                $("#apiInfo").removeClass("alert-success");
-                $("#apiInfo").addClass("alert-danger");
-                $("#apiInfo").css("display","block");
-                return;
-            }
-        }
-
-        if(3 == step) {
-            // 检测方法名是否填写
-            var methodFlag = $("#methodconfigform").valid();
-            if(1== methodFlag) {
-                //console.log("yes");
-            } else {
-                //console.log("no");
-                return;
-            }
-            // 检测方法参数是否填写
-            //var methodParamContent = carmenMethodParamTable.$('input, select').serialize();
-        }
-
-        if( step < 6 ) { // 步骤上限为6
-            step = parseInt(step) + 1;
-            var apiTypeValue = getAPIType();
-            if(4 == step && 2 == apiTypeValue) { //如果是配置PHP接口，那么跳过结构配置
-                step = parseInt(step) + 1;
-            }
-            $("#configStep").val(step);
-        }
-
-
-
-        if(1 == step) { // 第一步，显示被隐藏的“上一步“按钮
-
-            var serviceType = getAPIType();
-            if(1 == serviceType) {
-                $("#apiUrl").html("注册中心");
-                $("#appNameContent").css("display", "block");
-            } else {
-                $("#apiUrl").html("url");
-                $("#appNameContent").css("display", "none");
-            }
-            $("li[step=1]").removeClass("active");
-            $("li[step=2]").addClass("active");
-
-            $(".apiconfig").css("margin-left","260px");
-            $(".apiconfig").html("API接口信息配置");
-            var edit = $("#edit").val();
-            if(1 != edit) { // 新建任务场景
-                $(".hasApi").css("display", "block"); // 打开API检测按钮&关闭下一步按钮
-                $(".nextStep").css("display", "none");
-            } else { // 编辑任务场景
-                $(".hasApi").css("display", "none"); // 打开API检测按钮&关闭下一步按钮
-                $(".nextStep").css("display", "block");
-            }
-
-
-            $(".preStep").css("display", "block");
-            $(".apiType").css("display", "none"); // 隐藏API类型选择界面
-            $(".apiconfig1").css("display", "block"); //  显示API配置界面
-        } else if (2 == step) {
-            $("li[step=2]").removeClass("active");
-            $("li[step=3]").addClass("active");
-            $(".apiconfig").html("API参数配置");
-            $(".apiconfig1").css("display", "none");  //  隐藏API配置界面
-            $(".apiconfig2").css("display", "block"); // 显示API参数配置界面
-            var apiType = getAPIType();
-            if(2 == apiType) {
-                $("#batchAdd").css("display", "block");
-            } else {
-                $("#batchAdd").css("display", "none");
-            }
-        } else if (3 == step) {
-            $("li[step=3]").removeClass("active");
-            $("li[step=4]").addClass("active");
-            $(".apiconfig").html("内部方法&方法参数配置");
-            var apiType = getAPIType();
-            if(2 == apiType) {
-                $("#batchAddMethod").css("display", "block");
-            } else {
-                $("#batchAddMethod").css("display", "none");
-            }
-            $(".apiconfig2").css("display", "none"); // 隐藏API参数配置界面
-            $(".methodconfig").css("display", "block"); // 显示方法&方法参数配置界面
-            var edit = $("#edit").val();
-            if(1 == edit) { // 编辑场景
-                $(".nextStep").css("display", "block");
-                $(".hasMethod").css("display", "none");
-            } else { // 新增场景
-                $(".nextStep").css("display", "none");
-                $(".hasMethod").css("display", "block");
-            }
-        } else if (4 == step) {
-            $("li[step=4]").removeClass("active");
-            $("li[step=5]").addClass("active");
-            $(".apiconfig").html("方法参数中的结构配置");
-
-            $(".methodconfig").css("display", "none"); // 隐藏方法&方法参数配置界面
-            $(".structureconfig").css("display", "block"); // 显示结构配置界面
-
-        } else if(5 == step) {
-            if("2" == getAPIType()) { //如果是PHP配置
-                $("li[step=4]").removeClass("active");
-                $("li[step=5]").addClass("active");
-            } else {
-                $("li[step=5]").removeClass("active");
-                $("li[step=6]").addClass("active");
-            }
-            $(".apiconfig").html("方法映射配置");
-            // 参数映射检测成功之后才能继续
-            var edit = $("#edit").val();
-            if(1 == edit) { // 编辑场景
-                $(".nextStep").css("display", "block");
-                $(".hasMapping").css("display", "none");
-            } else { // 新增场景
-                $(".nextStep").css("display", "none");
-                $(".hasMapping").css("display", "block");
-            }
-
-
-            $(".methodconfig").css("display", "none"); // 隐藏方法&方法参数配置界面
-            $(".structureconfig").css("display", "none"); // 隐藏结构配置界面
-
-            //  获取前面填写的namespace等
-            var apiNamespace = $("#namespace").val();
-            var apiName = $("#name").val();
-            var apiVersion = $("#version").val();
-            var methodNamespace = $("#namespaceMethodParam").val();
-            var methodName = $("#nameMethodParam").val();
-            var methodVersion = $("#versionMethodParam").val();
-            var apiService = apiNamespace + "/" + apiVersion + "/" + apiName;
-            //var innerService = methodNamespace + "/" + methodVersion + "/" + methodName;
-            var innerService = methodNamespace + "/" + methodName;
-            $("#namespaceMethodMappingApi").html(apiService);
-            //$("#nameMethodMappingApi").html(apiName);
-            //$("#versionMethodMappingApi").html(apiVersion);
-            $("#namespaceMethodMapping").html(innerService);
-            //$("#nameMethodMapping").html(methodName);
-            //$("#versionMethodMapping").html(methodVersion);
-
-            $(".methodmappingconfig").css("display", "block"); // 显示方法映射的配置界面
-        } else if(6 == step) { // 第6步，隐藏“下一步”按钮
-            if("2" == getAPIType()) { //如果是PHP配置
-                $("li[step=5]").removeClass("active");
-                $("li[step=6]").addClass("active");
-                $("#fieldTitle").html("参数名");
-                $("#fieldType").html("参数类型");
-            } else {
-                $("li[step=6]").removeClass("active");
-                $("li[step=7]").addClass("active");
-                $("#fieldTitle").html("属性名");
-                $("#fieldType").html("属性类型");
-            }
-
-
-
-            $("#apiMethodMappingInfo").css("display","none"); // 关闭上一步的提示
-            $(".nextStep").css("display", "none");
-            $(".finalSave").css("display", "block");
-            $(".apiconfig").html("API与内部方法的参数映射配置");
-            $(".methodmappingconfig").css("display", "none"); // 隐藏方法映射的配置界面
-
-            //显示映射配置界面之前，先获取之前填写的API参数和内部方法参数
-            var apiParamNames = getEditedApiParams();
-            var methodParamNames = getEditedMethodParams();
-            $("#apiParamNames").val(apiParamNames);
-            $("#methodParamNames").val(methodParamNames);
-            appendSelect(apiParamNames);
-            appendMethodSelect(methodParamNames);
-
-            $(".parammappingconfig").css("display", "block"); //  显示参数映射配置界面
-        }
-    });*/
-
+//    //  给API配置DIV绑定dataTable插件
+//    var carmenApiTable = $("#carmenApi").DataTable({
+//        paging: false,
+//        language: {"infoEmpty": "","info": ""}
+//        //info: false
+//        //info: false
+//    });
+//
+//    $("#apiInterfaceConfig").validate();
+//
+//    $("#methodconfigform").validate();
+//
 
     // 获取第 2 步的多选数据
     $.get('getServeInner', function(data){
@@ -433,6 +51,8 @@ $(document).ready(function(){
 
     $('.nextStep').click(function(){
 
+//        if($('#apiconfig-box > div:eq('+(currentStep-1)+') .form-control.error').length > 0) return;
+
         switch(currentStep) {
             case 1:  // 检测namespace是否存在
                 if(
@@ -449,7 +69,6 @@ $(document).ready(function(){
                     $('.hasApi').trigger('click');
                     return;
                 }
-                if($('#apiInterfaceConfig .form-control.error').length > 0) return;
 
             break;
             case 2:
@@ -550,7 +169,6 @@ $(document).ready(function(){
     }
 
     function changeStepTo(step){  // 跳转到指定页面
-
         var stepTitle = '';
         switch(step){
             case 1: stepTitle = 'API接口配置'; break;
@@ -592,6 +210,8 @@ $(document).ready(function(){
         }else{
             $('.preStep').show();
         }
+
+        $('.alert').hide();
 
         $('#step-nav-box li').eq(step-1).addClass('active').siblings().removeClass('active');
         $('#apiconfig-box > div').eq(step-1).addClass('active').siblings().removeClass('active');
@@ -650,6 +270,7 @@ $(document).ready(function(){
         $("#apiInfo").html('<p>正在检查...</p>');
         $.post("checkapi", {"namespace":apiNamespace, "name":apiName, "version":apiVersion, "env": getEnv()}, function (d) {
 
+
             if("success" == d.message) {
                 $("#apiInfo").html("<p>当前不存在此API，请继续配置</p>");
                 $("#apiInfo").css("display","block");
@@ -667,6 +288,10 @@ $(document).ready(function(){
                 $("#apiInfo").addClass("alert-danger");
                 $('.hasApi').attr('data-exists', 'yes');
 
+            }
+            if(!jsonProcess('resultDemo', $('#resultDemo').val())){
+                $("#apiInfo").append("<p style='color:red'>JSON 格式错误！</p>");
+                $('#resultDemo').addClass('error');
             }
         }, "json");
     });
@@ -688,7 +313,8 @@ $(document).ready(function(){
 
     function finalReview(){
 
-        $('#requestStructure').text(JSON.stringify(JSONresult.getJson()));
+        if($('#requestType').val() == 'POST'){
+        }
 
         // API接口信息配置
         apiObj = formdataToJSON($('#apiInterfaceConfig').serializeArray());
@@ -696,7 +322,6 @@ $(document).ready(function(){
         $('#final-review-apiconfig').html(str);
 
         serviceObj = formdataToJSON($('#methodconfigform').serializeArray());
-
 
         var arr = [];
         $('#serviceParamList input[type="checkbox"]:checked').each(function(){
@@ -706,7 +331,6 @@ $(document).ready(function(){
 //        console.log(serviceObj);
         var str = objToStr(serviceObj);
         $('#final-review-method').html( str );
-
 
         if(apiObj.requestType == 'POST' ) {  // 请求方式 POST，加入json数据
 
@@ -720,8 +344,18 @@ $(document).ready(function(){
 //            $('#requestDemoJson').html('<pre />');
 //            $('#requestDemoJson pre').text(formatJson($('#json-input').val()));
 
-
             $('#review-jsonparse').show();
+
+            $('#requestStructure').text(JSON.stringify(JSONresult.getJson()));
+
+            $('#requestStructureJson').html('').jsonEditorByTreeJson(JSON.parse($('#requestStructure').val()), true);
+            $('#requestStructureJson').addClass('json-editor');
+            if($('#treeHead-view').length == 0){
+                var treeHead = $('<p style="text-align:right; color:#aaa; margin-bottom:0;" id="treeHead-view"><span style="margin-right:30px">数据类型</span><span style="margin-right:25px">是否必填</span><span style="margin-right:180px">描述</span></p>');
+                $('#requestStructureJson').before(treeHead);
+            }
+
+            jsonProcess('requestDemoJson', $('#json-input').text());
 
         } else {  // 请求方式 GET
             paramObj = null;
@@ -730,16 +364,8 @@ $(document).ready(function(){
 
         // 增加 JSON格式和着色
         jsonProcess('resultDemo-finalView', $('#resultDemo-finalView').text());
-        jsonProcess('requestDemoJson', $('#json-input').text());
 
-        $('#requestStructureJson').html('').jsonEditorByTreeJson(JSON.parse($('#requestStructure').val()), true);
-        $('#requestStructureJson').addClass('json-editor');
-        if($('#treeHead-view').length == 0){
-            var treeHead = $('<p style="text-align:right; color:#aaa; margin-bottom:0;" id="treeHead-view"><span style="margin-right:30px">数据类型</span><span style="margin-right:25px">是否必填</span><span style="margin-right:180px">描述</span></p>');
-            $('#requestStructureJson').before(treeHead);
-        }
     }
-
 
     function formdataToJSON (arr){
         var len = arr.length;
@@ -750,7 +376,6 @@ $(document).ready(function(){
         }
         return obj;
     }
-
 
     function objToStr(obj){
         var str = '', id='';
@@ -819,8 +444,9 @@ $(document).ready(function(){
 
             if(proced) {
                 $(this).hide().siblings('#'+viewId).show();
+                $('#'+viewId).siblings('textarea').removeClass('error');
             }else {
-                $(this).addClass('error');
+                $('#'+viewId).siblings('textarea').addClass('error');
             }
         });
 
