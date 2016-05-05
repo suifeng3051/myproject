@@ -436,7 +436,7 @@ $(document).ready(function(){
         switch(currentStep) {
             case 1:  // 检测namespace是否存在
                 if(
-                    ($('#edit').val() == 1)
+                    ($('#edit').val() == 1)  // 正在修改API 不进行检测
                     ||
                     ($('.hasApi').attr('data-exists') == 'no')  // 没有冲突，是新建
                     ||
@@ -449,6 +449,8 @@ $(document).ready(function(){
                     $('.hasApi').trigger('click');
                     return;
                 }
+                if($('#apiInterfaceConfig .form-control.error').length > 0) return;
+
             break;
             case 2:
                  if($('#requestType').val() != 'POST'){  // 如果是GET 方式则路过第 3 步
@@ -533,12 +535,11 @@ $(document).ready(function(){
 
     if($('#detail').val() == 1){
         $('#step-title').text('预览');
-
-        $('#step-nav-box, #save, .nextStep').hide();
-        $('.preStep').show().click(function(){
-            window.history.back();
+        $('#goback-btn').show().click(function(){
+           window.history.back();
         })
 
+        $('#step-nav-box, #save, .nextStep').hide();
 
         if($('#json-input').val().length){
             window.JSONresult = $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );
@@ -603,9 +604,9 @@ $(document).ready(function(){
         $('.hasApi').removeAttr('data-exists');
     });
 
-    $('#json-input').blur(function(){  // 自动格式化JSON字符串
-        $(this).val(formatJson($(this).val()));
-    });
+
+
+
 
     $('#JSONparse-btn').click(function(){
         try {
@@ -716,12 +717,9 @@ $(document).ready(function(){
             var str = objToStr(paramObj);
             $('#final-review-json').html( str );
 
-            $('#requestDemoJson').html('<pre />');
-            $('#requestDemoJson pre').text(formatJson($('#json-input').val()));
+//            $('#requestDemoJson').html('<pre />');
+//            $('#requestDemoJson pre').text(formatJson($('#json-input').val()));
 
-
-            $('#requestStructureJson').html('<pre />');
-            $('#requestStructureJson pre').text(formatJson(JSON.stringify(JSONresult.getJson())));
 
             $('#review-jsonparse').show();
 
@@ -730,7 +728,16 @@ $(document).ready(function(){
             $('#review-jsonparse').hide();
         }
 
-        $('#requestStructureJson').html($('#editor').clone().removeAttr('id'));
+        // 增加 JSON格式和着色
+        jsonProcess('resultDemo-finalView', $('#resultDemo-finalView').text());
+        jsonProcess('requestDemoJson', $('#json-input').text());
+
+        $('#requestStructureJson').html('').jsonEditorByTreeJson(JSON.parse($('#requestStructure').val()), true);
+        $('#requestStructureJson').addClass('json-editor');
+        if($('#treeHead-view').length == 0){
+            var treeHead = $('<p style="text-align:right; color:#aaa; margin-bottom:0;" id="treeHead-view"><span style="margin-right:30px">数据类型</span><span style="margin-right:25px">是否必填</span><span style="margin-right:180px">描述</span></p>');
+            $('#requestStructureJson').before(treeHead);
+        }
     }
 
 
@@ -744,16 +751,6 @@ $(document).ready(function(){
         return obj;
     }
 
-//    function formdataToStr (arr){
-//        var len = arr.length;
-//        var str = '';
-//        for(var i=0;i<len; i++){
-//            str += '<div class="form-group"><label class="col-sm-4 control-label">'+
-//             arr[i].name+ '</label><div class="col-sm-6"><p class="form-control-static">'+
-//             arr[i].value + '</p></div></div>';
-//        }
-//        return str;
-//    }
 
     function objToStr(obj){
         var str = '', id='';
@@ -778,7 +775,10 @@ $(document).ready(function(){
                 break;
                 case 'apiDescription': label = '功能描述'; break;
                 case 'apiScene': label = '使用场景'; break;
-                case 'resultDemo': label = '结果示例'; break;
+                case 'resultDemo':
+                    label = '结果示例';
+                     id = 'resultDemo-finalView';
+                break;
 
                 case 'innerParams': label = '内部参数'; break;
 
@@ -796,114 +796,147 @@ $(document).ready(function(){
     }
 
 
-    // 为已有的select补充完整
-    function appendSelect(apiParamNames) {
-        if("" == apiParamNames || "undefined" == typeof(apiParamNames) ) {
-            return;
-        }
-        var apiParams = apiParamNames.split(",");
-        $(".apiParamsSelect").each(function(index){
-             var currentParam = $(this).val();
-             var existElements = new Array();
-             $(this).children().each(function(index){
-                var value = $(this).val();
-                existElements.push(value);
-             });
-             for(var i=0; i<apiParams.length; i++) {
-                var tmpParam = decodeURI(apiParams[i]);
-                if(-1 != $.inArray(tmpParam, existElements) || "" == tmpParam){ // 过滤掉已有的值
-                    continue;
-                }
-                $(this).append("<option value='" + tmpParam + "'>" + tmpParam + "</option>");
-             }
+
+
+/* ******************************** JSON 着色开始 ***************************************** */
+
+
+    jsonInputView( 'json-input', 'json-input-jsonshow' );
+    jsonInputView( 'resultDemo', 'resultDemo-jsonshow' );
+
+    if($('#edit').val() == 1){
+        $('#json-input, resultDemo').trigger('blur');
+    }
+
+
+    function jsonInputView( inputId, viewId ){
+
+        $('#'+inputId).blur(function(){
+
+            $(this).val(formatJson($(this).val()));  // 自动格式化JSON字符串
+
+            var proced = jsonProcess(viewId, $('#'+inputId).val());
+
+            if(proced) {
+                $(this).hide().siblings('#'+viewId).show();
+            }else {
+                $(this).addClass('error');
+            }
+        });
+
+        $('#'+viewId).click(function(){
+            $(this).hide().siblings('#'+inputId).show().focus();
         });
     }
 
-    function appendMethodSelect(methodParamNames) {
-        if("" == methodParamNames || "undefined" == typeof(methodParamNames)) {
-            return;
-        }
-        var methodParams =methodParamNames.split(",");
-        $(".methodParamSelect").each(function(index){
-            var currentParam = $(this).val();
-            var existElements = new Array();
-            $(this).children().each(function(index){
-               var value = $(this).val();
-               existElements.push(value);
-            });
-            for(var i=0; i<methodParams.length; i++) {
-                var tmpParam = decodeURI(methodParams[i]);
-                if(-1 != $.inArray(tmpParam, existElements)  || "" == tmpParam){ // 过滤掉已有的值
-                    continue;
-                }
-                $(this).append("<option value='" + tmpParam + "'>" + tmpParam + "</option>");
-            }
-        });
+
+		function jsonProcess(eleId, jsonStr){
+//		  var json = document.getElementById("RawJson").value;
+		  var json = jsonStr;
+		  var html = "";
+		  try{
+		    if(json == "") return;
+		    var obj = eval("["+json+"]");
+		    html = ProcessObject(obj[0], 0, false, false, false);
+		    document.getElementById(eleId).innerHTML = "<PRE class='CodeContainer'>"+html+"</PRE>";
+		    return true;
+		  }catch(e){
+		    console.log(eleId+" JSON语法错误,不能格式化,错误信息:\n"+e.message);
+		    document.getElementById(eleId).innerHTML = "";
+		    return false;
+		  }
+		}
+
+
+/*翻译：球*/
+// 这里需要制表符来表示空格，而不是用CSS的magin-left属性
+// 这是为了确保直接复制和粘贴时的格式(译注：若用margin-left会导致复制时复制不到空白)。
+window.TAB = "  ";
+
+function IsArray(obj) {
+  return obj &&
+          typeof obj === 'object' &&
+          typeof obj.length === 'number' &&
+          !(obj.propertyIsEnumerable('length'));
+}
+
+function ProcessObject(obj, indent, addComma, isArray, isPropertyContent){
+  var html = "";
+  var comma = (addComma) ? "<span class='Comma'>,</span> " : "";
+  var type = typeof obj;
+
+  if(IsArray(obj)){
+    if(obj.length == 0){
+      html += GetRow(indent, "<span class='ArrayBrace'>[ ]</span>"+comma, isPropertyContent);
+    }else{
+      html += GetRow(indent, "<span class='ArrayBrace'>[</span>", isPropertyContent);
+      for(var i = 0; i < obj.length; i++){
+        html += ProcessObject(obj[i], indent + 1, i < (obj.length - 1), true, false);
+      }
+      html += GetRow(indent, "<span class='ArrayBrace'>]</span>"+comma);
     }
-
-    // 获取已经填写的API参数
-    function getEditedApiParams() {
-        // 2. 解析API参数，结果转为json数组字符串
-        var apiParamContent = carmenParamDivTable.$('input, select').serialize();
-        var totalResult = "";
-        if("" != apiParamContent) {
-            var updateArray = new Array();
-            var elements = apiParamContent.split("&");
-            for (var i=0; i<elements.length/8; i++ ){
-                var column = elements[i*8].split("=")[1];
-                updateArray.push(column);
-            }
-
-            var parseUpdateResult = updateArray.join(",");
-            return parseUpdateResult;
-        }
+  }else if(type == 'object' && obj == null){
+    html += FormatLiteral("null", "", comma, indent, isArray, "Null");
+  }else if(type == 'object'){
+    var numProps = 0;
+    for(var prop in obj) numProps++;
+    if(numProps == 0){
+      html += GetRow(indent, "<span class='ObjectBrace'>{ }</span>"+comma, isPropertyContent);
+    }else{
+      html += GetRow(indent, "<span class='ObjectBrace'>{</span>", isPropertyContent);
+      var j = 0;
+      for(var prop in obj){
+        html += GetRow(indent + 1, "<span class='PropertyName'>"+prop+"</span>: "+ProcessObject(obj[prop], indent + 1, ++j < numProps, false, true));
+      }
+      html += GetRow(indent, "<span class='ObjectBrace'>}</span>"+comma);
     }
+  }else if(type == 'number'){
+    html += FormatLiteral(obj, "", comma, indent, isArray, "Number");
+  }else if(type == 'boolean'){
+    html += FormatLiteral(obj, "", comma, indent, isArray, "Boolean");
+  }else if(type == 'function'){
+    obj = FormatFunction(indent, obj);
+    html += FormatLiteral(obj, "", comma, indent, isArray, "Function");
+  }else if(type == 'undefined'){
+    html += FormatLiteral("undefined", "", comma, indent, isArray, "Null");
+  }else{
+    html += FormatLiteral(obj, "\"", comma, indent, isArray, "String");
+  }
+  return html;
+}
+function FormatLiteral(literal, quote, comma, indent, isArray, style){
+  if(typeof literal == 'string')
+    literal = literal.split("<").join("&lt;").split(">").join("&gt;");
+  var str = "<span class='"+style+"'>"+quote+literal+quote+comma+"</span>";
+  if(isArray) str = GetRow(indent, str);
+  return str;
+}
+function FormatFunction(indent, obj){
+  var tabs = "";
+  for(var i = 0; i < indent; i++) tabs += window.TAB;
+  var funcStrArray = obj.toString().split("\n");
+  var str = "";
+  for(var i = 0; i < funcStrArray.length; i++){
+    str += ((i==0)?"":tabs) + funcStrArray[i] + "\n";
+  }
+  return str;
+}
+function GetRow(indent, data, isPropertyContent){
+  var tabs = "";
+  for(var i = 0; i < indent && !isPropertyContent; i++) tabs += window.TAB;
+  if(data != null && data.length > 0 && data.charAt(data.length-1) != "\n")
+    data = data+"\n";
+  return tabs+data;
+}
 
-    // 获取已经填写的内部方法参数
-    function getEditedMethodParams() {
-        // 4. 解析方法的配置
-        var methodParamContent = carmenMethodParamTable.$('input, select').serialize();
-        var methodTotalResult = ""; // 解析方法参数
-        if("" != methodParamContent) {
-            var updateArray = new Array();
-            var elements = methodParamContent.split("&");
-            for (var i=0; i<elements.length/5; i++ ){
-                var column = elements[i*5].split("=")[1];
-                updateArray.push(column);
-            }
-            var parseUpdateResult = updateArray.join(",");
-            return parseUpdateResult;
-        }
-    }
+/* ******************************** JSON 着色结束 ***************************************** */
 
 
-    //********************************************** API参数配置 ******************************************
-    var carmenParamDivTable = $("#carmenParam").DataTable({
-        paging: false,
-        language: {"infoEmpty": "","info": ""}
-    });
 
-    // API参数配置，绑定新增行事件
-    $("#addRow_carmenParam").on("click", function () {
-        $("#apiParamInfo").html("");
-        $("#apiParamInfo").css("display","none");
-        var operate = '<a href="#" class="needTip" data-toggle="tooltip" data-placement="top" title="编辑" style="margin-left:5px;display:none;" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span></a><a href="#" class="needTip deleteCurrentRow" flag="step2" apiIdValue="0" data-toggle="tooltip" data-placement="top" title="删除当前行" style="margin-left:5px;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>';
 
-        var paramNameElement = '<input style="max-width:160px;" type="text"  name="apiParamName" >';
-        //var paramTypeElement = '<input style="max-width:160px;" type="text"  name="apiParamType" >';
-        var paramTypeElement = '<select style="max-width:150px;max-height: 25px;"  name="apiParamType" class="form-control apiParamType"><option value="Number" >Number</option><option value="String" >String</option><option value="Price" >Price</option><option value="Boolean" >Boolean</option><option value="Date" >Date</option><option value="byte[]" >byte[]</option></select>';
-        var describleElement = '<input style="max-width:100px;" type="text"  name="describle" >';
-        var isRequiredElement = '<select style="min-width:50px;max-height: 25px;"  name="apiIsRequired" class="form-control" ><option value="1" selected>是</option><option value="0" >否</option></select>';
-        var ruleElement = '<input style="max-width:140px;" type="text"  name="rule" >';
-        var timestamp = Math.round(new Date().getTime()/1000);
-        var isStructureElement = '<select style="min-width:50px;max-height: 25px;"  name="apiIsStructure" class="form-control" ><option value="0" selected>是</option><option value="1" >否</option></select><input type="hidden" name="currentId" value="0"><input type="hidden" name="currentSequence" value="' + timestamp + '">';
-        carmenParamDivTable.row.add( [
-           paramNameElement,paramTypeElement,describleElement,isRequiredElement,ruleElement,isStructureElement,operate
-        ] ).draw();
-        $('[data-toggle="tooltip"]').tooltip();
-    });
 
-    $('[data-toggle="tooltip"]').tooltip();
+
+
     //********************************************** 方法&方法参数配置 ******************************************
     var carmenMethodParamTable = $("#carmenMethodParam").DataTable({
         paging: false,
@@ -911,177 +944,10 @@ $(document).ready(function(){
         language: {"infoEmpty": "","info": ""}
     });
 
-/*
-    $("#addRow_carmenMethodParam").on("click", function () {
-        $("#apiMethodParamsInfo").html("");
-        $("#apiMethodParamsInfo").css("display","none");
-        var operate = '<a href="#" class="needTip" data-toggle="tooltip" data-placement="top" title="编辑" style="margin-left:5px;display:none;" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span></a><a href="#" class="needTip deleteCurrentRow" flag="step4" apiIdValue="0" data-toggle="tooltip" data-placement="top" title="删除当前行" style="margin-left:5px;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>';
-        var paramNameElement = '<input style="max-width:160px;" type="text"  name="apiParamName" >';
-        var paramTypeElement = '<input style="max-width:160px;" type="text"  name="apiParamType" >';
-        //var paramTypeElement = '<select style="max-width:150px;max-height: 25px;"  name="apiParamType" class="form-control apiParamType"><option value="Number" >Number</option><option value="String" >String</option><option value="Price" >Price</option><option value="Boolean" >Boolean</option><option value="Date" >Date</option><option value="byte[]" >byte[]</option></select>';
-        var sequenceElement = '<input style="max-width:160px;" type="text"  name="sequence" >';
-        var isStructureElement = '<select style="min-width:50px;max-height: 25px;"  name="apiIsStructure" class="form-control" ><option value="0" selected>是</option><option value="1" >否</option></select><input type="hidden" name="currentId" value="0">';
-
-        carmenMethodParamTable.row.add( [
-           paramNameElement,paramTypeElement,sequenceElement,isStructureElement,operate
-        ] ).draw();
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-
-    //********************************************** 结构配置 ******************************************
-    var carmenStructureTable = $("#carmenStructure").DataTable({
-        paging: false,
-        language: {"infoEmpty": "","info": ""}
-    });
-
-    $("#addRow_carmenStructure").on("click", function () {
-        $("#apiStructureInfo").html("");
-        $("#apiStructureInfo").css("display","none");
-        var operate = '<a href="#" class="needTip" data-toggle="tooltip" data-placement="top" title="编辑" style="margin-left:5px;display:none;" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span></a><a href="#" class="needTip deleteCurrentRow" flag="step5" apiIdValue="0" data-toggle="tooltip" data-placement="top" title="删除当前行" style="margin-left:5px;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>';
-        var classNameElement = '<input style="max-width:100px;" type="text"  name="apiParamName" >';
-        var fieldNameElement = '<input style="max-width:100px;" type="text"  name="apiParamType" >';
-        var fieldTypeElement = '<input style="max-width:100px;" type="text"  name="sequence" >';
-        var isStructureElement = '<select style="min-width:50px;max-height: 25px;"  name="apiIsStructure" class="form-control" ><option value="1" >是</option><option value="0" selected>否</option></select><input type="hidden" name="currentId" value="0">';
-
-        carmenStructureTable.row.add( [
-           classNameElement,fieldNameElement,fieldTypeElement,isStructureElement,operate
-        ] ).draw();
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-
-    //********************************************* 7. 参数映射 *********************************************
-    var carmenParamMappingTable = $("#carmenParamMapping").DataTable({
-        paging: false,
-        language: {"infoEmpty": "","info": ""}
-    });
-
-    $("#addRow_carmenParamMapping").on("click", function () {
-
-        $("#apiParamMappingInfo").html("");
-        $("#apiParamMappingInfo").css("display","none");
-        var operate = '<a href="#" class="needTip" data-toggle="tooltip" data-placement="top" title="编辑" style="margin-left:5px;display:none;" ><span class="glyphicon glyphicon-pencil" aria-hidden="true" ></span></a><a href="#" class="needTip deleteCurrentRow" flag="step7" apiIdValue="0" data-toggle="tooltip" data-placement="top" title="删除当前行" style="margin-left:5px;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>';
-        var fieldNameElement = '<select style="max-width:150px;max-height: 25px;display:none;" id="innerParam" name="innerParam" class="form-control" ><option value="user_id">user_id</option><option value="client_id" >client_id</option><option value="client_name" >client_name</option><option value="client_secret" >client_secret</option><option value="client_source" >client_source</option><option value="client_num" >client_num</option><option value="client_type" >client_type</option><option value="access_token" >access_token</option><option value="request_ip" >request_ip</option></select><input style="max-width:160px;" type="text"  name="fieldName" >';
-        var fieldTypeElement = '<input style="max-width:160px;" type="text"  name="fieldType" >';
-        //var apiParamNameElement = '<input style="max-width:100px;" type="text"  name="apiParamName" >';
-        var apiParamNameElement = '<select style="max-width:150px;max-height: 25px;" name="innerParam" class="form-control" ><option value="default">default</option></select>';
-        var apiParams = $("#apiParamNames").val();
-        if("" != apiParams) {
-            apiParamNameElement = '<select style="max-width:150px;max-height: 25px;" name="innerParam" class="form-control" >';
-            var columns = apiParams.split(",");
-            for(var i=0; i<columns.length; i++) {
-                if("" == columns[i]) {
-                    continue;
-                }
-                apiParamNameElement += "<option>" + decodeURI(columns[i]) + "</option>";
-            }
-            apiParamNameElement += "</select>";
-        }
-        apiParamNameElement += '<input style="max-width:160px;display:none;" type="text"  name="apiParamName" >';
-
-
-        var timestamp = Math.round(new Date().getTime()/1000);
-        //var methodParamRefElement = '<input style="max-width:100px;" type="text"  name="methodParamRef" ><input type="hidden" name="currentId" value="0"><input type="hidden" name="currentSequence" value="' + timestamp + '" >';
-        var methodParamRefElement = '<select style="max-width:150px;max-height: 25px;" name="methodParamRef" class="form-control" ><option value="default">default</option></select>';
-        var methodParams = $("#methodParamNames").val();
-        if("" != methodParams) {
-            methodParamRefElement = '<select style="max-width:150px;max-height: 25px;" name="methodParamRef" class="form-control" >';
-            var columns = methodParams.split(",");
-            for(var i=0; i<columns.length; i++) {
-                if("" == columns[i]) {
-                    continue;
-                }
-                methodParamRefElement += "<option>" + decodeURI(columns[i]) + "</option>";
-            }
-            methodParamRefElement += '</select>';
-        }
-        methodParamRefElement += '<input style="max-width:160px;display:none;" type="text"  name="methodParamRef" >';
-        methodParamRefElement += '<input type="hidden" name="currentId" value="0"><input type="hidden" name="currentSequence" value="' + timestamp + '" >';
-        var dateFromElement = '<select style="min-width:50px;max-height: 25px;" id="dataFrom"  name="dateFrom" class="form-control" ><option value="OUTER" selected>API参数</option><option value="INNER" >内部参数</option><option value="FREE" >自定义参数</option></select>'
-        carmenParamMappingTable.row.add( [
-           dateFromElement, fieldNameElement, fieldTypeElement, apiParamNameElement, methodParamRefElement, operate
-        ] ).draw();
-        $('[data-toggle="tooltip"]').tooltip();
-    });*/
-
 
     // 保存所有的配置信息
     $("#save").on("click", function () {
 
-    /*
-        // 0. 检测是否填写
-        var paramMappingContent = carmenParamMappingTable.$('input, select').serialize();
-        $("#apiParamMappingInfo").css("display", 'none');
-        if("" == paramMappingContent) {
-            $("#apiParamMappingInfo").html('<p>请先配置参数映射</p>');
-            $("#apiParamMappingInfo").css("display", 'block');
-            return;
-        }
-
-
-        // 1. 解析API配置的结果，转为json字符串
-        var apiContent = $("#apiInterfaceConfig").serialize();
-        //console.log("apiContent: " + apiContent);
-        var parseApiResult = parseApi(apiContent);
-
-        // 2. 解析API参数，结果转为json数组字符串
-        var apiParamContent = carmenParamDivTable.$('input, select').serialize();
-        //console.log("apiParamContent: " + apiParamContent);
-        var totalResult = "";
-        var apiParamUpdate = "";
-        var apiParamAdd = "";
-        if("" != apiParamContent) {
-            totalResult = parseApiParam(apiParamContent); // 解析API参数，结果转为json数组字符串
-            apiParamUpdate = totalResult.split(";")[0];
-            apiParamAdd = totalResult.split(";")[1];
-        }
-
-        // 3. 解析方法的配置
-        var methodContent = $("#methodconfigform").serialize();
-        //console.log("methodContent: " + methodContent);
-        var methodResult = parseMethod(methodContent); // 解析方法配置
-
-        // 4. 解析方法的配置
-        var methodParamContent = carmenMethodParamTable.$('input, select').serialize();
-        //console.log("methodParamContent: " + methodParamContent);
-        var methodTotalResult = ""; // 解析方法参数
-        var methodParamUpdate = "";
-        var methodParamAdd = "";
-        if("" != methodParamContent) {
-            methodTotalResult = parseMethodParam(methodParamContent); // 解析方法参数
-            methodParamUpdate = methodTotalResult.split(";")[0];
-            methodParamAdd = methodTotalResult.split(";")[1];
-        }
-
-        // 5. 解析结构
-        var structureContent = carmenStructureTable.$('input, select').serialize();
-        //console.log("structureContent: " + structureContent);
-        var structureResult = ""; // 解析结构参数
-        var structureUpdate = "";
-        var structureAdd = "";
-        if("" != structureContent) {
-            structureResult = parseStructure(structureContent); // 解析结构参数
-            structureUpdate = structureResult.split(";")[0];
-            structureAdd = structureResult.split(";")[1];
-        }
-
-        // 6. 解析参数映射
-        var paramMappingContent = carmenParamMappingTable.$('input, select').serialize();
-        //console.log("paramMappingContent: " + paramMappingContent);
-        //var paramMappingContent = ""; // 解析参数映射
-        var paramMappingUpdate = "";
-        var paramMappingAdd = "";
-        if("" != paramMappingContent) {
-            paramMappingContent = parseParamMapping(paramMappingContent); // 解析参数映射
-            paramMappingUpdate = paramMappingContent.split(";")[0];
-            paramMappingAdd = paramMappingContent.split(";")[1];
-        }
-
-        // 7. 解析方法映射
-        var methodMappingId = $(".methodmappingconfig").attr("methodMapping");
-        if("" == methodMappingId) {
-            methodMappingId = 0;
-        }
-*/
 
         $("#updateStatus").html("正在保存...");
         $("#myHideModal").modal("show");
@@ -1111,200 +977,6 @@ $(document).ready(function(){
             });
     });
 
-/*
-    //  解析API接口配置的内容
-    function parseApi(content) {
-        var cells = content.split("&");
-
-        var updateObject = new Object();
-        updateObject.namespace = cells[0].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.name = cells[1].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.version = cells[2].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.appName = cells[3].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        //updateObject.addressUrl = cells[4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.enableLog = cells[4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.enableFreq = cells[5].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.enableInnerOuter = cells[6].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-//        updateObject.apiType = getAPIType();
-        updateObject.requestType = cells[7].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.id = cells[8].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.apiGroup = cells[9].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.sessionFlag = cells[10].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.apiDesc = cells[11].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.apiScenarios = cells[12].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        var decoded = decodeURIComponent(cells[13].split("=")[1]).replace(/\+/g, ' ');
-        console.log(decoded);
-        var resultDemo = encodeURIComponent(encodeURI(decoded));
-        console.log(resultDemo);
-        updateObject.resultDemo =resultDemo.replace(/\%22/g, "\%22");
-        updateObject.env = getEnv();
-        updateObject.creator = $("#userName").val();
-
-        var parseResult = JSON.stringify(updateObject);
-        return parseResult;
-    }
-    function valueReplace(v) {
-        if (v.indexOf("\"") != -1) {
-            v = v.toString().replace(new RegExp('(["\"])', 'g'), "\\\"");
-        }
-        else if (v.indexOf("\\") != -1)
-            v = v.toString().replace(new RegExp("([\\\\])", 'g'), "\\\\");
-        return v;
-    }
-    //  解析API参数的配置内容
-    function parseApiParam(content) {
-        var updateArray = new Array();
-        var addArray = new Array();
-        var elements = content.split("&");
-        for (var i=0; i<elements.length/8; i++ ){
-            var updateObject = new Object();
-            updateObject.paramName = elements[i*8].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.paramType = elements[i*8+1].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.describle = elements[i*8+2].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.isRequired = elements[i*8+3].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.rule = elements[i*8+4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.isStructure = elements[i*8+5].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.env = getEnv();
-            //updateObject.apiId = apiId; // 此处的id要等API查询出来
-            updateObject.creator = $("#userName").val();
-            var currentId = elements[i*8+6].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            if(0 != currentId && "" != currentId) {
-                updateObject.id = currentId;
-                updateArray.push(updateObject);
-            } else {
-                addArray.push(updateObject);
-            }
-            updateObject.sequence = elements[i*8+7].split("=")[1];
-        }
-        var parseUpdateResult = JSON.stringify(updateArray);
-        var parseAddResult = JSON.stringify(addArray);
-        var totalResult = parseUpdateResult + ";" + parseAddResult;
-        return totalResult;
-    }
-
-    // 解析方法的配置
-    function parseMethod(content) {
-        var elements = content.split("&");
-        var updateObject = new Object();
-        updateObject.name = elements[0].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.method = elements[1].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.version = elements[2].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.id = elements[3].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.addressUrl = elements[4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        updateObject.creator = $("#userName").val();
-        updateObject.env = getEnv();
-
-        var parseMethodResult = JSON.stringify(updateObject);
-        return parseMethodResult;
-    }
-
-    // 解析方法参数的配置
-    function parseMethodParam(content) {
-        var updateArray = new Array();
-        var addArray = new Array();
-        var elements = content.split("&");
-        for (var i=0; i<elements.length/5; i++ ){
-            var updateObject = new Object();
-            updateObject.paramName = elements[i*5].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.paramType = elements[i*5+1].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.sequence = elements[i*5+2].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.isStructure = elements[i*5+3].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.env = getEnv();
-            //updateObject.serviceMethodId = apiId; //  这个在JAVA里插入的时候从返回值中获取
-            updateObject.creator = $("#userName").val();
-            var currentId = elements[i*5+4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            if(0 != currentId && "" != currentId) {
-                updateObject.id = currentId;
-                updateArray.push(updateObject);
-            } else {
-                addArray.push(updateObject);
-            }
-        }
-        var parseUpdateResult = JSON.stringify(updateArray);
-        var parseAddResult = JSON.stringify(addArray);
-        var totalResult = parseUpdateResult + ";" + parseAddResult;
-        return totalResult;
-    }
-
-    // 解析结构
-    function parseStructure(content){
-        var updateArray = new Array();
-        var addArray = new Array();
-        //var apiId = jsonObject.id;
-        //var content = carmenStructureTable.$('input, select').serialize();
-        //console.log("content: " + content);
-        var elements = content.split("&");
-        for (var i=0; i<elements.length/5; i++ ){
-            var updateObject = new Object();
-            updateObject.className = elements[i*5].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.fieldName = elements[i*5+1].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.fieldType = elements[i*5+2].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.isStructure = elements[i*5+3].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            updateObject.env = getEnv();
-            //updateObject.serviceMethodId = apiId; //这个值从方法插入的返回结果获取
-            updateObject.creator = $("#userName").val();
-            var currentId = elements[i*5+4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            if(0 != currentId && ""!=currentId) {
-                updateObject.id = currentId;
-                updateArray.push(updateObject);
-            } else {
-                addArray.push(updateObject);
-            }
-        }
-
-        var parseUpdateResult = JSON.stringify(updateArray);
-        var parseAddResult = JSON.stringify(addArray);
-        var totalResult = parseUpdateResult + ";" + parseAddResult;
-        return totalResult;
-    }
-
-    // 解析参数映射
-    function parseParamMapping(content) {
-        var updateArray = new Array();
-        var addArray = new Array();
-        var elements = content.split("&");
-        for (var i=0; i<elements.length/10; i++ ){
-            var updateObject = new Object();
-            updateObject.dataFrom = elements[i*10].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            if("INNER" == updateObject.dataFrom) { //内部参数
-                updateObject.fieldName = elements[i*10+1].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            } else {
-                updateObject.fieldName = elements[i*10+2].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            }
-
-            updateObject.fieldType = elements[i*10+3].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            if("OUTER" == updateObject.dataFrom) { //API参数
-                updateObject.apiParamName = elements[i*10+4].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            } else {
-                updateObject.apiParamName = elements[i*10+5].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            }
-            if("OUTER" == updateObject.dataFrom) { //API参数
-                updateObject.methodParamRef = elements[i*10+6].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            } else {
-                updateObject.methodParamRef = elements[i*10+7].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            }
-
-            updateObject.env = getEnv();
-            // 以下这些值可以从JAVA中获取，不用再冗余设置
-            //updateObject.serviceMethodId = $("#apiParamMappingParamMethodId").val();
-            //updateObject.apiNamespace = apiNamespace;
-            //updateObject.apiName = apiName;
-            //updateObject.version = apiVersion;
-            updateObject.creator = $("#userName").val();
-            var currentId = elements[i*10+8].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-            if(0 != currentId && ""!= currentId) {
-                updateObject.id = currentId;
-                updateArray.push(updateObject);
-            } else {
-                addArray.push(updateObject);
-            }
-            updateObject.sequence = elements[i*10+9].split("=")[1].replace(/(^\+*)|(\+*$)/g, '');
-        }
-        var parseUpdateResult = JSON.stringify(updateArray);
-        var parseAddResult = JSON.stringify(addArray);
-        var totalResult = parseUpdateResult + ";" + parseAddResult;
-        return totalResult;
-    }*/
 
 
     // 获取环境变量的值
@@ -1315,276 +987,6 @@ $(document).ready(function(){
         return envValue;
     }
 
-/*
-    // 绑定删除行事件，这么写是因为要给还未添加的DOM元素绑定事件
-    $('body').on('click', '.deleteCurrentRow', function(e) {
-        e.preventDefault();
-        var flag = $(this).attr("flag");
-       var tmp = $(this).closest('tr')[0];
-       var content = carmenApiTable.$('input,select').serialize();
-       //console.log("content" + content);
-       if("step1" == flag) {
-            var id = $(this).attr("apiIdValue");
-            if(0 != id && "" != id) { // 需要从数据库中删除
-                $.post("deleteapi",{"id":id}, function (d) {
-                    console.log("apiResult: " + d);
-                },"json");
-                carmenApiTable.row(tmp).remove().draw(false);
-            } else {
-                carmenApiTable.row(tmp).remove().draw(false);
-            }
-       }  else if ("step2" == flag) {
-            var id = $(this).attr("apiIdValue");
-            if(0 != id && "" != id) {
-                $.post("deleteapiparam", {"id":id}, function (d) {
-                    console.log("apiParamResult: " + d);
-                },"json");
-                carmenParamDivTable.row(tmp).remove().draw(false);
-            } else { // 简单地从页面删除
-                carmenParamDivTable.row(tmp).remove().draw(false);
-            }
-
-       } else if ("step3" == flag) {
-            var id = $(this).attr("apiIdValue");
-            if(0 != id && "" != id) {
-                $.post("deleteapimethod", {"id":id}, function () {
-                    console.log("apiMethodResult: " + d);
-                },"json");
-                carmenMethodTable.row(tmp).remove().draw(false);
-            } else {
-                carmenMethodTable.row(tmp).remove().draw(false);
-            }
-       } else if ("step4" == flag) {
-            var id = $(this).attr("apiIdValue");
-            if(0 != id && "" != id) {
-                $.post("deleteapimethodparam", {"id":id}, function(d) {
-                    console.log("apiMethodParam: " + d);
-                },"json");
-                carmenMethodParamTable.row(tmp).remove().draw(false);
-            } else {
-                carmenMethodParamTable.row(tmp).remove().draw(false);
-            }
-
-       } else if ("step5" == flag) {
-            var id = $(this).attr("apiIdValue");
-            if(0 != id && "" != id) {
-                $.post("deleteapistructure", {"id":id}, function (d) {
-                    console.log("deleteApiStructure " + d);
-                },"json");
-                carmenStructureTable.row(tmp).remove().draw(false);
-            } else {
-                carmenStructureTable.row(tmp).remove().draw(false);
-            }
-
-       } else if ("step6" == flag) {
-            carmenMethodMappingTable.row(tmp).remove().draw(false);
-       } else if ("step7" == flag) {
-            var id = $(this).attr("apiIdValue");
-            if(0 != id && "" != id) {
-                $.post("deleteapiparammapping", {"id":id}, function(d) {
-                    console.log("apiParamMapping: " + d);
-                },"json");
-                carmenParamMappingTable.row(tmp).remove().draw(false);
-            } else {
-                carmenParamMappingTable.row(tmp).remove().draw(false);
-            }
-       }
-    });
-
-    // 预览事件
-    $("#preview").on("click", function (e) {
-        e.preventDefault();
-        $("#apiInfo").css("display", "none");
-        $("#apiParamInfo").css("display", "none");
-        $("#apiMethodInfo").css("display", "none");
-        $("#apiMethodParamsInfo").css("display", "none");
-        $("#apiStructureInfo").css("display", "none");
-        $("#apiMethodMappingInfo").css("display", "none");
-        $("#apiParamMappingInfo").css("display", "none");
-        $("#batchAdd").css("display", "none");
-        $("#batchAddMethod").css("display", "none");
-
-        var flag = $(this).attr("flag");  // 1代表预览，2代表关闭预览
-
-        if(1 == flag) { // 当前是预览
-            $(this).attr("flag", "2");
-            $(this).html("关闭预览");
-            $(".save").css("display", "none");
-            $(".preStep").css("display", "none");
-
-            $(".apiconfig").html("预览所有配置");
-            $(".apiconfig").css("margin-left", "360px");
-
-            $(".cut").css("display", "block");
-
-            $("#apiType").css("display", "block");
-            $(".apiconfig1").css("display", "block");
-            $(".apiconfig2").css("display", "block");
-            $(".methodconfig").css("display", "block");
-
-//            var apiType = getAPIType();
-//            if(2 == apiType) { // 当前是PHP配置
-//                $(".structureconfig").css("display", "none");
-//                $("#previewStep5").css("display", "none");
-//                $("#previewStep6").html("5");
-//                $("#previewStep7").html("6");
-//
-//            } else { // JAVA配置
-//                $(".structureconfig").css("display", "block");
-//                $("#previewStep5").css("display", "block");
-//                $("#previewStep6").html("6");
-//                $("#previewStep7").html("7");
-//            }
-
-            $(".methodmappingconfig").css("display", "block");
-            $(".parammappingconfig").css("display", "block");
-
-            $("#addRow_carmenParam").css("display", "none");
-            $("#addRow_carmenMethodParam").css("display", "none");
-            $("#addRow_carmenStructure").css("display", "none");
-            $("#addRow_carmenParamMapping").css("display", "none");
-        } else {
-            $(this).attr("flag", "1");
-            $(this).html("预览");
-            $(".save").css("display", "block");
-            $(".preStep").css("display", "block");
-
-            $(".apiconfig").html("API与内部方法的参数映射配置");
-            $(".apiconfig").css("margin-left", "260px");
-
-            $(".cut").css("display", "none");
-
-//            $("#apiType").css("display", "none");
-            $(".apiconfig1").css("display", "none");
-            $(".apiconfig2").css("display", "none");
-            $(".methodconfig").css("display", "none");
-            $(".structureconfig").css("display", "none");
-            $(".methodmappingconfig").css("display", "none");
-            $(".parammappingconfig").css("display", "block");
-
-            $("#addRow_carmenParam").css("display", "block");
-            $("#addRow_carmenMethodParam").css("display", "block");
-            $("#addRow_carmenStructure").css("display", "block");
-            $("#addRow_carmenParamMapping").css("display", "block");
-
-//            var apiType = getAPIType();
-//            if(2 == apiType) {
-//                $("#batchAdd").css("display", "block");
-//                $("#batchAddMethod").css("display", "block");
-//            }
-
-
-        }
-
-
-    });
-
-
-     $(".apiTypeLi").on("change", function () {
-        var value = $(this).val();
-        if(2 == value) { // PHP配置，去除url选项的校验
-            $("#appName").removeClass("required");
-        } else if (1 == value) { // JAVA配置，添加url选项的校验
-            $("#appName").removeClass("required");
-            $("#appName").addClass("required");
-        }
-     });
-
-    function bindEventHandlerForInnerParam() {
-        $("body").on("change", "#innerParam", function () {
-            var selected = $(this).find("option:selected").text();
-            console.log("selected:" + selected);
-            $($(this).parent().next().next().children()[1]).val(selected);
-            $($(this).parent().next().next().next().children()[1]).val(selected);
-        });
-    }
-    bindEventHandlerForInnerParam();
-
-    $("body").on("change", "#dataFrom", function() {
-        var content = $(this).val();
-        //console.log("content: " + content);
-
-        if("OUTER" == content) { // API参数
-            // 参数名的select和input的切换
-            $($(this).parent().next().children()[0]).css("display", "none");
-            $($(this).parent().next().children()[1]).css("display", "block");
-
-            // api参数名的select与input的切换
-            $($(this).parent().next().next().next().children()[0]).css("display", "block");
-            $($(this).parent().next().next().next().children()[1]).css("display", "none");
-
-            // api参数名的select与input的切换
-            $($(this).parent().next().next().next().next().children()[0]).css("display", "block");
-            $($(this).parent().next().next().next().next().children()[1]).css("display", "none");
-        } else if("INNER" == content) { // 内部参数
-            // 参数名的select和input的切换
-            $($(this).parent().next().children()[0]).css("display", "block");
-            $($(this).parent().next().children()[1]).css("display", "none");
-            var selected = $($(this).parent().next().children()[0]).find("option:selected").text();
-
-            // api参数名的select与input的切换
-            $($(this).parent().next().next().next().children()[0]).css("display", "none");
-            $($(this).parent().next().next().next().children()[1]).css("display", "block");
-
-            $($(this).parent().next().next().next().children()[1]).val(selected);
-            $($(this).parent().next().next().next().children()[1]).attr("readonly","readonly");
-            //$($(this).parent().next().next().next().children()[1]).attr("readonly","readonly");
-            // api参数名的select与input的切换
-            $($(this).parent().next().next().next().next().children()[0]).css("display", "none");
-            $($(this).parent().next().next().next().next().children()[1]).css("display", "block");
-            $($(this).parent().next().next().next().next().children()[1]).val(selected);
-            $($(this).parent().next().next().next().next().children()[1]).attr("readonly","readonly");
-            bindEventHandlerForInnerParam();
-
-        } else if("FREE" == content) { // 自定义参数
-            // 参数名的select和input的切换
-            $($(this).parent().next().children()[0]).css("display", "none");
-            $($(this).parent().next().children()[1]).css("display", "block");
-
-            // api参数名的select与input的切换
-            $($(this).parent().next().next().next().children()[0]).css("display", "none");
-            $($(this).parent().next().next().next().children()[1]).css("display", "block");
-            $($(this).parent().next().next().next().children()[1]).val("");
-            $(this).parent().next().next().next().children()[1].removeAttribute("readonly");
-
-            // api参数名的select与input的切换
-            $($(this).parent().next().next().next().next().children()[0]).css("display", "none");
-            $($(this).parent().next().next().next().next().children()[1]).css("display", "block");
-            $($(this).parent().next().next().next().next().children()[1]).val("");
-            $(this).parent().next().next().next().next().children()[1].removeAttribute("readonly");
-
-        }
-    });*/
-
-/*
-    initWidth();
-    function initWidth() {
-        var width = window.innerWidth;
-        var apiType = getAPIType();
-        if(1 == apiType) { // JAVA服务
-             if(width < 1209) {
-                $("ul.nav-wizard li").css("padding", "0 30px 0 40px");
-             }
-        } else if(2 == apiType) { // PHP服务
-             if(width < 1209) {
-
-             }
-        }
-    }
-
-    window.onresize = function(){
-        var width = window.innerWidth;
-        var apiType = getAPIType();
-        if(1 == apiType) { // JAVA服务
-             if(width < 1209) {
-                $("ul.nav-wizard li").css("padding", "0 30px 0 40px");
-             }
-        } else if(2 == apiType) { // PHP服务
-             if(width < 1209) {
-
-             }
-        }
-    }*/
 
     // 批量增加API参数
     $("#batchAdd").on("click", function(){
