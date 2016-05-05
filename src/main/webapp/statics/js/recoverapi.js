@@ -29,6 +29,10 @@ $(document).ready(function () {
         }
         $.post("deleteApis", {"ids": ids}, function (d) {
             console.log("d:" + d);
+            if(d.code != 0)
+            {
+                alert(d.message);
+            }
             location.reload();
         });
     });

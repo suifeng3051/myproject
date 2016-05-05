@@ -5,16 +5,19 @@ $(document).ready(function(){
 
 
     var groupId_show = getCookie("groupId_show");
-    setTimeout(function(){
-/*        console.log(groupId_show);
-        console.log($('.affixGroup[groupid='+groupId_show+']').attr("group"));*/
 
-        if($('.affixGroup[groupid='+groupId_show+']').parent().parent().children('a').text()!="所有"){
-            $('.affixGroup[groupid='+groupId_show+']').parent().parent().children('i').trigger('click');
-        }
-        $('.affixGroup[groupid='+groupId_show+']>a').trigger("click");
+    if(groupId_show.length > 0){
+        setTimeout(function(){
+    /*        console.log(groupId_show);
+            console.log($('.affixGroup[groupid='+groupId_show+']').attr("group"));*/
 
-    }, 200);
+            if($('.affixGroup[groupid='+groupId_show+']').parent().parent().children('a').text()!="所有"){
+                $('.affixGroup[groupid='+groupId_show+']').parent().parent().children('i').trigger('click');
+            }
+            $('.affixGroup[groupid='+groupId_show+']>a').trigger("click");
+
+        }, 200);
+    }
 
 
 
