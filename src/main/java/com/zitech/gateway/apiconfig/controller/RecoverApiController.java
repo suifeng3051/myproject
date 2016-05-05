@@ -86,7 +86,7 @@ public class RecoverApiController {
     }
 
     /**
-     *
+     * 恢复删除的api
      * @param ids
      * @param request
      * @return
@@ -112,10 +112,17 @@ public class RecoverApiController {
         Integer userid = users.get(0).getId();
 
         String[] idArray = ids.split(",");
+        Integer numbers = idArray.length;
+        Integer cnt = 0;
         try {
             for (String id : idArray) {
                 Integer apiId = Integer.valueOf(id);
                 Api api = apiService.getApiById(apiId);
+                //检测要恢复的api是否已经存在同名的api
+                if(!apiService.checkApi(api.getNamespace(), api.getMethod(), api.getVersion(), api.getEnv()))
+                {
+                    continue;
+                }
                 if (api != null) {
                     api.setUpdatedTime(new Date());
                     api.setDeleted((byte) 0);
@@ -138,16 +145,28 @@ public class RecoverApiController {
                     param.setUpdatedId(userid);
                     paramService.updateParam(param);
                 }
+                cnt++;
             }
         } catch (Exception e) {
             apiResult.setCode(3);
             apiResult.setMessage("恢复api发生异常");
             return apiResult.toString();
         }
+        if (numbers!= cnt) {
+            apiResult.setCode(4);
+            apiResult.setMessage("因api已经存在，有部分api未恢复");
+        }
 
         return apiResult.toString();
     }
 
+    /**
+     *
+     * 物理删除api
+     * @param ids
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/deleteApis", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String deleteApis(@RequestParam("ids") String ids,
