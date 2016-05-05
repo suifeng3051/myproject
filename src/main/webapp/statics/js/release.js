@@ -241,9 +241,38 @@ $(document).ready(function () {
     });
 
     $("#sureUpload").on("click", function() {
-        var uploadFile = $("#inputFile").val();
-        console.log("file: " + uploadFile);
+        /*var uploadFile = $("#inputFile").val();
+        console.log("file: " + uploadFile);*/
+
+        var options = {
+             success:function(data){
+                console.log(data);
+                return false;
+            },
+
+            // other available options:
+            url:'releaseupload',         // 提交的URL, 默认使用FORM  ACTION
+            type: 'post',
+            dataType:  "json",     // 'xml', 'script', or 'json' (expected server response type)
+            //clearForm: true        // 是否清空form
+            resetForm: true   ,     // 是否重置form
+
+            // $.ajax options can be used here too, for example:
+            timeout:   3000
+        };
+
+        $("#uploadForm").ajaxSubmit(options);
+/*        $("#uploadForm").ajaxSubmit({
+             dataType: "json",//返回结果格式
+            success: function (data) {
+                alert("data:"+data);
+                 console.log(data);
+            }
+
+        })*/
+
     });
+
 
     // 获取选中的checkbox的id
     function getIds() {

@@ -291,4 +291,9 @@
         env = #{env,jdbcType=TINYINT}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="getMaxId" resultType="java.lang.Integer">
+        select max(id) from t_api_n
+    </select>
+
 </mapper>

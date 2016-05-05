@@ -1,16 +1,14 @@
 package com.zitech.gateway.apiconfig.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.zitech.gateway.apiconfig.model.Api;
-import com.zitech.gateway.apiconfig.service.AdminService;
-import com.zitech.gateway.apiconfig.service.ApiService;
-import com.zitech.gateway.apiconfig.service.ReleaseService;
+import com.zitech.gateway.apiconfig.model.Param;
+import com.zitech.gateway.apiconfig.model.Serve;
+import com.zitech.gateway.apiconfig.service.*;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +48,10 @@ public class ReleaseController {
     RedisOperate redisOperate;
     @Autowired
     private ReleaseService releaseService;
+    @Autowired
+    private ServeService serveService;
+    @Autowired
+    private ParamService paramService;
 
     @RequestMapping("/release")
     public ModelAndView release(@RequestParam(value="env", defaultValue = "1") byte env,
@@ -136,7 +138,9 @@ public class ReleaseController {
     }
 
     @RequestMapping(value = "/releaseupload", produces="application/json;charset=utf-8")
-    public String releaseupload(@RequestParam("file") MultipartFile file) {
+    public @ResponseBody  String releaseupload(@RequestParam("file") MultipartFile file) {
+
+        JSONArray array_result = new JSONArray();
 
         if (!file.isEmpty()) {
             try {
@@ -145,17 +149,25 @@ public class ReleaseController {
                 String uploadStr = new String(bytes);
                 JSONArray array = JSONArray.parseArray(uploadStr);
 
+                for(int i=0;i<array.size();i++) {
+
+                    JSONObject obj = array.getJSONObject(i);
+                    JSONObject resultObj = releaseService.loadUploadFile(obj);
+
+                    if(resultObj!=null)array_result.add(resultObj);
+
+                }
 
              } catch (Exception e) {
-                e.printStackTrace();
+                return new ApiResult<String>(1,"文件读取错误",e.getMessage()).toString();
              }
+
         } else {
-            return "";
+             return new ApiResult<String>(1,"发布失败","文件为空").toString();
         }
 
-        //JSONArray array = JSONArray.parseArray(downloadStr);
+        return new ApiResult<JSONArray>(0,"发布成功",array_result).toString();
 
-        return null;
     }
 
 

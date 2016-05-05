@@ -30,6 +30,8 @@ public interface ApiDAO {
 
     List<Api> getDeletedApi();
 
+    int getMaxId();
+
 //    void saveResult(Map paraMap);
 
 
