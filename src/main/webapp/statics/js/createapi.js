@@ -298,23 +298,9 @@ $(document).ready(function(){
 
 
     var apiObj, paramObj, serviceObj;
-//    $('#save').click(function(){
-//
-//        var saveObj = {};
-//        saveObj = {
-//            'apiObj': apiObj,
-//            'paramObj': paramObj,
-//            'serviceObj': serviceObj
-//        }
-////        console.log(saveObj); // 最终需要保存的对象
-//
-//        //$.post(); // 保存API配置
-//    });
 
     function finalReview(){
 
-        if($('#requestType').val() == 'POST'){
-        }
 
         // API接口信息配置
         apiObj = formdataToJSON($('#apiInterfaceConfig').serializeArray());
@@ -349,7 +335,7 @@ $(document).ready(function(){
             $('#requestStructure').text(JSON.stringify(JSONresult.getJson()));
 
             $('#requestStructureJson').html('').jsonEditorByTreeJson(JSON.parse($('#requestStructure').val()), true);
-            $('#requestStructureJson').addClass('json-editor');
+            $('#requestStructureJson').addClass('json-editor expanded ');
             if($('#treeHead-view').length == 0){
                 var treeHead = $('<p style="text-align:right; color:#aaa; margin-bottom:0;" id="treeHead-view"><span style="margin-right:30px">数据类型</span><span style="margin-right:25px">是否必填</span><span style="margin-right:180px">描述</span></p>');
                 $('#requestStructureJson').before(treeHead);
@@ -413,12 +399,27 @@ $(document).ready(function(){
                 default: label = o; break;
             }
 
+            obj[o] = html_encode(obj[o]+''); // 防止 json 字符串中有HTML标签，在预览写入页面时，浏览器当正常文档结构解析
+
             str += '<div class="form-group"><label class="col-sm-3 control-label">'+
              label + '</label><div class="col-sm-9"><p class="form-control-static" id="'+ id +'">'+
              (value== '' ? obj[o] : value) + '</p></div></div>';
         }
         return str;
     }
+    function html_encode(str)
+     {
+       var s = "";
+       if (str.length == 0) return "";
+       s = str.replace(/&/g, "&gt;");
+       s = s.replace(/</g, "&lt;");
+       s = s.replace(/>/g, "&gt;");
+       s = s.replace(/ /g, "&nbsp;");
+       s = s.replace(/\'/g, "&#39;");
+       s = s.replace(/\"/g, "&quot;");
+       s = s.replace(/\n/g, "<br>");
+       return s;
+     }
 
 
 
@@ -430,7 +431,9 @@ $(document).ready(function(){
     jsonInputView( 'resultDemo', 'resultDemo-jsonshow' );
 
     if($('#edit').val() == 1){
-        $('#json-input, resultDemo').trigger('blur');
+        setTimeout(function(){
+            $('#json-input').trigger('blur');
+        }, 1000)
     }
 
 

@@ -246,8 +246,45 @@ $(document).ready(function () {
 
         var options = {
              success:function(data){
-                console.log(data);
-                return false;
+
+                 var code = data.code;
+                 var successNum = data.data.successNum;
+                 var items = data.data.items;
+
+                 if(code==0){
+                     var appendHtml  = "<table class='table table-striped table-bordered table-hover'>"+
+                         "<thead><tr><th>API名称</th><th>发布状态</th><th>原因</th></tr></thead><tbody>";
+                     $.each(items,function(i,item){
+                         console.log(item);
+                         var apiObj = item.api;
+                         var apiCode = item.code;
+                         var apiStatus = "";
+                         if(apiCode==1){
+                             apiStatus = "<span style='color:red'>发布失败</span>";
+                         }
+                         var message = "<span style='color:#AA00AA'>"+item.message+"</span>";
+                         appendHtml += "<tr><td>"+apiObj.namespace+"/"+apiObj.method+"/"+apiObj.version+"</td><td>"+apiStatus+"</td><td>"+message+"</td>";
+                         //$("#uploadApiList").append(insertObject);
+
+                         // $("#employee").append("<option value="+item.id+">   "+item.name+"</option>");
+                     });
+
+                     appendHtml += "</tbody></table>";
+                     $("#uploadResultTable").empty();
+                     $("#uploadResultTable").append("<div class='alert alert-success' role='alert'>本次成功发布"+successNum+"条记录</div>");
+                     if(items.length>0){
+                         $("#uploadResultTable").append("<div class='alert alert-danger' role='alert'>本次发布失败"+items.length+"条记录</div>");
+                         $("#uploadResultTable").append(appendHtml);
+                     }
+
+
+                 }else{
+                     //提示失败
+                     $("#uploadResultTable").empty();
+                     $("#uploadResultTable").append("<div class='alert alert-danger' role='alert'>文件解析失败，您是不是选错文件啦   o(∩_∩)o</div>");
+                 }
+
+                 return false;
             },
 
             // other available options:

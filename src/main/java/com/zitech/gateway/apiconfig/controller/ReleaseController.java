@@ -141,6 +141,7 @@ public class ReleaseController {
     public @ResponseBody  String releaseupload(@RequestParam("file") MultipartFile file) {
 
         JSONArray array_result = new JSONArray();
+        int successNum = 0;
 
         if (!file.isEmpty()) {
             try {
@@ -154,7 +155,11 @@ public class ReleaseController {
                     JSONObject obj = array.getJSONObject(i);
                     JSONObject resultObj = releaseService.loadUploadFile(obj);
 
-                    if(resultObj!=null)array_result.add(resultObj);
+                    if(resultObj!=null){
+                        array_result.add(resultObj);
+                    }else{
+                        successNum++;
+                    }
 
                 }
 
@@ -166,7 +171,11 @@ public class ReleaseController {
              return new ApiResult<String>(1,"发布失败","文件为空").toString();
         }
 
-        return new ApiResult<JSONArray>(0,"发布成功",array_result).toString();
+        JSONObject result = new JSONObject();
+        result.put("items",array_result);
+        result.put("successNum",successNum);
+
+        return new ApiResult<JSONObject>(0,"发布成功",result).toString();
 
     }
 
