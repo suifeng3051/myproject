@@ -3,6 +3,7 @@ package com.zitech.gateway.gateway.excutor;
 import com.zitech.gateway.common.BaseException;
 import com.zitech.gateway.gateway.Constants;
 import com.zitech.gateway.gateway.PipeHelper;
+import com.zitech.gateway.gateway.exception.ServeException;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.gateway.pipes.IPipe;
 import com.zitech.gateway.gateway.pipes.impl.Pipe;
@@ -94,7 +95,13 @@ public class Pipeline {
         }
 
         String msg = null;
-        if (e instanceof BaseException) {
+        if(e instanceof ServeException) {
+            BaseException be = (BaseException) e;
+            msg = String.format(Constants.ERROR_RESPONSE, be.getCode(), be.getDescription());
+            // serve error, should alarm
+            logger.error("an error happened in {}, event: {}", pipe, event, e);
+        }
+        else if (e instanceof BaseException) {
             BaseException be = (BaseException) e;
             msg = String.format(Constants.ERROR_RESPONSE, be.getCode(), be.getDescription());
             logger.info("an error happened in {}, event: {}", pipe, event, e);
