@@ -29,10 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -97,7 +94,7 @@ public class ReleaseController {
 
     @RequestMapping(value = "/releasedownload", produces="application/json;charset=utf-8")
     public ResponseEntity<String> releasedownload(@RequestParam("ids") String ids,
-                             @RequestParam("toEnv") byte toEnv) throws IOException {
+                             @RequestParam("toEnv") byte toEnv) throws NumberFormatException, UnsupportedEncodingException {
 
         List<JSONObject> list_Info = new ArrayList<>();
 
@@ -108,13 +105,17 @@ public class ReleaseController {
                 String[] idArray = ids.split(",");
                 for(String id:idArray){
                     try{
-                        list_Info.add(releaseService.getDownloadInfo(id));
-                    }catch (Exception e){
-                        throw new IOException("ID格式不正确！无法生成下载文件!");
+                        list_Info.add(releaseService.getDownloadInfo(id,toEnv));
+                    }catch (NumberFormatException e){
+                        throw new NumberFormatException("ID格式不正确！无法生成下载文件!");
                     }
                 }
             }else{
-                list_Info.add(releaseService.getDownloadInfo(ids));
+                try{
+                    list_Info.add(releaseService.getDownloadInfo(ids,toEnv));
+                }catch (NumberFormatException e){
+                    throw new NumberFormatException("ID格式不正确！无法生成下载文件!");
+                }
             }
 
         }
@@ -126,7 +127,6 @@ public class ReleaseController {
 
         String downloadStr = JSONArray.toJSONString(list_Info, SerializerFeature.DisableCheckSpecialChar);
 
-        //JSONArray array = JSONArray.parseArray(downloadStr);
 
         downloadStr =new String(downloadStr.getBytes("utf-8"), "ISO8859-1");
 

@@ -8,5 +8,5 @@ import java.util.List;
  * Created by panxl on 2016/5/4.
  */
 public interface ReleaseService {
-    JSONObject getDownloadInfo(String id);
+    JSONObject getDownloadInfo(String id,byte toEnv);
 }

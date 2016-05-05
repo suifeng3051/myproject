@@ -6,8 +6,8 @@ $(document).ready(function(){
 
     var groupId_show = getCookie("groupId_show");
     setTimeout(function(){
-        console.log(groupId_show);
-        console.log($('.affixGroup[groupid='+groupId_show+']').attr("group"));
+/*        console.log(groupId_show);
+        console.log($('.affixGroup[groupid='+groupId_show+']').attr("group"));*/
 
         if($('.affixGroup[groupid='+groupId_show+']').parent().parent().children('a').text()!="所有"){
             $('.affixGroup[groupid='+groupId_show+']').parent().parent().children('i').trigger('click');
@@ -393,15 +393,22 @@ $(document).ready(function(){
 
 
     // 独立显示 resourceGroup
-    //$('#addGroupBtn').click(function (e) {
     $('body').on('click','#addGroupBtn', function(e) {
-        e.preventDefault();
+         e.preventDefault();
         document.getElementById("apiResourceGroupConfig").reset();
         $("#apiResourceInfo1").css("display", "none");
         $("#apiResourceInfo").css("display", "none");
         var resourceGroupParent = $(".affixGroup.current");
         var resourceGroupParentAlias = resourceGroupParent.attr("group");
         var resourceGroupParentId = resourceGroupParent.attr("groupid");
+        var resourceGroupLevel = resourceGroupParent.attr("level");
+
+        console.log(resourceGroupLevel);
+        if(resourceGroupLevel=="3"){
+            alert("当前group无法添加下级group");
+            return ;
+        }
+
 
         var text = resourceGroupParent.text();
         $("#resourceGroupParentAlias").attr("group",resourceGroupParentAlias);

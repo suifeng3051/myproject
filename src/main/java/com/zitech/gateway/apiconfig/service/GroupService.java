@@ -31,4 +31,5 @@ public interface GroupService {
 
     Map<String, Object> getGroupTreeById(int id);
 
-    }
+    List<Group> getAllById(int id);
+}

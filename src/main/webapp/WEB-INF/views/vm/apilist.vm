@@ -37,21 +37,21 @@
                              <i class="icon-chevron-right"></i>
                         <ul class="nav nav-list bs-docs-sidenav" style="display:block">
                             #foreach ($group_lv1 in $!groupTree.get("children") )
-                                 <li class="affixGroup" groupid='$!group_lv1.get("id")' group='$!group_lv1.get("alias")' >
+                                 <li class="affixGroup" groupid='$!group_lv1.get("id")' group='$!group_lv1.get("alias")' level ="1" >
                                  <a href="#">$!group_lv1.get("name")</a>
                                      #if($group_lv1.get("children"))
                                         <i class="icon-chevron-right"></i>
                                     <ul class="nav nav-list bs-docs-sidenav" >
                                         #foreach($group_lv2 in $!group_lv1.get("children"))
-                                                   <li class="affixGroup" groupid='$!group_lv2.get("id")' group='$!group_lv2.get("alias")' >
+                                                   <li class="affixGroup" groupid='$!group_lv2.get("id")' group='$!group_lv2.get("alias")' level ="2" >
                                                        <a href="#">$!group_lv2.get("name")</a>
                                                           #if($group_lv2.get("children"))
                                                               <i class="icon-chevron-right"></i>
                                                           <ul class="nav nav-list bs-docs-sidenav" >
                                                                 #foreach($group_lv3 in $!group_lv2.get("children"))
-                                                                 <li class="affixGroup" groupid='$!group_lv3.get("id")' group='$!group_lv3.get("alias")' >
+                                                                 <li class="affixGroup" groupid='$!group_lv3.get("id")' group='$!group_lv3.get("alias")' level ="3" >
                                                                      <a href="#">$!group_lv3.get("name")</a>
-                                                                 <li>
+                                                                 </li>
                                                                  #end
                                                           </ul>
                                                           #end

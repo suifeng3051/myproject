@@ -41,18 +41,11 @@ public interface ApiService {
 
     /**
      * 保存新增或修改API的结果
-     * @param parseApiResult
-     * @param apiParamUpdate
-     * @param apiParamAdd
-     * @param methodResult
-     * @param methodParamUpdate
-     * @param methodParamAdd
-     * @param structureUpdate
-     * @param structureAdd
-     * @param paramMappingUpdate
-     * @param paramMappingAdd
-     * @param methodMappingId
+     * @param apiObj
+     * @param serviceObj
+     * @param paramObj
      * @param env
+     * @return
      */
     boolean  saveResult(String apiObj,String serviceObj,String paramObj,Byte env);
 
@@ -62,7 +55,24 @@ public interface ApiService {
 
     List<Api> getAllByEnv(Byte env);
 
+    /**
+     * 获取指定group内的API
+     * @param groupId
+     * @param env
+     * @return
+     */
     List<Api> getByGroupIdAndEnv(Integer groupId, Byte env);
+
+
+    /**
+     * 获取指定group自身及其下级的所有API
+     * @param groupId
+     * @param env
+     * @return
+     */
+    List<Api> getAllByGroupIdAndEnv(Integer groupId,Byte env);
+
+
 
     List<Api> getDeletedApi();
 }

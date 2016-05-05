@@ -6,10 +6,13 @@ import com.zitech.gateway.apiconfig.dao.gateway.ApiDAO;
 import com.zitech.gateway.apiconfig.dao.gateway.ParamDAO;
 import com.zitech.gateway.apiconfig.dao.gateway.ServeDAO;
 import com.zitech.gateway.apiconfig.model.Api;
+import com.zitech.gateway.apiconfig.model.Group;
 import com.zitech.gateway.apiconfig.model.Param;
 import com.zitech.gateway.apiconfig.model.Serve;
 import com.zitech.gateway.apiconfig.service.ApiService;
 
+import com.zitech.gateway.apiconfig.service.GroupService;
+import com.zitech.gateway.utils.AppUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,8 @@ public class ApiServiceImpl implements ApiService {
     private ServeDAO serveDAO;
     @Autowired
     private ParamDAO paramDAO;
+    @Autowired
+    private GroupService groupService;
 
 
     @Override
@@ -197,6 +202,24 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public List<Api> getByGroupIdAndEnv(Integer groupId, Byte env) {
         return apiDAO.getByGroupIdAndEnv(groupId, env);
+    }
+
+    @Override
+    public List<Api> getAllByGroupIdAndEnv(Integer groupId, Byte env) {
+
+        List<Api> list_api = new ArrayList<>();
+
+        List<Group> list_group = groupService.getAllById(groupId);
+
+        for(Group group:list_group){
+
+            List<Api> list_singleGroup = getByGroupIdAndEnv(group.getId(),env);
+            list_api.addAll(list_singleGroup);
+
+        }
+
+
+        return list_api;
     }
 
     @Override

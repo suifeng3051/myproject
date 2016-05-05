@@ -28,9 +28,10 @@ public class ReleaseServiceImpl implements ReleaseService {
     private ParamDAO paramDAO;
 
     @Override
-    public JSONObject getDownloadInfo(String id){
+    public JSONObject getDownloadInfo (String id,byte toEnv){
 
         int apiId = Integer.parseInt(id);
+
 
         JSONObject jsonObject = new JSONObject();
 
@@ -41,6 +42,7 @@ public class ReleaseServiceImpl implements ReleaseService {
         jsonObject.put("api",JSONObject.toJSON(api));
         jsonObject.put("serve",JSONObject.toJSON(serve));
         jsonObject.put("param",JSONObject.toJSON(param));
+        jsonObject.put("toEnv",toEnv);
 
         return jsonObject;
 
