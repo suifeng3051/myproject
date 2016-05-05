@@ -42,6 +42,7 @@
         and method = #{method,jdbcType=VARCHAR}
         and version = #{version,jdbcType=INTEGER}
         and env = #{env,jdbcType=INTEGER}
+        and deleted = 0
     </select>
     <select id="getAllApiByEnv" resultMap="BaseResultMap">
         select
@@ -291,4 +292,9 @@
         env = #{env,jdbcType=TINYINT}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="getMaxId" resultType="java.lang.Integer">
+        select max(id) from t_api_n
+    </select>
+
 </mapper>

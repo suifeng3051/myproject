@@ -48,9 +48,8 @@
 
                     <div class="col-sm-1">
                     <button type="button" class="btn btn-primary nextStep" >下一步<span class="glyphicon glyphicon-menu-right"></span></button>
-                    <!--<button type="button" class="btn btn-primary finalSave" flag="1" id="preview" >预览</button>-->
-                    <button type="button" class="btn btn-primary finalSave save" flag="1" id="save" >保存</button>
-                    <!--<button type="button" class="btn btn-primary finalSave save" flag="2" id="saveAndContinue" >保存&继续</button>-->
+                    <button type="button" class="btn btn-primary finalSave save" flag="1" id="save" >保存 <span class="glyphicon glyphicon-ok"></span></button>
+                    <button type="button" class="btn btn-primary " id="goback-btn" style="display:none"><span class="glyphicon glyphicon-menu-left"></span>返回</button>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -202,6 +201,7 @@
                                 <div class="col-sm-4" style="text-align: right;">结果示例</div>
                                 <div class="col-sm-6">
                                     <textarea  rows="20" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API结果示例" >$!results.get('api').resultDemo</textarea>
+                                    <div id="resultDemo-jsonshow"></div>
                                 </div>
                             </div>
 
@@ -223,7 +223,7 @@
                         <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="apiMethodInfo"></div>
                         <form class="form-horizontal" id="methodconfigform">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label" for="namespaceMethodParam">serviceName</label>
+                                <label class="col-sm-4 control-label" for="namespaceMethodParam">service</label>
 
                                 <div  class="col-sm-6">
                                     <input type="text" style="min-width:180px;" class="form-control required" id="namespaceMethodParam" name="service" placeholder="serviceName" value="$!results.get('serve').service">
@@ -279,6 +279,7 @@
                             <div class="col-sm-4">
                                 <input type="button" class="btn btn-success" id="JSONparse-btn" style="margin-bottom:15px;" value="解析" />
                                 <textarea class="form-control" id="json-input" name="requestDemo">$!results.get('param').requestDemo</textarea>
+                                <div class="Canvas" id="json-input-jsonshow" style="display:none"></div>
                             </div>
 
                             <textarea style="display:none" name="requestStructure" id="requestStructure"></textarea>

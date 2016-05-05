@@ -1,5 +1,6 @@
 package com.zitech.gateway.apiconfig.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
@@ -9,4 +10,5 @@ import java.util.List;
  */
 public interface ReleaseService {
     JSONObject getDownloadInfo(String id,byte toEnv);
+    JSONObject loadUploadFile(JSONObject jsonObject);
 }

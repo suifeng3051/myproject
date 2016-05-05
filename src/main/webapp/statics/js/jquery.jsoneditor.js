@@ -19,15 +19,17 @@
 //     $('#mydiv').jsonEditor(myjson, opt);
 
 (function($) {
-    var jsonTree = {};
-    $.fn.jsonEditor = function(json) {
+    var jsonTree = {},isEditeing=false;
+    $.fn.jsonEditor = function(json,isEdite) {
+         isEditeing=isEdite;
         var jsonObject = parse(stringify(json));
         treeJson = getTreeJsonByDataJson(jsonObject);
         JSONEditor($(this), treeJson);
         return jsonTree;
     };
 
-     $.fn.jsonEditorByTreeJson = function(json) {
+     $.fn.jsonEditorByTreeJson = function(json,isEdite) {
+        isEditeing=isEdite;
         treeJson=json;
         JSONEditor($(this), treeJson);
         return jsonTree;
@@ -66,16 +68,16 @@
 
             var item = $('<div>', { 'class': 'item', 'data-path': path }),
                 property = $('<input>', { 'class': 'property', 'readonly': 'true' }),
-                typeSelect = $('<select>', { 'class': 'type' }),
-                typeValue = $('<option value="INT">INT</option><option value="STRING">STRING</option><option value="BOOL">BOOL</option><option value="OBJECT">OBJECT</option><option value="ARRAY">ARRAY</option>'),
-                requireCheckBox = $('<input type="checkbox" value="" checked="true"/>'),
-                descInput=$('<input type="text" />');
+                typeSelect = isEditeing?$('<input>', { 'class': 'type','readonly': 'true'}):$('<select>', { 'class': 'type' }),
+                typeValue = isEditeing?'':$('<option value="INT">INT</option><option value="STRING">STRING</option><option value="BOOL">BOOL</option><option value="OBJECT">OBJECT</option><option value="ARRAY">ARRAY</option>'),
+                requireCheckBox = isEditeing?$('<input>', { 'class': 'type','readonly': 'true'}):$('<input type="checkbox" value="" checked="true"/>'),
+                descInput=isEditeing?$('<input>', { 'class': 'type des-show','readonly': 'true'}):$('<input type="text" />');
             if (isObject(json[key].fields) || isArray(json[key].fields)) {
                 addExpander(item);
             }
             property.val(key).attr('title', key);
-            descInput.val(json[key].des);
-            json[key].require ? requireCheckBox.attr('checked', 'true') : requireCheckBox.removeAttr('checked');
+            descInput.val(json[key].des?json[key].des:'无');
+            isEditeing?(json[key].require ? requireCheckBox.val('是') : requireCheckBox.val('否')):(json[key].require ? requireCheckBox.attr('checked', 'true') : requireCheckBox.removeAttr('checked'));
             typeSelect.append(typeValue).val(json[key].type);
             item.append(property).append(descInput).append(requireCheckBox).append(typeSelect);
             root.append(item);
