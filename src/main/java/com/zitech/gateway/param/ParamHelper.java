@@ -68,13 +68,13 @@ public class ParamHelper {
 
             if (param.getType() == ParamType.OBJECT) {
                 JSONObject fields = struct.getJSONObject(FIELDS);
-                ParamHelper.parseObject(fields, param);
+                parseObject(fields, param);
             } else if (param.getType() == ParamType.ARRAY) {
                 JSONArray fields = struct.getJSONArray(FIELDS);
                 if (fields.size() == 0)
                     throw new LogicalException(Constants.Code.NO_ARRAY_FIELD,
                             "no array field for " + param.getName());
-                ParamHelper.parseArray((JSONObject) fields.get(0), param);
+                parseArray((JSONObject) fields.get(0), param);
             }
         }
     }
@@ -103,13 +103,13 @@ public class ParamHelper {
 
         if (param.getType() == ParamType.OBJECT) {
             JSONObject fields = object.getJSONObject(FIELDS);
-            ParamHelper.parseObject(fields, param);
+            parseObject(fields, param);
         } else if (param.getType() == ParamType.ARRAY) {
             JSONArray fields = object.getJSONArray(FIELDS);
             if (fields.size() == 0)
                 throw new LogicalException(Constants.Code.NO_ARRAY_FIELD,
                         "no array field for " + param.getName());
-            ParamHelper.parseArray((JSONObject) fields.get(0), param);
+            parseArray((JSONObject) fields.get(0), param);
         }
     }
 
