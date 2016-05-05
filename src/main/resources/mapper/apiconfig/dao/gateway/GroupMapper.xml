@@ -149,4 +149,15 @@
         update_time = #{updateTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+
+    <select id="selectAllById" parameterType="java.lang.Integer"  resultMap="BaseResultMap" >
+        SELECT  t2.* FROM t_api_group t1
+        LEFT OUTER JOIN t_api_group t2 ON t2.pid = t1.id
+        where t1.id=#{id,jdbcType=INTEGER} and t2.id is not null
+        union
+        select * from t_api_group
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
 </mapper>

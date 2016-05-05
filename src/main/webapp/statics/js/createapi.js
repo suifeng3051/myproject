@@ -729,6 +729,8 @@ $(document).ready(function(){
             paramObj = null;
             $('#review-jsonparse').hide();
         }
+
+        $('#requestStructureJson').html($('#editor').clone().removeAttr('id'));
     }
 
 
@@ -757,14 +759,23 @@ $(document).ready(function(){
         var str = '', id='';
         for(o in obj){
             id = '';
-            var label = '';
+            var label = '', value = '';
             switch(o){
                 case 'id': continue; break;
 
                 case 'requestType': label = '请求方式'; break;
-                case 'groupId': label = 'API分组'; break;
-                case 'frequencyControl': label = '频率控制'; break;
-                case 'checkInner': label = '区分内外请求'; break;
+                case 'groupId':
+                    label = 'API分组';
+                    value = $('#apiGroup option[value='+obj[o]+']').text();
+                break;
+                case 'frequencyControl':
+                    label = '频率控制';
+                    value = $('#isFreq option[value='+obj[o]+']').text();
+                break;
+                case 'checkInner':
+                    label = '区分内外请求';
+                    value = $('#isInnerOuter option[value='+obj[o]+']').text();
+                break;
                 case 'apiDescription': label = '功能描述'; break;
                 case 'apiScene': label = '使用场景'; break;
                 case 'resultDemo': label = '结果示例'; break;
@@ -777,9 +788,9 @@ $(document).ready(function(){
                 default: label = o; break;
             }
 
-            str += '<div class="form-group"><label class="col-sm-4 control-label">'+
-             label + '</label><div class="col-sm-6"><p class="form-control-static" id="'+ id +'">'+
-             obj[o] + '</p></div></div>';
+            str += '<div class="form-group"><label class="col-sm-3 control-label">'+
+             label + '</label><div class="col-sm-9"><p class="form-control-static" id="'+ id +'">'+
+             (value== '' ? obj[o] : value) + '</p></div></div>';
         }
         return str;
     }

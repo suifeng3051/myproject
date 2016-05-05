@@ -97,8 +97,8 @@ public class GroupServiceImpl implements GroupService {
         }
 
 
-        Map<Integer,Map<String,Object>> groupTreeKeyByID = new HashMap<Integer,Map<String,Object>>();
-        Map<Integer,List<Map<String,Object>>> groupTreeKeyByPID = new HashMap<Integer,List<Map<String,Object>>>();
+        Map<Integer,Map<String,Object>> groupTreeKeyByID = new HashMap<>();
+        Map<Integer,List<Map<String,Object>>> groupTreeKeyByPID = new HashMap<>();
         List<Group>  list_openApiGroup = groupDAO.selectAll();
 
         //为了递归的时候不重新去数据库取
@@ -132,6 +132,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
 
+    @Override
+    public List<Group> getAllById(int id){
+
+        return groupDAO.selectAllById(id);
+
+    }
 
 
 }

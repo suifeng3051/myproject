@@ -165,7 +165,7 @@ public class ApiController {
 
         int code = 0;
         String message = "success";
-        String data = "json验证通过！";
+        String data = "参数验证通过！";
 
         try{
             ParamHelper.validate(jsonStr, ParamHelper.buildTree(struct));
