@@ -12,7 +12,7 @@ $(document).ready(function () {
         window.location.href = "apilist?env=" + env;
       } else if("LogView" == theme) {
         window.location.href = "pipelog?env=" + env;
-      } else if("Users" == theme) {
+      } else if("User" == theme) {
        window.location.href = "user?env=" + env;
      } else if("Manual" == theme) {
         window.location.href = "manual?env=" + env;
@@ -20,7 +20,7 @@ $(document).ready(function () {
         window.location.href = "cachemanage?env=" + env;
      } else if("Instance" == theme) {
         window.location.href = "instancedetail?env=" + env;
-     } else if("RecoverApi" == theme) {
+     } else if("Recover" == theme) {
         window.location.href = "recoverapi?env=" + env;
      } else if ("Client" == theme) {
            window.location.href = "client?env=" + env;

@@ -31,8 +31,8 @@
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">Instance</a></li>
                         #if($!results.get("isAdmin"))
 ##                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">LogView</a></li>
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Users</a></li>
-                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">RecoverApi</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Recover</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">User</a></li>
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">Client</a></li>
                         #end
 ##                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Safety</a></li>
