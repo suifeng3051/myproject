@@ -242,8 +242,8 @@ $(document).ready(function(){
 
             if(flag_check){
                 var check = in_array(groupTree.alias, scopeArr) ? 'checked' : '';
-                console.log(groupTree.alias);
-                console.log(check);
+/*                console.log(groupTree.alias);
+                console.log(check);*/
                 if(check){
                     html += '<div class="level-box"><label> <input name="default_scope" value="'+groupTree.alias+'" type="checkbox" checked="checked" />'+groupTree.name+'</label>';
                 }else{

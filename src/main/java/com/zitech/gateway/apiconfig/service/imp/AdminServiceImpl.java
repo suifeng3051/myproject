@@ -31,8 +31,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public int insert(Admin user) {
-        adminDAO.insert(user);
-        return user.getId();
+        return adminDAO.insert(user);
     }
 
     @Override
