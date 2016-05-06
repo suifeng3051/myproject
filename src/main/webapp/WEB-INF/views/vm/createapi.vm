@@ -311,7 +311,7 @@
 
                         <form class="form-horizontal">
 
-                            <h4 style="margin-top:50px;text-align:center;">API接口配置</h4>
+                            <h4 style="text-align:center;">API接口配置</h4>
                             <div id="final-review-apiconfig"></div>
 
                             <h4 style="margin-top:50px;text-align:center;">内部方法及参数配置</h4>

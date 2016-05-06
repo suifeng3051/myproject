@@ -23,11 +23,10 @@ public class Constants {
     public static Map<String, String> contextMap = new TreeMap<>();
 
     static {
-        contextMap.put("Token", PARAMS_ACCESS_TOKEN);
         contextMap.put("用户ID", PARAMS_USER_ID);
+        contextMap.put("事件ID", PARAMS_EVENT_ID);
+        contextMap.put("用户IP", PARAMS_REQUEST_IP);
         contextMap.put("客户端ID", PARAMS_CLIENT_ID);
         contextMap.put("客户端名称", PARAMS_CLIENT_NAME);
-        contextMap.put("用户IP", PARAMS_REQUEST_IP);
-        contextMap.put("事件ID", PARAMS_EVENT_ID);
     }
 }

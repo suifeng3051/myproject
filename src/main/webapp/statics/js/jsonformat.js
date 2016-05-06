@@ -4,6 +4,13 @@ function repeat(s, count) {
 }
 
 function formatJson(json) {
+
+    try{
+        JSON.parse(json);
+    } catch(e){
+        return json;
+    }
+
     var i = 0,
     il = 0,
     tab = "    ",
