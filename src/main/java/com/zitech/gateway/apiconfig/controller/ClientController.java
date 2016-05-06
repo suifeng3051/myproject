@@ -47,7 +47,7 @@ public class ClientController {
      */
     @RequestMapping(value="/add/client",produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String addOauthClient(@RequestParam("client") String clientStr)
+    public String addOauthClient(@RequestParam("oauthclient") String clientStr)
     {
         ApiResult<String> apiResult = new ApiResult<>(0, "success");
 
