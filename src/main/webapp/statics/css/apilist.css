@@ -939,8 +939,8 @@ form.bs-docs-example {
 
 .apiElement { padding:6px 15px;}
 .apiElement:hover { background-color:#f5f5f5; }
-.apiElement p.apiElement-des { font-size:12px; color:#bfbfbf; margin-bottom:0;}
-
+.apiElement .apiElement-des { font-size:12px; color:#bfbfbf; margin-bottom:0;}
+.list-operations { text-align:right; }
 
 /* Responsive
 -------------------------------------------------- */

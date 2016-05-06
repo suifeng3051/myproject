@@ -40,18 +40,20 @@
                 <!-- List group -->
                 <ul class="list-group" id="listAPI">
                     #foreach ($!apiElement in $!results.get("apilists"))
-                            <li class="list-group-item apiElement ">
-                                <a href="#">$!apiElement.namespace/$!apiElement.method/$!apiElement.version</a>
-                                <input style="float:right" class="select" apiContent="$!{apiElement.namespace}/$!{apiElement.method}/$!{apiElement.version}"  apiId="$!apiElement.id" type="checkbox">
-                                <p class="row releastElement-des">
-                                    <span class="col-sm-8">$!apiElement.apiDescription</span>
-                                    <span class="col-sm-4">
-                                        #if('GET' == $!apiElement.requestType)
-                                        GET
-                                        #elseif('POST' == $!apiElement.requestType)
-                                        POST
-                                        #end
+                            <li class="list-group-item releaseElement ">
+                                <p class="row">
+                                    <a href="#" class="col-sm-8">$!apiElement.namespace/$!apiElement.method/$!apiElement.version</a>
+                                    <span class="col-sm-2 releastElement-des">
+                                            #if('GET' == $!apiElement.requestType)
+                                            GET
+                                            #elseif('POST' == $!apiElement.requestType)
+                                            POST
+                                            #end
                                     </span>
+                                    <span class="col-sm-2">
+                                        <input  class="select" apiContent="$!{apiElement.namespace}/$!{apiElement.method}/$!{apiElement.version}"  apiId="$!apiElement.id" type="checkbox">
+                                    </span>
+                                    <span class="col-sm-12 releastElement-des">$!apiElement.apiDescription</span>
                                 </p>
                            </li>
                     #end
