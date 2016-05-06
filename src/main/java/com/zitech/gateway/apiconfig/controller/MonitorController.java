@@ -1,7 +1,7 @@
 package com.zitech.gateway.apiconfig.controller;
 
-import com.zitech.gateway.apiconfig.model.CarmenUser;
-import com.zitech.gateway.apiconfig.service.ICarmenUserService;
+import com.zitech.gateway.apiconfig.model.Admin;
+import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.cache.RedisOperate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by dingdongsheng on 15/9/5.
- */
+
 
 @Controller
 public class MonitorController {
@@ -29,7 +27,7 @@ public class MonitorController {
     @Resource
     RedisOperate redisOperate;
     @Resource
-    ICarmenUserService iCarmenUserService;
+    private AdminService adminService;
 
     /**
      * 监控页面
@@ -45,41 +43,22 @@ public class MonitorController {
         String userName = null;
         Map<String, Object> results = new HashMap<>();
         try {
-            String userKey = request.getSession().getAttribute("username").toString();
-            userName = redisOperate.getStringByKey(userKey);
-            redisOperate.set("username", userName, 60*60); // 一小时
+            userName = adminService.getUserNameFromSessionAndRedis(request);
+            if (userName == null) {
+                return new ModelAndView("redirect:/unifyerror", "cause", "test");
+            }
             results.put("data", userName);
             if(!StringUtils.isEmpty(namespace)) {
                 String api = namespace + "." + name + "." + version;
                 results.put("apiName", api);
             }
-
-
         } catch (Exception e) {
             logger.warn("fail to get session", e);
         }
-        if(null == userName) {
-            return new ModelAndView("redirect:/unifyerror", "cause", "test");
-        }
+
         results.put("env", env);
-        Boolean isAdmin = isAdministrator(userName);
-        results.put("isAdmin", isAdmin);
+        results.put("isAdmin", adminService.isAdmin(userName));
         results.put("user", userName);
         return new ModelAndView("monitor", "results", results);
-    }
-
-    public Boolean isAdministrator(String userName) {
-
-        try {
-            List<CarmenUser> user = iCarmenUserService.getByUserName(userName);
-            for(CarmenUser carmenUser : user) {
-                if(1 == carmenUser.getUserGroup()) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            logger.error("can not get uesrs.", e);
-        }
-        return false;
     }
 }

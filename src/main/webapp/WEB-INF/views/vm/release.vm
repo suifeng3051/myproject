@@ -22,47 +22,40 @@
 
 
 
-<div class="container-fluid">
+<div class="container-fluid release-page">
     <div class="row">
-        <div class="col-md-2">
-
-        </div>
-        <div class="col-md-8">
-            <div class="panel panel-primary" style="margin-top:58px;min-height:460px;">
+            <div class="panel panel-primary" style="margin-top:88px;min-height:460px;">
                 <div class="panel-heading">API 列表
                     <button type="button" class="btn btn-primary" flag="1" id="selectAll" style="float:right;margin:-7px -15px 0 0; border:0px;">全选</button>
+#*
                     <button type="button" class="btn btn-primary" flag="1" id="sureReleasedApi" style="float:right;margin:-7px -1px 0 0; border:0px;">确定发布</button>
-                    <button type="button" class="btn btn-primary" flag="1" id="uploadApi" style="float:right;margin:-7px -1px 0 0; border:0px;">上传</button>
-                    <button type="button" class="btn btn-primary" flag="1" id="releaseApi" style="float:right;margin:-7px -1px 0 0; border:0px;">下载</button>
-                    #if($!results.get("isAdmin"))
+                                        #if($!results.get("isAdmin"))
                         <button type="button" class="btn btn-primary" id="physicalDeleteApi" style="float:right;margin:-7px -1px 0 0; border:0px;">物理删除</button>
                     #end
+*#
+                    <button type="button" class="btn btn-primary" flag="1" id="uploadApi" style="float:right;margin:-7px -1px 0 0; border:0px;">上传</button>
+                    <button type="button" class="btn btn-primary" flag="1" id="releaseApi" style="float:right;margin:-7px -1px 0 0; border:0px;">下载</button>
+
                 </div>
                 <!-- List group -->
                 <ul class="list-group" id="listAPI">
                     #foreach ($!apiElement in $!results.get("apilists"))
-                        #if(2 == $!apiElement.migrateFlag)
-                            <li class="list-group-item apiElement list-group-item-warning">
-                        #else
-                            <li class="list-group-item apiElement ">
-                        #end
-                            #if(2 == $!apiElement.migrateFlag)
-                                <span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="正在发布" class="icon-spinner icon-spin releasing"></span>
-                                <a href="#">$!apiElement.namespace.$!apiElement.name.$!apiElement.version</a>
-                            #else
-                                <a href="#">$!apiElement.namespace.$!apiElement.name.$!apiElement.version</a>
-                            #end
-                            <!--<a href="#" data-toggle="tooltip" data-placement="top" title="删除" style="float:right" >-->
-                                <!--<span apiID="$!apiElement.id" class="glyphicon glyphicon-trash deleteIcon"></span>-->
-                            <!--</a>-->
-                            #if(2 == $!apiElement.migrateFlag)
-                                <input style="float:right" class="select" apiContent="$!{apiElement.namespace}.$!{apiElement.name}.$!{apiElement.version}" flag="2" apiId="$!apiElement.id" type="checkbox" checked disabled>
-                            #elseif(3 == $!apiElement.migrateFlag)
-                                <input style="float:right" class="select" apiContent="$!{apiElement.namespace}.$!{apiElement.name}.$!{apiElement.version}" flag="3" apiId="$!apiElement.id" type="checkbox" disabled>
-                            #else
-                                <input style="float:right" class="select" apiContent="$!{apiElement.namespace}.$!{apiElement.name}.$!{apiElement.version}" flag="1" apiId="$!apiElement.id" type="checkbox">
-                            #end
-                        </li>
+                            <li class="list-group-item releaseElement ">
+                                <p class="row">
+                                    <a href="#" class="col-sm-8">$!apiElement.namespace/$!apiElement.method/$!apiElement.version</a>
+                                    <span class="col-sm-2 releastElement-des">
+                                            #if('GET' == $!apiElement.requestType)
+                                            GET
+                                            #elseif('POST' == $!apiElement.requestType)
+                                            POST
+                                            #end
+                                    </span>
+                                    <span class="col-sm-2">
+                                        <input  class="select" apiContent="$!{apiElement.namespace}/$!{apiElement.method}/$!{apiElement.version}"  apiId="$!apiElement.id" type="checkbox">
+                                    </span>
+                                    <span class="col-sm-12 releastElement-des">$!apiElement.apiDescription</span>
+                                </p>
+                           </li>
                     #end
                 </ul>
             </div>
@@ -79,7 +72,7 @@
         <div class="modal-content" style="margin-top:-100px;">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myReleaseLabel">发布API</h4>
+                <h4 class="modal-title" id="myReleaseLabel">下载API</h4>
             </div>
             <div class="modal-body">
                 <form class="form-inline">
@@ -118,7 +111,7 @@
             <div class="alert alert-danger" role="alert" style="margin-bottom: -1px;display:none;" id="apiReleaseInfo"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="sureRelease">确定</button>
+                <button type="button" class="btn btn-primary" id="sureRelease">下载</button>
             </div>
         </div>
     </div>
@@ -133,50 +126,23 @@
                 <h4 class="modal-title" id="myUploadLabel">发布API</h4>
             </div>
             <div class="modal-body">
-                <form target="_self" action="upload" runat="server" method="post" enctype="multipart/form-data">
-                    <div class="form-group">
+                <form target="_self" id="uploadForm" url="releaseupload"   method="post" enctype="multipart/form-data">
+                    <div class="form-group" id="uploadFormBody">
                         <label for="file">File input</label>
                         <input type="file" name="file" id="file">
                     </div>
-                    <button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left:80%;">取消</button>
-                    <button type="submit" class="btn btn-primary">确定</button>
-                </form>
+                <div id="uploadResultTable">
 
-                <div class="alert alert-danger" role="alert" style="margin-bottom: -1px;display:none;" id="apiUploadInfo"></div>
-                <div class="modal-footer">
-                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>-->
-                    <!--<button type="button" class="btn btn-primary" id="sureUpload">确定</button>-->
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!--  Sure Release Modal -->
-<div class="modal fade" id="mySureReleaseModal" tabindex="-1" role="dialog" aria-labelledby="mySureReleaseLabel" aria-hidden="true">
-    <div class="modal-dialog" style="margin-top:160px;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="mySureReleaseLabel">修改白名单</h4>
-            </div>
-            <div class="modal-body">
-                <form class="form-inline SureReleaseForm">
-                    <div class="form-group radio">
-                        <input class="yesReleaseRadio" type="radio" name="Release" id="yesRelease" value="1" checked>
-                        <label><p class="text-primary">确认API发布已经成功</p></label>
-                        <input class="noReleaseRadio" type="radio" name="Release" id="noRelease" value="2">
-                        <label><p class="text-primary">取消正在发布的API</p></label>
-                    </div>
+
+              #*  <div class="alert alert-danger" role="alert" style="margin-bottom: -1px;display:none;" id="apiUploadInfo"></div>*#
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" >取消</button>
+                    <a id="sureUpload" class="btn btn-primary">上传</a>
+                </div>
                 </form>
-
             </div>
-            <div class="alert alert-danger" role="alert" style="margin-bottom: -1px;display:none;" id="apiRelease1Info"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="sureIfRelease">确定</button>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -190,6 +156,7 @@
 <script src="/statics/js/jquery.validate.min.js"></script>
 <script src="/statics/js/jquery.metadata.js"></script>
 <script src="/statics/js/jquery.dataTables.min.js"></script>
+<script src="/statics/js/jquery.form.js"></script>
 <script src="/statics/js/icheck.js"></script>
 <script src="/statics/js/release.js"></script>
 <script src="/statics/js/base.js"></script>

@@ -28,8 +28,6 @@ public class MapReduceDao {
     public MapReduceResults<CountResult> command(Query query, String inputCollectionName
     		, String mapFunction, String reduceFunction){
     	
-    	//CommandResult result = mongoTemplate.executeCommand(command);
-    	
     	MapReduceResults<CountResult> result = mongoTemplate.mapReduce(query
     			, inputCollectionName, mapFunction, reduceFunction, CountResult.class);
     	

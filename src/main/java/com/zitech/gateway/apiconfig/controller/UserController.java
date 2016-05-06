@@ -1,15 +1,14 @@
 package com.zitech.gateway.apiconfig.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.zitech.gateway.apiconfig.model.CarmenUser;
-import com.zitech.gateway.apiconfig.service.ICarmenUserService;
+import com.zitech.gateway.apiconfig.model.Admin;
+import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.utils.AppUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,9 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by dingdongsheng on 15/9/5.
- */
 
 @Controller
 public class UserController {
@@ -36,10 +32,9 @@ public class UserController {
 
     // Resource 默认按照名称进行装配
     @Resource
-    ICarmenUserService iCarmenUserService;
+    AdminService adminService;
     @Resource
     RedisOperate redisOperate;
-
 
     /**
      * 用户管理页面
@@ -50,25 +45,36 @@ public class UserController {
     public ModelAndView user(@RequestParam("env") String env,
                              HttpServletRequest request) {
         String userName = null;
-        Map<String, Object> hashMap = new HashMap();
+        Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("env", env);
         try {
-            String userKey = request.getSession().getAttribute("username").toString();
-            userName = redisOperate.getStringByKey(userKey);
-            redisOperate.set("username", userName, 60*60); // 一小时
-            List<CarmenUser> allList = iCarmenUserService.getAllList();
+            userName = adminService.getUserNameFromSessionAndRedis(request);
+            if(null == userName) {
+                return new ModelAndView("redirect:/unifyerror", "cause", "userName is null.");
+            }
+            List<Admin> allList = adminService.getAllList();
             hashMap.put("data", userName);
             hashMap.put("allList", allList);
         } catch (Exception e) {
             logger.warn("fail to get session", e);
         }
-        if(null == userName) {
-            return new ModelAndView("redirect:/unifyerror", "cause", "userName is null.");
-        }
-        Boolean isAdmin = isAdministrator(userName);
+
+        Boolean isAdmin = adminService.isAdmin(userName);
         hashMap.put("isAdmin", isAdmin);
         hashMap.put("user", userName);
         return new ModelAndView("user", "results", hashMap);
+    }
+
+
+    /**
+     * 统一错误处理界面
+     *
+     * @return
+     */
+    @RequestMapping("/unifyerror")
+    public ModelAndView unifyError() {
+
+        return new ModelAndView("unifyError");
     }
 
     /**
@@ -85,7 +91,7 @@ public class UserController {
         String status = "fail";
 
         try {
-            List<CarmenUser> user = iCarmenUserService.getByUserName(userName);
+            List<Admin> user = adminService.getByUserName(userName);
             String result = JSON.toJSONString(user.get(0));
             return result;
         } catch (Exception e) {
@@ -102,28 +108,28 @@ public class UserController {
         return status;
     }
 
-    /**
-     * 判断当前登录用户是不是管理员
-     * @param userName 当前登录用户名
-     * @return 是管理员返回true，不是返回false
-     */
-    @RequestMapping(value = "/isadministrator", produces="application/text;charset=utf-8")
-    @ResponseBody
-    public Boolean isAdministrator(@RequestParam("userName") String userName) {
-
-        try {
-            List<CarmenUser> user = iCarmenUserService.getByUserName(userName);
-            for(CarmenUser carmenUser : user) {
-                if(1 == carmenUser.getUserGroup()) {
-                    return true;
-                }
-            }
-
-        } catch (Exception e) {
-            logger.error("can not get uesrs.", e);
-        }
-        return false;
-    }
+//    /**
+//     * 判断当前登录用户是不是管理员
+//     * @param userName 当前登录用户名
+//     * @return 是管理员返回true，不是返回false
+//     */
+//    @RequestMapping(value = "/isadministrator", produces="application/text;charset=utf-8")
+//    @ResponseBody
+//    public Boolean isAdministrator(@RequestParam("userName") String userName) {
+//
+//        try {
+//            List<Admin> user = adminService.getByUserName(userName);
+//            for(Admin carmenUser : user) {
+//                if(1 == carmenUser.getUserGroup()) {
+//                    return true;
+//                }
+//            }
+//
+//        } catch (Exception e) {
+//            logger.error("can not get uesrs.", e);
+//        }
+//        return false;
+//    }
 
 
     /**
@@ -137,7 +143,7 @@ public class UserController {
         String status = "fail";
 
         try {
-            iCarmenUserService.deleteById(Integer.valueOf(id));
+            adminService.deleteById(Integer.valueOf(id));
             status = "success";
         } catch (NumberFormatException e) {
             logger.error("can not delete user.", e);
@@ -167,19 +173,22 @@ public class UserController {
                           @RequestParam("userGroup") String userGroup,
                           HttpServletRequest request) {
         String status = "fail";
-
-
         try {
-            CarmenUser user = new CarmenUser();
-            user.setUserName(userName);
-            user.setUserGroup(Integer.valueOf(userGroup));
-            user.setCreateTime(new Date());
-            String userKey = request.getSession().getAttribute("username").toString();
-            userName = redisOperate.getStringByKey(userKey);
-            user.setCreator(userName);
+            if (adminService.getByUserName(userName).size() == 0) {
+                Admin user = new Admin();
+                user.setUserName(userName);
+                user.setUserGroup(Integer.valueOf(userGroup));
+                user.setCreateTime(new Date());
+                user.setPassword(AppUtils.MD5("666666"));
+                user.setIsDelete("n");
+                String userKey = request.getSession().getAttribute("username").toString();
+                userName = redisOperate.getStringByKey(userKey);
+                user.setCreator(userName);
 
-            iCarmenUserService.insert(user);
-            status = "success";
+                adminService.insert(user);
+                status = "success";
+            }
+
         } catch (NumberFormatException e) {
             logger.error("can not delete user.", e);
         } catch (Exception e) {
@@ -207,8 +216,8 @@ public class UserController {
         objectMap.put("result",false);
         objectMap.put("to", "/user/login");
         password = AppUtils.MD5(password);
-        List<CarmenUser> users = iCarmenUserService.getByUserName(username);
-        for (CarmenUser u:users){
+        List<Admin> users = adminService.getByUserName(username);
+        for (Admin u:users){
             if (u.getPassword().equals(password)){
                 HttpSession httpSession = request.getSession(true);
                 String nameKey = "gateway_login_" + username;
@@ -245,7 +254,7 @@ public class UserController {
         if(null == userName) {
             return new ModelAndView("redirect:/unifyerror", "cause", "test");
         }
-        Boolean isAdmin = isAdministrator(userName);
+        Boolean isAdmin = adminService.isAdmin(userName);
         results.put("isAdmin", isAdmin);
         results.put("user", userName);
         results.put("env", env);
@@ -263,23 +272,23 @@ public class UserController {
         HttpSession httpSession = request.getSession(true);
         String username = (String)httpSession.getAttribute("username");
         username = username.replaceAll("gateway_login_","");
-        List<CarmenUser> users = iCarmenUserService.getByUserName(username);
+        List<Admin> users = adminService.getByUserName(username);
         if (users==null||users.size()<=0){
             objectMap.put("result",false);
             objectMap.put("message", "用户不存在");
             return JSON.toJSONString(objectMap);
         }
-        CarmenUser user = users.get(0);
+        Admin user = users.get(0);
         if (!AppUtils.MD5(oldpwd).equals(user.getPassword())){
             objectMap.put("result",false);
             objectMap.put("message", "密码错误");
             return JSON.toJSONString(objectMap);
         }
         password = AppUtils.MD5(password);
-        CarmenUser newuser = new CarmenUser();
+        Admin newuser = new Admin();
         newuser.setPassword(password);
         newuser.setUserName(username);
-        iCarmenUserService.updatePwd(newuser);
+        adminService.updatePwd(newuser);
         return JSON.toJSONString(objectMap);
     }
 }

@@ -33,80 +33,24 @@ public class MonitorService implements IMonitorService {
 	private static final Logger logger = LoggerFactory.getLogger(MonitorService.class);
 
 	
-	/* (non-Javadoc)
-	 * @see com.zitech.gateway.monitor.api.IMonitorService#saveGatewayInfo(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public void saveGatewayInfo(String group, String api, String host,
-			String rt, String isSuccess, String contents) {
-		
-		Gateway gateway = new Gateway();
-		try{
-			String time = DateUtil.getTimeNumber();
-			//Integer rand = RandomUtils.nextInt(100);
-			gateway.setGroup(group);
-			gateway.setApi(api);
-			gateway.setHost(host);
-			gateway.setRt(rt);//毫秒
-			gateway.setIsSuccess(isSuccess);
-			gateway.setContents(contents);
-			gateway.setMinute(time.substring(0,time.length()-2));//记录到分
-			gateway.setTime(time);
-			
-			dao.add(gateway);
-		}catch(Exception ex){
-			//为了不影响网关的正常使用，这里将异常内吞，并记录error日志
-			logger.error("网关数据存储异常：{}",ex);
-			logger.error("网关数据存储异常,网关数据：{}",gateway.toString());
-		}
-	}
-
-
-	/* (non-Javadoc)
-	 * @see com.zitech.gateway.monitor.api.IMonitorService#saveGatewayInfo(com.zitech.gateway.monitor.entity.Gateway)
-	 */
-	@Override
-	public void saveGatewayInfo(Gateway gateway) {
-		try{
-			String time = DateUtil.getTimeNumber();
-
-			gateway.setMinute(time.substring(0,time.length()-2));//记录到分
-			gateway.setTime(time);
-			
-			dao.add(gateway);
-		}catch(Exception ex){
-			//为了不影响网关的正常使用，这里将异常内吞，并记录error日志
-			logger.error("网关数据存储异常：{}",ex);
-			logger.error("网关数据存储异常,网关数据：{}",gateway.toString());
-		}
-		
-	}
-	
-
-	public void saveMonitorData(RequestEvent event, long all, long call,
-			long pre, long redis, String isSuccess, String exceptionName) {
+	public void saveMonitorData(String path, long rt, long serveRt, int status, String other) {
 		Gateway gateway = new Gateway();
 		try {
-			gateway.setApi(event.getNamespace()+event.getMethod());
-			gateway.setCallT(String.valueOf(call));
-			gateway.setContents(event.getResultStr());
-			gateway.setGroup(event.getNamespace());
-			gateway.setHost(AppUtils.getHostName());
-			gateway.setIsSuccess(isSuccess);
-			gateway.setPreT(String.valueOf(pre));
-			gateway.setRedisT(String.valueOf(redis));
-			gateway.setRt(String.valueOf(all));
-			gateway.setExceptionName(exceptionName);
-			
-			String time = DateUtil.getTimeNumber();
-			gateway.setMinute(time.substring(0,time.length()-2));//记录到分
-			gateway.setTime(time);
-			
+			gateway.setApi(path);
+            gateway.setHost(AppUtils.getHostName());
+
+            String time = DateUtil.getTimeNumber();
+            gateway.setMinute(time.substring(0,time.length()-2));//记录到分
+            gateway.setTime(time);
+
+			gateway.setRt(String.valueOf(rt));
+            gateway.setServeRt(String.valueOf(serveRt));
+            gateway.setStatus(String.valueOf(status));
+            gateway.setOther(other);
+
 			dao.add(gateway);
 		} catch (Exception e) {
-			//为了不影响网关的正常使用，这里将异常内吞，并记录error日志
-			logger.error("网关数据存储异常：{}",e);
-			logger.error("网关数据存储异常,网关数据：{}",gateway.toString());
+			logger.error("网关数据存储异常, 网关数据：{}", gateway.toString(), e);
 		}
 		
 	}

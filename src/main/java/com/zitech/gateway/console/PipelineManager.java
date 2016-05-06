@@ -26,31 +26,28 @@ public class PipelineManager {
 
     private String threadNode;
     private String threadAllNode;
-    private String threadPreNode;
-    private String threadDubboNode;
+    private String threadPoolNode;
 
     private String requestNode;
-    private String requestPreNode;
+    private String requestAllNode;
     private String requestHttpAsyncNode;
-    private String requestDubboSyncNode;
 
     private String iNode;
 
     private int threadAllCount;
-    private int threadPreCount;
-    private int threadDubboCount;
+    private int threadPoolCount;
 
-    private int requestPreCount;
+    private int requestAllCount;
     private int requestHttpAsyncCount;
-    private int requestDubboSyncCount;
+
 
     private PipelineManager(String instanceNode) {
         this.threadNode = instanceNode + Constants.THREAD_NODE;
         this.threadAllNode = this.threadNode + Constants.THREAD_ALL_NODE;
-        this.threadPreNode = this.threadNode + Constants.THREAD_PRE_NODE;
+        this.threadPoolNode = this.threadNode + Constants.THREAD_POOL_NODE;
 
         this.requestNode = instanceNode + Constants.REQUEST_NODE;
-        this.requestPreNode = this.requestNode + Constants.REQUEST_PRE_NODE;
+        this.requestAllNode = this.requestNode + Constants.REQUEST_ALL_NODE;
         this.requestHttpAsyncNode = this.requestNode + Constants.REQUEST_HTTP_ASYNC;
 
         this.iNode = instanceNode + "/i";
@@ -83,20 +80,20 @@ public class PipelineManager {
                         threadAllCount = tmp;
                     }
 
-                    tmp = pipeline.getPreThreadCount();
-                    if (tmp != threadPreCount) {
+                    tmp = pipeline.getThreadCount();
+                    if (tmp != threadPoolCount) {
                         client.setData()
                                 .inBackground()
-                                .forPath(threadPreNode, String.valueOf(tmp).getBytes());
-                        threadPreCount = tmp;
+                                .forPath(threadPoolNode, String.valueOf(tmp).getBytes());
+                        threadPoolCount = tmp;
                     }
 
-                    tmp = pipeline.getPreTaskCount();
-                    if (tmp != requestPreCount) {
+                    tmp = pipeline.getTaskCount();
+                    if (tmp != requestAllCount) {
                         client.setData()
                                 .inBackground()
-                                .forPath(requestPreNode, String.valueOf(tmp).getBytes());
-                        requestPreCount = tmp;
+                                .forPath(requestAllNode, String.valueOf(tmp).getBytes());
+                        requestAllCount = tmp;
                     }
 
                     tmp = pipeline.getHttpAsyncTask();
@@ -111,7 +108,7 @@ public class PipelineManager {
                     logger.error("update pipe monitor data error", e);
                 }
             }
-        }, 0, 2 * 1000);
+        }, 0, 10 * 1000);
     }
 
     public String readNodes() throws Exception {
@@ -145,15 +142,11 @@ public class PipelineManager {
     }
 
     public void createNodes() {
-        //this.createNode(threadNode);
         this.createNode(threadAllNode, "0");
-        this.createNode(threadPreNode, "0");
-        this.createNode(threadDubboNode, "0");
+        this.createNode(threadPoolNode, "0");
 
-        //this.createNode(requestNode);
-        this.createNode(requestPreNode, "0");
+        this.createNode(requestAllNode, "0");
         this.createNode(requestHttpAsyncNode, "0");
-        this.createNode(requestDubboSyncNode, "0");
     }
 
     public void createNode(String node) {

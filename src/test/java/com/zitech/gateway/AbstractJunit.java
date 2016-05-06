@@ -24,7 +24,7 @@ import javax.annotation.Resource;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:spring-test.xml"})
-@TransactionConfiguration(defaultRollback=true,transactionManager="txManagerCommon")
+@TransactionConfiguration(defaultRollback=true,transactionManager="txManagerGateway")
 @ActiveProfiles("dev")
 public abstract class AbstractJunit {
 

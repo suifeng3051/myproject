@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class AppConfig {
 
     @Value("${application.env}")
-    public byte env;
+    public Byte env;
 
     @Value("${application.name}")
     public String appName;
@@ -38,6 +38,10 @@ public class AppConfig {
 
     public boolean isDevMode() {
         return env == 1;
+    }
+
+    public boolean isPrdMode() {
+        return env == 3;
     }
 
 }

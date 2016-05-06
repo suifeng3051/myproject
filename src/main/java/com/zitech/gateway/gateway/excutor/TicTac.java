@@ -7,59 +7,44 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class TicTac {
 
     private static Logger logger = LoggerFactory.getLogger(TicTac.class);
 
-    private Map<String, STEntry> entryMap = new HashMap<>();
+    private Map<String, Entry> entryMap = new HashMap<>();
 
-    /**
-     * record starting point
-     */
     public void tic(String name) {
         if (entryMap.get(name) != null) {
             logger.error(name + " already exists");
             return;
         }
-        entryMap.put(name, new STEntry(System.currentTimeMillis(), 0));
+        entryMap.put(name, new Entry(System.nanoTime(), 0));
     }
 
-    /**
-     * record ending point
-     */
     public void tac(String name) {
-        STEntry entry = entryMap.get(name);
+        Entry entry = entryMap.get(name);
         if (entry == null) {
             logger.error(name + " does not exist");
             return;
         }
-        entry.setEndThreadId(Thread.currentThread().getId());
-        entry.setEnd(System.currentTimeMillis());
+        entry.setEnd(System.nanoTime());
     }
 
-    public Map<String, STEntry> getEntryMap() {
+    public Map<String, Entry> getEntryMap() {
         return entryMap;
     }
 
-    /**
-     * get time by name
-     */
-    public STEntry get(String name) {
+    public Entry get(String name) {
         return entryMap.get(name);
     }
 
-    /**
-     * get elapsed time by name
-     */
     public long elapsed(String name) {
-        STEntry entry = entryMap.get(name);
-        if (entry != null) {
-            if (entry.getEnd() != 0) {
-                return entry.getEnd() - entry.getStart();
-            }
-        }
-        return 0;
+        Entry entry = entryMap.get(name);
+        if (entry != null)
+            return entry.getElapsed();
+        return -1;
     }
 
     @Override
@@ -67,28 +52,20 @@ public class TicTac {
         return JSON.toJSONString(entryMap);
     }
 
-    public class STEntry {
-
-        private long startThreadId;
-        private long endThreadId;
+    public class Entry {
         private long start;
         private long end;
 
-        public STEntry(long start, long end) {
+        public Entry(long start, long end) {
             this.start = start;
             this.end = end;
-            this.startThreadId = Thread.currentThread().getId();
         }
 
         public long getElapsed() {
-            if (end == 0) {
+            if (end == 0 || start == 0) {
                 return -1;
             }
-            return end - start;
-        }
-
-        public void setEndThreadId(long endThreadId) {
-            this.endThreadId = endThreadId;
+            return TimeUnit.NANOSECONDS.toMillis(end - start);
         }
 
         public long getStart() {
