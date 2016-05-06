@@ -196,8 +196,8 @@ public class RequestEvent {
                 ", ip='" + (ip == null ? "" : ip) + '\'' +
                 ", path='" + namespace + "/" + version + "/" + method + '\'' +
                 ", step=" + step +
-                ", body='" + PipeHelper.removeSpaces(body) + '\'' +
-                ", resultStr='" + PipeHelper.removeSpaces(resultStr) + '\'' +
+                ", body='" + PipeHelper.compactJson(body) + '\'' +
+                ", resultStr='" + PipeHelper.compactJson(resultStr) + '\'' +
                 ", exception=" + (exception == null ? "" : exception.toString()) +
                 '}';
     }

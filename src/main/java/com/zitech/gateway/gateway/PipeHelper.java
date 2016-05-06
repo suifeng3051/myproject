@@ -37,7 +37,7 @@ public class PipeHelper {
         return httpHeaders;
     }
 
-    public static String removeSpaces(String json) {
+    public static String compactJson(String json) {
         if (StringUtils.isEmpty(json))
             return "";
 
@@ -71,5 +71,11 @@ public class PipeHelper {
         }
 
         return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        String s = "sadfsadf\" adfsadfsd\\ adsfsadfsdf";
+        s = compactJson(s);
+        System.out.println(s);
     }
 }
