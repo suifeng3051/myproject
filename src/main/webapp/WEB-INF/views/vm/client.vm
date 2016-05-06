@@ -61,8 +61,7 @@
                     <span class="glyphicon glyphicon-plus"></span>新建
                 </button>
             </div>
-            <!-- 选择配置JAVA还是PHP -->
-            <div class="userconfig">
+             <div class="userconfig">
                 <div class="alert alert-danger" role="alert" style="margin-bottom: -1px;display:none;" id="OAuthClientConfigInfo"></div>
                 <table id="users" class="table table-striped table-bordered" >
                     <thead>
@@ -148,41 +147,6 @@
 
                             </div>
 
-
-
-
-
-                            <!-- 该标签<div id="defaultScopeArea"></div>内的静态代码放入上面对应位置 -->
-
-#*                            <div id="defaultScopeArea" class="col-sm-9 checkbox">
-                                <div class="level-box">
-                                    <label> <input name="default_scope" value="all" type="checkbox" />all</label>
-
-                                    <div class="level-box">
-                                        <label> <input name="default_scope" value="scene" type="checkbox" >scene</label>
-                                        <div class="level-box">
-                                            <label  class="col-sm-3"> <input name="default_scope" value="testA" type="checkbox"  />testA</label>
-                                            <label class="col-sm-3"> <input name="default_scope" value="testB" type="checkbox" />testB</label>
-                                            <label class="col-sm-3"> <input name="default_scope" value="testc" type="checkbox" />testc</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="level-box">
-                                        <label> <input name="default_scope" value="scene" type="checkbox" />scene</label>
-                                        <div class="level-box">
-                                            <label class="col-sm-3"> <input name="default_scope" value="testB" type="checkbox" />testB</label>
-                                            <label class="col-sm-3"> <input name="default_scope" value="testc" type="checkbox" />testc</label>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="level-box">
-                                    <label> <input name="default_scope" value="testD" type="checkbox" />testD</label>
-                                </div>
-                            </div>*#
-
-                            <!-- END Example -->
 
                         </div>
                     </div>
