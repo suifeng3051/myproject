@@ -331,6 +331,9 @@ $(document).ready(function(){
 
             setTimeout(function(){
                 jsonProcess('requestDemoJson', $('#json-input').text());
+                if($('#resultDemo-finalView pre').length < 1 ){
+                    $('#resultDemo-finalView').wrapInner('<pre />');
+                }
             }, 800);
 
         } else {  // 请求方式 GET
@@ -391,7 +394,17 @@ $(document).ready(function(){
 //                    obj[o] = html_encode(obj[o]+''); // 防止 json 字符串中有HTML标签，在预览写入页面时，浏览器当正常文档结构解析
                 break;
 
-                case 'innerParams': label = '内部参数'; break;
+                case 'innerParams':
+                   label = '内部参数';
+
+                    var arr = obj[o];
+                    arr = arr.split(' ');
+                    for(var i=0;i<arr.length; i++){
+                        arr[i] = $('#serviceParamList input[value='+arr[i]+']').parent().text();
+                    }
+                    value = arr.join(', ');
+                    console.log(obj)
+                break;
 
                 case 'requestDemo':
                     label = '请求示例';
