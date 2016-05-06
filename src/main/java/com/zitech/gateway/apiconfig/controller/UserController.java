@@ -173,19 +173,22 @@ public class UserController {
                           @RequestParam("userGroup") String userGroup,
                           HttpServletRequest request) {
         String status = "fail";
-
-
         try {
-            Admin user = new Admin();
-            user.setUserName(userName);
-            user.setUserGroup(Integer.valueOf(userGroup));
-            user.setCreateTime(new Date());
-            String userKey = request.getSession().getAttribute("username").toString();
-            userName = redisOperate.getStringByKey(userKey);
-            user.setCreator(userName);
+            if (adminService.getByUserName(userName).size() == 0) {
+                Admin user = new Admin();
+                user.setUserName(userName);
+                user.setUserGroup(Integer.valueOf(userGroup));
+                user.setCreateTime(new Date());
+                user.setPassword(AppUtils.MD5("666666"));
+                user.setIsDelete("n");
+                String userKey = request.getSession().getAttribute("username").toString();
+                userName = redisOperate.getStringByKey(userKey);
+                user.setCreator(userName);
 
-            adminService.insert(user);
-            status = "success";
+                adminService.insert(user);
+                status = "success";
+            }
+
         } catch (NumberFormatException e) {
             logger.error("can not delete user.", e);
         } catch (Exception e) {
