@@ -90,6 +90,8 @@ $(document).ready(function(){
                                 var scopeArr = clientData.data.defaultScope.split(' ');
 
                                 var groupTree = allGroupData.data;
+                                console.log(groupTree);
+                                console.log(scopeArr);
 
                                 html = foreachGroupTree(groupTree,html,true,scopeArr);
 
@@ -183,7 +185,7 @@ $(document).ready(function(){
             var url = 'add/client';
         }
 
-         $.post(url, {'client': formContent}, function(data){
+         $.post(url, {'oauthclient': formContent}, function(data){
             if(data.code == 0)
             {
                 $("#OAuthClientInfo2").html("<p>成功</p>")
@@ -240,6 +242,8 @@ $(document).ready(function(){
 
             if(flag_check){
                 var check = in_array(groupTree.alias, scopeArr) ? 'checked' : '';
+                console.log(groupTree.alias);
+                console.log(check);
                 if(check){
                     html += '<div class="level-box"><label> <input name="default_scope" value="'+groupTree.alias+'" type="checkbox" checked="checked" />'+groupTree.name+'</label>';
                 }else{

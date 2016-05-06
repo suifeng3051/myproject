@@ -37,7 +37,6 @@ public class ReleaseServiceImpl implements ReleaseService {
 
         int apiId = Integer.parseInt(id);
 
-
         JSONObject jsonObject = new JSONObject();
 
         Api api = apiDAO.selectByPrimaryKey(apiId);

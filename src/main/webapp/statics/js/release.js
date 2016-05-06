@@ -241,8 +241,6 @@ $(document).ready(function () {
     });
 
     $("#sureUpload").on("click", function() {
-        /*var uploadFile = $("#inputFile").val();
-        console.log("file: " + uploadFile);*/
 
         var options = {
              success:function(data){
@@ -264,9 +262,7 @@ $(document).ready(function () {
                          }
                          var message = "<span style='color:#AA00AA'>"+item.message+"</span>";
                          appendHtml += "<tr><td>"+apiObj.namespace+"/"+apiObj.method+"/"+apiObj.version+"</td><td>"+apiStatus+"</td><td>"+message+"</td>";
-                         //$("#uploadApiList").append(insertObject);
 
-                         // $("#employee").append("<option value="+item.id+">   "+item.name+"</option>");
                      });
 
                      appendHtml += "</tbody></table>";
@@ -299,14 +295,6 @@ $(document).ready(function () {
         };
 
         $("#uploadForm").ajaxSubmit(options);
-/*        $("#uploadForm").ajaxSubmit({
-             dataType: "json",//返回结果格式
-            success: function (data) {
-                alert("data:"+data);
-                 console.log(data);
-            }
-
-        })*/
 
     });
 
