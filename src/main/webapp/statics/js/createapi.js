@@ -241,12 +241,6 @@ $(document).ready(function(){
 
         window.JSONresult = $('#editor').jsonEditor(json);  // 解析JSON，生成JSON树
 
-//        setTimeout(function(){
-//            $('#editor .item').addClass('expanded');
-//        }, 200);
-
-        //$('#requestStructure').val(JSONresult.getJson());
-
         $('.item .property').mouseenter(function(){
             $(this).parent().addClass('grey');
         });
@@ -287,10 +281,6 @@ $(document).ready(function(){
                 $("#apiInfo").addClass("alert-danger");
                 $('.hasApi').attr('data-exists', 'yes');
 
-            }
-            if(!jsonProcess('resultDemo', $('#resultDemo').val())){
-                $("#apiInfo").append("<p style='color:red'>JSON 格式错误！</p>");
-                $('#resultDemo').addClass('error');
             }
         }, "json");
     });
@@ -335,7 +325,7 @@ $(document).ready(function(){
             $('#requestStructureJson').html('').jsonEditorByTreeJson(JSON.parse($('#requestStructure').val()), true);
             $('#requestStructureJson').addClass('json-editor expanded ');
             if($('#treeHead-view').length == 0){
-                var treeHead = $('<p style="text-align:right; color:#aaa; margin-bottom:0;" id="treeHead-view"><span style="margin-right:30px">数据类型</span><span style="margin-right:25px">是否必填</span><span style="margin-right:180px">描述</span></p>');
+                var treeHead = $('<p style="text-align:right; color:#aaa; margin-bottom:0;" id="treeHead-view"><span style="margin-right:30px">数据类型</span><span style="margin-right:28px">是否必填</span><span style="margin-right:188px">描述</span></p>');
                 $('#requestStructureJson').before(treeHead);
             }
 
@@ -349,10 +339,17 @@ $(document).ready(function(){
         }
 
         setTimeout(function(){
+            var isJson = true;
+            try{
+                JSON.parse($('#resultDemo-finalView').text());
+            } catch(e){
+                isJson = false;
+            }
             // 增加 JSON格式和着色
-            jsonProcess('resultDemo-finalView', $('#resultDemo-finalView').text());
-        }, 800);
-
+            if(isJson){
+                jsonProcess('resultDemo-finalView', $('#resultDemo-finalView').text());
+            }
+        }, 300);
     }
 
     function formdataToJSON (arr){
@@ -432,7 +429,7 @@ $(document).ready(function(){
 
 
     jsonInputView( 'json-input', 'json-input-jsonshow' );
-    jsonInputView( 'resultDemo', 'resultDemo-jsonshow' );
+    jsonInputView('resultDemo', 'resultDemo-jsonshow' );
 
     if($('#edit').val() == 1){
         setTimeout(function(){
@@ -468,7 +465,7 @@ $(document).ready(function(){
 		  var json = jsonStr;
 		  var html = "";
 		  try{
-		    if(json == "") return;
+		    if(json == "") return false;
 		    var obj = eval("["+json+"]");
 		    html = ProcessObject(obj[0], 0, false, false, false);
 		    document.getElementById(eleId).innerHTML = "<PRE class='CodeContainer'>"+html+"</PRE>";

@@ -937,7 +937,9 @@ form.bs-docs-example {
 
 .bs-docs-sidenav li.active > .icon-chevron-right::before { content:"\f078"; }
 
-
+.apiElement { padding:6px 15px;}
+.apiElement:hover { background-color:#f5f5f5; }
+.apiElement p.apiElement-des { font-size:12px; color:#bfbfbf; margin-bottom:0;}
 
 
 /* Responsive

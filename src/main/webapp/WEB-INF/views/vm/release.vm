@@ -22,12 +22,8 @@
 
 
 
-<div class="container-fluid">
+<div class="container-fluid release-page">
     <div class="row">
-        <div class="col-md-2">
-
-        </div>
-        <div class="col-md-8">
             <div class="panel panel-primary" style="margin-top:88px;min-height:460px;">
                 <div class="panel-heading">API 列表
                     <button type="button" class="btn btn-primary" flag="1" id="selectAll" style="float:right;margin:-7px -15px 0 0; border:0px;">全选</button>
@@ -47,14 +43,16 @@
                             <li class="list-group-item apiElement ">
                                 <a href="#">$!apiElement.namespace/$!apiElement.method/$!apiElement.version</a>
                                 <input style="float:right" class="select" apiContent="$!{apiElement.namespace}/$!{apiElement.method}/$!{apiElement.version}"  apiId="$!apiElement.id" type="checkbox">
-                                <span style="position: absolute;left:400px;color:#929292;">$!apiElement.apiDescription</span>
-                                    <span style="position: absolute;right:200px;color:#929292;">
+                                <p class="row releastElement-des">
+                                    <span class="col-sm-8">$!apiElement.apiDescription</span>
+                                    <span class="col-sm-4">
                                         #if('GET' == $!apiElement.requestType)
                                         GET
                                         #elseif('POST' == $!apiElement.requestType)
                                         POST
                                         #end
                                     </span>
+                                </p>
                            </li>
                     #end
                 </ul>
@@ -143,7 +141,6 @@
                 </div>
                 </form>
             </div>
-        </div>
     </div>
 </div>
 
