@@ -42,7 +42,7 @@ $(document).ready(function(){
                         $(this).prop('checked', true);
                     }
                 });
-            }, 1000);
+            }, 500);
         }
     });
 
@@ -153,6 +153,8 @@ $(document).ready(function(){
     }
 
     if($('#detail').val() == 1){
+        $('body > .container-fluid ').hide();
+
         $('#step-title').text('预览');
         $('#goback-btn').show().click(function(){
            window.history.back();
@@ -165,7 +167,10 @@ $(document).ready(function(){
         }
         $('#apiconfig-box > div').eq(3).addClass('active').siblings().removeClass('active');
 
-        finalReview();
+        setTimeout(function(){
+            finalReview();
+            $('body > .container-fluid').show();
+        }, 900);
     }
 
     function changeStepTo(step){  // 跳转到指定页面
@@ -297,11 +302,17 @@ $(document).ready(function(){
 
         serviceObj = formdataToJSON($('#methodconfigform').serializeArray());
 
-        var arr = [];
-        $('#serviceParamList input[type="checkbox"]:checked').each(function(){
-            arr.push($(this).val());
-        });
-        serviceObj.innerParams = arr.join(' ');
+        if($('#detail').val() == 1){
+            serviceObj.innerParams = $('#innerParams').val();
+        } else {
+            var arr = [];
+            $('#serviceParamList input[type="checkbox"]:checked').each(function(){
+                arr.push($(this).val());
+            });
+            serviceObj.innerParams = arr.join(' ');
+        }
+
+
 //        console.log(serviceObj);
         var str = objToStr(serviceObj);
         $('#final-review-method').html( str );
@@ -397,13 +408,15 @@ $(document).ready(function(){
                 case 'innerParams':
                    label = '内部参数';
 
-                    var arr = obj[o];
-                    arr = arr.split(' ');
-                    for(var i=0;i<arr.length; i++){
-                        arr[i] = $('#serviceParamList input[value='+arr[i]+']').parent().text();
+                    if(obj[o].length > 0){
+                        var arr = $.trim(obj[o]);
+
+                        arr = arr.split(' ');
+                        for(var i=0;i<arr.length; i++){
+                            arr[i] = $('#serviceParamList input[value="'+arr[i]+'"]').parent().text();
+                        }
+                        value = arr.join(', ');
                     }
-                    value = arr.join(', ');
-                    console.log(obj)
                 break;
 
                 case 'requestDemo':
@@ -434,8 +447,6 @@ $(document).ready(function(){
        s = s.replace(/\"/g, "&quot;");
        return s;
      }
-
-
 
 
 /* ******************************** JSON 着色开始 ***************************************** */
