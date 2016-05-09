@@ -37,30 +37,49 @@ public class PipeHelper {
         return httpHeaders;
     }
 
-    public static String removeSpaces(String json) {
+    /**
+     * compact json string, remove unnecessary ' ' and '\n' and '\r'
+     * @param json valid json string
+     * @return compact json string
+     */
+    public static String compactJson(String json) {
         if (StringUtils.isEmpty(json))
             return "";
 
         char[] charArray = json.toCharArray();
         StringBuilder sb = new StringBuilder();
-        Stack<Integer> stack = new Stack<>();
 
-        int i = 0;
-        char c;
+        int i = 0, count = 0, slash = 0;
+        char c, b = 0;
         while (i < charArray.length) {
             c = charArray[i];
             switch (c) {
                 case '"':
                 case '\'':
+                    if (count % 2 == 0) {
+                        b = c;
+                        ++count;
+                    } else {
+                        if (c == b) {
+                            if (slash % 2 == 0) {
+                                ++count;
+                                b = 0;
+                            } else {
+                                ++slash; // tread \" as \\ to ++slash
+                            }
+                        }
+                    }
+                    sb.append(c);
+                    break;
                 case '\\':
-                    stack.push(1);
+                    ++slash;
                     sb.append(c);
                     break;
                 case ' ':
                 case '\t':
                 case '\r':
                 case '\n':
-                    if (stack.size() % 2 == 1)
+                    if (count % 2 == 1)
                         sb.append(c);
                     break;
                 default: {
