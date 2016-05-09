@@ -24,47 +24,47 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from t_oauth_clients
+        from t_client
         where id = #{id,jdbcType=INTEGER}
     </select>
 
     <select id="selectByClientId" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
-        from t_oauth_clients
+        from t_client
         where client_id = #{clientId,jdbcType=VARCHAR}
     </select>
 
     <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from t_oauth_clients
+        from t_client
         where user_id = #{userId,jdbcType=INTEGER}
     </select>
 
     <select id="selectAll" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from t_oauth_clients
+        from t_client
     </select>
 
 
     <select id="selectClientIds" resultType="java.lang.String">
-        select DISTINCT client_id from t_oauth_clients
+        select DISTINCT client_id from t_client
     </select>
 
 
     <delete id="deleteById" parameterType="java.lang.Integer">
-        delete from t_oauth_clients
+        delete from t_client
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <delete id="deleteByClientId">
-        delete from t_oauth_clients
+        delete from t_client
         where client_id = #{clientId,jdbcType=VARCHAR}
     </delete>
     <insert id="insert" parameterType="com.zitech.gateway.oauth.model.Client"
             useGeneratedKeys="true" keyProperty="id">
-        insert into t_oauth_clients
+        insert into t_client
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -143,7 +143,7 @@
         </trim>
     </insert>
     <update id="update" parameterType="com.zitech.gateway.oauth.model.Client">
-        update t_oauth_clients
+        update t_client
         <set>
             <if test="clientId != null">
                 client_id = #{clientId,jdbcType=VARCHAR},

@@ -18,19 +18,19 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from t_oauth_refresh_tokens
+        from t_refresh_token
         where id = #{id,jdbcType=INTEGER}
     </select>
     <select id="selectByToken" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
-        from t_oauth_refresh_tokens
+        from t_refresh_token
         where refresh_token = #{token,jdbcType=VARCHAR}
     </select>
     <select id="selectByAccessTokens" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from t_oauth_refresh_tokens
+        from t_refresh_token
         where access_token in
         (
         <foreach collection="list" item="item" separator=",">
@@ -39,15 +39,15 @@
         )
     </select>
     <delete id="deleteById" parameterType="java.lang.Integer">
-        delete from t_oauth_refresh_tokens
+        delete from t_refresh_token
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <delete id="deleteByToken" parameterType="java.lang.String">
-        delete from t_oauth_refresh_tokens
+        delete from t_refresh_token
         where refresh_token = #{token,jdbcType=VARCHAR}
     </delete>
     <delete id="deleteByAccessTokens">
-        delete from t_oauth_refresh_tokens
+        delete from t_refresh_token
         where access_token in
         (
         <foreach collection="list" item="item" separator=",">
@@ -57,7 +57,7 @@
     </delete>
     <insert id="insert" parameterType="com.zitech.gateway.oauth.model.RefreshToken"
             useGeneratedKeys="true" keyProperty="id">
-        insert into t_oauth_refresh_tokens
+        insert into t_refresh_token
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -112,7 +112,7 @@
         </trim>
     </insert>
     <update id="update" parameterType="com.zitech.gateway.oauth.model.RefreshToken">
-        update t_oauth_refresh_tokens
+        update t_refresh_token
         <set>
             <if test="refreshToken != null">
                 refresh_token = #{refreshToken,jdbcType=VARCHAR},

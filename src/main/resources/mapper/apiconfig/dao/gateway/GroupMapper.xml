@@ -18,37 +18,37 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from t_api_group
+        from t_group
         where id = #{id,jdbcType=INTEGER}
     </select>
     <select id="selectByAlias" resultMap="BaseResultMap" parameterType="java.lang.String" >
         select
         <include refid="Base_Column_List" />
-        from t_api_group
+        from t_group
         where alias = #{alias,jdbcType=VARCHAR}
     </select>
     <select id="selectAllGroupAlias" resultType="java.lang.String">
-        select DISTINCT alias  from t_api_group
+        select DISTINCT alias  from t_group
     </select>
     <select id="selectGroupByNameAndAlias" resultMap="BaseResultMap" parameterType="com.zitech.gateway.apiconfig.model.Group">
         select
         <include refid="Base_Column_List"/>
         from
-        t_api_group
+        t_group
         where
         `name`=#{name,jdbcType=VARCHAR} or alias=#{alias, jdbcType=VARCHAR}
     </select>
     <select id="selectAll" resultMap="BaseResultMap"  >
         select
         <include refid="Base_Column_List" />
-        from t_api_group
+        from t_group
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from t_api_group
+        delete from t_group
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.zitech.gateway.apiconfig.model.Group">
-        insert into t_api_group (id, pid, name,
+        insert into t_group (id, pid, name,
         alias, level, description,
         create_time, update_time)
         values (#{id,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
@@ -56,7 +56,7 @@
         #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" parameterType="com.zitech.gateway.apiconfig.model.Group">
-        insert into t_api_group
+        insert into t_group
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -112,7 +112,7 @@
     </insert>
     <update id="updateByPrimaryKeySelective"
             parameterType="com.zitech.gateway.apiconfig.model.Group">
-        update t_api_group
+        update t_group
         <set>
             <if test="pid != null">
                 pid = #{pid,jdbcType=INTEGER},
@@ -139,7 +139,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.zitech.gateway.apiconfig.model.Group">
-        update t_api_group
+        update t_group
         set pid = #{pid,jdbcType=INTEGER},
         name = #{name,jdbcType=VARCHAR},
         alias = #{alias,jdbcType=VARCHAR},
@@ -152,11 +152,11 @@
 
 
     <select id="selectAllById" parameterType="java.lang.Integer"  resultMap="BaseResultMap" >
-        SELECT  t2.* FROM t_api_group t1
-        LEFT OUTER JOIN t_api_group t2 ON t2.pid = t1.id
+        SELECT  t2.* FROM t_group t1
+        LEFT OUTER JOIN t_group t2 ON t2.pid = t1.id
         where t1.id=#{id,jdbcType=INTEGER} and t2.id is not null
         union
-        select * from t_api_group
+        select * from t_group
         where id = #{id,jdbcType=INTEGER}
     </select>
 

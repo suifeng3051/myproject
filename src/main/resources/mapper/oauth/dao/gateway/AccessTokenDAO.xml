@@ -17,37 +17,37 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from t_oauth_access_tokens
+        from t_access_token
         where id = #{id,jdbcType=INTEGER}
     </select>
     <select id="selectByToken" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
-        from t_oauth_access_tokens
+        from t_access_token
         where access_token = #{token,jdbcType=VARCHAR}
     </select>
     <select id="selectValidToken" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from t_oauth_access_tokens
+        from t_access_token
         where expires <![CDATA[ > ]]> now()
     </select>
     <select id="selectByClientIdAndUserId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from t_oauth_access_tokens
+        from t_access_token
         where client_id = #{clientId,jdbcType=VARCHAR} and user_id = #{userId,jdbcType=INTEGER}
     </select>
     <delete id="deleteById" parameterType="java.lang.Integer">
-        delete from t_oauth_access_tokens
+        delete from t_access_token
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <delete id="deleteByToken" parameterType="java.lang.String">
-        delete from t_oauth_access_tokens
+        delete from t_access_token
         where access_token = #{token,jdbcType=VARCHAR}
     </delete>
     <delete id="deleteByIds">
-        delete from t_oauth_access_tokens
+        delete from t_access_token
         where id in
         (
         <foreach collection="list" item="item" separator=",">
@@ -57,7 +57,7 @@
     </delete>
     <insert id="insert" parameterType="com.zitech.gateway.oauth.model.AccessToken"
             useGeneratedKeys="true" keyProperty="id">
-        insert into t_oauth_access_tokens
+        insert into t_access_token
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -106,7 +106,7 @@
         </trim>
     </insert>
     <update id="update" parameterType="com.zitech.gateway.oauth.model.AccessToken">
-        update t_oauth_access_tokens
+        update t_access_token
         <set>
             <if test="accessToken != null">
                 access_token = #{accessToken,jdbcType=VARCHAR},

@@ -31,13 +31,13 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from t_api_n
+        from t_api
         where id = #{id,jdbcType=INTEGER}
     </select>
     <select id="findApiForCheck" resultMap="BaseResultMap" parameterType="java.util.Map">
         select
         <include refid="Base_Column_List"/>
-        from t_api_n
+        from t_api
         where namespace = #{nameSpace,jdbcType=VARCHAR}
         and method = #{method,jdbcType=VARCHAR}
         and version = #{version,jdbcType=INTEGER}
@@ -47,27 +47,27 @@
     <select id="getAllApiByEnv" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from t_api_n
+        from t_api
         where deleted=0 and env=#{env,jdbcType=TINYINT}
     </select>
     <select id="getByGroupIdAndEnv" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from t_api_n
+        from t_api
         where group_id = #{groupId,jdbcType=INTEGER} and deleted=0 and env=#{env,jdbcType=TINYINT}
     </select>
     <select id="getDeletedApi" resultType="com.zitech.gateway.apiconfig.model.Api">
         select
         <include refid="Base_Column_List"/>
-        from t_api_n
+        from t_api
         where deleted=1
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from t_api_n
+        delete from t_api
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.zitech.gateway.apiconfig.model.Api">
-        insert into t_api_n (id, namespace, method,
+        insert into t_api (id, namespace, method,
         version,avail, group_id, request_type,frequency_control,
         check_inner, api_description, api_scene,
         created_time, updated_id, updated_time,
@@ -91,7 +91,7 @@
         #{env,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.zitech.gateway.apiconfig.model.Api">
-        insert into t_api_n
+        insert into t_api
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -200,7 +200,7 @@
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.zitech.gateway.apiconfig.model.Api">
-        update t_api_n
+        update t_api
         <set>
             <if test="namespace != null">
                 namespace = #{namespace,jdbcType=VARCHAR},
@@ -254,7 +254,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zitech.gateway.apiconfig.model.Api">
-        update t_api_n
+        update t_api
         set namespace = #{namespace,jdbcType=VARCHAR},
         method = #{method,jdbcType=VARCHAR},
         version = #{version,jdbcType=INTEGER},
@@ -274,7 +274,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.zitech.gateway.apiconfig.model.Api">
-        update t_api_n
+        update t_api
         set namespace = #{namespace,jdbcType=VARCHAR},
         method = #{method,jdbcType=VARCHAR},
         version = #{version,jdbcType=INTEGER},
@@ -294,7 +294,7 @@
     </update>
 
     <select id="getMaxId" resultType="java.lang.Integer">
-        select max(id) from t_api_n
+        select max(id) from t_api
     </select>
 
 </mapper>
