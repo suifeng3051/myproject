@@ -16,8 +16,14 @@
 
 #json-input { min-height:500px; padding-top:10px; }
 
-.json-editor select, .json-editor input { margin-right:5px; height:26px; float:right; }
-.json-editor input[type="checkbox"] { margin:0 15px; }
+.json-editor select, .json-editor input { margin-right:5px; float:right; }
+.json-editor input[type="checkbox"] { margin:7px 15px; }
+.json-editor select {
+    padding:0;
+    width:70px;
+    height:26px;
+    font-size:12px;
+}
 
 .json-editor input.property { float:none; }
 
@@ -308,7 +314,7 @@ ul.nav-wizard.nav-wizard-backnav .active ~ li a:focus {
 
 .form-inline .form-group { margin-bottom:15px; margin-right:15px;}
 .data-review .form-group { margin-bottom:5px; }
-.data-review  h4 { padding-bottom:15px; margin-bottom:20px; border-bottom:1px solid #aaa; }
+.data-review  h4:after { content: ' '; display:block; width:450px; margin:15px auto 40px; border-bottom:1px solid #aaa; }
 
 
 
@@ -325,3 +331,5 @@ ul.nav-wizard.nav-wizard-backnav .active ~ li a:focus {
 .Null{  color:#0000FF;}
 .Comma{  color:#000000;  font-weight:bold;}
 PRE.CodeContainer{  margin-top:0px;  margin-bottom:0px;}
+
+

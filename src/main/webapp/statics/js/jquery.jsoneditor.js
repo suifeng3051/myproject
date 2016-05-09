@@ -68,7 +68,7 @@
 
             var item = $('<div>', { 'class': 'item', 'data-path': path }),
                 property = $('<input>', { 'class': 'property', 'readonly': 'true' }),
-                typeSelect = isEditeing?$('<input>', { 'class': 'type','readonly': 'true'}):$('<select>', { 'class': 'type' }),
+                typeSelect = isEditeing?$('<input>', { 'class': 'type','readonly': 'true'}):$('<select>', { 'class': 'type form-control' }),
                 typeValue = isEditeing?'':$('<option value="INT">INT</option><option value="STRING">STRING</option><option value="BOOL">BOOL</option><option value="OBJECT">OBJECT</option><option value="ARRAY">ARRAY</option>'),
                 requireCheckBox = isEditeing?$('<input>', { 'class': 'type','readonly': 'true'}):$('<input type="checkbox" value="" checked="true"/>'),
                 descInput=isEditeing?$('<input>', { 'class': 'type des-show','readonly': 'true'}):$('<input type="text" />');
