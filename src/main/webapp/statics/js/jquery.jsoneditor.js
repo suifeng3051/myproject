@@ -71,7 +71,7 @@
                 typeSelect = isEditeing?$('<input>', { 'class': 'type','readonly': 'true'}):$('<select>', { 'class': 'type form-control' }),
                 typeValue = isEditeing?'':$('<option value="INT">INT</option><option value="STRING">STRING</option><option value="BOOL">BOOL</option><option value="OBJECT">OBJECT</option><option value="ARRAY">ARRAY</option>'),
                 requireCheckBox = isEditeing?$('<input>', { 'class': 'type','readonly': 'true'}):$('<input type="checkbox" value="" checked="true"/>'),
-                descInput=isEditeing?$('<input>', { 'class': 'type des-show','readonly': 'true'}):$('<input type="text" />');
+                descInput=isEditeing?$('<input>', { 'class': 'type des-show','readonly': 'true'}):$('<input type="text" class="des-show" />');
             if (isObject(json[key].fields) || isArray(json[key].fields)) {
                 addExpander(item);
             }

@@ -24,8 +24,10 @@
     height:26px;
     font-size:12px;
 }
+#editor .des-show { border-radius:5px; border:1px solid #ccc; }
 
 .json-editor input.property { float:none; }
+
 
 
 

@@ -23,10 +23,10 @@
 }
 .json-editor .property { 
   width: 100px;
-  background-color: #B1C639;
-  color: white;
+  background-color: #ccc;
+  /*color: white;
   font-weight: bold;
-  text-shadow: 1px 1px 1px black;
+  text-shadow: 1px 1px 1px black;*/
 }
 .json-editor button.property { 
   width: 160px;
