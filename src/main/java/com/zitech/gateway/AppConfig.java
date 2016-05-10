@@ -30,9 +30,6 @@ public class AppConfig {
     @Value("${token.refresh}")
     public int tokenRefreshExpire;
 
-    @Value("${client.credential.scope}")
-    public String clientCredentialScope;
-
     @Value("${allow.access}")
     public String allowAccess;
 

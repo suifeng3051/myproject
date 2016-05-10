@@ -405,8 +405,8 @@ public class TokenController {
                 return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
-            Client openOauthClients = oAuthService.getClientByClientId(oAuthAuthzParameters.getClientId());
-            if (openOauthClients == null) {
+            Client client = oAuthService.getClientByClientId(oAuthAuthzParameters.getClientId());
+            if (client == null) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
                         .setError(String.valueOf(OAuthConstants.OAuthResponse.INVALID_CLIENT))
@@ -416,7 +416,7 @@ public class TokenController {
                 return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
-            if (!openOauthClients.getGrantTypes().contains(Constants.OAUTH_CLIENT_CREDENTIALS)) {
+            if (!client.getGrantTypes().contains(Constants.OAUTH_CLIENT_CREDENTIALS)) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
                         .setError(String.valueOf(OAuthConstants.OAuthResponse.INVALID_CLIENT_INFO))
@@ -426,25 +426,23 @@ public class TokenController {
                 return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
-            if (!openOauthClients.getClientSecret().equals(oAuthAuthzParameters.getClientSecret())) {
+            if (!client.getClientSecret().equals(oAuthAuthzParameters.getClientSecret())) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
                         .setError(String.valueOf(OAuthConstants.OAuthResponse.INVALID_CLIENT_INFO))
                         .setErrorDescription(OAuthConstants.OAuthDescription.INVALID_CLIENT_DESCRIPTION)
                         .buildJSONMessage();
-                logger.info("invalid secret: {}, context: {}", openOauthClients.getClientSecret(), oAuthAuthzParameters);
+                logger.info("invalid secret: {}, context: {}", client.getClientSecret(), oAuthAuthzParameters);
                 return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
             if (StringUtils.isEmpty(oAuthAuthzParameters.getScope())) {
-                //oAuthAuthzParameters.setScope(openOauthClients.getDefaultScope());
-                oAuthAuthzParameters.setScope(appConfig.clientCredentialScope); //for security
+                oAuthAuthzParameters.setScope(client.getDefaultScope());
             } else {
                 oAuthAuthzParameters.setScope(
                         OAuthUtils.encodeScopes(
                                 oAuthService.getRetainScopes(
-                                        //openOauthClients.getDefaultScope(),
-                                        appConfig.clientCredentialScope, // for security
+                                        client.getDefaultScope(),
                                         oAuthAuthzParameters.getScope()
                                 )
                         )
