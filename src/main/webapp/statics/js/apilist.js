@@ -1174,7 +1174,7 @@ $(document).ready(function(){
                     //    operate += '<a href="#" data-toggle="tooltip" data-placement="top" title="测试接口" style="float:right"><span apiId="' + results[item].id + '"namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" class="glyphicon glyphicon-wrench testApi"></span></a><a href="#" data-toggle="tooltip" data-placement="top" title="编辑" style="float:right" ><span namespace="' + results[item].namespace + '" name="' + results[item].name + '" version="' + results[item].version + '" apiId="' + results[item].id + '" class="glyphicon glyphicon-edit editIcon"></span></a></li>';
                     //} else {
                         operate += '<li class="list-group-item apiElement">'+
-                            '<p class="row"><a href="#" class="apidetail col-sm-8" apiId="' + results[item].id + '" >' + results[item].namespace + '/' + results[item].version + '/' + results[item].method + '</a>'+
+                            '<p class="row"><span class="col-sm-8"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' + results[item].version + '/' + results[item].method + '</a></span>'+
                              '<span class="apiElement-des col-sm-2 ">';
                             if ("GET" == results[item].requestType) {
                                 operate += 'GET';
