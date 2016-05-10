@@ -10,6 +10,7 @@ import com.zitech.gateway.apiconfig.service.ParamService;
 import com.zitech.gateway.apiconfig.service.ServeService;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -19,9 +20,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
 
 /**
  * Created by hy on 16-5-4.
@@ -87,9 +94,6 @@ public class RecoverApiController {
 
     /**
      * 恢复删除的api
-     * @param ids
-     * @param request
-     * @return
      */
     @RequestMapping(value = "/recoverApis", produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -119,8 +123,7 @@ public class RecoverApiController {
                 Integer apiId = Integer.valueOf(id);
                 Api api = apiService.getApiById(apiId);
                 //检测要恢复的api是否已经存在同名的api
-                if(!apiService.checkApi(api.getNamespace(), api.getMethod(), api.getVersion(), api.getEnv()))
-                {
+                if (!apiService.checkApi(api.getNamespace(), api.getMethod(), api.getVersion(), api.getEnv())) {
                     continue;
                 }
                 if (api != null) {
@@ -152,7 +155,7 @@ public class RecoverApiController {
             apiResult.setMessage("恢复api发生异常");
             return apiResult.toString();
         }
-        if (numbers!= cnt) {
+        if (numbers != cnt) {
             apiResult.setCode(4);
             apiResult.setMessage("因api已经存在，有部分api未恢复");
         }
@@ -161,16 +164,12 @@ public class RecoverApiController {
     }
 
     /**
-     *
      * 物理删除api
-     * @param ids
-     * @param request
-     * @return
      */
     @RequestMapping(value = "/deleteApis", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String deleteApis(@RequestParam("ids") String ids,
-                              HttpServletRequest request) {
+                             HttpServletRequest request) {
         ApiResult<Boolean> apiResult = new ApiResult<>(0, "success");
 
         String[] idArray = ids.split(",");

@@ -17,6 +17,8 @@ public class Api {
 
     private Integer groupId;
 
+    private Integer login;
+
     private RequestType requestType;
 
     private Byte frequencyControl;
@@ -36,6 +38,7 @@ public class Api {
     private Byte deleted;
 
     private String resultDemo;
+
     private Byte env;
 
     public RequestType getRequestType() {
@@ -100,6 +103,14 @@ public class Api {
 
     public void setGroupId(Integer groupId) {
         this.groupId = groupId;
+    }
+
+    public Integer getLogin() {
+        return login;
+    }
+
+    public void setLogin(Integer login) {
+        this.login = login;
     }
 
     public Byte getFrequencyControl() {

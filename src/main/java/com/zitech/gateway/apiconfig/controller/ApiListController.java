@@ -1,14 +1,12 @@
 package com.zitech.gateway.apiconfig.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.apiconfig.model.Api;
-import com.zitech.gateway.apiconfig.model.Group;
 import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.apiconfig.service.ApiService;
 import com.zitech.gateway.apiconfig.service.GroupService;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.URLDecoder;
-import java.util.*;
 
 /**
  * Created by hy on 16-4-26.
@@ -43,11 +45,9 @@ public class ApiListController {
     private GroupService groupService;
 
 
-
     @RequestMapping("/apilist")
-    public ModelAndView getApiList(@RequestParam(value = "env",required = false, defaultValue = "1") Byte env,
-            HttpServletRequest request, HttpServletResponse response)
-    {
+    public ModelAndView getApiList(@RequestParam(value = "env", required = false, defaultValue = "1") Byte env,
+                                   HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> results = new HashMap<>();
         try {
             String userName = adminService.getUserNameFromSessionAndRedis(request);
@@ -58,12 +58,12 @@ public class ApiListController {
 
             //api
             List<Api> allApi = apiService.getAllByEnv(env);
-            if(null != allApi) {
+            if (null != allApi) {
                 Collections.sort(allApi, new Comparator<Api>() {
                     @Override
                     public int compare(Api arg1, Api arg2) {
-                        if(org.springframework.util.StringUtils.isEmpty(arg1.getCreatedTime()) ||
-                                org.springframework.util.StringUtils.isEmpty(arg2.getCreatedTime())){ // 防止脏数据
+                        if (org.springframework.util.StringUtils.isEmpty(arg1.getCreatedTime()) ||
+                                org.springframework.util.StringUtils.isEmpty(arg2.getCreatedTime())) { // 防止脏数据
                             return 0;
                         }
                         return arg2.getCreatedTime().compareTo(arg1.getCreatedTime()); // 按时间逆序排序
@@ -79,19 +79,18 @@ public class ApiListController {
             results.put("groupMap", groupMap);
             results.put("env", env);
         } catch (Exception e) {
-            logger.error("get api list error",e);
+            logger.error("get api list error", e);
             return new ModelAndView("redirect:/unifyerror", "cause", "error when get api list");
         }
 
         return new ModelAndView("apilist", "results", results);
     }
 
-    @RequestMapping(value = "/getapi/by/groupid", produces="application/json;charset=utf-8")
+    @RequestMapping(value = "/getapi/by/groupid", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getApiByGroup(@RequestParam("groupid") Integer groupid,
-                                @RequestParam(value = "env",required = false, defaultValue = "1") Byte env)
-    {
-        ApiResult<List<Api>> apiResult = new ApiResult<>(0,"success");
+                                @RequestParam(value = "env", required = false, defaultValue = "1") Byte env) {
+        ApiResult<List<Api>> apiResult = new ApiResult<>(0, "success");
 
         try {
             List<Api> list = null;
@@ -99,12 +98,12 @@ public class ApiListController {
                 list = apiService.getAllByEnv(env);
             } else {
                 //list = apiService.getByGroupIdAndEnv(groupid,env);
-                list = apiService.getAllByGroupIdAndEnv(groupid,env);
+                list = apiService.getAllByGroupIdAndEnv(groupid, env);
             }
             Collections.sort(list, new Comparator<Api>() {
                 @Override
                 public int compare(Api arg1, Api arg2) {
-                    if(org.springframework.util.StringUtils.isEmpty(arg1.getCreatedTime()) || org.springframework.util.StringUtils.isEmpty(arg2.getCreatedTime())){ // 防止脏数据
+                    if (org.springframework.util.StringUtils.isEmpty(arg1.getCreatedTime()) || org.springframework.util.StringUtils.isEmpty(arg2.getCreatedTime())) { // 防止脏数据
                         return 0;
                     }
                     return arg2.getCreatedTime().compareTo(arg1.getCreatedTime()); // 按时间逆序排序
@@ -112,7 +111,7 @@ public class ApiListController {
             });
             apiResult.setData(list);
         } catch (Exception e) {
-            logger.info("根据groupid获取api发生异常",e);
+            logger.info("根据groupid获取api发生异常", e);
             apiResult.setCode(9000);
             apiResult.setMessage("根据grupid获取api发生异常");
         }
