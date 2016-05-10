@@ -257,7 +257,8 @@ $(function(){
                  yAxis: {
                      title: {
                          text: 'call count'
-                     }
+                     },
+                     min: 0
                  },
                  legend: {
                      enabled: false
@@ -312,7 +313,8 @@ $(function(){
               yAxis: {
                   title: {
                       text: 'RT时间'
-                  }
+                  },
+                  min: 0
               },
               legend: {
                   enabled: false
@@ -365,7 +367,8 @@ $(function(){
                yAxis: {
                    title: {
                        text: '错误次数'
-                   }
+                   },
+                   min: 0
                },
                legend: {
                    enabled: false
@@ -786,7 +789,8 @@ $(function(){
                  value: 0,
                  width: 1,
                  color: '#808080'
-             }]
+             }],
+             min: 0
          },
          tooltip: {
              formatter: function () {
@@ -862,7 +866,8 @@ $(function(){
                  value: 0,
                  width: 1,
                  color: '#808080'
-             }]
+             }],
+             min: 0
          },
          tooltip: {
              formatter: function () {
@@ -936,7 +941,8 @@ $(function(){
                   value: 0,
                   width: 1,
                   color: '#808080'
-              }]
+              }],
+              min: 0
           },
           tooltip: {
               formatter: function () {
@@ -1053,7 +1059,8 @@ $(function(){
           yAxis: {
               title: {
                   text: 'RT时间'
-              }
+              },
+              min: 0
           },
           legend: {
               enabled: false
@@ -1106,7 +1113,8 @@ $(function(){
            yAxis: {
                title: {
                    text: '错误次数'
-               }
+               },
+               min: 0
            },
            legend: {
                enabled: false
