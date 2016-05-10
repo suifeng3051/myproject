@@ -171,6 +171,12 @@
                             </div>
 
                             <div class="form-group">
+                                <label for="isLogin" class="col-sm-4 control-label">是否需要登录</label>
+                                <div class="col-sm-6">
+                                    <select id="isLogin" name="login" class="form-control" >#if(0 == $!results.get('api').login)<option value="1" >是</option><option value="0" selected>否</option>#else<option value="1" selected>是</option><option value="0" >否</option>#end</select>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="isFreq" class="col-sm-4 control-label">频率控制</label>
                                 <div class="col-sm-6">
                                     <select id="isFreq" name="frequencyControl" class="form-control" >#if(1 == $!results.get('api').frequencyControl)<option value="1" selected>是</option><option value="0" >否</option>#else<option value="1" >是</option><option value="0" selected>否</option>#end</select>

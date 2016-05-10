@@ -90,10 +90,10 @@ $(document).ready(function(){
     $('.preStep').click(function(){
         switch(currentStep){
             case 3:
-            if($('#jsonChecked').val() == '') {
-                validJSON();
-                return;  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
-            }
+//            if($('#jsonChecked').val() == '') {
+//                //validJSON();
+//                return;  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
+//            }
             break;
             case 4:
                  if(($('#requestType').val() != 'POST')){  // 如果是GET 方式则路过第 3 步
@@ -388,6 +388,11 @@ $(document).ready(function(){
                 case 'groupId':
                     label = 'API分组';
                     value = $('#apiGroup option[value='+obj[o]+']').text();
+                break;
+                case 'currentId': continue; break;
+                case 'login':
+                    label = '是否需要登录';
+                    value = $('#isLogin option[value='+obj[o]+']').text();
                 break;
                 case 'frequencyControl':
                     label = '频率控制';
