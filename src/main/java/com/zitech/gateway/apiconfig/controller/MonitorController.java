@@ -1,8 +1,8 @@
 package com.zitech.gateway.apiconfig.controller;
 
-import com.zitech.gateway.apiconfig.model.Admin;
 import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.cache.RedisOperate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -31,8 +30,6 @@ public class MonitorController {
 
     /**
      * 监控页面
-     * @param request
-     * @return
      */
     @RequestMapping("/monitor")
     public ModelAndView displayMonitorData(@RequestParam(value = "namespace", required = false) String namespace,
@@ -48,7 +45,7 @@ public class MonitorController {
                 return new ModelAndView("redirect:/unifyerror", "cause", "test");
             }
             results.put("data", userName);
-            if(!StringUtils.isEmpty(namespace)) {
+            if (!StringUtils.isEmpty(namespace)) {
                 String api = namespace + "." + name + "." + version;
                 results.put("apiName", api);
             }

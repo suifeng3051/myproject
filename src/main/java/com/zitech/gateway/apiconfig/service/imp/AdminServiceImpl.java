@@ -4,8 +4,8 @@ package com.zitech.gateway.apiconfig.service.imp;
 import com.zitech.gateway.apiconfig.dao.gateway.AdminDAO;
 import com.zitech.gateway.apiconfig.model.Admin;
 import com.zitech.gateway.apiconfig.service.AdminService;
-
 import com.zitech.gateway.cache.RedisOperate;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,15 +68,13 @@ public class AdminServiceImpl implements AdminService {
     public boolean isAdmin(String username) {
         try {
             List<Admin> admins = adminDAO.selectByUserName(username);
-            for(Admin admin:admins)
-            {
-                if(admin.getUserGroup() == 1)
-                {
+            for (Admin admin : admins) {
+                if (admin.getUserGroup() == 1) {
                     return true;
                 }
             }
         } catch (Exception e) {
-            logger.error("判断是否为管理员出错,username:{}",username,e);
+            logger.error("判断是否为管理员出错,username:{}", username, e);
         }
         return false;
     }
@@ -87,7 +85,7 @@ public class AdminServiceImpl implements AdminService {
         try {
             String userKey = request.getSession().getAttribute("username").toString();
             userName = redisOperate.getStringByKey(userKey);
-            redisOperate.set("username", userName, 60*60); // 一小时
+            redisOperate.set("username", userName, 60 * 60); // 一小时
         } catch (Exception e) {
             logger.warn("fail to get session", e);
         }

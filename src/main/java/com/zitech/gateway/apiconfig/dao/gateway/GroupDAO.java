@@ -30,8 +30,6 @@ public interface GroupDAO {
 
     /**
      * 获取自身及其所有下级的对象
-     * @param id
-     * @return
      */
     List<Group> selectAllById(Integer id);
 

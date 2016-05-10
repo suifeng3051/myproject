@@ -4,11 +4,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.zitech.gateway.apiconfig.model.Api;
-import com.zitech.gateway.apiconfig.model.Param;
-import com.zitech.gateway.apiconfig.model.Serve;
-import com.zitech.gateway.apiconfig.service.*;
+import com.zitech.gateway.apiconfig.service.AdminService;
+import com.zitech.gateway.apiconfig.service.ApiService;
+import com.zitech.gateway.apiconfig.service.ParamService;
+import com.zitech.gateway.apiconfig.service.ReleaseService;
+import com.zitech.gateway.apiconfig.service.ServeService;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +27,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.util.*;
 
 /**
  * Created by dingdongsheng on 15/9/5.
@@ -54,20 +63,20 @@ public class ReleaseController {
     private ParamService paramService;
 
     @RequestMapping("/release")
-    public ModelAndView release(@RequestParam(value="env", defaultValue = "1") byte env,
+    public ModelAndView release(@RequestParam(value = "env", defaultValue = "1") byte env,
                                 HttpServletRequest request,
                                 HttpServletResponse response) {
 
         String userName = adminService.getUserNameFromSessionAndRedis(request);
 
-        if(null == userName) {
+        if (null == userName) {
             return new ModelAndView("redirect:/unifyerror", "cause", "Fail to get user name");
         }
 
         List<Api> apiList = null;
         try {
             apiList = apiService.getAllByEnv(env);
-            if(null != apiList) {
+            if (null != apiList) {
                 Collections.sort(apiList, new Comparator<Api>() {
                     @Override
                     public int compare(Api arg1, Api arg2) {
@@ -93,29 +102,28 @@ public class ReleaseController {
     }
 
 
-
-    @RequestMapping(value = "/releasedownload", produces="application/json;charset=utf-8")
+    @RequestMapping(value = "/releasedownload", produces = "application/json;charset=utf-8")
     public ResponseEntity<String> releasedownload(@RequestParam("ids") String ids,
-                             @RequestParam("toEnv") byte toEnv) throws NumberFormatException, UnsupportedEncodingException {
+                                                  @RequestParam("toEnv") byte toEnv) throws NumberFormatException, UnsupportedEncodingException {
 
         List<JSONObject> list_Info = new ArrayList<>();
 
 
-        if(!StringUtils.isEmpty(ids)){
+        if (!StringUtils.isEmpty(ids)) {
 
-            if(ids.contains(",")){
+            if (ids.contains(",")) {
                 String[] idArray = ids.split(",");
-                for(String id:idArray){
-                    try{
-                        list_Info.add(releaseService.getDownloadInfo(id,toEnv));
-                    }catch (NumberFormatException e){
+                for (String id : idArray) {
+                    try {
+                        list_Info.add(releaseService.getDownloadInfo(id, toEnv));
+                    } catch (NumberFormatException e) {
                         throw new NumberFormatException("ID格式不正确！无法生成下载文件!");
                     }
                 }
-            }else{
-                try{
-                    list_Info.add(releaseService.getDownloadInfo(ids,toEnv));
-                }catch (NumberFormatException e){
+            } else {
+                try {
+                    list_Info.add(releaseService.getDownloadInfo(ids, toEnv));
+                } catch (NumberFormatException e) {
                     throw new NumberFormatException("ID格式不正确！无法生成下载文件!");
                 }
             }
@@ -130,15 +138,17 @@ public class ReleaseController {
         String downloadStr = JSONArray.toJSONString(list_Info, SerializerFeature.DisableCheckSpecialChar);
 
 
-        downloadStr =new String(downloadStr.getBytes("utf-8"), "ISO8859-1");
+        downloadStr = new String(downloadStr.getBytes("utf-8"), "ISO8859-1");
 
         return new ResponseEntity<String>(downloadStr,
                 headers, HttpStatus.CREATED);
 
     }
 
-    @RequestMapping(value = "/releaseupload", produces="application/json;charset=utf-8")
-    public @ResponseBody  String releaseupload(@RequestParam("file") MultipartFile file) {
+    @RequestMapping(value = "/releaseupload", produces = "application/json;charset=utf-8")
+    public
+    @ResponseBody
+    String releaseupload(@RequestParam("file") MultipartFile file) {
 
         JSONArray array_result = new JSONArray();
         int successNum = 0;
@@ -150,33 +160,33 @@ public class ReleaseController {
                 String uploadStr = new String(bytes);
                 JSONArray array = JSONArray.parseArray(uploadStr);
 
-                for(int i=0;i<array.size();i++) {
+                for (int i = 0; i < array.size(); i++) {
 
                     JSONObject obj = array.getJSONObject(i);
                     JSONObject resultObj = releaseService.loadUploadFile(obj);
 
-                    if(resultObj!=null){
+                    if (resultObj != null) {
                         array_result.add(resultObj);
-                    }else{
+                    } else {
                         successNum++;
                     }
 
                 }
 
-             } catch (Exception e) {
-                logger.error("文件解析失败"+e);
-                return new ApiResult<String>(1,"文件解析失败",e.getMessage()).toString();
-             }
+            } catch (Exception e) {
+                logger.error("文件解析失败" + e);
+                return new ApiResult<String>(1, "文件解析失败", e.getMessage()).toString();
+            }
 
         } else {
-             return new ApiResult<String>(1,"发布失败","文件为空").toString();
+            return new ApiResult<String>(1, "发布失败", "文件为空").toString();
         }
 
         JSONObject result = new JSONObject();
-        result.put("items",array_result);
-        result.put("successNum",successNum);
+        result.put("items", array_result);
+        result.put("successNum", successNum);
 
-        return new ApiResult<JSONObject>(0,"发布成功",result).toString();
+        return new ApiResult<JSONObject>(0, "发布成功", result).toString();
 
     }
 

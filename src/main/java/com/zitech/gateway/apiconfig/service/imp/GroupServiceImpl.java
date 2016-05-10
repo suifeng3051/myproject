@@ -4,6 +4,7 @@ import com.zitech.gateway.apiconfig.dao.gateway.GroupDAO;
 import com.zitech.gateway.apiconfig.model.Group;
 import com.zitech.gateway.apiconfig.service.GroupService;
 import com.zitech.gateway.utils.AppUtils;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -50,8 +51,9 @@ public class GroupServiceImpl implements GroupService {
     public List<Group> getAll() {
         return groupDAO.selectAll();
     }
+
     @Override
-    public List<Group> getGroupByNameAndAlias(String name, String alias){
+    public List<Group> getGroupByNameAndAlias(String name, String alias) {
         Group openApiGroup = new Group();
         openApiGroup.setName(name);
         openApiGroup.setAlias(alias);
@@ -60,23 +62,23 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Group getGroupByAlias(String alias) {
-        return  groupDAO.selectByAlias(alias);
+        return groupDAO.selectByAlias(alias);
     }
 
     @Override
-    public String getGroupNamesByIds(String ids){
+    public String getGroupNamesByIds(String ids) {
         StringBuffer groupNames = new StringBuffer();
 
-        if(StringUtils.isNotBlank(ids)){
-            if(ids.trim().contains(" ")){
+        if (StringUtils.isNotBlank(ids)) {
+            if (ids.trim().contains(" ")) {
                 String[] groupIds = ids.split(" ");
-                for(String groupId:groupIds){
+                for (String groupId : groupIds) {
                     int id = Integer.parseInt(groupId.trim());
-                    groupNames.append(groupDAO.selectByPrimaryKey(id).getAlias()+" ");
+                    groupNames.append(groupDAO.selectByPrimaryKey(id).getAlias() + " ");
                 }
-            }else{
-                    int id = Integer.parseInt(ids.trim());
-                    groupNames.append(groupDAO.selectByPrimaryKey(id).getAlias()+" ");
+            } else {
+                int id = Integer.parseInt(ids.trim());
+                groupNames.append(groupDAO.selectByPrimaryKey(id).getAlias() + " ");
             }
         }
 
@@ -86,38 +88,37 @@ public class GroupServiceImpl implements GroupService {
 
     /**
      * add by pxl 2016.4.12 获取group的树形结构
-     * @return
      */
     @Override
     public Map<String, Object> getGroupTreeById(int id) {
 
-        if(id==-1){
+        if (id == -1) {
             Group openApiGroup_all = groupDAO.selectByAlias("all");
-            id=openApiGroup_all.getId();
+            id = openApiGroup_all.getId();
         }
 
 
-        Map<Integer,Map<String,Object>> groupTreeKeyByID = new HashMap<>();
-        Map<Integer,List<Map<String,Object>>> groupTreeKeyByPID = new HashMap<>();
-        List<Group>  list_openApiGroup = groupDAO.selectAll();
+        Map<Integer, Map<String, Object>> groupTreeKeyByID = new HashMap<>();
+        Map<Integer, List<Map<String, Object>>> groupTreeKeyByPID = new HashMap<>();
+        List<Group> list_openApiGroup = groupDAO.selectAll();
 
         //为了递归的时候不重新去数据库取
-        for(Group openApiGroup:list_openApiGroup) {
+        for (Group openApiGroup : list_openApiGroup) {
 
-            if(StringUtils.isEmpty(openApiGroup.getAlias()) || StringUtils.isEmpty(openApiGroup.getName())) {
+            if (StringUtils.isEmpty(openApiGroup.getAlias()) || StringUtils.isEmpty(openApiGroup.getName())) {
                 continue;
             }
 
-            Map<String,Object>  treeObj = new HashMap<String,Object>();
-            treeObj.put("pid",openApiGroup.getPid());
-            treeObj.put("id",openApiGroup.getId());
-            treeObj.put("name",openApiGroup.getName());
-            treeObj.put("alias",openApiGroup.getAlias());
-            treeObj.put("level",openApiGroup.getLevel());
-            treeObj.put("children",null);
+            Map<String, Object> treeObj = new HashMap<String, Object>();
+            treeObj.put("pid", openApiGroup.getPid());
+            treeObj.put("id", openApiGroup.getId());
+            treeObj.put("name", openApiGroup.getName());
+            treeObj.put("alias", openApiGroup.getAlias());
+            treeObj.put("level", openApiGroup.getLevel());
+            treeObj.put("children", null);
             groupTreeKeyByID.put(openApiGroup.getId(), treeObj);
 
-            List<Map<String,Object>> temp = new ArrayList<Map<String,Object>>();
+            List<Map<String, Object>> temp = new ArrayList<Map<String, Object>>();
             if (groupTreeKeyByPID.containsKey(openApiGroup.getPid())) {
                 temp = groupTreeKeyByPID.get(openApiGroup.getPid());
             }
@@ -126,14 +127,14 @@ public class GroupServiceImpl implements GroupService {
         }
 
 
-        Map<String,Object> treeObj = AppUtils.getTreeById(id,groupTreeKeyByID,groupTreeKeyByPID);
+        Map<String, Object> treeObj = AppUtils.getTreeById(id, groupTreeKeyByID, groupTreeKeyByPID);
 
         return treeObj;
     }
 
 
     @Override
-    public List<Group> getAllById(int id){
+    public List<Group> getAllById(int id) {
 
         return groupDAO.selectAllById(id);
 
