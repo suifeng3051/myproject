@@ -36,7 +36,7 @@ public class ValidatePipe extends AbstractPipe {
         // login check
         AccessToken token = event.getAccessToken();
         Api api = event.getApi();
-        if (api.getLogin() == 1 && token.getUserId() == 0) {
+        if (api.getLogin() == 1 && (token.getUserId() == null || token.getUserId() == 0)) {
             throw new TokenException(5218, "请先登陆");
         }
     }
