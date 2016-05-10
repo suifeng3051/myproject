@@ -56,7 +56,7 @@ public class MonitorDataController {
 	 * @param stime 
 	 */
 //	@RequestMapping(value = "/querymonitor", produces = "application/json;charset=utf-8")
-    public String getMonitoData(String stime, String etime, String metric, String group, String host, String api){
+    public String getMonitorData(String stime, String etime, String metric, String group, String host, String api){
 		
     	Date beginDate = new Date(Long.parseLong(stime)*1000);
     	Date endDate = new Date(Long.parseLong(etime)*1000);

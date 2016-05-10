@@ -2,17 +2,16 @@
  * Copyright (c) 2015-2020 by zitech
  * All rights reserved.
  */
-package com.zitech.gateway.monitor.service;
+package com.zitech.gateway.monitor.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.monitor.api.IMonitorService;
 import com.zitech.gateway.monitor.entity.Gateway;
 import com.zitech.gateway.monitor.mongodb.MongoBaseDao;
+import com.zitech.gateway.monitor.service.IMonitorService;
 import com.zitech.gateway.utils.AppUtils;
 import com.zitech.gateway.utils.DateUtil;
 
