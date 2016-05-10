@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,14 +137,14 @@ public class InstanceMonitor {
                             String allThreadNode = threadNode + Constants.THREAD_ALL_NODE;
                             sb.append(readData(client, allThreadNode)).append(";");
 
-                            String preThreadNode = threadNode + Constants.THREAD_PRE_NODE;
+                            String preThreadNode = threadNode + Constants.THREAD_POOL_NODE;
                             sb.append(readData(client, preThreadNode)).append(";");
                         }
 
                         { // request node
                             String requestNode = childNode + Constants.REQUEST_NODE;
 
-                            String requestPreNode = requestNode + Constants.REQUEST_PRE_NODE;
+                            String requestPreNode = requestNode + Constants.REQUEST_ALL_NODE;
                             sb.append(readData(client, requestPreNode)).append(";");
 
                             String requestHttpAsyncNode = requestNode + Constants.REQUEST_HTTP_ASYNC;

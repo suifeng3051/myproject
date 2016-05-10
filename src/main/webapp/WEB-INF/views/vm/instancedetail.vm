@@ -40,9 +40,9 @@
                         <tr>
                             <th>实例名</th>
                             <th>thread_all</th>
-                            <th>thread_pre</th>
+                            <th>thread_pool</th>
                             <th>request_pre</th>
-                            <th>request_http_async</th>
+                            <th>request_serve</th>
                             #foreach($!cacheName in $!results.get("cacheNames"))
                                 <th>$!cacheName</th>
                             #end

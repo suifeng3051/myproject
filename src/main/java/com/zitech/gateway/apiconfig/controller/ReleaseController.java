@@ -1,24 +1,43 @@
 package com.zitech.gateway.apiconfig.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.zitech.gateway.apiconfig.model.CarmenApi;
-import com.zitech.gateway.apiconfig.model.CarmenUser;
-import com.zitech.gateway.apiconfig.service.ICarmenApiService;
-import com.zitech.gateway.apiconfig.service.ICarmenUserService;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.zitech.gateway.apiconfig.model.Api;
+import com.zitech.gateway.apiconfig.service.AdminService;
+import com.zitech.gateway.apiconfig.service.ApiService;
+import com.zitech.gateway.apiconfig.service.ParamService;
+import com.zitech.gateway.apiconfig.service.ReleaseService;
+import com.zitech.gateway.apiconfig.service.ServeService;
 import com.zitech.gateway.cache.RedisOperate;
+import com.zitech.gateway.common.ApiResult;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
 
 /**
  * Created by dingdongsheng on 15/9/5.
@@ -31,114 +50,145 @@ public class ReleaseController {
 
     // Resource 默认按照名称进行装配
     @Resource
-    ICarmenApiService iCarmenApiService;
+    ApiService apiService;
     @Resource
-    ICarmenUserService iCarmenUserService;
+    AdminService adminService;
     @Resource
     RedisOperate redisOperate;
+    @Autowired
+    private ReleaseService releaseService;
+    @Autowired
+    private ServeService serveService;
+    @Autowired
+    private ParamService paramService;
 
     @RequestMapping("/release")
-    public ModelAndView release(@RequestParam(value="env", defaultValue = "1") byte env,
+    public ModelAndView release(@RequestParam(value = "env", defaultValue = "1") byte env,
                                 HttpServletRequest request,
                                 HttpServletResponse response) {
 
-        String userName = null;
-        try {
-            String userKey = request.getSession().getAttribute("username").toString();
-            userName = redisOperate.getStringByKey(userKey);
-            redisOperate.set("username", userName, 60*60); // 一小时
-        } catch (Exception e) {
-            logger.warn("fail to get session", e);
+        String userName = adminService.getUserNameFromSessionAndRedis(request);
+
+        if (null == userName) {
+            return new ModelAndView("redirect:/unifyerror", "cause", "Fail to get user name");
         }
-        List<CarmenApi> carmenApi = null;
+
+        List<Api> apiList = null;
         try {
-            carmenApi = iCarmenApiService.getRecordByEnv(env);
-            if(null != carmenApi) {
-                Collections.sort(carmenApi, new Comparator<CarmenApi>() {
+            apiList = apiService.getAllByEnv(env);
+            if (null != apiList) {
+                Collections.sort(apiList, new Comparator<Api>() {
                     @Override
-                    public int compare(CarmenApi arg1, CarmenApi arg2) {
-                        if (StringUtils.isEmpty(arg1.getCreateTime()) || StringUtils.isEmpty(arg2.getCreateTime())) { // 防止脏数据
+                    public int compare(Api arg1, Api arg2) {
+                        if (StringUtils.isEmpty(arg1.getCreatedTime()) || StringUtils.isEmpty(arg2.getCreatedTime())) { // 防止脏数据
                             return 0;
                         }
-                        return arg2.getCreateTime().compareTo(arg1.getCreateTime()); // 按时间逆序排序
+                        return arg2.getCreatedTime().compareTo(arg1.getCreatedTime()); // 按时间逆序排序
                     }
                 });
             }
         } catch (Exception e) {
             logger.error("can not get api config", e);
         }
-        if(null == userName) {
-            return new ModelAndView("redirect:/unifyerror", "cause", "Fail to get user name");
-        }
+
         Map<String, Object> results = new HashMap<>();
-        results.put("apilists", carmenApi);
+        results.put("apilists", apiList);
         results.put("user", userName);
         results.put("env", env);
-        Boolean isAdmin = isAdministrator(userName);
+        Boolean isAdmin = adminService.isAdmin(userName);
         results.put("isAdmin", isAdmin);
         return new ModelAndView("release", "results", results);
+
     }
 
 
-    public Boolean isAdministrator(String userName) {
+    @RequestMapping(value = "/releasedownload", produces = "application/json;charset=utf-8")
+    public ResponseEntity<String> releasedownload(@RequestParam("ids") String ids,
+                                                  @RequestParam("toEnv") byte toEnv) throws NumberFormatException, UnsupportedEncodingException {
 
-        try {
-            List<CarmenUser> user = iCarmenUserService.getByUserName(userName);
-            for(CarmenUser carmenUser : user) {
-                if(1 == carmenUser.getUserGroup()) {
-                    return true;
+        List<JSONObject> list_Info = new ArrayList<>();
+
+
+        if (!StringUtils.isEmpty(ids)) {
+
+            if (ids.contains(",")) {
+                String[] idArray = ids.split(",");
+                for (String id : idArray) {
+                    try {
+                        list_Info.add(releaseService.getDownloadInfo(id, toEnv));
+                    } catch (NumberFormatException e) {
+                        throw new NumberFormatException("ID格式不正确！无法生成下载文件!");
+                    }
+                }
+            } else {
+                try {
+                    list_Info.add(releaseService.getDownloadInfo(ids, toEnv));
+                } catch (NumberFormatException e) {
+                    throw new NumberFormatException("ID格式不正确！无法生成下载文件!");
                 }
             }
-        } catch (Exception e) {
-            logger.error("can not get uesrs.", e);
+
         }
-        return false;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+        headers.setContentDispositionFormData("attachment", "release.txt");
+
+        String downloadStr = JSONArray.toJSONString(list_Info, SerializerFeature.DisableCheckSpecialChar);
+
+
+        downloadStr = new String(downloadStr.getBytes("utf-8"), "ISO8859-1");
+
+        return new ResponseEntity<String>(downloadStr,
+                headers, HttpStatus.CREATED);
+
     }
 
-
-    /**
-     * 更新API信息
-     * @param ids 待更新或者新增的对象
-     * @return String 成功返回success，失败返回fail
-     */
-    @RequestMapping(value = "/releaseapi", produces="application/json;charset=utf-8")
+    @RequestMapping(value = "/releaseupload", produces = "application/json;charset=utf-8")
+    public
     @ResponseBody
-    public String releaseApi(@RequestParam("ids") String ids,
-                             @RequestParam("flag") int flag) {
+    String releaseupload(@RequestParam("file") MultipartFile file) {
 
-        String status = "success";
-        String[] idArray = ids.split(",");
-        try {
-            if(1 == flag) { // 确认发布
-                for (String id : idArray) {
-                    CarmenApi carmenApi = new CarmenApi();
-                    carmenApi.setId(Long.valueOf(id));
-                    carmenApi.setMigrateFlag((byte)3);
-                    iCarmenApiService.update(carmenApi);
+        JSONArray array_result = new JSONArray();
+        int successNum = 0;
+
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+
+                String uploadStr = new String(bytes);
+                JSONArray array = JSONArray.parseArray(uploadStr);
+
+                for (int i = 0; i < array.size(); i++) {
+
+                    JSONObject obj = array.getJSONObject(i);
+                    JSONObject resultObj = releaseService.loadUploadFile(obj);
+
+                    if (resultObj != null) {
+                        array_result.add(resultObj);
+                    } else {
+                        successNum++;
+                    }
+
                 }
-            } else if(2 == flag) { //取消发布
-                for (String id : idArray) {
-                    CarmenApi carmenApi = new CarmenApi();
-                    carmenApi.setId(Long.valueOf(id));
-                    carmenApi.setMigrateFlag((byte)1);
-                    iCarmenApiService.update(carmenApi);
-                }
+
+            } catch (Exception e) {
+                logger.error("文件解析失败" + e);
+                return new ApiResult<String>(1, "文件解析失败", e.getMessage()).toString();
             }
 
-        } catch (Exception e) {
-            status = "fail";
-            logger.warn("fail to convert from jsonString to object", e);
+        } else {
+            return new ApiResult<String>(1, "发布失败", "文件为空").toString();
         }
 
-        try {
-            status = JSON.toJSONString(status);
-        } catch (Exception e) {
-            logger.warn("fail to convert json", e);
-        }
-        return status;
+        JSONObject result = new JSONObject();
+        result.put("items", array_result);
+        result.put("successNum", successNum);
+
+        return new ApiResult<JSONObject>(0, "发布成功", result).toString();
+
     }
-
-
 
 
 }

@@ -12,7 +12,7 @@ $(document).ready(function () {
         window.location.href = "apilist?env=" + env;
       } else if("LogView" == theme) {
         window.location.href = "pipelog?env=" + env;
-      } else if("Users" == theme) {
+      } else if("User" == theme) {
        window.location.href = "user?env=" + env;
      } else if("Manual" == theme) {
         window.location.href = "manual?env=" + env;
@@ -20,10 +20,10 @@ $(document).ready(function () {
         window.location.href = "cachemanage?env=" + env;
      } else if("Instance" == theme) {
         window.location.href = "instancedetail?env=" + env;
-     } else if("RecoverApi" == theme) {
+     } else if("Recover" == theme) {
         window.location.href = "recoverapi?env=" + env;
      } else if ("Client" == theme) {
-           window.location.href = "oauthclient?env=" + env;
+           window.location.href = "client?env=" + env;
     }else if("safety"==theme){
       window.location.href = "updatepwd?env=" + env;
       }
@@ -90,7 +90,7 @@ $(document).ready(function () {
     function getEnv() {
         var env = $("#env").serialize();
         var envValue = env.split("=")[1];
-        console.log("value: " + envValue);
+       // console.log("value: " + envValue);
         return envValue;
     }
 
@@ -184,8 +184,9 @@ $(document).ready(function () {
     // 确定发布
     $("#sureRelease").on("click", function () {
         var ids = getIds();
+        console.log(ids);
         if("" == ids) {
-            $("#apiRelease1Info").html("<p>Sorry，你没有勾选任何API，本次发布无效。</p>");
+            $("#apiRelease1Info").html("<p>Sorry，你没有勾选任何API!</p>");
             $("#apiRelease1Info").css("display", "block");
             return;
         } else {
@@ -207,7 +208,7 @@ $(document).ready(function () {
         var mapForm = document.createElement("form");
         mapForm.target = "_self";
         mapForm.method = "POST";
-        mapForm.action = "download";
+        mapForm.action = "releasedownload";
 
         var mapInput = document.createElement('input');
         mapInput.type = "text";
@@ -240,9 +241,63 @@ $(document).ready(function () {
     });
 
     $("#sureUpload").on("click", function() {
-        var uploadFile = $("#inputFile").val();
-        console.log("file: " + uploadFile);
+
+        var options = {
+             success:function(data){
+
+                 var code = data.code;
+                 var successNum = data.data.successNum;
+                 var items = data.data.items;
+
+                 if(code==0){
+                     var appendHtml  = "<table class='table table-striped table-bordered table-hover'>"+
+                         "<thead><tr><th>API名称</th><th>发布状态</th><th>原因</th></tr></thead><tbody>";
+                     $.each(items,function(i,item){
+                         console.log(item);
+                         var apiObj = item.api;
+                         var apiCode = item.code;
+                         var apiStatus = "";
+                         if(apiCode==1){
+                             apiStatus = "<span style='color:red'>发布失败</span>";
+                         }
+                         var message = "<span style='color:#AA00AA'>"+item.message+"</span>";
+                         appendHtml += "<tr><td>"+apiObj.namespace+"/"+apiObj.method+"/"+apiObj.version+"</td><td>"+apiStatus+"</td><td>"+message+"</td>";
+
+                     });
+
+                     appendHtml += "</tbody></table>";
+                     $("#uploadResultTable").empty();
+                     $("#uploadResultTable").append("<div class='alert alert-success' role='alert'>本次成功发布"+successNum+"条记录</div>");
+                     if(items.length>0){
+                         $("#uploadResultTable").append("<div class='alert alert-danger' role='alert'>本次发布失败"+items.length+"条记录</div>");
+                         $("#uploadResultTable").append(appendHtml);
+                     }
+
+
+                 }else{
+                     //提示失败
+                     $("#uploadResultTable").empty();
+                     $("#uploadResultTable").append("<div class='alert alert-danger' role='alert'>文件解析失败，您是不是选错文件啦   o(∩_∩)o</div>");
+                 }
+
+                 return false;
+            },
+
+            // other available options:
+            url:'releaseupload',         // 提交的URL, 默认使用FORM  ACTION
+            type: 'post',
+            dataType:  "json",     // 'xml', 'script', or 'json' (expected server response type)
+            //clearForm: true        // 是否清空form
+            resetForm: true   ,     // 是否重置form
+
+            // $.ajax options can be used here too, for example:
+            timeout:   3000
+        };
+
+        $("#uploadForm").ajaxSubmit(options);
+
     });
+
 
     // 获取选中的checkbox的id
     function getIds() {

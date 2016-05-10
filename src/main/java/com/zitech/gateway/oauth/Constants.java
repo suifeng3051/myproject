@@ -7,18 +7,15 @@ public final class Constants {
     public final static String APP_ENCODING = "utf-8";
 
     // for cache
-    public final static String CACHE_TOKEN_KEY_PATTERN = "open_oauth_access_token_%s";
-    public final static String CACHE_ACCESS_TOKEN_KEY_PATTERN = "open_oauth_access_token_*";
-    public static final String CACHE_NAME_ACCESS_TOKEN = "openOauthAccessTokens";
-    public final static String CACHE_APP_KEY_PATTERN = "cache_app_key_%s";
+    public final static String CACHE_TOKEN_KEY_PATTERN = "oauth_access_token_%s";
+    public final static String CACHE_ACCESS_TOKEN_KEY_PATTERN = "oauth_access_token_*";
+    public static final String CACHE_NAME_ACCESS_TOKEN = "oauth_access_token_name";
     public final static String CACHE_CLIENT_KEY_PATTERN = "cache_client_key_%s";
     public final static String CACHE_REFRESH_FREQUENCY_PATTERN = "cache_refresh_frequency_pattern_%s";
     public final static String CACHE_LOGIN_FREQUENCY_PATTERN = "cache_login_frequency_pattern_%s";
 
     // for login
     public final static String DEFAULT_CAPTCHA_PARAM = "captcha";
-
-    public final static String SMS_SEND_KEY =  "sms_send_key_%s";
 
     // for user
     public final static String USER_ID = "user_id";

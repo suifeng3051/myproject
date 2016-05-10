@@ -8,6 +8,6 @@ public interface IPipe {
     /*
         process request event
      */
-    void onEvent(RequestEvent event);
+    void onEvent(RequestEvent event) throws Exception;
 
 }

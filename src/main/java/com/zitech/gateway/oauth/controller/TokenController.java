@@ -5,11 +5,11 @@ import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.oauth.Constants;
 import com.zitech.gateway.oauth.exception.OAuthException;
 import com.zitech.gateway.oauth.model.OAuthAuthzParameters;
-import com.zitech.gateway.oauth.model.OauthUser;
-import com.zitech.gateway.oauth.model.OpenOauthClients;
-import com.zitech.gateway.oauth.model.OpenOauthRefreshTokens;
+import com.zitech.gateway.oauth.model.Account;
+import com.zitech.gateway.oauth.model.Client;
+import com.zitech.gateway.oauth.model.RefreshToken;
 import com.zitech.gateway.oauth.oauthex.*;
-import com.zitech.gateway.oauth.service.impl.OAuthService;
+import com.zitech.gateway.oauth.service.impl.OAuthServiceImpl;
 import com.zitech.gateway.utils.AppUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
@@ -42,7 +42,7 @@ public class TokenController {
     private static final Logger logger = LoggerFactory.getLogger(TokenController.class);
 
     @Autowired
-    private OAuthService oAuthService;
+    private OAuthServiceImpl oAuthService;
 
     @Autowired
     private AppConfig appConfig;
@@ -153,7 +153,7 @@ public class TokenController {
             }
 
             // check client id
-            OpenOauthClients openOauthClients = oAuthService.getClientByClientId(oauthRequest.getClientId());
+            Client openOauthClients = oAuthService.getClientByClientId(oauthRequest.getClientId());
             if (openOauthClients == null) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
@@ -265,7 +265,7 @@ public class TokenController {
             }
 
             // check token
-            OpenOauthRefreshTokens token = oAuthService.getRefreshToken(refreshToken);
+            RefreshToken token = oAuthService.getRefreshToken(refreshToken);
             if (token == null) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
@@ -288,7 +288,7 @@ public class TokenController {
             }
 
             // check client id
-            OpenOauthClients openOauthClients = oAuthService.getClientByClientId(oauthRequest.getClientId());
+            Client openOauthClients = oAuthService.getClientByClientId(oauthRequest.getClientId());
             if (openOauthClients == null) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
@@ -405,8 +405,8 @@ public class TokenController {
                 return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
-            OpenOauthClients openOauthClients = oAuthService.getClientByClientId(oAuthAuthzParameters.getClientId());
-            if (openOauthClients == null) {
+            Client client = oAuthService.getClientByClientId(oAuthAuthzParameters.getClientId());
+            if (client == null) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
                         .setError(String.valueOf(OAuthConstants.OAuthResponse.INVALID_CLIENT))
@@ -416,7 +416,7 @@ public class TokenController {
                 return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
-            if (!openOauthClients.getGrantTypes().contains(Constants.OAUTH_CLIENT_CREDENTIALS)) {
+            if (!client.getGrantTypes().contains(Constants.OAUTH_CLIENT_CREDENTIALS)) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
                         .setError(String.valueOf(OAuthConstants.OAuthResponse.INVALID_CLIENT_INFO))
@@ -426,25 +426,23 @@ public class TokenController {
                 return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
-            if (!openOauthClients.getClientSecret().equals(oAuthAuthzParameters.getClientSecret())) {
+            if (!client.getClientSecret().equals(oAuthAuthzParameters.getClientSecret())) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
                         .setError(String.valueOf(OAuthConstants.OAuthResponse.INVALID_CLIENT_INFO))
                         .setErrorDescription(OAuthConstants.OAuthDescription.INVALID_CLIENT_DESCRIPTION)
                         .buildJSONMessage();
-                logger.info("invalid secret: {}, context: {}", openOauthClients.getClientSecret(), oAuthAuthzParameters);
+                logger.info("invalid secret: {}, context: {}", client.getClientSecret(), oAuthAuthzParameters);
                 return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
             }
 
             if (StringUtils.isEmpty(oAuthAuthzParameters.getScope())) {
-                //oAuthAuthzParameters.setScope(openOauthClients.getDefaultScope());
-                oAuthAuthzParameters.setScope(appConfig.clientCredentialScope); //for security
+                oAuthAuthzParameters.setScope(client.getDefaultScope());
             } else {
                 oAuthAuthzParameters.setScope(
                         OAuthUtils.encodeScopes(
                                 oAuthService.getRetainScopes(
-                                        //openOauthClients.getDefaultScope(),
-                                        appConfig.clientCredentialScope, // for security
+                                        client.getDefaultScope(),
                                         oAuthAuthzParameters.getScope()
                                 )
                         )
@@ -489,22 +487,7 @@ public class TokenController {
     public Object password(HttpServletRequest request)
             throws URISyntaxException, OAuthSystemException {
         try {
-//            String type = request.getParameter("type");
-//            LoginType loginType = LoginType2EnumUtils.getLoginTypeByStr(type);
-//
-//            if (loginType == null) //登录类型不正确
-//            {
-//                OAuthResponse response = OAuthASResponseEx
-//                        .errorResponse(HttpServletResponse.SC_OK)
-//                        .setError(String.valueOf(OAuthConstants.OAuthResponse.INVALID_TYPE))
-//                        .setErrorDescription(OAuthConstants.OAuthDescription.INVALID_GRANT_TYPE)
-//                        .buildJSONMessage();
-//                logger.info("invalid type, context: {}", type);
-//                return new ResponseEntity<String>(response.getBody(), HttpStatus.valueOf(response.getResponseStatus()));
-//            }
-
             OAuthPasswordRequest oauthRequest = new OAuthPasswordRequest(request);
-            //OAuthAuthzParameters参数对象
             OAuthAuthzParameters oAuthAuthzParameters = new OAuthAuthzParameters(oauthRequest);//参数类型决定构造函数的调用
 
             //验证GRANT_TYPE
@@ -531,7 +514,7 @@ public class TokenController {
             }
 
             //判断ClientId是否正确
-            OpenOauthClients openOauthClients = oAuthService.getClientByClientId(oAuthAuthzParameters.getClientId());
+            Client openOauthClients = oAuthService.getClientByClientId(oAuthAuthzParameters.getClientId());
             if (openOauthClients == null) {
                 OAuthResponse response = OAuthASResponseEx
                         .errorResponse(HttpServletResponse.SC_OK)
@@ -565,9 +548,8 @@ public class TokenController {
             }
 
 
-            OauthUser user = null;
+            Account user = null;
             try {
-//                user = oAuthService.login(oAuthAuthzParameters.getUserName(),oAuthAuthzParameters.getPassword(), Integer.valueOf(type));
                 user = oAuthService.login(oAuthAuthzParameters, request);
             } catch (Exception e) {
                 logger.info("login error", e);
@@ -594,25 +576,6 @@ public class TokenController {
                 oAuthAuthzParameters.setScope(openOauthClients.getDefaultScope());
             }
 
-            // remove by pxl 网关权限暂时只到client级别
-            /*else {
-                // add by panxl 若该用户已被分配了权限，则写入其被分配的权限,否则就是写入该client所拥有的默认权限
-                String scope_userHas = user.getScope();
-                if(StringUtils.isNotBlank(scope_userHas)){
-                    oAuthAuthzParameters.setScope(scope_userHas.trim());
-                }else{
-                    oAuthAuthzParameters.setScope(
-                            OAuthUtils.encodeScopes(
-                                    oAuthService.getRetainScopes(
-                                            openOauthClients.getDefaultScope(),
-                                            oAuthAuthzParameters.getScope()
-                                    )
-                            )
-                    );
-                }//end else StringUtils.isNotBlank(scope_userHas)
-
-            }//end else StringUtils.isEmpty(oAuthAuthzParameters.getScope()
-*/
             /**
              * limit client access token number
              */

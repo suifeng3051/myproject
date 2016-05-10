@@ -7,10 +7,7 @@ import com.zitech.gateway.gateway.pipes.IPipe;
 public class AbstractPipe implements IPipe {
 
     @Override
-    public void onEvent(RequestEvent event) {
-    }
-
-    protected void onNext(RequestEvent event) {
+    public void onEvent(RequestEvent event) throws Exception {
     }
 
 }

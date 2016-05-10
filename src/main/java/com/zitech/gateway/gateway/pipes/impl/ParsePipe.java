@@ -1,76 +1,45 @@
 package com.zitech.gateway.gateway.pipes.impl;
 
+import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.gateway.Constants;
-import com.zitech.gateway.gateway.excutor.Pipeline;
+import com.zitech.gateway.gateway.PipeHelper;
+import com.zitech.gateway.gateway.cache.AccessTokenCache;
+import com.zitech.gateway.gateway.cache.ApiCache;
 import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.gateway.model.RequestState;
-import com.zitech.gateway.gateway.model.ValidateType;
-import com.zitech.gateway.gateway.services.HelpService;
+import com.zitech.gateway.oauth.model.AccessToken;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 
 
+@Service
+@Pipe(Group = 'A', Order = 1)
 public class ParsePipe extends AbstractPipe {
 
     private static final Logger logger = LoggerFactory.getLogger(ParsePipe.class);
 
-    public void onEvent(RequestEvent event) {
-        try {
-            logger.debug("begin of parsing client request: {}", event);
+    @Autowired
+    private AccessTokenCache tokenCache;
 
-            HttpServletRequest request = event.getRequest();
+    @Autowired
+    private ApiCache apiCache;
 
-            Map<String, String> params = event.getParams();
-            Map<String, String> signParams = event.getSignParams();
-            Map<String, String[]> parameterMap = request.getParameterMap();
+    public void onEvent(RequestEvent event) throws Exception {
 
-            // set event ip
-            String ip = HelpService.getIp(request);
-            event.setIp(ip);
+        HttpServletRequest request = event.getRequest();
 
-            // set normal parameters
-            // caution: only get the first parameter
-            for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
-                if (entry.getKey().equals(Constants.ACCESS_TOKEN)) {
-                    event.setAccessToken(entry.getValue()[0]);
-                } else if (entry.getKey().equals(Constants.SIGN)) {
-                    event.setSign(entry.getValue()[0]);
-                } else {
-                    String value = entry.getValue()[0];
-                    params.put(entry.getKey(), value);
-                    signParams.put(entry.getKey(), value);
-                }
-            }
+        String tokenStr = request.getParameter(Constants.ACCESS_TOKEN);
 
-            // set multi files
-            if (request instanceof MultipartHttpServletRequest) {
-                event.setMultiFiles(((MultipartHttpServletRequest) request).getMultiFileMap());
-            }
+        AccessToken token = tokenCache.get(tokenStr);
+        Api api = apiCache.get(event.getNamespace(), event.getMethod(), event.getVersion());
+        String ip = PipeHelper.getIp(request);
 
-        } catch (Exception e) {
-            event.setException(e);
-            logger.error("exception happened when parsing request: {}", event.getId(), e);
-        } finally {
-            logger.info("complete parsing request: {}", event.getId());
-            onNext(event);
-        }
+        event.setAccessToken(token);
+        event.setApi(api);
+        event.setIp(ip);
     }
-
-    @Override
-    protected void onNext(RequestEvent event) {
-        if (event.getValidateType() == ValidateType.TOKEN)
-            event.setState(RequestState.TOKEN);
-        else if (event.getValidateType() == ValidateType.SIGN)
-            event.setState(RequestState.SIGN);
-
-        // go on
-        Pipeline.getInstance().process(event);
-    }
-
 }

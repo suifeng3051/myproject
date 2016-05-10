@@ -1,9 +1,16 @@
 package com.zitech.gateway.apiconfig.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.zitech.gateway.apiconfig.model.CarmenApi;
-import com.zitech.gateway.apiconfig.service.ICarmenApiService;
+import com.zitech.gateway.apiconfig.model.Admin;
+import com.zitech.gateway.apiconfig.model.Api;
+import com.zitech.gateway.apiconfig.model.Param;
+import com.zitech.gateway.apiconfig.model.Serve;
+import com.zitech.gateway.apiconfig.service.AdminService;
+import com.zitech.gateway.apiconfig.service.ApiService;
+import com.zitech.gateway.apiconfig.service.ParamService;
+import com.zitech.gateway.apiconfig.service.ServeService;
 import com.zitech.gateway.cache.RedisOperate;
+import com.zitech.gateway.common.ApiResult;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -13,87 +20,183 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
 
 /**
- * Created by dingdongsheng on 15/9/10.
+ * Created by hy on 16-5-4.
  */
-
 @Controller
 public class RecoverApiController {
-    // 日志记录器
     private final static Logger logger = LoggerFactory.getLogger(RecoverApiController.class);
 
     // Resource 默认按照名称进行装配
     @Resource
     RedisOperate redisOperate;
     @Resource
-    ICarmenApiService iCarmenApiService;
+    private ApiService apiService;
+
+    @Resource
+    private ServeService serveService;
+
+    @Resource
+    private ParamService paramService;
+
+    @Resource
+    private AdminService adminService;
+
 
     @RequestMapping("/recoverapi")
     public ModelAndView recoverApi(@RequestParam("env") String env,
                                    HttpServletRequest request) {
-        String userName = null;
-        try {
-            String userKey = request.getSession().getAttribute("username").toString();
-            userName = redisOperate.getStringByKey(userKey);
-            redisOperate.set("username", userName, 60*60); // 一小时
-        } catch (Exception e) {
-            logger.warn("fail to get session", e);
-        }
 
-        List<CarmenApi> allDeletedRecord = null;
+
+        String userName = null;
+
+
+        List<Api> deletedApi = null;
         try {
-            allDeletedRecord = iCarmenApiService.getAllDeletedRecord();
-            if(null != allDeletedRecord) {
-                Collections.sort(allDeletedRecord, new Comparator<CarmenApi>() {
+            userName = adminService.getUserNameFromSessionAndRedis(request);
+            if (null == userName) {
+                return new ModelAndView("redirect:/unifyerror", "cause", "Fail to get user name");
+            }
+
+            deletedApi = apiService.getDeletedApi();
+            if (null != deletedApi) {
+                Collections.sort(deletedApi, new Comparator<Api>() {
                     @Override
-                    public int compare(CarmenApi arg1, CarmenApi arg2) {
-                        if (StringUtils.isEmpty(arg1.getCreateTime()) || StringUtils.isEmpty(arg2.getCreateTime())) { // 防止脏数据
+                    public int compare(Api arg1, Api arg2) {
+                        if (StringUtils.isEmpty(arg1.getCreatedTime()) || StringUtils.isEmpty(arg2.getCreatedTime())) { // 防止脏数据
                             return 0;
                         }
-                        return arg2.getCreateTime().compareTo(arg1.getCreateTime()); // 按时间逆序排序
+                        return arg2.getCreatedTime().compareTo(arg1.getCreatedTime()); // 按时间逆序排序
                     }
                 });
             }
         } catch (Exception e) {
-            logger.error("fail to get deleted api",e);
+            logger.error("fail to get deleted api", e);
         }
 
-        if(null == userName) {
-            return new ModelAndView("redirect:/unifyerror", "cause", "Fail to get user name");
-        }
         Map<String, Object> results = new HashMap<>();
-        results.put("apilists", allDeletedRecord);
+        results.put("apilists", deletedApi);
         results.put("user", userName);
         results.put("env", env);
+        results.put("isAdmin", adminService.isAdmin(userName));
         return new ModelAndView("recoverapi", "results", results);
     }
 
-    @RequestMapping(value = "/executeapis", produces="application/json;charset=utf-8")
+    /**
+     * 恢复删除的api
+     */
+    @RequestMapping(value = "/recoverApis", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String executeApis(@RequestParam("ids") String ids) {
-        String status = "success";
+    public String recoverApis(@RequestParam("ids") String ids,
+                              HttpServletRequest request) {
+        ApiResult<Boolean> apiResult = new ApiResult<>(0, "success");
+
+        String userName = adminService.getUserNameFromSessionAndRedis(request);
+        if (null == userName) {
+            apiResult.setCode(2);
+            apiResult.setMessage("未查找到用户信息");
+            return apiResult.toString();
+        }
+        List<Admin> users = adminService.getByUserName(userName);
+        if (users.size() == 0) {
+            apiResult.setCode(2);
+            apiResult.setMessage("未查找到用户信息");
+            return apiResult.toString();
+        }
+        Integer userid = users.get(0).getId();
+
+        String[] idArray = ids.split(",");
+        Integer numbers = idArray.length;
+        Integer cnt = 0;
+        try {
+            for (String id : idArray) {
+                Integer apiId = Integer.valueOf(id);
+                Api api = apiService.getApiById(apiId);
+                //检测要恢复的api是否已经存在同名的api
+                if (!apiService.checkApi(api.getNamespace(), api.getMethod(), api.getVersion(), api.getEnv())) {
+                    continue;
+                }
+                if (api != null) {
+                    api.setUpdatedTime(new Date());
+                    api.setDeleted((byte) 0);
+                    api.setUpdatedId(userid);
+                    apiService.updateApi(api);
+                }
+
+                Serve serve = serveService.getByApiId(apiId);
+                if (serve != null) {
+                    serve.setDeleted((byte) 0);
+                    serve.setUpdatedId(userid);
+                    serve.setUpdatedTime(new Date());
+                    serveService.updateServe(serve);
+                }
+
+                Param param = paramService.getByApiId(apiId);
+                if (param != null) {
+                    param.setDeleted((byte) 0);
+                    param.setUpdatedTime(new Date());
+                    param.setUpdatedId(userid);
+                    paramService.updateParam(param);
+                }
+                cnt++;
+            }
+        } catch (Exception e) {
+            apiResult.setCode(3);
+            apiResult.setMessage("恢复api发生异常");
+            return apiResult.toString();
+        }
+        if (numbers != cnt) {
+            apiResult.setCode(4);
+            apiResult.setMessage("因api已经存在，有部分api未恢复");
+        }
+
+        return apiResult.toString();
+    }
+
+    /**
+     * 物理删除api
+     */
+    @RequestMapping(value = "/deleteApis", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String deleteApis(@RequestParam("ids") String ids,
+                             HttpServletRequest request) {
+        ApiResult<Boolean> apiResult = new ApiResult<>(0, "success");
+
         String[] idArray = ids.split(",");
         try {
             for (String id : idArray) {
-                CarmenApi carmenApi = new CarmenApi();
-                carmenApi.setId(Long.valueOf(id));
-                carmenApi.setIsDelete("n");
-                iCarmenApiService.update(carmenApi);
+                Integer apiId = Integer.valueOf(id);
+                Api api = apiService.getApiById(apiId);
+                if (api != null) {
+                    apiService.deleteApiRealById(api.getId());
+                }
+
+                Serve serve = serveService.getByApiId(apiId);
+                if (serve != null) {
+                    serveService.deleteServeRealById(serve.getId());
+                }
+
+                Param param = paramService.getByApiId(apiId);
+                if (param != null) {
+                    paramService.deleteParamRealById(param.getId());
+                }
             }
         } catch (Exception e) {
-            status = "fail";
-            logger.warn("fail to convert from jsonString to object", e);
+            apiResult.setCode(3);
+            apiResult.setMessage("删除api发生异常");
+            return apiResult.toString();
         }
 
-        try {
-            status = JSON.toJSONString(status);
-        } catch (Exception e) {
-            logger.warn("fail to convert json", e);
-        }
-        return status;
+        return apiResult.toString();
     }
 }
