@@ -59,7 +59,7 @@ public class MonitorDataController {
 	 */
 	@RequestMapping(value = "/querymonitor", produces = "application/json;charset=utf-8")
 	@ResponseBody
-    public String getMonitorData(String stime, String etime, String metric, String group, String host, String api){
+    public String getMonitorData(String stime, String etime, String metric, String host, String api){
 		
     	Date beginDate = new Date(Long.parseLong(stime)*1000);
     	Date endDate = new Date(Long.parseLong(etime)*1000);
@@ -70,7 +70,7 @@ public class MonitorDataController {
 		Map<String,Object> resMap = new HashMap<String, Object>();
 		List<Object> result = new ArrayList<Object>();
 
-		Query query = createQueryConditions(beginTime, endTime, group, api, host);
+		Query query = createQueryConditions(beginTime, endTime, api, host);
 		
 		String inputCollectionName = DB_NAME;
 		String mapFunction = MapReduceJs.MAP_FAILURE_COUNT;
@@ -87,7 +87,7 @@ public class MonitorDataController {
 			//BigDecimal key = new BigDecimal(keyD);  
 			res.put("key", key);
 			String value = countResult.getValue();
-			if(value.contains("isSuccess")){
+			if(value.contains("status")){
 				value = value.substring(17, value.length()-2);
 			}
 			res.put("value", Math.round(Double.parseDouble(value)));
@@ -168,7 +168,6 @@ public class MonitorDataController {
 	 * @Title: greatQueryConditions 
 	 * @param beginTime
 	 * @param endTime
-	 * @param group
 	 * @param api
 	 * @param host
 	 * @return
@@ -176,11 +175,8 @@ public class MonitorDataController {
 	 * @author ws
 	 */
 	private Query createQueryConditions(String beginTime, String endTime,
-                                        String group, String api, String host) {
+                                        String api, String host) {
 		Query query = new Query(Criteria.where("minute").gte(beginTime).lte(endTime));
-		if(StringUtils.isNotBlank(group)){
-            query.addCriteria(Criteria.where("group").regex(".*?"+group+".*"));
-		}
 		if(StringUtils.isNotBlank(api)){
 			query.addCriteria(Criteria.where("api").regex(".*?"+api+".*"));
 		}
