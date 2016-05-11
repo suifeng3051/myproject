@@ -365,26 +365,19 @@ $(document).ready(function(){
             // API接口信息配置
             apiObj = formdataToJSON($('#apiInterfaceConfig').serializeArray());
 
+            var str = objToStr(apiObj);
 
-
+            $('#final-review-apiconfig').html(str);
 
             // 将resultDemo 结果结构 加入api接口信息对象，保存
             resultObj = formdataToJSON($('#resultconfigForm').serializeArray());
-
-
             resultObj.resultStruct = $('#resultparsedJSON').val();
-
-
-
-
-
-            for(k in resultObj){  //  第四步数据合并到第一步数据对象
+            for(k in resultObj){  //  第四步数据合并到第一步数据对象，分开预览
                 apiObj[k] = resultObj[k];
             }
 
-            console.log(apiObj);
-            var str = objToStr(apiObj);
-            $('#final-review-apiconfig').html(str);
+            var str = objToStr(resultObj);
+            $('#final-review-resultjson').html(str);
 
             if($('#detail').val() == 1){
                 $('#resultStructureJson').html('').jsonEditorByTreeJson(JSON.parse($('#resultparsedJSON').val()), true);
@@ -400,6 +393,8 @@ $(document).ready(function(){
                 var treeHead = $('<p style="text-align:right; color:#aaa; margin-bottom:0;" id="result-treeHead-view"><span style="margin-right:30px">数据类型</span><span style="margin-right:28px">是否必需</span><span style="margin-right:188px">描述</span></p>');
                 $('#resultStructureJson').before(treeHead);
             }
+
+
 
 
 
@@ -515,7 +510,7 @@ $(document).ready(function(){
                          id = 'requestStructureJson';
                      break;
                     case 'requestMemo':
-                        label = '请求描述';
+                        label = '请求备注';
                     break;
 
                     case 'resultDemo':
@@ -528,7 +523,7 @@ $(document).ready(function(){
                         id = 'resultStructureJson';
                     break;
                     case 'resultMemo':
-                        label = '结果描述';
+                        label = '结果备注';
                     break;
 
                     default: label = o; break;
