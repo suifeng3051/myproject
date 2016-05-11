@@ -309,7 +309,7 @@
 
                                 <div class="clearfix"></div>
                                 <div class="form-group " style="margin-top:25px;">
-                                    <label for="request_memo" class="control-label" style="font-weight:normal; width:100%; padding-bottom:15px;border-bottom: 1px solid rgb(221, 221, 221);">请求备注</label>
+                                    <label for="request_memo" class="control-label" style="font-weight:bold; width:100%; padding-bottom:15px;border-bottom: 1px solid rgb(221, 221, 221);">请求备注</label>
                                     <textarea id="request_memo" name="requestMemo" rows="6" class="form-control">$!results.get('param').requestMemo</textarea>
                                 </div>
                             </div>
@@ -352,7 +352,7 @@
 
                                 <div class="clearfix"></div>
                                 <div class="form-group " style="margin-top:25px;">
-                                    <label for="result_memo" class="control-label" style="font-weight:normal; width:100%; padding-bottom:15px;border-bottom: 1px solid rgb(221, 221, 221);">结果备注</label>
+                                    <label for="result_memo" class="control-label" style="font-weight:bold; width:100%; padding-bottom:15px;border-bottom: 1px solid rgb(221, 221, 221);">结果备注</label>
                                     <textarea id="result_memo" name="resultMemo" rows="6" class="form-control">$!results.get('api').resultMemo</textarea>
                                 </div>
 
