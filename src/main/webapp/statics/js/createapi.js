@@ -85,11 +85,19 @@ $(document).ready(function(){
 
                 break;
                 case 3:  // 验证类型选择，是否为空；若为空，则提示用户
-                    validJSON('json-input', 'editor', 'parsedJSON', 'jsonParseInfo', window.JSONresult());  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
+                    if($('#editor').html().length > 0){
+                        validJSON('json-input', 'editor', 'parsedJSON', 'jsonParseInfo', window.JSONresult());  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
+                    } else {
+                        $('#JSONparse-btn').trigger('click');
+                    }
                     return;
                 break;
                 case 4:
-                   validJSON('resultDemo', 'resulteditor', 'resultparsedJSON', 'resultconfigInfo', window.resultJSONresult());  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
+                    if($('#resulteditor').html().length > 0){
+                        validJSON('resultDemo', 'resulteditor', 'resultparsedJSON', 'resultconfigInfo', window.resultJSONresult());  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
+                    } else {
+                        $('#result-JSONparse-btn').trigger('click');
+                    }
                    return;
                 break;
             }
@@ -126,11 +134,9 @@ $(document).ready(function(){
                 }
             });
 
-            if(window.JSONerror) { errorInfo += ' 未选择所有数据类型 '; }
+            $('#'+parsedJSON).text(JSON.stringify(jsonResultStr));  // 将修改后的树数据放入隐藏textarea
 
-            if($('#'+editor).html().length > 0){
-                $('#'+parsedJSON).text(JSON.stringify(jsonResultStr));  // 将修改后的树数据放入隐藏textarea
-            }
+            if(window.JSONerror) { errorInfo += ' 未选择所有数据类型 '; }
 
             $.post(
                 '/validateJsonStr',
@@ -149,7 +155,6 @@ $(document).ready(function(){
                     }
                     if(window.JSONerror){
                         $('#'+jsonInfo).html('<p>'+ errorInfo +'</p>').show();
-
                         return false;
                     } else {
                         // 直接进入下一步，检验成功不再进行提示
@@ -498,6 +503,7 @@ $(document).ready(function(){
                             }
                             value = arr.join(', ');
                         }
+                        if(value == '') { value='无'; }
                     break;
 
                     case 'requestDemo':
@@ -511,6 +517,9 @@ $(document).ready(function(){
                      break;
                     case 'requestMemo':
                         label = '请求备注';
+                        if(obj[o] == '') {
+                            value = '无';
+                        }
                     break;
 
                     case 'resultDemo':
@@ -524,6 +533,9 @@ $(document).ready(function(){
                     break;
                     case 'resultMemo':
                         label = '结果备注';
+                        if(obj[o] == '') {
+                            value = '无';
+                        }
                     break;
 
                     default: label = o; break;

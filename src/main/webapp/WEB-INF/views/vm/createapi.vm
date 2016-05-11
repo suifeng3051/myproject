@@ -297,7 +297,7 @@
                             #end
 
                             <div class="col-sm-8">
-                            请求解析
+                            <b>请求解析</b>
                                 <div style="color:#aaa;border-bottom: 1px solid rgb(221, 221, 221); padding-bottom: 3px;text-align:right;">
                                     <span style="margin-right:15px">数据类型</span><span style="margin-right:46px">是否必填</span><span style="margin-right:74px">描述</span>
                                 </div>
@@ -310,7 +310,7 @@
                                 <div class="clearfix"></div>
                                 <div class="form-group " style="margin-top:25px;">
                                     <label for="request_memo" class="control-label" style="font-weight:normal; width:100%; padding-bottom:15px;border-bottom: 1px solid rgb(221, 221, 221);">请求备注</label>
-                                    <textarea id="request_memo" name="requestMemo" rows="3" class="form-control">$!results.get('param').requestMemo</textarea>
+                                    <textarea id="request_memo" name="requestMemo" rows="6" class="form-control">$!results.get('param').requestMemo</textarea>
                                 </div>
                             </div>
 
@@ -341,7 +341,7 @@
                                 </div>
 
                             <div class="col-sm-8">
-                                结果解析
+                                <b>结果解析</b>
                                 <div style="color:#aaa;border-bottom: 1px solid rgb(221, 221, 221); padding-bottom: 3px;text-align:right;">
                                     <span style="margin-right:15px">数据类型</span><span style="margin-right:46px">是否必需</span><span style="margin-right:84px">描述</span>
                                 </div>
@@ -353,7 +353,7 @@
                                 <div class="clearfix"></div>
                                 <div class="form-group " style="margin-top:25px;">
                                     <label for="result_memo" class="control-label" style="font-weight:normal; width:100%; padding-bottom:15px;border-bottom: 1px solid rgb(221, 221, 221);">结果备注</label>
-                                    <textarea id="result_memo" name="resultMemo" rows="3" class="form-control">$!results.get('api').resultMemo</textarea>
+                                    <textarea id="result_memo" name="resultMemo" rows="6" class="form-control">$!results.get('api').resultMemo</textarea>
                                 </div>
 
                             </div>
