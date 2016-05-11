@@ -11,6 +11,8 @@ public class Param {
 
     private String requestStructure;
 
+    private String requestMemo;
+
     private Date createdTime;
 
     private Integer updatedId;
@@ -58,6 +60,14 @@ public class Param {
 
     public void setRequestStructure(String requestStructure) {
         this.requestStructure = requestStructure == null ? null : requestStructure.trim();
+    }
+
+    public String getRequestMemo() {
+        return requestMemo;
+    }
+
+    public void setRequestMemo(String requestMemo) {
+        this.requestMemo = requestMemo;
     }
 
     public Date getCreatedTime() {

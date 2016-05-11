@@ -21,6 +21,8 @@ import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.zitech.gateway.monitor.mongodb.MapReduceDao;
@@ -42,21 +44,11 @@ public class MonitorDataController {
 
 	@Autowired
 	MapReduceDao mapReduceDao;
-	
-	/**
-	 * 每分钟RT平均时间统计
-	 * 	
-	 * @Description: (方法职责详细描述,可空)  
-	 * @Title: rtCount 
-	 * @return
-	 * @date 2015年11月27日 下午2:20:26  
-	 * @author ws
-	 * @param metric
-	 * @param etime 
-	 * @param stime 
-	 */
-//	@RequestMapping(value = "/querymonitor", produces = "application/json;charset=utf-8")
-    public String getMonitoData(String stime, String etime, String metric, String group, String host, String api){
+
+
+	@RequestMapping(value = "/querymonitor", produces = "application/json;charset=utf-8")
+	@ResponseBody
+    public String getMonitorData(String stime, String etime, String metric, String host, String api){
 		
     	Date beginDate = new Date(Long.parseLong(stime)*1000);
     	Date endDate = new Date(Long.parseLong(etime)*1000);
@@ -67,14 +59,14 @@ public class MonitorDataController {
 		Map<String,Object> resMap = new HashMap<String, Object>();
 		List<Object> result = new ArrayList<Object>();
 
-		Query query = creatQueryConditions(beginTime, endTime, group, api, host);
+		Query query = createQueryConditions(beginTime, endTime, api, host);
 		
 		String inputCollectionName = DB_NAME;
 		String mapFunction = MapReduceJs.MAP_FAILURE_COUNT;
 		String reduceFunction = MapReduceJs.REDUCE_FAILURE_COUNT;
 		
-		MapReduceResults<CountResult> rtResult = mapReduceDao.command(query
-				, inputCollectionName, mapFunction, reduceFunction);
+		MapReduceResults<CountResult> rtResult = mapReduceDao.command(query,
+                inputCollectionName, mapFunction, reduceFunction);
 		
 		for (CountResult countResult : rtResult) {
 			Map<String, Object> res = new HashMap<String, Object>();
@@ -84,29 +76,13 @@ public class MonitorDataController {
 			//BigDecimal key = new BigDecimal(keyD);  
 			res.put("key", key);
 			String value = countResult.getValue();
-			if(value.contains("isSuccess")){
-				value = value.substring(17, value.length()-2);
+			if(value.contains("status")){
+				value = value.substring(14, value.length()-2);
 			}
 			res.put("value", Math.round(Double.parseDouble(value)));
 			result.add(res);
 		}
-		/*int a = 5;
-		for(Long i=Long.parseLong(stime);i<Long.parseLong(etime);i+=60){
-			Map<String, Object> res = new HashMap<String, Object>();
-			Random random = new Random();
-			Integer val = random.nextInt(5);
-			
-			a++;
-			if(a<5){
-				continue;
-			}else{
-				a=0;
-			}
-			
-			res.put("key", i);
-			res.put("value", val);
-			result.add(res);
-		}*/
+
 		resMap.put("dps", result);
 		resMap.put("metric", "failure");
 		response.add(resMap);
@@ -134,16 +110,7 @@ public class MonitorDataController {
 			res.put("value", Math.round(Double.parseDouble(value)));
 			result.add(res);
 		}
-		/*for(Long i=Long.parseLong(stime);i<Long.parseLong(etime);i+=60){
-			Map<String, Object> res = new HashMap<String, Object>();
-			//Date keyDate = DateUtil.string2Date(countResult.get_id(), "yyyyMMddHHmm");
-			//Double key = Math.floor(keyDate.getTime()/1000);
-			Random random = new Random();
-			Integer val = random.nextInt(100);
-			res.put("key", i);
-			res.put("value", val);
-			result.add(res);
-		}*/
+
 		resMap.put("dps", result);
 		resMap.put("metric", "maxResponseTime");
 		response.add(resMap);
@@ -170,14 +137,7 @@ public class MonitorDataController {
 			res.put("value", Math.round(Double.parseDouble(value)));
 			result.add(res);
 		}
-		/*for(Long i=Long.parseLong(stime);i<Long.parseLong(etime);i+=60){
-			Map<String, Object> res = new HashMap<String, Object>();
-			Random random = new Random();
-			Integer val = random.nextInt(10);
-			res.put("key", i);
-			res.put("value", val);
-			result.add(res);
-		}*/
+
 		resMap.put("dps", result);
 		resMap.put("metric", "callCount");
 		response.add(resMap);
@@ -188,28 +148,9 @@ public class MonitorDataController {
 		
 	}
      
-	
-	
-	/**
-	 * 构造查询条件
-	 * 	
-	 * @Description: (方法职责详细描述,可空)  
-	 * @Title: greatQueryConditions 
-	 * @param beginTime
-	 * @param endTime
-	 * @param group
-	 * @param api
-	 * @param host
-	 * @return
-	 * @date 2015年11月27日 下午2:19:57  
-	 * @author ws
-	 */
-	private Query creatQueryConditions(String beginTime, String endTime,
-			String group, String api, String host) {
+	private Query createQueryConditions(String beginTime, String endTime,
+                                        String api, String host) {
 		Query query = new Query(Criteria.where("minute").gte(beginTime).lte(endTime));
-		if(StringUtils.isNotBlank(group)){
-            query.addCriteria(Criteria.where("group").regex(".*?"+group+".*"));
-		}
 		if(StringUtils.isNotBlank(api)){
 			query.addCriteria(Criteria.where("api").regex(".*?"+api+".*"));
 		}
@@ -219,7 +160,4 @@ public class MonitorDataController {
 		//query.with(new Sort(new Order(Direction.ASC, "minute")));//升序
 		return query;
 	}
-	
-	
-	
 }

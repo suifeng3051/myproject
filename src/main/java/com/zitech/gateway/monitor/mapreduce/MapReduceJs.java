@@ -14,16 +14,16 @@ package com.zitech.gateway.monitor.mapreduce;
  */
 public interface MapReduceJs {
 	
-	public static final String MAP_FAILURE_COUNT = "function (){emit(this.minute,{isSuccess:this.isSuccess});}";
-	public static final String REDUCE_FAILURE_COUNT = "function (key,values){var count=0;values.forEach(function(val){if('1'==val.isSuccess){count +=1;}});return count;}";
+	String MAP_FAILURE_COUNT = "function (){if(this.status==1){emit(this.minute,{status:this.status});}}";
+	String REDUCE_FAILURE_COUNT = "function (key,values){var count=0;values.forEach(function(val){count +=1;});return count;}";
 	
-	public static final String MAP_RT_MAX = "function (){emit(this.minute,{rt:this.rt});}";
-	public static final String REDUCE_RT_MAX = "function (key,values){var ctmax=0; values.forEach(function(val){if(ctmax < val.rt){ctmax = val.rt;}});return ctmax ;}";
+	String MAP_RT_MAX = "function (){emit(this.minute,{rt:this.rt});}";
+	String REDUCE_RT_MAX = "function (key,values){var ctmax=0; values.forEach(function(val){if(ctmax < val.rt){ctmax = val.rt;}});return ctmax ;}";
 
-	public static final String MAP_REQUEST_COUNT = "function (){emit(this.minute,{count:1});}";
-	public static final String REDUCE_REQUEST_COUNT = "function (key,values){var cnt=0;values.forEach(function(val){ cnt+=val.count;});return cnt;}";
+	String MAP_REQUEST_COUNT = "function (){emit(this.minute,{count:1});}";
+	String REDUCE_REQUEST_COUNT = "function (key,values){var cnt=0;values.forEach(function(val){ cnt+=val.count;});return cnt;}";
 
-	public static final String MAP_RT_COUNT = "function (){emit(this.minute,{rt:this.rt});}";
-	public static final String REDUCE_RT_COUNT = "function (key,values){var cnt=1;var rtall=0;values.forEach(function(val){cnt+=1;rtall+=parseInt(val.rt);});return (rtall/cnt).toFixed(2);}";
+	String MAP_RT_COUNT = "function (){emit(this.minute,{rt:this.rt});}";
+	String REDUCE_RT_COUNT = "function (key,values){var cnt=1;var rtall=0;values.forEach(function(val){cnt+=1;rtall+=parseInt(val.rt);});return (rtall/cnt).toFixed(2);}";
 	
 }
