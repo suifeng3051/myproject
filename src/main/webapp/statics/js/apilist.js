@@ -20,8 +20,6 @@ $(document).ready(function(){
     }
 
 
-
-
     $("#newCreateTask").click("click", function () {
         var group = $("#currentGroup").val();
         window.location.href = "createapi?env=" + getEnv() + "&group=" + group;
@@ -159,7 +157,6 @@ $(document).ready(function(){
         }
 
         oAuthClientTable.row(tmp).remove().draw(false);
-
 
     });
 

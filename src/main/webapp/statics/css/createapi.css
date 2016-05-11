@@ -31,7 +31,7 @@
 
 
 
-#requestStructureJson {
+#resultStructureJson, #requestStructureJson {
     padding: 9.5px;
     margin: 0 0 10px;
     font-size: 13px;
@@ -44,8 +44,8 @@
     border-radius: 4px;
 }
 
-#requestStructureJson .type { border:none; width:80px; background:transparent; }
-#requestStructureJson .des-show {  width:200px;  }
+#resultStructureJson .type , #requestStructureJson .type { border:none; width:80px; background:transparent; }
+#resultStructureJson .des-show, #requestStructureJson .des-show {  width:200px;  }
 
 input.error,
 select.error,
@@ -201,7 +201,7 @@ ul.nav-wizard li {
   height: 46px;
   display: inline-block;
   text-align: middle;
-  padding: 0 8% 0 9%;
+  padding: 0 6% 0 7%;
   margin: 0;
   font-size: 16px;
   line-height: 46px;

@@ -32,6 +32,7 @@
             <li step="2"><a href="#">步骤二</a></li>
             <li step="3"><a href="#">步骤三</a></li>
             <li step="4"><a href="#">步骤四</a></li>
+            <li step="4"><a href="#">步骤五</a></li>
         </ul>
     </div>
     <div class="row">
@@ -202,14 +203,7 @@
                                     <textarea  rows="3" class="form-control required" id="scenarios" name="apiScene" placeholder="API使用场景" >$!results.get('api').apiScene</textarea>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <!--<label for="resultDemo" class="col-sm-4 control-label">示例</label>-->
-                                <div class="col-sm-4" style="text-align: right;">结果示例</div>
-                                <div class="col-sm-6">
-                                    <textarea  rows="20" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API结果示例" >$!results.get('api').resultDemo</textarea>
-                                    <div id="resultDemo-jsonshow"></div>
-                                </div>
-                            </div>
+
 
     #if($!results.get('api').id)
         <input type="hidden"  name="id"   value="$!results.get('api').id" />
@@ -220,7 +214,11 @@
                     </div>
                 </div>
 
-                <!-- 2. API 参数配置 （已去掉） -->
+
+
+
+
+
 
                 <!-- 2. 方法&参数配置 -->
 
@@ -242,7 +240,6 @@
                                 <div  class="col-sm-6">
                                     <input type="text" class="form-control required" id="nameMethodParam"  name="method" placeholder="method" value="$!results.get('serve').method">
                                 </div>
-
                             </div>
 
                             <div class="form-group">
@@ -277,14 +274,17 @@
                     </div>
                 </div>
 
-                <!-- 3. JSON 解析与编辑（POST方法） -->
+
+
+
+                <!-- 3. 请求参数配置 -->
                 <div class="json-parse">
                     <div class="panel-body">
                         <div class="alert alert-danger" role="alert" style="margin-bottom:20px;display:none;" id="jsonParseInfo"></div>
                         <form id="jsonparseForm">
                             <div class="col-sm-4">
                                 <input type="button" class="btn btn-success" id="JSONparse-btn" style="margin-bottom:15px;" value="解析" />
-                                <textarea class="form-control" id="json-input" name="requestDemo">$!results.get('param').requestDemo</textarea>
+                                <textarea class="form-control" id="json-input" name="requestDemo" placeholder="请求参数">$!results.get('param').requestDemo</textarea>
                                 <div class="Canvas" id="json-input-jsonshow" style="display:none"></div>
                             </div>
 
@@ -295,22 +295,76 @@
                             #else
                                 <input type="hidden"  name="id"   value="-1" />
                             #end
-                        </form>
 
-                        <div class="col-sm-8">
-                        解析结果
-                            <div style="color:#aaa;border-bottom: 1px solid rgb(221, 221, 221); padding-bottom: 3px;text-align:right;">
-                                <span style="margin-right:15px">数据类型</span><span style="margin-right:46px">是否必填</span><span style="margin-right:84px">描述</span>
+                            <div class="col-sm-8">
+                            请求解析
+                                <div style="color:#aaa;border-bottom: 1px solid rgb(221, 221, 221); padding-bottom: 3px;text-align:right;">
+                                    <span style="margin-right:15px">数据类型</span><span style="margin-right:46px">是否必填</span><span style="margin-right:74px">描述</span>
+                                </div>
+
+                                <div id="editor" class="json-editor expanded "></div>
+                                <textarea id="parsedJSON" style="display:none">$!results.get('param').requestStructure</textarea><!--  编辑时，在这里保存数据库中取出来的，解析之后的JSON字符串  -->
+                                <!-- <input type="hidden" id="jsonChecked" value="" /> -->
                             </div>
 
-                            <form id="editor" class="json-editor expanded "></form>
-                            <textarea id="parsedJSON" style="display:none">$!results.get('param').requestStructure</textarea><!--  编辑时，在这里保存数据库中取出来的，解析之后的JSON字符串  -->
-                            <input type="hidden" id="jsonChecked" value="" />
-                        </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group " style="margin-top:25px;">
+                                <label for="request_memo" class="control-label">请求描述</label>
+                                <textarea id="request_memo" name="request_memo" rows="3" class="form-control"></textarea>
+                            </div>
+
+                        </form>
+
                     </div>
                 </div>
 
-                <!-- 4. 预览 最后一步 -->
+
+
+                <!-- 4. 请求结果配置 -->
+
+                <div class="resultconfig">
+                    <div class="panel-body">
+                        <div class="alert alert-danger" role="alert" style="margin-bottom:20px;display:none;" id="resultconfigInfo"></div>
+                        <form id="resultconfigForm">
+
+                            <div class="form-group">
+                                <div class="col-sm-4" >
+                                    <input type="button" class="btn btn-success" id="result-JSONparse-btn" style="margin-bottom:15px;" value="解析" />
+                                    <textarea  rows="20" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API结果示例" >$!results.get('api').resultDemo</textarea>
+                                    <div id="resultDemo-jsonshow"></div>
+
+                                    <textarea style="display:none" name="result_struct" id="result_struct"></textarea>
+
+                                </div>
+                                </div>
+
+                            <div class="col-sm-8">
+                                结果解析
+                                <div style="color:#aaa;border-bottom: 1px solid rgb(221, 221, 221); padding-bottom: 3px;text-align:right;">
+                                    <span style="margin-right:15px">数据类型</span><span style="margin-right:46px">是否必需</span><span style="margin-right:84px">描述</span>
+                                </div>
+
+                                <div id="resulteditor" class="json-editor expanded "></div>
+                                <textarea id="resultparsedJSON" style="display:none">$!results.get('param').result_struct</textarea>
+                                <!-- <input type="hidden" id="resultjsonChecked" value="" /> -->
+
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <div class="form-group " style="margin-top:25px;">
+                                <label for="result_memo" class="control-label">结果描述</label>
+                                <textarea id="result_memo" name="result_memo" rows="3" class="form-control"></textarea>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+
+
+
+                <!-- 5. 预览 最后一步 -->
                 <div class="data-review">
                     <div class="panel-body">
                         <div class="alert alert-danger" role="alert" style="margin-bottom:2px;display:none;" id="dataReviewInfo"></div>
@@ -320,13 +374,15 @@
                             <h4 style="text-align:center;">API接口配置</h4>
                             <div id="final-review-apiconfig"></div>
 
+                            <div id="review-jsonparse">
+                                <h4 style="margin-top:50px;text-align:center;">请求参数配置</h4>
+                                <div id="final-review-json"></div>
+                            </div>
+
+
                             <h4 style="margin-top:50px;text-align:center;">内部方法及参数配置</h4>
                             <div id="final-review-method"></div>
 
-                            <div id="review-jsonparse">
-                                <h4 style="margin-top:50px;text-align:center;">参数配置</h4>
-                                <div id="final-review-json"></div>
-                            </div>
                         </form>
                     </div>
                 </div>
