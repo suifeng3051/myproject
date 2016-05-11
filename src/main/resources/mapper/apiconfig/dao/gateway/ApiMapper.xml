@@ -215,7 +215,7 @@
             <if test="resultStruct != null">
                 #{resultStruct,jdbcType=LONGVARCHAR},
             </if>
-            <if test="resultDemo != null">
+            <if test="resultMemo != null">
                 #{resultMemo,jdbcType=VARCHAR},
             </if>
             <if test="env != null">
