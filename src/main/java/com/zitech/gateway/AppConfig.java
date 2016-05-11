@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class AppConfig {
 
     @Value("${application.env}")
-    public byte env;
+    public Byte env;
 
     @Value("${application.name}")
     public String appName;
@@ -30,14 +30,15 @@ public class AppConfig {
     @Value("${token.refresh}")
     public int tokenRefreshExpire;
 
-    @Value("${client.credential.scope}")
-    public String clientCredentialScope;
-
     @Value("${allow.access}")
     public String allowAccess;
 
     public boolean isDevMode() {
         return env == 1;
+    }
+
+    public boolean isPrdMode() {
+        return env == 3;
     }
 
 }

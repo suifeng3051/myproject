@@ -1,81 +1,54 @@
 package com.zitech.gateway.gateway.pipes.impl;
 
-
 import com.alibaba.fastjson.JSONObject;
-import com.zitech.gateway.gateway.exception.ResultException;
-import com.zitech.gateway.gateway.excutor.Pipeline;
-import com.zitech.gateway.gateway.model.ApiResponse;
+import com.zitech.gateway.gateway.PipeHelper;
+import com.zitech.gateway.gateway.exception.PipeException;
 import com.zitech.gateway.gateway.model.RequestEvent;
-import com.zitech.gateway.gateway.model.RequestState;
+import com.zitech.gateway.gateway.model.ServeResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.async.DeferredResult;
 
 
-@SuppressWarnings("ALL")
+@Service
+@Pipe(Group = 'B', Order = 1)
 public class ResultPipe extends AbstractPipe {
 
     private static final Logger logger = LoggerFactory.getLogger(ResultPipe.class);
 
-    public ResultPipe() {
-    }
-
-    @Override
     public void onEvent(RequestEvent event) {
-        try {
-            logger.debug("begin of processing result: {}", event);
 
-            DeferredResult<Object> eventResult = event.getResult();
-
-            // check if expired
-            if (eventResult.isSetOrExpired()) {
-                logger.warn("a request has been expired: " + event);
-                return;
-            }
-
-            try {
-                if (!StringUtils.isEmpty(event.getResultStr())) {
-                    ApiResponse apiResponse = JSONObject.parseObject(event.getResultStr(), ApiResponse.class);
-                    if (apiResponse.getCode() == 0) {
-                        ResponseEntity<String> responseEntity = new ResponseEntity<String>(event.getResultStr(), HttpStatus.valueOf(200));
-                        eventResult.setResult(responseEntity);
-                        logger.info("get correct response, event: {}, result: {}", event,event.getResultStr());
-                    } else {
-                        ResponseEntity<String> responseEntity = new ResponseEntity<String>(event.getResultStr(), HttpStatus.valueOf(200));
-                        eventResult.setResult(responseEntity);
-                        logger.info("get error response, event: {}, result: {}", event, event.getResultStr());
-                    }
-                } else {
-                    logger.warn("get empty result: {}", event);
-                }
-            } catch (Exception e) {
-                logger.error("incorrect format: {}", event, e);
-                event.setException(e);
-            }
-
-        } catch (Exception e) {
-            logger.error("exception happened when processing result: {}", event.getId(), e);
-        } finally {
-            logger.debug("complete processing result: {}", event);
-            onNext(event);
+        DeferredResult<Object> eventResult = event.getResult();
+        if (eventResult.isSetOrExpired()) {
+            logger.warn("a request has been expired: " + event);
+            return;
         }
-    }
 
-    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
-    @Override
-    protected void onNext(RequestEvent event) {
-        if (event.getException() != null)
-            if(event.getException() instanceof ResultException)
-                event.setState(RequestState.POST);
-            else
-                event.setState(RequestState.ERROR);
-        else
-            event.setState(RequestState.POST);
+        String result = event.getResultStr();
+        if (!StringUtils.isEmpty(result)) {
+            ServeResponse serveResponse = JSONObject.parseObject(result, ServeResponse.class);
+            event.setServeResponse(serveResponse);
 
-        // go on
-        Pipeline.getInstance().process(event);
+            HttpHeaders headers = PipeHelper.getHeaders(event);
+            ResponseEntity<String> responseEntity = new ResponseEntity<>(result,
+                    headers, HttpStatus.valueOf(200));
+            eventResult.setResult(responseEntity);
+
+            if (serveResponse.getCode() == 0) {
+                logger.info("get correct response, event: {}, result: {}", event, result);
+            } else if (serveResponse.getCode() > 0) {
+                logger.info("get error response, event: {}, result: {}", event, result);
+            } else {
+                logger.error("get unexpected response, event: {}, result: {}", event, result);
+            }
+        } else {
+            throw new PipeException(5215, "没有获得结果");
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.zitech.gateway.utils;
 
 import java.io.IOException;
 
+import javax.annotation.Resource;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -11,6 +12,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.*;
 
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.cache.RedisOperate;
@@ -23,9 +25,11 @@ import com.zitech.gateway.cache.RedisOperateImp;
 
 public class ApiConfigFilter implements Filter {
 
+
+
+
     private AppConfig appConfig = SpringContext.getBean(AppConfig.class);
 
-	private static RedisOperate redisOperate = SpringContext.getBean(RedisOperateImp.class);
     private static final Logger logger = LoggerFactory.getLogger(ApiConfigFilter.class);
 
     public void destroy() {
@@ -45,11 +49,19 @@ public class ApiConfigFilter implements Filter {
         if (StringUtils.isNotEmpty(appConfig.allowAccess) && !appConfig.allowAccess.contains(addr)) {
             res.sendRedirect("/");
         } else {
+            RedisOperate redisOperate = SpringContext.getBean(RedisOperate.class);
             HttpSession httpSession= req.getSession(true);
-            String name = "zitech";
-            String nameKey = "gateway_login_zitech";
-            httpSession.setAttribute("username", nameKey);
-            redisOperate.set(nameKey, name);
+            String username = (String) httpSession.getAttribute("username");
+            if(StringUtils.isEmpty(username))
+            {
+                request.getRequestDispatcher("/user/login").forward(request,response);
+                return;
+            }
+            username = redisOperate.getStringByKey(username);
+            if (StringUtils.isEmpty(username)){
+                request.getRequestDispatcher("/user/login").forward(request,response);
+                return;
+            }
         }
 
         chain.doFilter(request, response);

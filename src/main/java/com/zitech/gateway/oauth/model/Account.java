@@ -1,75 +1,103 @@
 package com.zitech.gateway.oauth.model;
 
+
 import java.util.Date;
 
 public class Account {
-    private Long id;
+    private int id;
+    private String loginName;
+	private String loginPhone;
+	private String loginMail;
+	private String password;
+	private int status;
+	private Date createdTime;
+	private Date updatedTime;
+	private String scope;
 
-    private Long userId;
+	public int getId() {
+		return id;
+	}
 
-    private Long totalIntegral;
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    private Long availableIntegral;
+	public String getLoginName() {
+		return loginName;
+	}
 
-    private Long freezeIntegral;
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
+	}
 
-    private Date gmtCreate;
+	public String getLoginPhone() {
+		return loginPhone;
+	}
 
-    private Date gmtModify;
+	public void setLoginPhone(String loginPhone) {
+		this.loginPhone = loginPhone;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public String getLoginMail() {
+		return loginMail;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setLoginMail(String loginMail) {
+		this.loginMail = loginMail;
+	}
 
-    public Long getUserId() {
-        return userId;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public Long getTotalIntegral() {
-        return totalIntegral;
-    }
+	public int getStatus() {
+		return status;
+	}
 
-    public void setTotalIntegral(Long totalIntegral) {
-        this.totalIntegral = totalIntegral;
-    }
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
-    public Long getAvailableIntegral() {
-        return availableIntegral;
-    }
+	public Date getUpdatedTime() {
+		return updatedTime;
+	}
 
-    public void setAvailableIntegral(Long availableIntegral) {
-        this.availableIntegral = availableIntegral;
-    }
+	public void setUpdatedTime(Date updatedTime) {
+		this.updatedTime = updatedTime;
+	}
 
-    public Long getFreezeIntegral() {
-        return freezeIntegral;
-    }
+	public Date getCreatedTime() {
+		return createdTime;
+	}
 
-    public void setFreezeIntegral(Long freezeIntegral) {
-        this.freezeIntegral = freezeIntegral;
-    }
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
+	}
 
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
+	public String getScope() {
+		return scope;
+	}
 
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
 
-    public Date getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(Date gmtModify) {
-        this.gmtModify = gmtModify;
-    }
+	@Override
+	public String toString() {
+		return "OauthUser{" +
+				"id=" + id +
+				", loginName='" + loginName + '\'' +
+				", loginPhone='" + loginPhone + '\'' +
+				", loginMail='" + loginMail + '\'' +
+				", password='" + password + '\'' +
+				", status=" + status +
+				", createdTime =" + createdTime +
+				", updatedTime=" + updatedTime +
+				", scope=" + scope +
+				'}';
+	}
 }

@@ -70,6 +70,14 @@
         <filter-name>LoginFilter</filter-name>
         <url-pattern>unifyerror</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>updatepwd</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>client</url-pattern>
+    </filter-mapping>
 
     <!-- listener, substituted by DispatcherServlet -->
     <listener>

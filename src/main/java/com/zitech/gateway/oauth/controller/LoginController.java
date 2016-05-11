@@ -14,9 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
-import com.zitech.gateway.oauth.model.OauthUser;
-import com.zitech.gateway.oauth.model.OpenOauthClients;
-import com.zitech.gateway.oauth.service.impl.OpenOauthClientsService;
+import com.zitech.gateway.oauth.model.Account;
+import com.zitech.gateway.oauth.model.Client;
+import com.zitech.gateway.oauth.service.impl.ClientServiceImpl;
 import com.zitech.gateway.utils.AppUtils;
 import com.zitech.gateway.oauth.Constants;
 import com.zitech.gateway.oauth.exception.PrivilegeException;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
-import com.zitech.gateway.oauth.service.impl.OAuthService;
+import com.zitech.gateway.oauth.service.impl.OAuthServiceImpl;
 import com.zitech.gateway.utils.CaptchaUtils;
 
 @Controller
@@ -40,13 +40,13 @@ public class LoginController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    private static final SimplePropertyPreFilter clientFilter = new SimplePropertyPreFilter(OpenOauthClients.class, "clientId", "clientSecret");
+    private static final SimplePropertyPreFilter clientFilter = new SimplePropertyPreFilter(Client.class, "clientId", "clientSecret");
 
     @Autowired
-    private OAuthService oAuthService;
+    private OAuthServiceImpl oAuthService;
 
     @Autowired
-    private OpenOauthClientsService clientsService;
+    private ClientServiceImpl clientsService;
 
     /**
      * when user has no session
@@ -106,7 +106,7 @@ public class LoginController extends BaseController {
             return JSON.toJSONString(objectMap);
         }
 
-        OauthUser user = null;
+        Account user = null;
         try {
             user = oAuthService.login(username, password);
         } catch (Exception e) {
@@ -121,7 +121,7 @@ public class LoginController extends BaseController {
 
         userId = user.getId();
         session.setAttribute(Constants.USER_ID, userId);
-        session.setAttribute(Constants.USER_ACCOUNT, user.getAccount());
+        session.setAttribute(Constants.USER_ACCOUNT, user.getLoginName());
 
         /**
          * redirect to /oauth/authorize when every thing is ok
@@ -134,7 +134,7 @@ public class LoginController extends BaseController {
 
     /**
      * wap login
-     * @param session
+     * @param request session
      * @param response
      * @throws IOException
      */
@@ -146,7 +146,7 @@ public class LoginController extends BaseController {
         String password = request.getParameter("password");
         password = AppUtils.MD5(password);
 
-        OauthUser user = oAuthService.login(userName, password);
+        Account user = oAuthService.login(userName, password);
 
         if (user == null) {
             JSONObject jsonObject = new JSONObject();
@@ -155,7 +155,7 @@ public class LoginController extends BaseController {
             return jsonObject.toJSONString();
         }
 
-        OpenOauthClients clients = clientsService.getByUserId(user.getId());
+        Client clients = clientsService.getByUserId(user.getId());
 
         if (clients == null) {
             JSONObject jsonObject = new JSONObject();

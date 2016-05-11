@@ -6585,3 +6585,6 @@ button.close {
   }
 }
 /*# sourceMappingURL=bootstrap.css.map */
+
+
+.form-control { padding-top:0; padding-bottom:0; }

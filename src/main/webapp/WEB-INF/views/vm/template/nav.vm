@@ -1,0 +1,93 @@
+
+<style>
+    #consoleText { text-transform:capitalize; }
+    .nav .glyphicon-user::before { color:#337ab7; margin-right:-8px; }
+</style>
+
+<!-- 导航条 -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="apilist?env=$!results.get('env')">
+                <img alt="Brand" class="logo"  src="/statics/imag/logo2.jpg">
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active1"><a href="apilist?env=$!results.get('env')"><h3 style="margin:0 0 0 0;">Gateway</h3> <span class="sr-only">(current)</span></a></li>
+            </ul>
+            <ul id="myTitle" class="nav nav-pills" style="margin:9px 0 0 0;">
+                <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Home</a></li>
+                <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Config</a></li>
+                <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Release</a></li>
+
+                <!--<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Monitor</a></li>-->
+                <li role="presentation" class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="tab" aria-haspopup="true" aria-expanded="false"><span id="consoleText">Console</span> <span class="caret"></span></a>
+                    <ul class="dropdown-menu" >
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console ">Monitor</a></li>
+##                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Manual</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Cache</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Instance</a></li>
+                        #if($!results.get("isAdmin"))
+##                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">LogView</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Recover</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">User</a></li>
+                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Client</a></li>
+                        #end
+##                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Safety</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-left" id="env" style="margin: -38px 0 0 46%;">
+                <div class="form-group radio">
+                    #if(2 == $!results.get('env'))
+                    <label><input class="envRadio" type="radio" name="env"  value="1" >
+                        <span class="text-primary">dev</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="2" checked>
+                        <span class="text-primary">test</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="3">
+                        <span class="text-primary">product</span></label>
+                    #elseif(3 == $!results.get('env'))
+                    <label><input class="envRadio" type="radio" name="env"  value="1" >
+                        <span class="text-primary">dev</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="2">
+                        <span class="text-primary">test</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="3" checked>
+                        <span class="text-primary">product</span></label>
+                    #else
+                    <label><input class="envRadio" type="radio" name="env"  value="1" checked>
+                        <span class="text-primary">dev</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="2">
+                        <span class="text-primary">test</span></label>
+                    <label><input class="envRadio" type="radio" name="env"  value="3">
+                        <span class="text-primary">product</span></label>
+                    #end
+
+                </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li style="margin:-50px 100px 0 0;">
+                    <span class="navbar-text">Welcome
+                        <span class="dropdown-toggle glyphicon glyphicon-user" data-toggle="dropdown" style="cursor:pointer;margin:0 10px;"> $!results.get('user')</span>
+                        <ul class="dropdown-menu" role="menu">
+                            <li id="safety-user-btn"><a href="#">修改密码</a></li>
+                            <!--<li class="divider"></li>-->
+                        </ul>
+                    </span>
+                </li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li style="margin:-50px 50px 0 0;"><p class="navbar-text"><a href="/user/logout">退出</a></p></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li role="presentation" style="margin:-63px -35px 0 0;" class="help">
+                    <a href="#">
+                        <p class="navbar-text"><strong>帮助</strong> <span class="glyphicon glyphicon-question-sign" aria-hidden="true"  class="needTip" data-toggle="tooltip" data-placement="left" title="查看帮助文档"></span></p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

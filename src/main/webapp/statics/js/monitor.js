@@ -1,45 +1,5 @@
 $(function(){
 
-    // 当前激活按钮绑定事件
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-      var theme = $(e.target).html(); // 当前激活按钮显示的关键字
-      var env = $("#env").val();
-      var group = $("#currentGroup").val();
-      if("Release" == theme){
-        window.location.href = "release?env=" + env;
-      } else if("Home" == theme) {
-        window.location.href = "apilist?env=" + env;
-      } else if("Config" == theme) {
-        window.location.href = "createapi?env=" + env + "&group=" + group;
-      } else if("LogView" == theme) {
-        window.location.href = "pipelog?env=" + env;
-      } else if("Users" == theme) {
-       window.location.href = "user?env=" + env;
-      } else if("Manual" == theme) {
-        window.location.href = "manual?env=" + env;
-      } else if("Cache" == theme) {
-        window.location.href = "cachemanage?env=" + env;
-      } else if("Instance" == theme) {
-         window.location.href = "instancedetail?env=" + env;
-      } else if("RecoverApi" == theme) {
-        window.location.href = "recoverapi?env=" + env;
-      }
-
-
-    });
-
-    // 跳转到帮助页面
-    $(".help").on("click", function(e){
-        e.preventDefault();
-        var env = $("#env").val();
-        location.href = "manual?env=" + env;
-    });
-
-    // 之前激活按钮的绑定事件
-    $('a[data-toggle="tab"]').on('hide.bs.tab', function (e) {
-      var theme = $(e.target).html(); // 之前激活按钮显示的关键字
-    });
-
     $(".needTip").tooltip();
 
     // 按日期区间查询监控数据
@@ -297,7 +257,8 @@ $(function(){
                  yAxis: {
                      title: {
                          text: 'call count'
-                     }
+                     },
+                     min: 0
                  },
                  legend: {
                      enabled: false
@@ -352,7 +313,8 @@ $(function(){
               yAxis: {
                   title: {
                       text: 'RT时间'
-                  }
+                  },
+                  min: 0
               },
               legend: {
                   enabled: false
@@ -405,7 +367,8 @@ $(function(){
                yAxis: {
                    title: {
                        text: '错误次数'
-                   }
+                   },
+                   min: 0
                },
                legend: {
                    enabled: false
@@ -826,7 +789,8 @@ $(function(){
                  value: 0,
                  width: 1,
                  color: '#808080'
-             }]
+             }],
+             min: 0
          },
          tooltip: {
              formatter: function () {
@@ -902,7 +866,8 @@ $(function(){
                  value: 0,
                  width: 1,
                  color: '#808080'
-             }]
+             }],
+             min: 0
          },
          tooltip: {
              formatter: function () {
@@ -976,7 +941,8 @@ $(function(){
                   value: 0,
                   width: 1,
                   color: '#808080'
-              }]
+              }],
+              min: 0
           },
           tooltip: {
               formatter: function () {
@@ -1093,7 +1059,8 @@ $(function(){
           yAxis: {
               title: {
                   text: 'RT时间'
-              }
+              },
+              min: 0
           },
           legend: {
               enabled: false
@@ -1146,7 +1113,8 @@ $(function(){
            yAxis: {
                title: {
                    text: '错误次数'
-               }
+               },
+               min: 0
            },
            legend: {
                enabled: false

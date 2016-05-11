@@ -1,10 +1,11 @@
 package com.zitech.gateway.apiconfig.controller;
 
-import com.zitech.gateway.apiconfig.model.CarmenUser;
-import com.zitech.gateway.apiconfig.service.ICarmenUserService;
+import com.zitech.gateway.apiconfig.model.Admin;
+import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.console.CacheManager;
 import com.zitech.gateway.console.InstanceMonitor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -12,15 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by dingdongsheng on 15/9/5.
- */
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+
 @Controller
 public class InstanceController {
 
@@ -31,12 +31,12 @@ public class InstanceController {
     @Resource
     RedisOperate redisOperate;
     @Resource
-    ICarmenUserService iCarmenUserService;
+    AdminService iCarmenUserService;
 
     /**
      * 每个实例当前JVM状态
+     *
      * @param env 环境变量 1 dev, 2 test, 3 product
-     * @param request
      * @return 实例详情展示页面
      */
     @RequestMapping("/instancedetail")
@@ -57,25 +57,26 @@ public class InstanceController {
 
             //添加本地缓存表格头部
             List<String> allCacheNames = CacheManager.getInstance().getAllCacheNames();
-            hashMap.put("cacheNames",allCacheNames);
+            hashMap.put("cacheNames", allCacheNames);
 
         } catch (Exception e) {
             logger.warn("fail to get session", e);
         }
-        if(null == userName) {
+        if (null == userName) {
             return new ModelAndView("redirect:/unifyerror", "cause", "userName is null.");
         }
         Boolean isAdmin = isAdministrator(userName);
         hashMap.put("isAdmin", isAdmin);
+        hashMap.put("user", userName);
         return new ModelAndView("instancedetail", "results", hashMap);
     }
 
     public Boolean isAdministrator(String userName) {
 
         try {
-            List<CarmenUser> user = iCarmenUserService.getByUserName(userName);
-            for(CarmenUser carmenUser : user) {
-                if(1 == carmenUser.getUserGroup()) {
+            List<Admin> user = iCarmenUserService.getByUserName(userName);
+            for (Admin carmenUser : user) {
+                if (1 == carmenUser.getUserGroup()) {
                     return true;
                 }
             }

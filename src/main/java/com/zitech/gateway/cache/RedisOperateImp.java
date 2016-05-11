@@ -4,9 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Transaction;
 
 import javax.annotation.Resource;
+
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -214,5 +217,31 @@ public class RedisOperateImp implements RedisOperate {
         Long expire = con.expire(key, seconds);
         redispool.closeConnection(con);
         return expire;
+    }
+
+    @Override
+    public Set<String> keys(String pattern) {
+        Jedis con = redispool.getConnection();
+        Set<String> keys = con.keys(pattern);
+        Transaction tx = con.multi();
+        List<Object> list = tx.exec();
+        redispool.closeConnection(con);
+        return keys;
+    }
+
+    @Override
+    public void delKeys(String pattern) {
+        Jedis con = redispool.getConnection();
+        Set<String> keys = con.keys(pattern);
+        if(null != keys && keys.size() > 0) {
+            Pipeline pipeline = con.pipelined();
+            Iterator<String> it = keys.iterator();
+            while (it.hasNext()) {
+                String key = it.next();
+                pipeline.del(key);
+            }
+            pipeline.sync();
+        }
+        redispool.closeConnection(con);
     }
 }
