@@ -310,7 +310,7 @@
                             <div class="clearfix"></div>
                             <div class="form-group " style="margin-top:25px;">
                                 <label for="request_memo" class="control-label">请求描述</label>
-                                <textarea id="request_memo" name="request_memo" rows="3" class="form-control"></textarea>
+                                <textarea id="request_memo" name="requestMemo" rows="3" class="form-control">$!results.get('param').requestMemo</textarea>
                             </div>
 
                         </form>
@@ -333,7 +333,7 @@
                                     <textarea  rows="20" class="form-control required" id="resultDemo" name="resultDemo" placeholder="API结果示例" >$!results.get('api').resultDemo</textarea>
                                     <div id="resultDemo-jsonshow"></div>
 
-                                    <textarea style="display:none" name="result_struct" id="result_struct"></textarea>
+                                    <textarea style="display:none" name="resultStruct" id="result_struct"></textarea>
 
                                 </div>
                                 </div>
@@ -345,7 +345,7 @@
                                 </div>
 
                                 <div id="resulteditor" class="json-editor expanded "></div>
-                                <textarea id="resultparsedJSON" style="display:none">$!results.get('param').result_struct</textarea>
+                                <textarea id="resultparsedJSON" style="display:none">$!results.get('param').resultStruct</textarea>
                                 <!-- <input type="hidden" id="resultjsonChecked" value="" /> -->
 
                             </div>
@@ -353,7 +353,7 @@
                             <div class="clearfix"></div>
                             <div class="form-group " style="margin-top:25px;">
                                 <label for="result_memo" class="control-label">结果描述</label>
-                                <textarea id="result_memo" name="result_memo" rows="3" class="form-control"></textarea>
+                                <textarea id="result_memo" name="resultMemo" rows="3" class="form-control">$!results.get('param').resultMemo</textarea>
                             </div>
 
                         </form>
