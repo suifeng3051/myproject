@@ -422,10 +422,7 @@ public class OAuthServiceImpl implements OAuthService {
          */
         List<AccessToken> tokensList = accessTokenService
                 .getByClientIdAndUserId(clientId, adminId);
-        Comparator<AccessToken> comparator = (
-                AccessToken t1, AccessToken t2) -> {
-            return t1.getExpires().compareTo(t2.getExpires());
-        };
+        Comparator<AccessToken> comparator = (AccessToken t1, AccessToken t2) -> t1.getExpires().compareTo(t2.getExpires());
         tokensList.sort(comparator.reversed());
 
         /**
