@@ -44,19 +44,8 @@ public class MonitorDataController {
 
 	@Autowired
 	MapReduceDao mapReduceDao;
-	
-	/**
-	 * 每分钟RT平均时间统计
-	 * 	
-	 * @Description: (方法职责详细描述,可空)  
-	 * @Title: rtCount 
-	 * @return
-	 * @date 2015年11月27日 下午2:20:26  
-	 * @author ws
-	 * @param metric
-	 * @param etime 
-	 * @param stime 
-	 */
+
+
 	@RequestMapping(value = "/querymonitor", produces = "application/json;charset=utf-8")
 	@ResponseBody
     public String getMonitorData(String stime, String etime, String metric, String host, String api){
@@ -76,8 +65,8 @@ public class MonitorDataController {
 		String mapFunction = MapReduceJs.MAP_FAILURE_COUNT;
 		String reduceFunction = MapReduceJs.REDUCE_FAILURE_COUNT;
 		
-		MapReduceResults<CountResult> rtResult = mapReduceDao.command(query
-				, inputCollectionName, mapFunction, reduceFunction);
+		MapReduceResults<CountResult> rtResult = mapReduceDao.command(query,
+                inputCollectionName, mapFunction, reduceFunction);
 		
 		for (CountResult countResult : rtResult) {
 			Map<String, Object> res = new HashMap<String, Object>();
@@ -88,7 +77,7 @@ public class MonitorDataController {
 			res.put("key", key);
 			String value = countResult.getValue();
 			if(value.contains("status")){
-				value = value.substring(17, value.length()-2);
+				value = value.substring(14, value.length()-2);
 			}
 			res.put("value", Math.round(Double.parseDouble(value)));
 			result.add(res);
@@ -159,21 +148,6 @@ public class MonitorDataController {
 		
 	}
      
-	
-	
-	/**
-	 * 构造查询条件
-	 * 	
-	 * @Description: (方法职责详细描述,可空)  
-	 * @Title: greatQueryConditions 
-	 * @param beginTime
-	 * @param endTime
-	 * @param api
-	 * @param host
-	 * @return
-	 * @date 2015年11月27日 下午2:19:57  
-	 * @author ws
-	 */
 	private Query createQueryConditions(String beginTime, String endTime,
                                         String api, String host) {
 		Query query = new Query(Criteria.where("minute").gte(beginTime).lte(endTime));
@@ -186,7 +160,4 @@ public class MonitorDataController {
 		//query.with(new Sort(new Order(Direction.ASC, "minute")));//升序
 		return query;
 	}
-	
-	
-	
 }

@@ -14,8 +14,8 @@ package com.zitech.gateway.monitor.mapreduce;
  */
 public interface MapReduceJs {
 	
-	String MAP_FAILURE_COUNT = "function (){emit(this.minute,{status:this.status});}";
-	String REDUCE_FAILURE_COUNT = "function (key,values){var count=0;values.forEach(function(val){if('1'==val.status){count +=1;}});return count;}";
+	String MAP_FAILURE_COUNT = "function (){if(this.status==1){emit(this.minute,{status:this.status});}}";
+	String REDUCE_FAILURE_COUNT = "function (key,values){var count=0;values.forEach(function(val){count +=1;});return count;}";
 	
 	String MAP_RT_MAX = "function (){emit(this.minute,{rt:this.rt});}";
 	String REDUCE_RT_MAX = "function (key,values){var ctmax=0; values.forEach(function(val){if(ctmax < val.rt){ctmax = val.rt;}});return ctmax ;}";
