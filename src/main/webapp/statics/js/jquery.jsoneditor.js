@@ -19,25 +19,24 @@
 //     $('#mydiv').jsonEditor(myjson, opt);
 
 (function($) {
-    var jsonTree = {},isEditeing=false;
-    $.fn.jsonEditor = function(json,isEdite) {
-         isEditeing=isEdite;
+    $.fn.jsonEditor = function(json, isEdite) {
+        isEditeing = isEdite ? true : false;
         var jsonObject = parse(stringify(json));
-        treeJson = getTreeJsonByDataJson(jsonObject);
+        var treeJson = getTreeJsonByDataJson(jsonObject);
         JSONEditor($(this), treeJson);
-        return jsonTree;
+        return function() {
+            return treeJson;
+        };
     };
 
-     $.fn.jsonEditorByTreeJson = function(json,isEdite) {
-        isEditeing=isEdite;
-        treeJson=json;
+    $.fn.jsonEditorByTreeJson = function(json, isEdite) {
+        isEditeing = isEdite ? true : false;
+        treeJson = json;
         JSONEditor($(this), treeJson);
-        return jsonTree;
+        return function() {
+            return treeJson;
+        };
     };
-
-    jsonTree.getJson = function() {
-        return treeJson;
-    }
 
     function getTreeJsonByDataJson(json) {
         if (!isObject(json) && !isArray(json)) {
@@ -48,7 +47,12 @@
         }
         for (var key in json) {
             if (!json.hasOwnProperty(key)) continue;
-            json[key] = { 'require': 1, 'type': assignType(json[key]),'des':"", 'fields': getTreeJsonByDataJson(json[key]) }
+            json[key] = {
+                'require': 1,
+                'type': assignType(json[key]),
+                'des': "",
+                'fields': getTreeJsonByDataJson(json[key])
+            }
         }
         return json;
     }
@@ -60,31 +64,48 @@
 
     function construct(root, json, path) {
         path = path || '';
-
+        var jsonObj = json;
         root.children('.item').remove();
 
         for (var key in json) {
             if (!json.hasOwnProperty(key)) continue;
 
-            var item = $('<div>', { 'class': 'item', 'data-path': path }),
-                property = $('<input>', { 'class': 'property', 'readonly': 'true' }),
-                typeSelect = isEditeing?$('<input>', { 'class': 'type','readonly': 'true'}):$('<select>', { 'class': 'type form-control' }),
-                typeValue = isEditeing?'':$('<option value="INT">INT</option><option value="STRING">STRING</option><option value="BOOL">BOOL</option><option value="OBJECT">OBJECT</option><option value="ARRAY">ARRAY</option>'),
-                requireCheckBox = isEditeing?$('<input>', { 'class': 'type','readonly': 'true'}):$('<input type="checkbox" value="" checked="true"/>'),
-                descInput=isEditeing?$('<input>', { 'class': 'type des-show','readonly': 'true'}):$('<input type="text" class="des-show" />');
+            var item = $('<div>', {
+                    'class': 'item',
+                    'data-path': path
+                }),
+                property = $('<input>', {
+                    'class': 'property',
+                    'readonly': 'true'
+                }),
+                typeSelect = isEditeing ? $('<input>', {
+                    'class': 'type',
+                    'readonly': 'true'
+                }) : $('<select>', {
+                    'class': 'type form-control'
+                }),
+                typeValue = isEditeing ? '' : $('<option value="INT">INT</option><option value="STRING">STRING</option><option value="BOOL">BOOL</option><option value="OBJECT">OBJECT</option><option value="ARRAY">ARRAY</option>'),
+                requireCheckBox = isEditeing ? $('<input>', {
+                    'class': 'type',
+                    'readonly': 'true'
+                }) : $('<input type="checkbox" value="" checked="true"/>'),
+                descInput = isEditeing ? $('<input>', {
+                    'class': 'type des-show',
+                    'readonly': 'true'
+                }) : $('<input type="text" class="des-show" />');
             if (isObject(json[key].fields) || isArray(json[key].fields)) {
                 addExpander(item);
             }
             property.val(key).attr('title', key);
-            descInput.val(json[key].des?json[key].des:'无');
-            isEditeing?(json[key].require ? requireCheckBox.val('是') : requireCheckBox.val('否')):(json[key].require ? requireCheckBox.attr('checked', 'true') : requireCheckBox.removeAttr('checked'));
+            descInput.val(json[key].des ? json[key].des : '无');
+            isEditeing ? (json[key].require ? requireCheckBox.val('是') : requireCheckBox.val('否')) : (json[key].require ? requireCheckBox.attr('checked', 'true') : requireCheckBox.removeAttr('checked'));
             typeSelect.append(typeValue).val(json[key].type);
             item.append(property).append(descInput).append(requireCheckBox).append(typeSelect);
             root.append(item);
 
-            typeSelect.change(typeChanged(treeJson));
-            requireCheckBox.change(requireChanged(treeJson));
-            descInput.change(descChanged(treeJson));
+            typeSelect.change(typeChanged(jsonObj));
+            requireCheckBox.change(requireChanged(jsonObj));
+            descInput.change(descChanged(jsonObj));
             if (json[key].fields != undefined && json[key].fields != '') {
                 construct(item, json[key].fields, (path ? path + '.' : '') + key);
             }
@@ -111,7 +132,7 @@
         }
     }
 
-    function descChanged(json){
+    function descChanged(json) {
         return function() {
             var key = $(this).prev().val(),
                 val = $(this).val(),
@@ -127,10 +148,9 @@
                 i = 0,
                 parts = path.split('.');
             for (var len = parts.length; i < len; i++) {
-                if(diver.hasOwnProperty('fields')){
+                if (diver.hasOwnProperty('fields')) {
                     diver = diver['fields'][parts[i]];
-                }
-                else{
+                } else {
                     diver = diver[parts[i]];
                 }
             }
@@ -143,7 +163,9 @@
 
     function addExpander(item) {
         if (item.children('.expander').length == 0) {
-            var expander = $('<span>', { 'class': 'expander' });
+            var expander = $('<span>', {
+                'class': 'expander'
+            });
             expander.bind('click', function() {
                 var item = $(this).parent();
                 item.toggleClass('expanded');
@@ -184,7 +206,9 @@
 
     function parse(str) {
         var res;
-        try { res = JSON.parse(str); } catch (e) {
+        try {
+            res = JSON.parse(str);
+        } catch (e) {
             res = null;
             error('JSON parse failed.');
         }
@@ -193,7 +217,9 @@
 
     function stringify(obj) {
         var res;
-        try { res = JSON.stringify(obj); } catch (e) {
+        try {
+            res = JSON.stringify(obj);
+        } catch (e) {
             res = 'null';
             error('JSON stringify failed.');
         }
@@ -201,6 +227,8 @@
     }
 
     function error(reason) {
-        if (window.console) { console.error(reason); }
+        if (window.console) {
+            console.error(reason);
+        }
     }
 })(jQuery);

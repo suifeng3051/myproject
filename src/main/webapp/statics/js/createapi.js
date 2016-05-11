@@ -76,18 +76,20 @@ $(document).ready(function(){
                         $('.hasApi').trigger('click');
                         return;
                     }
+
+                break;
+                case 2:
                      if($('#requestType').val() != 'POST'){  // 如果是GET 方式则路过第 3 步
                         currentStep++;
                      }
 
                 break;
-                case 2:break;
                 case 3:  // 验证类型选择，是否为空；若为空，则提示用户
-                    validJSON('json-input', 'editor', 'parsedJSON','jsonChecked', 'jsonParseInfo')  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
+                    validJSON('json-input', 'editor', 'parsedJSON', 'jsonParseInfo', window.JSONresult());  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
                     return;
                 break;
                 case 4:
-                   validJSON('resultDemo', 'resulteditor', 'resultparsedJSON', 'resultjsonChecked', 'resultconfigInfo')  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
+                   validJSON('resultDemo', 'resulteditor', 'resultparsedJSON', 'resultconfigInfo', window.resultJSONresult());  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
                    return;
                 break;
             }
@@ -99,7 +101,7 @@ $(document).ready(function(){
 
         $('.preStep').click(function(){
             switch(currentStep){
-                case 3:
+                case 4:
                      if(($('#requestType').val() != 'POST')){  // 如果是GET 方式则路过第 3 步
                         currentStep--;
                      }
@@ -109,7 +111,7 @@ $(document).ready(function(){
             changeStepTo(currentStep);
         });
 
-        function validJSON(input, editor, parsedJSON, jsonChecked, jsonInfo){
+        function validJSON(input, editor, parsedJSON, jsonInfo, jsonResultStr){
 
             var errorInfo = '';
 
@@ -126,8 +128,8 @@ $(document).ready(function(){
 
             if(window.JSONerror) { errorInfo += ' 未选择所有数据类型 '; }
 
-            if($('#'+editor).html().length){
-                $('#'+parsedJSON).text(JSON.stringify(JSONresult.getJson()));  // 将修改后的树数据放入隐藏textarea
+            if($('#'+editor).html().length > 0){
+                $('#'+parsedJSON).text(JSON.stringify(jsonResultStr));  // 将修改后的树数据放入隐藏textarea
             }
 
             $.post(
@@ -139,7 +141,6 @@ $(document).ready(function(){
                 function(data){
                     if(data.code == 1){
                         $('#'+input).addClass('error');
-                        $('#'+jsonChecked).val('');
                         errorInfo += data.data;
                         window.JSONerror = true;
                     } else {
@@ -174,7 +175,7 @@ $(document).ready(function(){
 
                     if($('#json-input').val().length > 0){
                         $('#json-input').val(formatJson($('#json-input').val()));  // 自动格式化输入框中的 json 字符串
-                        window.JSONresult = $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );  // 将保存的数据取出来解析成“树”进行修改
+                        window.JSONresult = $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()));  // 将保存的数据取出来解析成“树”进行修改
                     }
 
                     $('#editor .item .property').mouseenter(function(){
@@ -196,7 +197,6 @@ $(document).ready(function(){
                             $('#resultconfigInfo').html('<p>JSON格式错误：'+ e +'</p>').removeClass('alert-success').addClass('alert-danger').show();
                         }
                     }
-
 
                     $('#resulteditor .item .property').mouseenter(function(){
                         $(this).parent().addClass('grey');
@@ -256,6 +256,7 @@ $(document).ready(function(){
             $('#jsonParseInfo').hide();
 
             window.JSONresult = $('#editor').jsonEditor(json);  // 解析JSON，生成JSON树
+            window.JSONresultStr = window.JSONresult();
 
             $('.item .property').mouseenter(function(){
                 $(this).parent().addClass('grey');
@@ -282,6 +283,7 @@ $(document).ready(function(){
             $('#resultconfigInfo').hide();
 
             window.resultJSONresult = $('#resulteditor').jsonEditor(json);  // 解析JSON，生成JSON树
+            window.resultJSONresultStr = window.resultJSONresult();
 
             $('.item .property').mouseenter(function(){
                 $(this).parent().addClass('grey');
@@ -343,12 +345,12 @@ $(document).ready(function(){
 
             $('#step-nav-box, #save, .nextStep').hide();
 
-            if(($('#json-input').val().length >0) && ($('#parsedJSON').val().length > 0)){
-                window.JSONresult = $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );
-            }
-            if(($('#resultDemo').val().length >0) && ($('#resultparsedJSON').val().length > 0)){
-                window.resultJSONresult = $('#resulteditor').jsonEditorByTreeJson( JSON.parse($('#resultparsedJSON').val()) );
-            }
+//            if(($('#json-input').val().length >0) && ($('#parsedJSON').val().length > 0)){
+//                window.JSONresultStr = $('#editor').jsonEditorByTreeJson( JSON.parse($('#parsedJSON').val()) );
+//            }
+//            if(($('#resultDemo').val().length >0) && ($('#resultparsedJSON').val().length > 0)){
+//                window.resultJSONresultStr = $('#resulteditor').jsonEditorByTreeJson( JSON.parse($('#resultparsedJSON').val()) );
+//            }
             $('#apiconfig-box > div').eq(4).addClass('active').siblings().removeClass('active');
 
             finalReview(); //
@@ -363,28 +365,35 @@ $(document).ready(function(){
             // API接口信息配置
             apiObj = formdataToJSON($('#apiInterfaceConfig').serializeArray());
 
+            var str = objToStr(apiObj);
+
+            $('#final-review-apiconfig').html(str);
+
             // 将resultDemo 结果结构 加入api接口信息对象，保存
             resultObj = formdataToJSON($('#resultconfigForm').serializeArray());
-            resultObj.result_struct = resultJSONresult.getJson();
-
-            for(k in resultObj){  //  第四步数据合并到第一步数据对象
+            resultObj.resultStruct = $('#resultparsedJSON').val();
+            for(k in resultObj){  //  第四步数据合并到第一步数据对象，分开预览
                 apiObj[k] = resultObj[k];
             }
 
-            console.log(apiObj);
+            var str = objToStr(resultObj);
+            $('#final-review-resultjson').html(str);
 
-            var str = objToStr(apiObj);
-            $('#final-review-apiconfig').html(str);
+            if($('#detail').val() == 1){
+                $('#resultStructureJson').html('').jsonEditorByTreeJson(JSON.parse($('#resultparsedJSON').val()), true);
+            }else {
+                // 结果结构 JSON 树
+                $('#result_struct').text(JSON.stringify(resultJSONresult()));
 
-            // 结果结构 JSON 树
-            $('#result_struct').text(JSON.stringify(resultJSONresult.getJson()));
+                $('#resultStructureJson').html('').jsonEditorByTreeJson(JSON.parse($('#result_struct').val()), true);
+            }
 
-            $('#resultStructureJson').html('').jsonEditorByTreeJson(JSON.parse($('#result_struct').val()), true);
             $('#resultStructureJson').addClass('json-editor expanded ');
             if($('#result-treeHead-view').length == 0){
                 var treeHead = $('<p style="text-align:right; color:#aaa; margin-bottom:0;" id="result-treeHead-view"><span style="margin-right:30px">数据类型</span><span style="margin-right:28px">是否必需</span><span style="margin-right:188px">描述</span></p>');
                 $('#resultStructureJson').before(treeHead);
             }
+
 
 
 
@@ -410,8 +419,7 @@ $(document).ready(function(){
             if(apiObj.requestType == 'POST' ) {  // 请求方式 POST，加入json数据
 
                 paramObj = formdataToJSON($('#jsonparseForm').serializeArray());
-
-                paramObj.requestStructure = JSONresult.getJson();
+                paramObj.requestStructure = $('#parsedJSON').val();
 
                 console.log(paramObj);
 
@@ -420,9 +428,8 @@ $(document).ready(function(){
 
                 $('#review-jsonparse').show();
 
-                $('#requestStructure').text(JSON.stringify(JSONresult.getJson()));
+                $('#requestStructureJson').html('').jsonEditorByTreeJson(JSON.parse($('#parsedJSON').val()), true);
 
-                $('#requestStructureJson').html('').jsonEditorByTreeJson(JSON.parse($('#requestStructure').val()), true);
                 $('#requestStructureJson').addClass('json-editor expanded ');
                 if($('#treeHead-view').length == 0){
                     var treeHead = $('<p style="text-align:right; color:#aaa; margin-bottom:0;" id="treeHead-view"><span style="margin-right:30px">数据类型</span><span style="margin-right:28px">是否必填</span><span style="margin-right:188px">描述</span></p>');
@@ -502,8 +509,8 @@ $(document).ready(function(){
                          label = '请求结构';
                          id = 'requestStructureJson';
                      break;
-                    case 'request_memo':
-                        label = '请求描述';
+                    case 'requestMemo':
+                        label = '请求备注';
                     break;
 
                     case 'resultDemo':
@@ -511,12 +518,12 @@ $(document).ready(function(){
                          id = 'resultDemoJson';
                         obj[o] = html_encode(obj[o]+''); // 防止 json 字符串中有HTML标签，在预览写入页面时，浏览器当正常文档结构解析
                     break;
-                    case 'result_struct':
+                    case 'resultStruct':
                         label = '结果结构';
                         id = 'resultStructureJson';
                     break;
-                    case 'result_memo':
-                        label = '结果描述';
+                    case 'resultMemo':
+                        label = '结果备注';
                     break;
 
                     default: label = o; break;
