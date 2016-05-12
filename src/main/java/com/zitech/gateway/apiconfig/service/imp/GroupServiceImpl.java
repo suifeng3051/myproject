@@ -143,5 +143,18 @@ public class GroupServiceImpl implements GroupService {
 
     }
 
+    @Override
+    public Map<Integer, String> getAllNameIdMapping() {
+
+        Map<Integer,String> map = new HashMap<>();
+        List<Group> list = getAll();
+
+        for(Group group:list){
+            map.put(group.getId(),group.getName());
+        }
+
+        return map;
+    }
+
 
 }

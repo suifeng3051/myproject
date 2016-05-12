@@ -1,5 +1,7 @@
 package com.zitech.gateway.apiconfig.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.apiconfig.service.ApiService;
@@ -76,6 +78,7 @@ public class ApiListController {
             results.put("user", userName);
             results.put("isAdmin", adminService.isAdmin(userName));
             results.put("apilists", allApi);
+            results.put("groupIdToName", groupService.getAllNameIdMapping());
             results.put("groupMap", groupMap);
             results.put("env", env);
         } catch (Exception e) {
@@ -90,7 +93,7 @@ public class ApiListController {
     @ResponseBody
     public String getApiByGroup(@RequestParam("groupid") Integer groupid,
                                 @RequestParam(value = "env", required = false, defaultValue = "1") Byte env) {
-        ApiResult<List<Api>> apiResult = new ApiResult<>(0, "success");
+        ApiResult<Object> apiResult = new ApiResult<>(0, "success");
 
         try {
             List<Api> list = null;
@@ -109,7 +112,13 @@ public class ApiListController {
                     return arg2.getCreatedTime().compareTo(arg1.getCreatedTime()); // 按时间逆序排序
                 }
             });
-            apiResult.setData(list);
+
+            Map<String,Object> data = new HashMap<>();
+
+            data.put("list",list);
+            data.put("mapping",groupService.getAllNameIdMapping());
+
+            apiResult.setData(JSONObject.toJSON(data));
         } catch (Exception e) {
             logger.info("根据groupid获取api发生异常", e);
             apiResult.setCode(9000);
