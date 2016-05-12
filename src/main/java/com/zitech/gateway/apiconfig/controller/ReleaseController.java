@@ -204,7 +204,7 @@ public class ReleaseController {
                 }
 
             } catch (Exception e) {
-                logger.error("文件解析失败" + e);
+                logger.error("文件解析失败", e);
                 return new ApiResult<String>(1, "文件解析失败", e.getMessage()).toString();
             }
 
