@@ -82,14 +82,16 @@ $(document).ready(function(){
                      if($('#requestType').val() != 'POST'){  // 如果是GET 方式则路过第 3 步
                         currentStep++;
                      }
-
+                    $('#json-input').trigger('blur');
                 break;
                 case 3:  // 验证类型选择，是否为空；若为空，则提示用户
+
                     if($('#editor').html().length > 0){
                         validJSON('json-input', 'editor', 'parsedJSON', 'jsonParseInfo', window.JSONresult());  // 请求后台验证JSON格式是否正确，如果不正确提示并阻止下一步
                     } else {
                         $('#JSONparse-btn').trigger('click');
                     }
+                    $('#resultDemo').trigger('blur');
                     return;
                 break;
                 case 4:

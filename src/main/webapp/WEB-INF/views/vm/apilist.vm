@@ -28,7 +28,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2 bs-docs-sidebar" >
-            <div data-offset-top="200"  style="margin-top:60px;">
+            <div data-offset-top="200"  style="margin-top:60px; margin-right:-20px;">
                 <ul class="nav nav-list bs-docs-sidenav" id="navbarLeft">
 
                     <li class="affixGroup clearfix" groupid='$!groupTree.get("id")' group="$!groupTree.get('alias')" >

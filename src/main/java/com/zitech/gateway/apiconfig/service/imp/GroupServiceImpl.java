@@ -94,6 +94,9 @@ public class GroupServiceImpl implements GroupService {
 
         if (id == -1) {
             Group openApiGroup_all = groupDAO.selectByAlias("all");
+            if (openApiGroup_all == null) {
+                return new HashMap<>();
+            }
             id = openApiGroup_all.getId();
         }
 
