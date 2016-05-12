@@ -61,18 +61,24 @@ public class ReleaseServiceImpl implements ReleaseService {
 
         if (apiService.checkApi(api.getNamespace(), api.getMethod(), api.getVersion(), env)) {
 
-            api.setId(apiDAO.getMaxId() + 1);
+            //api.setId(apiDAO.getMaxId() + 1);
             api.setEnv(env);
+
             serve.setId(null);
-            serve.setApiId(api.getId());
+            //serve.setApiId(api.getId());
             serve.setEnv(env);
+
             param.setId(null);
-            param.setApiId(api.getId());
+            //param.setApiId(api.getId());
             param.setEnv(env);
 
             try {
-                apiDAO.insertSelective(api);
+                int apiId = apiDAO.insertSelective(api);
+
+                serve.setApiId(apiId);
                 serveDAO.insertSelective(serve);
+
+                param.setApiId(apiId);
                 paramDAO.insertSelective(param);
             } catch (Exception e) {
                 JSONObject result_obj = new JSONObject();
