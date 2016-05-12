@@ -57,39 +57,42 @@ public class ReleaseServiceImpl implements ReleaseService {
         Api api = JSONObject.toJavaObject(jsonObject.getJSONObject("api"), Api.class);
         Serve serve = JSONObject.toJavaObject(jsonObject.getJSONObject("serve"), Serve.class);
         Param param = JSONObject.toJavaObject(jsonObject.getJSONObject("param"), Param.class);
-        byte env = jsonObject.getByte("toEnv");
 
-        if (apiDAO.selectByPrimaryKey(api.getId()) == null) {
+            byte env = jsonObject.getByte("toEnv");
 
-            api.setEnv(env);
-            serve.setEnv(env);
-            param.setEnv(env);
+            if (apiDAO.selectByPrimaryKey(api.getId()) == null) {
+                try {
+                    api.setEnv(env);
+                    apiDAO.insertSelective(api);
 
-            try {
-                apiDAO.insertSelective(api);
-                serveDAO.insertSelective(serve);
-                paramDAO.insertSelective(param);
-            } catch (Exception e) {
+                    serve.setEnv(env);
+                    serveDAO.insertSelective(serve);
+
+                    if (param != null) {
+                        param.setEnv(env);
+                        paramDAO.insertSelective(param);
+                    }
+                } catch (Exception e) {
+                    JSONObject result_obj = new JSONObject();
+                    result_obj.put("api", api);
+                    result_obj.put("code", 1);
+                    result_obj.put("message", "入库发布失败," + e.getMessage());
+                    return result_obj;
+                }
+
+            } else {
                 JSONObject result_obj = new JSONObject();
                 result_obj.put("api", api);
                 result_obj.put("code", 1);
-                result_obj.put("message", "入库发布失败," + e.getMessage());
+                result_obj.put("message", "该API已存在");
                 return result_obj;
+
+
             }
 
-        } else {
-            JSONObject result_obj = new JSONObject();
-            result_obj.put("api", api);
-            result_obj.put("code", 1);
-            result_obj.put("message", "该API已存在");
-            return result_obj;
 
+            return null;
 
         }
 
-
-        return null;
-
     }
-
-}

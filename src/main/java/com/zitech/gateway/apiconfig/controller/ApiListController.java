@@ -1,6 +1,5 @@
 package com.zitech.gateway.apiconfig.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.Api;
@@ -54,11 +53,11 @@ public class ApiListController {
 
     @RequestMapping("/apilist")
     public ModelAndView getApiList(@RequestParam(value = "envToSet", required = false, defaultValue = "") Byte envToSet,
-            HttpServletRequest request, HttpServletResponse response) {
+                                   HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> results = new HashMap<>();
         try {
             String userName = adminService.getUserNameFromSessionAndRedis(request);
-            boolean isAdmin =adminService.isAdmin(userName);
+            boolean isAdmin = adminService.isAdmin(userName);
 
             if (userName == null) {
                 return new ModelAndView("redirect:/unifyerror", "cause", "Fail to get user name");
@@ -68,42 +67,40 @@ public class ApiListController {
             String groupId_show = "";
 
             Cookie[] cookies = request.getCookies();
-             if (cookies != null && cookies.length > 0) { //如果没有设置过Cookie会返回null
+            if (cookies != null && cookies.length > 0) { //如果没有设置过Cookie会返回null
                 for (Cookie cookie : cookies) {
                     String cookieName = cookie.getName();
-                    if(!StringUtils.isEmpty(cookieName)){
-                        if(cookieName.equals("groupId_show")){
+                    if (!StringUtils.isEmpty(cookieName)) {
+                        if (cookieName.equals("groupId_show")) {
                             groupId_show = cookie.getValue();
-                        }else if(cookieName.equals("env")&&isAdmin){
+                        } else if (cookieName.equals("env") && isAdmin) {
                             env = Byte.valueOf(cookie.getValue());
                         }
                     }// end if
                 }//end for
             }
 
-            if(isAdmin){
+            if (isAdmin) {
 
-                if(!StringUtils.isEmpty(envToSet)){
+                if (!StringUtils.isEmpty(envToSet)) {
                     env = envToSet;
-                    Cookie cookie = new Cookie("env",env+"");
+                    Cookie cookie = new Cookie("env", env + "");
                     response.addCookie(cookie);
-                }else{
-                    Cookie cookie = new Cookie("env",env+"");
+                } else {
+                    Cookie cookie = new Cookie("env", env + "");
                     response.addCookie(cookie);
                 }
 
-            }else{
-                Cookie cookie = new Cookie("env",env+"");
+            } else {
+                Cookie cookie = new Cookie("env", env + "");
                 response.addCookie(cookie);
             }
-
-
 
 
             //api
             List<Api> allApi = null;
 
-            if(StringUtils.isEmpty(groupId_show)){
+            if (StringUtils.isEmpty(groupId_show)) {
                 allApi = apiService.getAllByEnv(env);
             }
 
@@ -124,7 +121,7 @@ public class ApiListController {
             Map<String, Object> groupMap = groupService.getGroupTreeById(-1);
 
             results.put("user", userName);
-            Cookie cookie = new Cookie("isAdmin",isAdmin+"");
+            Cookie cookie = new Cookie("isAdmin", isAdmin + "");
             response.addCookie(cookie);
 
             results.put("apilists", allApi);
@@ -165,10 +162,10 @@ public class ApiListController {
                 }
             });
 
-            Map<String,Object> data = new HashMap<>();
+            Map<String, Object> data = new HashMap<>();
 
-            data.put("list",list);
-            data.put("mapping",groupService.getAllNameIdMapping());
+            data.put("list", list);
+            data.put("mapping", groupService.getAllNameIdMapping());
 
             apiResult.setData(JSONObject.toJSON(data));
         } catch (Exception e) {

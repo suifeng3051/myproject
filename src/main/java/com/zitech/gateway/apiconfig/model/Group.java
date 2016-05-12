@@ -40,6 +40,10 @@ public class Group implements TreeNode {
         return pid;
     }
 
+    public void setPid(Integer pid) {
+        this.pid = pid;
+    }
+
     @Override
     public Integer getRank() {
         return 0;
@@ -62,10 +66,6 @@ public class Group implements TreeNode {
     @Override
     public void setParent(TreeNode parent) {
         this.parent = parent;
-    }
-
-    public void setPid(Integer pid) {
-        this.pid = pid;
     }
 
     public String getName() {

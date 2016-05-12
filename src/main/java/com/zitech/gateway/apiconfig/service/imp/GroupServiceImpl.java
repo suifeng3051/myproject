@@ -4,9 +4,9 @@ import com.zitech.gateway.apiconfig.dao.gateway.GroupDAO;
 import com.zitech.gateway.apiconfig.model.Group;
 import com.zitech.gateway.apiconfig.service.GroupService;
 import com.zitech.gateway.utils.AppUtils;
-
 import com.zitech.gateway.utils.TreeHelper;
 import com.zitech.gateway.utils.TreeNode;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -148,7 +148,7 @@ public class GroupServiceImpl implements GroupService {
     public List<Group> getParents(Group root, int id) {
         List<TreeNode> parents = TreeHelper.getParentNodes(root, id);
         List<Group> rts = new ArrayList<>();
-        parents.stream().forEach(node -> rts.add((Group)node));
+        parents.stream().forEach(node -> rts.add((Group) node));
         return rts;
     }
 
@@ -162,11 +162,11 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public Map<Integer, String> getAllNameIdMapping() {
 
-        Map<Integer,String> map = new HashMap<>();
+        Map<Integer, String> map = new HashMap<>();
         List<Group> list = getAll();
 
-        for(Group group:list){
-            map.put(group.getId(),group.getName());
+        for (Group group : list) {
+            map.put(group.getId(), group.getName());
         }
 
         return map;

@@ -6,7 +6,12 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.zitech.gateway.apiconfig.model.Api;
 import com.zitech.gateway.apiconfig.model.Group;
-import com.zitech.gateway.apiconfig.service.*;
+import com.zitech.gateway.apiconfig.service.AdminService;
+import com.zitech.gateway.apiconfig.service.ApiService;
+import com.zitech.gateway.apiconfig.service.GroupService;
+import com.zitech.gateway.apiconfig.service.ParamService;
+import com.zitech.gateway.apiconfig.service.ReleaseService;
+import com.zitech.gateway.apiconfig.service.ServeService;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
 
@@ -26,7 +31,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -139,15 +151,14 @@ public class ReleaseController {
         Group root = groupService.getTree();
 
         Set<Group> groups = new HashSet<>();
-        for(JSONObject jsonObject :list_Info){
+        for (JSONObject jsonObject : list_Info) {
             Api api = JSONObject.toJavaObject(jsonObject.getJSONObject("api"), Api.class);
             List<Group> list_parent = groupService.getParents(root, api.getGroupId());
             list_parent.stream().forEach(groups::add);
         }
 
-        data.put("groupSet",groups);
-        data.put("apiList",list_Info);
-
+        data.put("groupSet", groups);
+        data.put("apiList", list_Info);
 
 
         String downloadStr = JSONArray.toJSONString(data, groupFilter, SerializerFeature.DisableCheckSpecialChar);
@@ -179,13 +190,13 @@ public class ReleaseController {
                 JSONArray apiArray = uploadObj.getJSONArray("apiList");
                 JSONArray groupArray = uploadObj.getJSONArray("groupSet");
 
-                 for(int j=0;j<groupArray.size();j++){
+                for (int j = 0; j < groupArray.size(); j++) {
 
                     Group group = JSONObject.toJavaObject(groupArray.getJSONObject(j), Group.class);
 
-                    Group group_exits =  groupService.getById(group.getId());
+                    Group group_exits = groupService.getById(group.getId());
 
-                    if(group_exits==null)groupService.insert(group);
+                    if (group_exits == null) groupService.insert(group);
 
                 }
 
