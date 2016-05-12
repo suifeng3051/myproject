@@ -93,14 +93,14 @@
                         #foreach ($!apiElement in $!results.get("apilists"))
 
                                 <li class="list-group-item apiElement" style="padding:6px 15px;">
-                                    <p class="row"><span class="col-sm-8"><a href="#" class="apidetail" apiId="$!apiElement.id" namespace="$!apiElement.namespace" method="$!apiElement.method" version="$!apiElement.version" > $!apiElement.namespace/$!apiElement.version/$!apiElement.method </a></span>
+                                    <p class="row"><span class="col-sm-6"><a href="#" class="apidetail" apiId="$!apiElement.id" namespace="$!apiElement.namespace" method="$!apiElement.method" version="$!apiElement.version" > $!apiElement.namespace/$!apiElement.version/$!apiElement.method </a></span>
 
                                     <span class="col-sm-2 apiElement-des">#if('GET' == $!apiElement.requestType)
                                         GET
                                     #elseif('POST' == $!apiElement.requestType)
                                         POST
                                     #end</span>
-                                        <span class="apiElement-des col-sm-2 ">'+$!groupIdToName.get($!apiElement.groupId)+'</span>'
+                                        <span class="apiElement-des col-sm-2 ">$!results.get("groupIdToName").get($!apiElement.groupId)</span>
                                     <span class="col-sm-2 list-operations">
                                     <a href="#" data-toggle="tooltip" data-placement="top" title="编辑" ><span namespace="$!apiElement.namespace" method="$!apiElement.method" version="$!apiElement.version" apiId="$!apiElement.id" class="glyphicon glyphicon-edit editIcon"></span></a>
                                     #if(1==$!apiElement.avail)

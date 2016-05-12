@@ -31,6 +31,10 @@ public interface GroupService {
 
     Map<String, Object> getGroupTreeById(int id);
 
+    Group getTree();
+
+    List<Group> getParents(Group root, int id);
+
     /**
      * 获取某一组的自身及其子组
      * @param id
@@ -43,5 +47,8 @@ public interface GroupService {
      * @return
      */
     Map<Integer,String>  getAllNameIdMapping();
+
+
+
 
 }

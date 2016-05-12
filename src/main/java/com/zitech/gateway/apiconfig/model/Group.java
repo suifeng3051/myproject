@@ -1,8 +1,12 @@
 package com.zitech.gateway.apiconfig.model;
 
-import java.util.Date;
+import com.zitech.gateway.utils.TreeNode;
 
-public class Group {
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class Group implements TreeNode {
 
     private Integer id;
 
@@ -20,6 +24,10 @@ public class Group {
 
     private Date updateTime;
 
+    private List<TreeNode> children = new ArrayList<>();
+
+    private TreeNode parent;
+
     public Integer getId() {
         return id;
     }
@@ -30,6 +38,30 @@ public class Group {
 
     public Integer getPid() {
         return pid;
+    }
+
+    @Override
+    public Integer getRank() {
+        return 0;
+    }
+
+    @Override
+    public List<TreeNode> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<TreeNode> children) {
+        this.children = children;
+    }
+
+    @Override
+    public TreeNode getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(TreeNode parent) {
+        this.parent = parent;
     }
 
     public void setPid(Integer pid) {

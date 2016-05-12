@@ -3,12 +3,10 @@ package com.zitech.gateway.apiconfig.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.zitech.gateway.apiconfig.model.Api;
-import com.zitech.gateway.apiconfig.service.AdminService;
-import com.zitech.gateway.apiconfig.service.ApiService;
-import com.zitech.gateway.apiconfig.service.ParamService;
-import com.zitech.gateway.apiconfig.service.ReleaseService;
-import com.zitech.gateway.apiconfig.service.ServeService;
+import com.zitech.gateway.apiconfig.model.Group;
+import com.zitech.gateway.apiconfig.service.*;
 import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.common.ApiResult;
 
@@ -28,12 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -61,6 +54,10 @@ public class ReleaseController {
     private ServeService serveService;
     @Autowired
     private ParamService paramService;
+    @Autowired
+    private GroupService groupService;
+
+    private SimplePropertyPreFilter groupFilter = new SimplePropertyPreFilter(Group.class, "id", "pid", "name", "alias", "level", "description");
 
     @RequestMapping("/release")
     public ModelAndView release(@RequestParam(value = "env", defaultValue = "1") byte env,
@@ -107,6 +104,9 @@ public class ReleaseController {
                                                   @RequestParam("toEnv") byte toEnv) throws NumberFormatException, UnsupportedEncodingException {
 
         List<JSONObject> list_Info = new ArrayList<>();
+        Set<Group> groupSet = new HashSet<>();
+
+        JSONObject data = new JSONObject();
 
 
         if (!StringUtils.isEmpty(ids)) {
@@ -135,7 +135,22 @@ public class ReleaseController {
 
         headers.setContentDispositionFormData("attachment", "release.txt");
 
-        String downloadStr = JSONArray.toJSONString(list_Info, SerializerFeature.DisableCheckSpecialChar);
+
+        Group root = groupService.getTree();
+
+        Set<Group> groups = new HashSet<>();
+        for(JSONObject jsonObject :list_Info){
+            Api api = JSONObject.toJavaObject(jsonObject.getJSONObject("api"), Api.class);
+            List<Group> list_parent = groupService.getParents(root, api.getGroupId());
+            list_parent.stream().forEach(groups::add);
+        }
+
+        data.put("groupSet",groups);
+        data.put("apiList",list_Info);
+
+
+
+        String downloadStr = JSONArray.toJSONString(data, groupFilter, SerializerFeature.DisableCheckSpecialChar);
 
 
         downloadStr = new String(downloadStr.getBytes("utf-8"), "ISO8859-1");
@@ -158,11 +173,26 @@ public class ReleaseController {
                 byte[] bytes = file.getBytes();
 
                 String uploadStr = new String(bytes);
-                JSONArray array = JSONArray.parseArray(uploadStr);
+                //JSONArray array = JSONArray.parseArray(uploadStr);
+                JSONObject uploadObj = JSONObject.parseObject(uploadStr);
 
-                for (int i = 0; i < array.size(); i++) {
+                JSONArray apiArray = uploadObj.getJSONArray("apiList");
+                JSONArray groupArray = uploadObj.getJSONArray("groupSet");
 
-                    JSONObject obj = array.getJSONObject(i);
+                 for(int j=0;j<groupArray.size();j++){
+
+                    Group group = JSONObject.toJavaObject(groupArray.getJSONObject(j), Group.class);
+
+                    Group group_exits =  groupService.getById(group.getId());
+
+                    if(group_exits==null)groupService.insert(group);
+
+                }
+
+
+                for (int i = 0; i < apiArray.size(); i++) {
+
+                    JSONObject obj = apiArray.getJSONObject(i);
                     JSONObject resultObj = releaseService.loadUploadFile(obj);
 
                     if (resultObj != null) {

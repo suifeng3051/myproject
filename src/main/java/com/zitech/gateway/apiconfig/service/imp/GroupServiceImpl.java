@@ -5,6 +5,8 @@ import com.zitech.gateway.apiconfig.model.Group;
 import com.zitech.gateway.apiconfig.service.GroupService;
 import com.zitech.gateway.utils.AppUtils;
 
+import com.zitech.gateway.utils.TreeHelper;
+import com.zitech.gateway.utils.TreeNode;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -135,6 +137,20 @@ public class GroupServiceImpl implements GroupService {
         return treeObj;
     }
 
+    @Override
+    public Group getTree() {
+        List<Group> all = this.getAll();
+        TreeNode root = TreeHelper.buildTree(all);
+        return (Group) root;
+    }
+
+    @Override
+    public List<Group> getParents(Group root, int id) {
+        List<TreeNode> parents = TreeHelper.getParentNodes(root, id);
+        List<Group> rts = new ArrayList<>();
+        parents.stream().forEach(node -> rts.add((Group)node));
+        return rts;
+    }
 
     @Override
     public List<Group> getAllById(int id) {

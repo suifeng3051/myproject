@@ -160,4 +160,13 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
+    <select id="selectAllParentById" parameterType="java.lang.Integer"  resultMap="BaseResultMap" >
+        SELECT  t2.* FROM t_group t1
+        LEFT OUTER JOIN t_group t2 ON t2.pid = t1.id
+        where t1.id=#{id,jdbcType=INTEGER} and t2.id is not null
+        union
+        select * from t_group
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
 </mapper>
