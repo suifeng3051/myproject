@@ -150,7 +150,7 @@ public class UserController {
         String status = "fail";
 
         try {
-            adminService.deleteById(Integer.valueOf(id));
+            adminService.deleteById(Long.valueOf(id));
             status = "success";
         } catch (NumberFormatException e) {
             logger.error("can not delete user.", e);

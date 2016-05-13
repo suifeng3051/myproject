@@ -40,7 +40,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         adminDAO.deleteByPrimaryKey(id);
     }
 
