@@ -208,12 +208,14 @@ $(document).ready(function () {
             var fromEnv = getEnv();
             var toEnv = $("#ToDev").children('option:selected').val();
             windowOpenInPost(ids, fromEnv, toEnv);
-             
-             $("#noRelease").trigger("click");
-/*             setTimeout(function () {
-                 //window.location.href = "release?env=" + getEnv();
 
-             }, 3000);*/
+             //$("#noRelease").trigger("click");
+
+             setTimeout(function () {
+
+                 window.location.href = "release?env=" + getEnv();
+
+             }, 5000);
 
 
 
