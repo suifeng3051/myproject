@@ -258,11 +258,15 @@ $(document).ready(function(){
                 $('#jsonParseInfo').html('<p>解析JSON时发生错误：'+e+'</p>').show();
                 return;
             }
+            var oldJson = '';
+            if($('#editor').html().length > 0){
+                oldJson = window.JSONresult();
+            }
 
             $('#json-input').removeClass('error');
             $('#jsonParseInfo').hide();
 
-            window.JSONresult = $('#editor').jsonEditor(json);  // 解析JSON，生成JSON树
+            window.JSONresult = $('#editor').jsonEditor(json, oldJson);  // 解析JSON，生成JSON树
             window.JSONresultStr = window.JSONresult();
 
             $('.item .property').mouseenter(function(){
@@ -285,11 +289,15 @@ $(document).ready(function(){
                 $('#resultconfigInfo').html('<p>解析JSON时发生错误：'+e+'</p>').show();
                 return;
             }
+            var oldJson = '';
+            if($('#resulteditor').html().length > 0){
+                oldJson = window.resultJSONresult();
+            }
 
             $('#resultDemo').removeClass('error');
             $('#resultconfigInfo').hide();
 
-            window.resultJSONresult = $('#resulteditor').jsonEditor(json);  // 解析JSON，生成JSON树
+            window.resultJSONresult = $('#resulteditor').jsonEditor(json, oldJson);  // 解析JSON，生成JSON树
             window.resultJSONresultStr = window.resultJSONresult();
 
             $('.item .property').mouseenter(function(){

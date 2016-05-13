@@ -14,7 +14,7 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active1"><a href="apilist?env=$!results.get('env')"><h3 style="margin:0 0 0 0;">Gateway</h3> <span class="sr-only">(current)</span></a></li>
+                <li class="active1"><a   href="apilist" ><h3 style="margin:0 0 0 0;">Gateway</h3> <span class="sr-only">(current)</span></a></li>
             </ul>
             <ul id="myTitle" class="nav nav-pills" style="margin:9px 0 0 0;">
                 <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Home</a></li>
@@ -40,29 +40,7 @@
                 </li>
             </ul>
             <form class="navbar-form navbar-left" id="env" style="margin: -38px 0 0 46%;">
-                <div class="form-group radio">
-                    #if(2 == $!results.get('env'))
-                    <label><input class="envRadio" type="radio" name="env"  value="1" >
-                        <span class="text-primary">dev</span></label>
-                    <label><input class="envRadio" type="radio" name="env"  value="2" checked>
-                        <span class="text-primary">test</span></label>
-                    <label><input class="envRadio" type="radio" name="env"  value="3">
-                        <span class="text-primary">product</span></label>
-                    #elseif(3 == $!results.get('env'))
-                    <label><input class="envRadio" type="radio" name="env"  value="1" >
-                        <span class="text-primary">dev</span></label>
-                    <label><input class="envRadio" type="radio" name="env"  value="2">
-                        <span class="text-primary">test</span></label>
-                    <label><input class="envRadio" type="radio" name="env"  value="3" checked>
-                        <span class="text-primary">product</span></label>
-                    #else
-                    <label><input class="envRadio" type="radio" name="env"  value="1" checked>
-                        <span class="text-primary">dev</span></label>
-                    <label><input class="envRadio" type="radio" name="env"  value="2">
-                        <span class="text-primary">test</span></label>
-                    <label><input class="envRadio" type="radio" name="env"  value="3">
-                        <span class="text-primary">product</span></label>
-                    #end
+                <div class="form-group radio" id="radioDiv" >
 
                 </div>
             </form>
@@ -91,3 +69,5 @@
         </div>
     </div>
 </nav>
+<script src="/statics/js/jquery.js"></script>
+<script src="/statics/js/nav.js"></script>

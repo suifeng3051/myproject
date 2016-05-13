@@ -84,7 +84,7 @@ public class ApiController {
 
         results.put("user", userName);
         results.put("apiType", "1");
-        results.put("env", env);
+        //results.put("env", env);
         results.put("api", apiModel);
         results.put("serve", serveModel);
         results.put("param", paramModel);

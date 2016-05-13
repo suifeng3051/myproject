@@ -96,7 +96,7 @@
         #{resultMemo,jdbcType=VARCHAR},
         #{env,jdbcType=TINYINT})
     </insert>
-    <insert id="insertSelective" parameterType="com.zitech.gateway.apiconfig.model.Api">
+    <insert id="insertSelective" parameterType="com.zitech.gateway.apiconfig.model.Api" useGeneratedKeys="true">
         insert into t_api
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
