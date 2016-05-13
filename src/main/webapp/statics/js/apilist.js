@@ -51,7 +51,7 @@ $(document).ready(function(){
     // 获取环境变量的值
     function getEnv() {
 
-         var env = getCookie("gateway_env");
+        var env = getCookie("gateway_env");
         if(env!=''&&env!=null){
             env = parseInt(env);
         }else{

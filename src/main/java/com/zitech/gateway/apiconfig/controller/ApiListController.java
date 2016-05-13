@@ -47,8 +47,6 @@ public class ApiListController {
 
     @Autowired
     private GroupService groupService;
-    @Autowired
-    private AppConfig appConfig;
 
 
     @RequestMapping("/apilist")
