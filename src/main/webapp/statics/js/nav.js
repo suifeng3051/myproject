@@ -72,7 +72,14 @@ $(document).ready(function(){
 
         $("#myTitle").html('<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Home</a></li>' +
             '<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Config</a></li>' +
-            '<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Monitor</a></li>');
+            '<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Release</a></li>' +
+            '<li role="presentation" class="dropdown active">' +
+            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="tab" aria-haspopup="true" aria-expanded="false">' +
+            '<span id="consoleText">Console</span> <span class="caret"></span></a>' +
+            '<ul class="dropdown-menu" >' +
+            '<li><a href="#" role="tab" data-toggle="tab" class="titles console ">Monitor</a></li>' +
+            '<li><a href="#" role="tab" data-toggle="tab" class="titles console">Cache</a></li>' +
+            '<li><a href="#" role="tab" data-toggle="tab" class="titles console">Instance</a></li></ul>');
 
     }
 
