@@ -209,12 +209,8 @@ $(document).ready(function () {
             var toEnv = $("#ToDev").children('option:selected').val();
             windowOpenInPost(ids, fromEnv, toEnv);
 
-             //$("#noRelease").trigger("click");
-
              setTimeout(function () {
-
-                 window.location.href = "release?env=" + getEnv();
-
+                 $("#myReleaseModal").modal("hide");
              }, 5000);
 
 
