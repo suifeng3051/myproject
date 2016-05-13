@@ -211,7 +211,7 @@ $(document).ready(function () {
 
              setTimeout(function () {
                  window.location.href = "release?env=" + getEnv();
-             }, 100);
+             }, 3000);
 
 //            var idArray = ids.split(",");
 //            location.reload();
