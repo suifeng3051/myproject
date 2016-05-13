@@ -60,6 +60,9 @@ public class TreeHelper {
      * @return 子节点或者null
      */
     public static TreeNode getNodeById(TreeNode root, Integer id) {
+        if(root.getId().equals(id))
+            return root;
+
         List<TreeNode> children = root.getChildren();
         TreeNode result = null;
         for (TreeNode node : children) {
@@ -85,7 +88,7 @@ public class TreeHelper {
     public static List<TreeNode> getParentNodes(TreeNode root, Integer id) {
         TreeNode cur = TreeHelper.getNodeById(root, id);
         if(cur == null) {
-            throw new LogicalException(1, "大纲节点不存在");
+            throw new LogicalException(1, "节点不存在");
         }
 
         List<TreeNode> parents = new ArrayList<>();

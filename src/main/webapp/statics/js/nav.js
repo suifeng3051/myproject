@@ -2,20 +2,16 @@ $(document).ready(function(){
 
     var env =1;
     var envName="dev";
-    var isAdmin = getCookie("isAdmin");
-
-    var url_now = window.location.href;
+    var role = getCookie("gateway_role");
     var home_flag = "false";
 
     if(window.location.href.indexOf("apilist")>0){
         home_flag ="true";
     }
 
-
-    if(getCookie("env")!=''||getCookie("env")!=null){
-        env =parseInt(getCookie("env"));
+    if(getCookie("gateway_env")!=''||getCookie("gateway_env")!=null){
+        env =parseInt(getCookie("gateway_env"));
     }
-
 
     switch(env)
     {
@@ -30,10 +26,9 @@ $(document).ready(function(){
             break;
     }
 
-    console.log("nav_env:"+env);
+    console.log("envName:"+envName);
 
-
-    if(isAdmin=="true"&&home_flag=="true"){
+    if(role=="1"&&home_flag=="true"){
 
         $("#radioDiv").html('<label><input class="envRadio" type="radio" name="env"  value="1">'+
             '<span class="text-primary">dev&nbsp;&nbsp;</span></label>'+
@@ -44,32 +39,49 @@ $(document).ready(function(){
 
         $(".envRadio[value="+env+"]").attr("checked","checked").parent().children('span').attr("class","text-warning");
 
-    }else if(isAdmin=="true"&&home_flag=="false"){
+    }else if(role=="1"&&home_flag=="false"){
         $("#radioDiv").html('<label><input class="envRadio" type="radio" name="env"  value="'+env+'" checked>'+
             '<span class="text-warning">'+envName+'</span></label>');
     }else{
         $("#radioDiv").html('<label><input class="envRadio" type="radio" name="env"  value="'+env+'" checked>'+
             '<span class="text-warning">'+envName+'</span></label>').hide();
-
     }
 
 
+    if(role=="1"){
 
+        $("#myTitle").html('<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Home</a></li>' +
+            '<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Config</a></li>' +
+            '<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Release</a></li>' +
+            '<li role="presentation" class="dropdown active">' +
+            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="tab" aria-haspopup="true" aria-expanded="false">' +
+            '<span id="consoleText">Console</span> <span class="caret"></span></a>' +
+            '<ul class="dropdown-menu" >' +
+            '<li><a href="#" role="tab" data-toggle="tab" class="titles console ">Monitor</a></li>' +
+            '<li><a href="#" role="tab" data-toggle="tab" class="titles console">Cache</a></li>' +
+            '<li><a href="#" role="tab" data-toggle="tab" class="titles console">Instance</a></li>' +
+            '<li><a href="#" role="tab" data-toggle="tab" class="titles console">Recover</a></li>' +
+            '<li><a href="#" role="tab" data-toggle="tab" class="titles console">User</a></li>' +
+            '<li><a href="#" role="tab" data-toggle="tab" class="titles console">Client</a></li></ul>');
 
+    }else if(role=="2"&&env==3){
 
+        $("#myTitle").html('<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Home</a></li>');
 
-/*    $("#goHome").click(function(){
+    }else if(role=="2"&&env!=3){
 
-        var env =getCookie("env");
+        $("#myTitle").html('<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Home</a></li>' +
+            '<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Config</a></li>' +
+            '<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Release</a></li>' +
+            '<li role="presentation" class="dropdown active">' +
+            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="tab" aria-haspopup="true" aria-expanded="false">' +
+            '<span id="consoleText">Console</span> <span class="caret"></span></a>' +
+            '<ul class="dropdown-menu" >' +
+            '<li><a href="#" role="tab" data-toggle="tab" class="titles console ">Monitor</a></li>' +
+            '<li><a href="#" role="tab" data-toggle="tab" class="titles console">Cache</a></li>' +
+            '<li><a href="#" role="tab" data-toggle="tab" class="titles console">Instance</a></li></ul>');
 
-        if(env==''||env==null){
-            env =1;
-        }
-
-        window.location.href = "apilist";
-
-    });*/
-
+    }
 
 
 

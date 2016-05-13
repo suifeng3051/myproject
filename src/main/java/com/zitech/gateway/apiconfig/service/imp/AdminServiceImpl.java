@@ -79,6 +79,16 @@ public class AdminServiceImpl implements AdminService {
         return false;
     }
 
+
+    @Override
+    public int getUserGroup(String username) {
+
+        return adminDAO.getUserGroupByName(username);
+    }
+
+
+
+
     @Override
     public String getUserNameFromSessionAndRedis(HttpServletRequest request) {
         String userName = null;
