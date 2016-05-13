@@ -207,17 +207,11 @@ $(document).ready(function () {
          } else {
             var fromEnv = getEnv();
             var toEnv = $("#ToDev").children('option:selected').val();
-            windowOpenInPost(ids, fromEnv, toEnv);
 
-             setTimeout(function () {
-                 $("#myReleaseModal").modal("hide");
-             }, 5000);
-
-
-
-//            var idArray = ids.split(",");
-//            location.reload();
-            //$.post("download", {"ids":ids, "fromEnv":fromEnv, "toEnv":toEnv}, function(){});
+             $("#myReleaseModal").modal("hide");
+             updateCheckbox(false);
+             windowOpenInPost(ids, fromEnv, toEnv);
+             
         }
     });
 
@@ -387,10 +381,10 @@ $(document).ready(function () {
         return apiList.toString();
     }
 
-    $("#myReleaseModal").on("hidden.bs.modal", function () {
+/*    $("#myReleaseModal").on("hidden.bs.modal", function () {
         //location.reload();
         window.location.href = "release?env=" + getEnv();
-    });
+    });*/
 
     $("#physicalDeleteApi").on("click", function(){
         var ids = getDeletedApis(); // 用发布的函数获取选中的API的id号
