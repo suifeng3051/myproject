@@ -19,10 +19,11 @@
 //     $('#mydiv').jsonEditor(myjson, opt);
 
 (function($) {
-    $.fn.jsonEditor = function(json, isEdite) {
+    $.fn.jsonEditor = function(json, oldJson, isEdite) {
         isEditeing = isEdite ? true : false;
         var jsonObject = parse(stringify(json));
         var treeJson = getTreeJsonByDataJson(jsonObject);
+        treeJson = oldJson ? getTreeJsonByOldTreeJson(treeJson, oldJson) : treeJson;
         JSONEditor($(this), treeJson);
         return function() {
             return treeJson;
@@ -37,6 +38,23 @@
             return treeJson;
         };
     };
+
+    function getTreeJsonByOldTreeJson(json, oldJson) {
+        for (var key in json) {
+            if (!json.hasOwnProperty(key)) continue;
+            if (oldJson[key] != undefined) {
+                json[key].require = oldJson[key].require != undefined ? oldJson[key].require : json[key].require;
+                json[key].type = oldJson[key].type ? oldJson[key].type : json[key].type;
+                json[key].des = oldJson[key].des ? oldJson[key].des : json[key].des;
+                if (isArray(json[key])) {
+                    getTreeJsonByOldTreeJson(json[key]['fields'][0], oldJson[key]['fields'][0]);
+                } else if (isObject(json[key])) {
+                    getTreeJsonByOldTreeJson(json[key]['fields'], oldJson[key]['fields']);
+                }
+            }
+        }
+        return json;
+    }
 
     function getTreeJsonByDataJson(json) {
         if (!isObject(json) && !isArray(json)) {
@@ -64,7 +82,7 @@
 
     function construct(root, json, path) {
         path = path || '';
-        var jsonObj = json;
+        jsonObj = path ? jsonObj : json;
         root.children('.item').remove();
 
         for (var key in json) {

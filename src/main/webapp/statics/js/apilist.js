@@ -35,6 +35,8 @@ $(document).ready(function(){
 
     $(".envRadio").on("change", function (e) {
         var result = $(e.target).val();
+        $(".apiElement").remove();
+        //setCookie("env",result,6);
 
         var form = $("<form></form>");
         form.attr('action','apilist');
@@ -1119,8 +1121,9 @@ $(document).ready(function(){
                     var operate = "";
 
                         operate += '<li class="list-group-item apiElement">'+
-                            '<p class="row"><span class="col-sm-6"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' + results[item].version + '/' + results[item].method + '</a></span>'+
-                             '<span class="apiElement-des col-sm-2 ">';
+                            '<p class="row"><span class="col-sm-8"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' + results[item].version + '/' + results[item].method + '</a></span>'+
+                             '<span class="col-sm-1 apiElement-des">'+results[item].group+'</span><span class="apiElement-des col-sm-1 ">';
+
                             if ("GET" == results[item].requestType) {
                                 operate += 'GET';
                             }else if ("POST" == results[item].requestType) {
