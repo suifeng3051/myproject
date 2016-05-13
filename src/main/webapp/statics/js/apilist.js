@@ -1122,7 +1122,7 @@ $(document).ready(function(){
 
                         operate += '<li class="list-group-item apiElement">'+
                             '<p class="row"><span class="col-sm-6"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' + results[item].version + '/' + results[item].method + '</a></span>'+
-                                                         '<span class="apiElement-des col-sm-2 ">';
+                             '<span class="apiElement-des col-sm-2 ">';
 
                             if ("GET" == results[item].requestType) {
                                 operate += 'GET';
