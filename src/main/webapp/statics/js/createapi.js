@@ -422,6 +422,7 @@ $(document).ready(function(){
             $('#final-review-method').html( str );
 
 
+            jsonProcess('resultDemoJson', $('#resultDemo').val());
 
             if(apiObj.requestType == 'POST' ) {  // 请求方式 POST，加入json数据
 
@@ -443,10 +444,7 @@ $(document).ready(function(){
                     $('#requestStructureJson').before(treeHead);
                 }
 
-                setTimeout(function(){
-                    jsonProcess('requestDemoJson', $('#json-input').val());
-                    jsonProcess('resultDemoJson', $('#resultDemo').val());
-                }, 800);
+                jsonProcess('requestDemoJson', $('#json-input').val());
 
             } else {  // 请求方式 GET
                 paramObj = null;

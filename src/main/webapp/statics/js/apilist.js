@@ -34,7 +34,7 @@ $(document).ready(function(){
                 var operate = "";
                 if (1 == results[item].testFlag) { // 如果测试通过
                     operate += '<li class="list-group-item list-group-item-success apiElement"><p class="row"><span class="col-sm-8"><span style="margin: 0 6px 0 -10px;" data-toggle="tooltip" data-placement="top" title="测试已通过" class="glyphicon glyphicon-ok-circle"></span><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name  + '</a></span>'+
-                    '<span class="col-sm-2">';
+                    '<span class="col-sm-1 apiElement-des">'+results[item].group+'</span><span class="col-sm-1 apiElement-des">';
                        if(0 == results[item].requestType){
                             operate +='GET';
                        } else if(1 == results[item].requestType) {
@@ -56,7 +56,7 @@ $(document).ready(function(){
                     operate += '</span><span class="col-sm-8 apiElement-des">'+results[item].apiDesc+'</span></p></li>';
                 } else {
                     operate += '<li class="list-group-item  apiElement"><p class="row"><span class="col-sm-8"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' +results[item].version+'/'+ results[item].name + '</a></span>'+
-                    '<span class="col-sm-2">';
+                    '<span class="col-sm-1 apiElement-des">'+results[item].group+'</span><span class="col-sm-1 apiElement-des">';
                        if(0 == results[item].requestType){
                             operate +='GET';
                        } else if(1 == results[item].requestType) {
@@ -1172,7 +1172,7 @@ $(document).ready(function(){
                     //} else {
                         operate += '<li class="list-group-item apiElement">'+
                             '<p class="row"><span class="col-sm-8"><a href="#" class="apidetail" apiId="' + results[item].id + '" >' + results[item].namespace + '/' + results[item].version + '/' + results[item].method + '</a></span>'+
-                             '<span class="apiElement-des col-sm-2 ">';
+                             '<span class="col-sm-1 apiElement-des">'+results[item].group+'</span><span class="apiElement-des col-sm-1 ">';
                             if ("GET" == results[item].requestType) {
                                 operate += 'GET';
                             }else if ("POST" == results[item].requestType) {
