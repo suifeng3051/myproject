@@ -128,6 +128,7 @@ public class ApiListController {
             results.put("groupIdToName", groupService.getAllNameIdMapping());
             results.put("groupMap", groupMap);
             results.put("env", env);
+            results.put("isAdmin", isAdmin);
 
 
         } catch (Exception e) {

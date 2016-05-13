@@ -25,4 +25,6 @@ public interface AdminDAO {
     int updateByPrimaryKeySelective(Admin record);
 
     int updateByPrimaryKey(Admin record);
+
+    int getUserGroupByName(String userName);
 }

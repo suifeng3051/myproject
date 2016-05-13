@@ -162,4 +162,7 @@
         </set>
         where user_name = #{userName,jdbcType=VARCHAR}
     </update>
+    <select id="getUserGroupByName" parameterType="java.lang.String" resultType="java.lang.Integer" >
+        select user_group from t_admin where user_name = #{userName,jdbcType=VARCHAR}
+    </select>
 </mapper>
