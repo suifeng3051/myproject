@@ -28,6 +28,8 @@ public interface AdminService {
 
     boolean isAdmin(String username);
 
+    int getUserGroup(String username);
+
     String getUserNameFromSessionAndRedis(HttpServletRequest request);
 
 

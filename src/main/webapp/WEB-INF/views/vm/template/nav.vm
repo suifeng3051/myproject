@@ -18,7 +18,7 @@
             </ul>
             <ul id="myTitle" class="nav nav-pills" style="margin:9px 0 0 0;">
                 <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Home</a></li>
-                <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Config</a></li>
+                 <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Config</a></li>
                 <li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Release</a></li>
 
                 <!--<li role="presentation" ><a href="#" role="tab" data-toggle="tab" class="titles">Monitor</a></li>-->
@@ -35,10 +35,10 @@
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">User</a></li>
                         <li><a href="#" role="tab" data-toggle="tab" class="titles console">Client</a></li>
                         #end
-##                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Safety</a></li>
+ ##                        <li><a href="#" role="tab" data-toggle="tab" class="titles console">Safety</a></li>
                     </ul>
                 </li>
-            </ul>
+             </ul>
             <form class="navbar-form navbar-left" id="env" style="margin: -38px 0 0 46%;">
                 <div class="form-group radio" id="radioDiv" >
 
