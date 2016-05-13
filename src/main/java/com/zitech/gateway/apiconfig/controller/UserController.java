@@ -231,10 +231,15 @@ public class UserController {
                 httpSession.setAttribute("username", nameKey);
                 redisOperate.set(nameKey, username, 60 * 60);
 
-/*                //edit by pxl for adminRole  16.5.13
+               //edit by pxl for adminRole  16.5.13
                 int userGroup = adminService.getUserGroup(username);
-                Cookie cookie = new Cookie("role",userGroup+"");
-                response.addCookie(cookie);*/
+                Cookie cookie_env = new Cookie("gateway_env",appConfig.env+"");
+                Cookie cookie_role = new Cookie("gateway_role",userGroup+"");
+                cookie_env.setPath("/");
+                cookie_role.setPath("/");
+                response.addCookie(cookie_env);
+                response.addCookie(cookie_role);
+                /////////////////////////////////////////////////////////
 
                 objectMap.put("to", "/apilist");
                 objectMap.put("result", true);

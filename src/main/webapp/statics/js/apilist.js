@@ -5,6 +5,7 @@ $(document).ready(function(){
 
 
     var groupId_show = getCookie("groupId_show");
+    var role = getCookie("gateway_role");
 
     if(groupId_show.length > 0){
         setTimeout(function(){
@@ -19,6 +20,13 @@ $(document).ready(function(){
         }, 200);
     }
 
+    if(getEnv()==3&&role!="1"){
+        $("#newCreateTask").hide();
+        $("#addGroupBtn").hide();
+    }
+
+
+
 
     $("#newCreateTask").click("click", function () {
         var group = $("#currentGroup").val();
@@ -27,7 +35,6 @@ $(document).ready(function(){
 
     $(".envRadio").on("change", function (e) {
         var result = $(e.target).val();
-        //setCookie("env",result,6);
 
         var form = $("<form></form>");
         form.attr('action','apilist');
@@ -39,22 +46,16 @@ $(document).ready(function(){
         form.css('display','none');
         form.submit();
 
-        //.location.href = "apilist?env="+result;
-
     });
 
     // 获取环境变量的值
     function getEnv() {
-        //var env = $("#env").serialize();
 
-        //edit by pxl
-        var env = getCookie("env");
-
- //       console.log("env:"+env);
-
-        if(env==''||env==null){
-            env = 1;
-            setCookie("env",1,6);
+         var env = getCookie("gateway_env");
+        if(env!=''&&env!=null){
+            env = parseInt(env);
+        }else{
+            env =1;
         }
 
          return env;

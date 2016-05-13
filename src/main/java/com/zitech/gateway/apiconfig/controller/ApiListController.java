@@ -63,7 +63,7 @@ public class ApiListController {
                 return new ModelAndView("redirect:/unifyerror", "cause", "Fail to get user name");
             }
 
-            byte env = appConfig.env;
+            byte env = 1;
             String groupId_show = "";
 
             Cookie[] cookies = request.getCookies();
@@ -73,29 +73,22 @@ public class ApiListController {
                     if (!StringUtils.isEmpty(cookieName)) {
                         if (cookieName.equals("groupId_show")) {
                             groupId_show = cookie.getValue();
-                        } else if (cookieName.equals("env") && isAdmin) {
+                        } else if (cookieName.equals("gateway_env")) {
                             env = Byte.valueOf(cookie.getValue());
                         }
                     }// end if
                 }//end for
             }
 
+            //只有admin权限的用户才可以修改env
             if (isAdmin) {
-
                 if (!StringUtils.isEmpty(envToSet)) {
                     env = envToSet;
-                    Cookie cookie = new Cookie("env", env + "");
-                    response.addCookie(cookie);
-                } else {
-                    Cookie cookie = new Cookie("env", env + "");
+                    Cookie cookie = new Cookie("gateway_env", env + "");
+                    cookie.setPath("/");
                     response.addCookie(cookie);
                 }
-
-            } else {
-                Cookie cookie = new Cookie("env", env + "");
-                response.addCookie(cookie);
             }
-
 
             //api
             List<Api> allApi = null;
@@ -120,15 +113,10 @@ public class ApiListController {
             //group
             Map<String, Object> groupMap = groupService.getGroupTreeById(-1);
 
-            results.put("user", userName);
-            Cookie cookie = new Cookie("isAdmin", isAdmin + "");
-            response.addCookie(cookie);
-
             results.put("apilists", allApi);
             results.put("groupIdToName", groupService.getAllNameIdMapping());
             results.put("groupMap", groupMap);
             results.put("env", env);
-            results.put("isAdmin", isAdmin);
 
 
         } catch (Exception e) {
