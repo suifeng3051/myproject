@@ -5,4 +5,5 @@ package com.zitech.gateway.oauth.service;
  */
 public interface OAuthService {
 
+    void clearClientCacheByClientId(String clientId);
 }
