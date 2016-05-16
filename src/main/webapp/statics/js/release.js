@@ -211,7 +211,7 @@ $(document).ready(function () {
              $("#myReleaseModal").modal("hide");
              updateCheckbox(false);
              windowOpenInPost(ids, fromEnv, toEnv);
-             
+
         }
     });
 
