@@ -437,7 +437,6 @@ $(document).ready(function(){
                 paramObj = formdataToJSON($('#jsonparseForm').serializeArray());
                 paramObj.requestStructure = $('#parsedJSON').val();
 
-                console.log(paramObj);
 
                 var str = objToStr(paramObj);
                 $('#final-review-json').html( str );
@@ -585,7 +584,6 @@ $(document).ready(function(){
                     "env":getEnv()
                 },
                  function (d) {
-                     console.log(d);
                     if("success" == d.message) {
                         var env = getEnv();
                         window.location.href = "apilist?env=" + env;
