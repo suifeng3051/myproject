@@ -405,7 +405,7 @@ $(document).ready(function(){
 
             $('#resultStructureJson').addClass('json-editor expanded ');
             if($('#result-treeHead-view').length == 0){
-                var treeHead = $('<p style="text-align:right; color:#aaa; margin-bottom:0;" id="result-treeHead-view"><span style="margin-right:30px">数据类型</span><span style="margin-right:28px">是否必需</span><span style="margin-right:188px">描述</span></p>');
+                var treeHead = $('<p style="text-align:right; color:#aaa; margin-bottom:0;" id="result-treeHead-view"><span style="margin-right:30px">数据类型</span><span style="margin-right:28px">是否必需</span><span style="margin-right:245px">描述</span></p>');
                 $('#resultStructureJson').before(treeHead);
             }
 
@@ -448,7 +448,7 @@ $(document).ready(function(){
 
                 $('#requestStructureJson').addClass('json-editor expanded ');
                 if($('#treeHead-view').length == 0){
-                    var treeHead = $('<p style="text-align:right; color:#aaa; margin-bottom:0;" id="treeHead-view"><span style="margin-right:30px">数据类型</span><span style="margin-right:28px">是否必填</span><span style="margin-right:188px">描述</span></p>');
+                    var treeHead = $('<p style="text-align:right; color:#aaa; margin-bottom:0;" id="treeHead-view"><span style="margin-right:30px">数据类型</span><span style="margin-right:28px">是否必填</span><span style="margin-right:245px">描述</span></p>');
                     $('#requestStructureJson').before(treeHead);
                 }
 
@@ -550,8 +550,8 @@ $(document).ready(function(){
                 }
 
 
-                str += '<div class="form-group"><label class="col-sm-3 control-label">'+
-                 label + '</label><div class="col-sm-9"><p class="form-control-static" id="'+ id +'">'+
+                str += '<div class="form-group"><label class="col-sm-2 control-label">'+
+                 label + '</label><div class="col-sm-10"><p class="form-control-static" id="'+ id +'">'+
                  (value== '' ? obj[o] : value) + '</p></div></div>';
             }
             return str;

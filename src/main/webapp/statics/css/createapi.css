@@ -45,7 +45,7 @@
 }
 
 #resultStructureJson .type , #requestStructureJson .type { border:none; width:80px; background:transparent; }
-#resultStructureJson .des-show, #requestStructureJson .des-show {  width:200px;  }
+#resultStructureJson .des-show, #requestStructureJson .des-show {  width:255px;  }
 
 input.error,
 select.error,

@@ -299,7 +299,7 @@
                             <div class="col-sm-8">
                             <b>请求解析</b>
                                 <div style="color:#aaa;border-bottom: 1px solid rgb(221, 221, 221); padding-bottom: 3px;text-align:right;">
-                                    <span style="margin-right:15px">数据类型</span><span style="margin-right:46px">是否必填</span><span style="margin-right:74px">描述</span>
+                                    <span style="margin-right:25px">数据类型</span><span style="margin-right:46px">是否必填</span><span style="margin-right:74px">描述</span>
                                 </div>
 
                                 <div id="editor" class="json-editor expanded "></div>
@@ -342,7 +342,7 @@
                             <div class="col-sm-8">
                                 <b>结果解析</b>
                                 <div style="color:#aaa;border-bottom: 1px solid rgb(221, 221, 221); padding-bottom: 3px;text-align:right;">
-                                    <span style="margin-right:15px">数据类型</span><span style="margin-right:46px">是否必需</span><span style="margin-right:84px">描述</span>
+                                    <span style="margin-right:25px">数据类型</span><span style="margin-right:46px">是否必需</span><span style="margin-right:84px">描述</span>
                                 </div>
 
                                 <div id="resulteditor" class="json-editor expanded "></div>

@@ -116,6 +116,9 @@
             }
             property.val(key).attr('title', key);
             descInput.val(json[key].des ? json[key].des : '无');
+
+            if(isEditeing){descInput.attr('title', json[key].des);}
+
             isEditeing ? (json[key].require ? requireCheckBox.val('是') : requireCheckBox.val('否')) : (json[key].require ? requireCheckBox.attr('checked', 'true') : requireCheckBox.removeAttr('checked'));
             typeSelect.append(typeValue).val(json[key].type);
             item.append(property).append(descInput).append(requireCheckBox).append(typeSelect);
