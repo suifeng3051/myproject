@@ -14,7 +14,7 @@ public interface AdminDAO {
 
     void updatePwd(Admin user);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(Admin record);
 

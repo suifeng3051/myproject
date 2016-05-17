@@ -16,7 +16,7 @@ public interface AdminService {
 
     void update(Admin user);
 
-    void deleteById(int id);
+    void deleteById(Long id);
 
     Admin getById(int id);
 

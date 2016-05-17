@@ -3,6 +3,8 @@ $(document).ready(function(){
     var env =1;
     var envName="dev";
     var role = getCookie("gateway_role");
+    var username = getCookie("gateway_username");
+    $("#nav_user").html(username);
     var home_flag = "false";
 
     if(window.location.href.indexOf("apilist")>0){
@@ -26,7 +28,7 @@ $(document).ready(function(){
             break;
     }
 
-    console.log("envName:"+envName);
+   // console.log("envName:"+envName);
 
     if(role=="1"&&home_flag=="true"){
 

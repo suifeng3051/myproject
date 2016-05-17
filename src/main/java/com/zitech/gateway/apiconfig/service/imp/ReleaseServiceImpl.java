@@ -60,18 +60,25 @@ public class ReleaseServiceImpl implements ReleaseService {
 
             byte env = jsonObject.getByte("toEnv");
 
-            if (apiDAO.selectByPrimaryKey(api.getId()) == null) {
+           // if (apiDAO.selectByPrimaryKey(api.getId()) == null) {
+            if (apiService.checkApi(api.getNamespace(),api.getMethod(),api.getVersion(),env)) {
                 try {
                     api.setEnv(env);
+                    api.setId(null);
                     apiDAO.insertSelective(api);
 
                     serve.setEnv(env);
+                    serve.setId(null);
+                    serve.setApiId(api.getId());
                     serveDAO.insertSelective(serve);
 
                     if (param != null) {
                         param.setEnv(env);
+                        param.setId(null);
+                        param.setApiId(api.getId());
                         paramDAO.insertSelective(param);
                     }
+
                 } catch (Exception e) {
                     JSONObject result_obj = new JSONObject();
                     result_obj.put("api", api);

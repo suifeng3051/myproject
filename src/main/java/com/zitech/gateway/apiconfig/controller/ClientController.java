@@ -4,6 +4,7 @@ import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.common.ApiResult;
 import com.zitech.gateway.oauth.model.Client;
 import com.zitech.gateway.oauth.service.ClientService;
+import com.zitech.gateway.oauth.service.OAuthService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,9 @@ public class ClientController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private OAuthService oAuthService;
 
 
     /**
@@ -122,7 +126,11 @@ public class ClientController {
     public String deleteOauthClient(Integer id) {
         ApiResult<Boolean> apiResult = new ApiResult<>(0, "success");
         try {
-            clientService.deleteById(id);
+            Client client = clientService.getById(id);
+            if(client != null) {
+                clientService.deleteById(id);
+                oAuthService.clearClientCacheByClientId(client.getClientId());
+            }
         } catch (Exception e) {
             logger.error("删除Client发生异常", e);
             apiResult.setCode(9003);
@@ -208,6 +216,7 @@ public class ClientController {
                     apiResult.setMessage(ret);
                 } else {
                     clientService.update(client);
+                    oAuthService.clearClientCacheByClientId(client.getClientId());
                 }
             }
 

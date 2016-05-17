@@ -150,7 +150,7 @@ public class UserController {
         String status = "fail";
 
         try {
-            adminService.deleteById(Integer.valueOf(id));
+            adminService.deleteById(Long.valueOf(id));
             status = "success";
         } catch (NumberFormatException e) {
             logger.error("can not delete user.", e);
@@ -235,10 +235,13 @@ public class UserController {
                 int userGroup = adminService.getUserGroup(username);
                 Cookie cookie_env = new Cookie("gateway_env",appConfig.env+"");
                 Cookie cookie_role = new Cookie("gateway_role",userGroup+"");
+                Cookie cookie_username = new Cookie("gateway_username",username);
                 cookie_env.setPath("/");
                 cookie_role.setPath("/");
+                cookie_username.setPath("/");
                 response.addCookie(cookie_env);
                 response.addCookie(cookie_role);
+                response.addCookie(cookie_username);
                 /////////////////////////////////////////////////////////
 
                 objectMap.put("to", "/apilist");
