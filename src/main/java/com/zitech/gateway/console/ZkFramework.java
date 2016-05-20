@@ -19,7 +19,7 @@ public class ZkFramework {
                 .connectString(appConfig.ZookeeperAddress)
                 .retryPolicy(new ExponentialBackoffRetry(1000, 5))
                 .connectionTimeoutMs(5000)
-                .namespace("carmen")
+                .namespace("gateway")
                 .defaultData(null)
                 .build();
         client.start();

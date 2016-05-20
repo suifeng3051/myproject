@@ -49,40 +49,6 @@ public class OAuthServiceImpl implements OAuthService {
     @Autowired
     private AccountDAO accountDAO;
 
-    public static String encodeStringWithUtf8(String str) throws OAuthException {
-        if (str == null)
-            return null;
-        byte[] bytes = null;
-        try {
-            bytes = str.getBytes("utf-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("编码错误，不支持的编码");
-        }
-        String ans = "";
-        for (byte tbyte : bytes) {
-            ans = ans + ":" + Integer.toString(tbyte & 0xff);
-        }
-        return ans;
-    }
-
-    public static String decodeStringFromUtf8(String ans) throws OAuthException {
-        if (ans == null)
-            return null;
-        String[] out = ans.split(":");
-        byte[] result = new byte[100];
-        int cnt = 0;
-        for (String anOut : out) {
-            if (anOut.equals("")) {
-                continue;
-            }
-            result[cnt++] = (byte) Integer.parseInt(anOut);
-        }
-        try {
-            return new String(result, 0, cnt, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("解码错误，不支持的编码");
-        }
-    }
 
     /**
      * get client by client id
@@ -102,6 +68,17 @@ public class OAuthServiceImpl implements OAuthService {
         if (clients != null)
             redis.set(key, JSON.toJSONString(clients));
         return clients;
+    }
+
+    /**
+     * clear client from cache
+     * @param clientId id
+     */
+    @Override
+    public void clearClientCacheByClientId(String clientId) {
+        String key = String
+                .format(Constants.CACHE_CLIENT_KEY_PATTERN, clientId);
+        redis.del(key);
     }
 
     /**
@@ -422,10 +399,7 @@ public class OAuthServiceImpl implements OAuthService {
          */
         List<AccessToken> tokensList = accessTokenService
                 .getByClientIdAndUserId(clientId, adminId);
-        Comparator<AccessToken> comparator = (
-                AccessToken t1, AccessToken t2) -> {
-            return t1.getExpires().compareTo(t2.getExpires());
-        };
+        Comparator<AccessToken> comparator = (AccessToken t1, AccessToken t2) -> t1.getExpires().compareTo(t2.getExpires());
         tokensList.sort(comparator.reversed());
 
         /**

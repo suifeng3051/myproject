@@ -2,7 +2,7 @@
  * Copyright (c) 2015-2020 by zitech
  * All rights reserved.
  */
-package com.zitech.gateway.monitor.api;
+package com.zitech.gateway.monitor.service;
 
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.monitor.entity.Gateway;

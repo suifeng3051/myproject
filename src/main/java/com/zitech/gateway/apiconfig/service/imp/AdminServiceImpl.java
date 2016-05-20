@@ -40,7 +40,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         adminDAO.deleteByPrimaryKey(id);
     }
 
@@ -78,6 +78,16 @@ public class AdminServiceImpl implements AdminService {
         }
         return false;
     }
+
+
+    @Override
+    public int getUserGroup(String username) {
+
+        return adminDAO.getUserGroupByName(username);
+    }
+
+
+
 
     @Override
     public String getUserNameFromSessionAndRedis(HttpServletRequest request) {

@@ -5,15 +5,15 @@
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
 		<result column="login_phone" property="loginPhone" jdbcType="VARCHAR" />
-		<result column="login_mail" property="loginMail" jdbcType="VARCHAR"/>
+		<result column="login_email" property="loginMail" jdbcType="VARCHAR"/>
 		<result column="password" property="password" jdbcType="VARCHAR"/>
 		<result column="status" property="status" jdbcType="INTEGER"/>
-		<result column="created_time" property="createdTime" jdbcType="DATE"/>
-		<result column="updated_time" property="updatedTime" jdbcType="DATE"/>
-		<result column="scope" property="scope" jdbcType="VARCHAR"/>
+		<result column="create_time" property="createdTime" jdbcType="DATE"/>
+		<result column="update_time" property="updatedTime" jdbcType="DATE"/>
+		<result column="role" property="scope" jdbcType="VARCHAR"/>
 	</resultMap>
 	<sql id="Base_Column_List">
-        id, login_name, login_phone,login_mail,password,status,created_time,updated_time
+        id, login_name, login_phone,login_email,password,role,create_time,update_time
     </sql>
 	<select id="getUserByUserId" parameterType="com.zitech.gateway.oauth.model.Account" resultMap="BaseResultMap">
  		select
@@ -40,6 +40,6 @@
 		select
         <include refid="Base_Column_List"/>
 		from account
-		where login_mail=#{mail,jdbcType=VARCHAR} and status=1 and deleted = 0
+		where login_email=#{mail,jdbcType=VARCHAR} and status=1 and deleted = 0
 	</select>
 </mapper>

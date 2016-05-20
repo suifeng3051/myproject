@@ -16,7 +16,7 @@ public interface AdminService {
 
     void update(Admin user);
 
-    void deleteById(int id);
+    void deleteById(Long id);
 
     Admin getById(int id);
 
@@ -27,6 +27,8 @@ public interface AdminService {
     void updatePwd(Admin user);
 
     boolean isAdmin(String username);
+
+    int getUserGroup(String username);
 
     String getUserNameFromSessionAndRedis(HttpServletRequest request);
 

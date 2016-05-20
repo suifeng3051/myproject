@@ -57,44 +57,49 @@ public class ReleaseServiceImpl implements ReleaseService {
         Api api = JSONObject.toJavaObject(jsonObject.getJSONObject("api"), Api.class);
         Serve serve = JSONObject.toJavaObject(jsonObject.getJSONObject("serve"), Serve.class);
         Param param = JSONObject.toJavaObject(jsonObject.getJSONObject("param"), Param.class);
-        byte env = jsonObject.getByte("toEnv");
 
-        if (apiService.checkApi(api.getNamespace(), api.getMethod(), api.getVersion(), env)) {
+            byte env = jsonObject.getByte("toEnv");
 
-            api.setId(apiDAO.getMaxId() + 1);
-            api.setEnv(env);
-            serve.setId(null);
-            serve.setApiId(api.getId());
-            serve.setEnv(env);
-            param.setId(null);
-            param.setApiId(api.getId());
-            param.setEnv(env);
+           // if (apiDAO.selectByPrimaryKey(api.getId()) == null) {
+            if (apiService.checkApi(api.getNamespace(),api.getMethod(),api.getVersion(),env)) {
+                try {
+                    api.setEnv(env);
+                    api.setId(null);
+                    apiDAO.insertSelective(api);
 
-            try {
-                apiDAO.insertSelective(api);
-                serveDAO.insertSelective(serve);
-                paramDAO.insertSelective(param);
-            } catch (Exception e) {
+                    serve.setEnv(env);
+                    serve.setId(null);
+                    serve.setApiId(api.getId());
+                    serveDAO.insertSelective(serve);
+
+                    if (param != null) {
+                        param.setEnv(env);
+                        param.setId(null);
+                        param.setApiId(api.getId());
+                        paramDAO.insertSelective(param);
+                    }
+
+                } catch (Exception e) {
+                    JSONObject result_obj = new JSONObject();
+                    result_obj.put("api", api);
+                    result_obj.put("code", 1);
+                    result_obj.put("message", "入库发布失败," + e.getMessage());
+                    return result_obj;
+                }
+
+            } else {
                 JSONObject result_obj = new JSONObject();
                 result_obj.put("api", api);
                 result_obj.put("code", 1);
-                result_obj.put("message", "入库发布失败," + e.getMessage());
+                result_obj.put("message", "该API已存在");
                 return result_obj;
+
+
             }
 
-        } else {
-            JSONObject result_obj = new JSONObject();
-            result_obj.put("api", api);
-            result_obj.put("code", 1);
-            result_obj.put("message", "该API已存在");
-            return result_obj;
 
+            return null;
 
         }
 
-
-        return null;
-
     }
-
-}

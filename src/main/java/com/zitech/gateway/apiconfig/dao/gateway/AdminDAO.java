@@ -14,7 +14,7 @@ public interface AdminDAO {
 
     void updatePwd(Admin user);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(Admin record);
 
@@ -25,4 +25,6 @@ public interface AdminDAO {
     int updateByPrimaryKeySelective(Admin record);
 
     int updateByPrimaryKey(Admin record);
+
+    int getUserGroupByName(String userName);
 }

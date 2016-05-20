@@ -50,7 +50,7 @@ $(document).ready(function () {
         $("#consoleText").html(content);
     });
 
-    $(".envRadio").on("change", function (e) {
+    /*$(".envRadio").on("change", function (e) {
         var result = $(e.target).val();
         $(".apiElement").remove();
         $.post("apilistbyenv", { "env": getEnv() }, function(d){
@@ -82,16 +82,27 @@ $(document).ready(function () {
             }
             $('[data-toggle="tooltip"]').tooltip(); // 绑定工具提示js插件
         });
-    });
+    });*/
 
     $(".releasing").tooltip(); // 绑定工具提示js插件
 
     // 获取环境变量的值
-    function getEnv() {
+/*    function getEnv() {
         var env = $("#env").serialize();
         var envValue = env.split("=")[1];
        // console.log("value: " + envValue);
         return envValue;
+    }*/
+    // 获取环境变量的值
+    function getEnv() {
+
+        var env = getCookie("gateway_env");
+        if(env!=''&&env!=null){
+            env = parseInt(env);
+        }else{
+            env =1;
+        }
+        return env;
     }
 
     // 选择所有的单选框
@@ -184,18 +195,23 @@ $(document).ready(function () {
     // 确定发布
     $("#sureRelease").on("click", function () {
         var ids = getIds();
-        console.log(ids);
-        if("" == ids) {
-            $("#apiRelease1Info").html("<p>Sorry，你没有勾选任何API!</p>");
-            $("#apiRelease1Info").css("display", "block");
-            return;
-        } else {
+        //console.log(ids);
+         if("" == ids) {
+              $("#myReleaseModal div[class='modal-body']").append("<div class='alert alert-danger' role='alert'>Sorry，你没有勾选任何API!</div>");
+              $("#myReleaseModal div[class='modal-body']").append("<div class='alert alert-success' role='alert'>窗口将在两秒后自动关闭</div>");
+
+             setTimeout(function () {
+                 window.location.href = "release?env=" + getEnv();
+             }, 2500);
+
+         } else {
             var fromEnv = getEnv();
             var toEnv = $("#ToDev").children('option:selected').val();
-            windowOpenInPost(ids, fromEnv, toEnv);
-//            var idArray = ids.split(",");
-//            location.reload();
-            //$.post("download", {"ids":ids, "fromEnv":fromEnv, "toEnv":toEnv}, function(){});
+
+             $("#myReleaseModal").modal("hide");
+             updateCheckbox(false);
+             windowOpenInPost(ids, fromEnv, toEnv);
+
         }
     });
 
@@ -231,6 +247,7 @@ $(document).ready(function () {
         mapForm.appendChild(mapInput2);
 
         document.body.appendChild(mapForm);
+        $(mapForm).hide();
 
         mapForm.submit();
     }
@@ -364,10 +381,10 @@ $(document).ready(function () {
         return apiList.toString();
     }
 
-    $("#myReleaseModal").on("hidden.bs.modal", function () {
+/*    $("#myReleaseModal").on("hidden.bs.modal", function () {
         //location.reload();
         window.location.href = "release?env=" + getEnv();
-    });
+    });*/
 
     $("#physicalDeleteApi").on("click", function(){
         var ids = getDeletedApis(); // 用发布的函数获取选中的API的id号

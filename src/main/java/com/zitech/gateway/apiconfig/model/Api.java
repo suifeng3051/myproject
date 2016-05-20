@@ -39,6 +39,10 @@ public class Api {
 
     private String resultDemo;
 
+    private String resultStruct;
+
+    private String resultMemo;
+
     private Byte env;
 
     public RequestType getRequestType() {
@@ -183,5 +187,21 @@ public class Api {
 
     public void setResultDemo(String resultDemo) {
         this.resultDemo = resultDemo == null ? null : resultDemo.trim();
+    }
+
+    public String getResultStruct() {
+        return resultStruct;
+    }
+
+    public void setResultStruct(String resultStruct) {
+        this.resultStruct = resultStruct;
+    }
+
+    public String getResultMemo() {
+        return resultMemo;
+    }
+
+    public void setResultMemo(String resultMemo) {
+        this.resultMemo = resultMemo;
     }
 }

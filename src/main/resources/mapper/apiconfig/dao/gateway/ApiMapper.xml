@@ -16,6 +16,8 @@
         <result column="api_description" property="apiDescription" jdbcType="VARCHAR"/>
         <result column="api_scene" property="apiScene" jdbcType="VARCHAR"/>
         <result column="result_demo" property="resultDemo" jdbcType="LONGVARCHAR"/>
+        <result column="result_struct" property="resultStruct" jdbcType="LONGVARCHAR"/>
+        <result column="result_memo" property="resultMemo" jdbcType="VARCHAR"/>
         <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
         <result column="updated_id" property="updatedId" jdbcType="INTEGER"/>
         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
@@ -24,7 +26,7 @@
     </resultMap>
     <sql id="Base_Column_List">
         id, namespace, method, version,avail, group_id, login, request_type, frequency_control, check_inner, api_description,
-        api_scene, result_demo, created_time, updated_id, updated_time, deleted, env
+        api_scene, result_demo, result_struct, result_memo, created_time, updated_id, updated_time, deleted, env
     </sql>
     <sql id="Blob_Column_List">
         result_demo
@@ -72,7 +74,7 @@
         version,avail, group_id, login, request_type,frequency_control,
         check_inner, api_description, api_scene,
         created_time, updated_id, updated_time,
-        deleted, result_demo,env)
+        deleted, result_demo, result_struct, result_memo, env)
         values (#{id,jdbcType=INTEGER},
         #{namespace,jdbcType=VARCHAR},
         #{method,jdbcType=VARCHAR},
@@ -90,9 +92,12 @@
         #{updatedTime,jdbcType=TIMESTAMP},
         #{deleted,jdbcType=TINYINT},
         #{resultDemo,jdbcType=LONGVARCHAR},
+        #{resultStruct,jdbcType=LONGVARCHAR},
+        #{resultMemo,jdbcType=VARCHAR},
         #{env,jdbcType=TINYINT})
     </insert>
-    <insert id="insertSelective" parameterType="com.zitech.gateway.apiconfig.model.Api">
+    <insert id="insertSelective" parameterType="com.zitech.gateway.apiconfig.model.Api" useGeneratedKeys="true" keyProperty="id">
+
         insert into t_api
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -145,6 +150,12 @@
             </if>
             <if test="resultDemo != null">
                 result_demo,
+            </if>
+            <if test="resultStruct != null">
+                result_struct,
+            </if>
+            <if test="resultMemo != null">
+                result_memo,
             </if>
             <if test="env != null">
                 env,
@@ -202,6 +213,12 @@
             <if test="resultDemo != null">
                 #{resultDemo,jdbcType=LONGVARCHAR},
             </if>
+            <if test="resultStruct != null">
+                #{resultStruct,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="resultMemo != null">
+                #{resultMemo,jdbcType=VARCHAR},
+            </if>
             <if test="env != null">
                 #{env,jdbcType=TINYINT},
             </if>
@@ -258,6 +275,12 @@
             <if test="resultDemo != null">
                 result_demo = #{resultDemo,jdbcType=LONGVARCHAR},
             </if>
+            <if test="resultStruct != null">
+                result_struct = #{resultStruct,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="resultMemo != null">
+                result_memo = #{resultMemo,jdbcType=VARCHAR},
+            </if>
             <if test="env != null">
                 env = #{env,jdbcType=TINYINT},
             </if>
@@ -282,6 +305,8 @@
         updated_time = #{updatedTime,jdbcType=TIMESTAMP},
         deleted = #{deleted,jdbcType=TINYINT},
         result_demo = #{resultDemo,jdbcType=LONGVARCHAR},
+        result_struct = #{resultStruct,jdbcType=LONGVARCHAR},
+        result_memo = #{resultMemo,jdbcType=VARCHAR},
         env = #{env,jdbcType=TINYINT}
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -302,6 +327,9 @@
         updated_id = #{updatedId,jdbcType=INTEGER},
         updated_time = #{updatedTime,jdbcType=TIMESTAMP},
         deleted = #{deleted,jdbcType=TINYINT},
+        result_demo = #{resultDemo,jdbcType=LONGVARCHAR},
+        result_struct = #{resultStruct,jdbcType=LONGVARCHAR},
+        result_memo = #{resultMemo,jdbcType=VARCHAR},
         env = #{env,jdbcType=TINYINT}
         where id = #{id,jdbcType=INTEGER}
     </update>

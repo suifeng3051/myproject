@@ -5,7 +5,7 @@ import com.zitech.gateway.gateway.excutor.Pipeline;
 import com.zitech.gateway.gateway.excutor.TicTac;
 import com.zitech.gateway.gateway.model.RequestEvent;
 import com.zitech.gateway.gateway.model.ServeResponse;
-import com.zitech.gateway.monitor.service.MonitorService;
+import com.zitech.gateway.monitor.service.impl.MonitorService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

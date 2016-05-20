@@ -1,6 +1,7 @@
 package com.zitech.gateway.apiconfig.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.zitech.gateway.AppConfig;
 import com.zitech.gateway.apiconfig.model.Admin;
 import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.cache.RedisOperate;
@@ -8,6 +9,7 @@ import com.zitech.gateway.utils.AppUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -37,6 +40,8 @@ public class UserController {
     AdminService adminService;
     @Resource
     RedisOperate redisOperate;
+    @Autowired
+    private AppConfig appConfig;
 
     /**
      * 用户管理页面
@@ -145,7 +150,7 @@ public class UserController {
         String status = "fail";
 
         try {
-            adminService.deleteById(Integer.valueOf(id));
+            adminService.deleteById(Long.valueOf(id));
             status = "success";
         } catch (NumberFormatException e) {
             logger.error("can not delete user.", e);
@@ -225,6 +230,20 @@ public class UserController {
                 String nameKey = "gateway_login_" + username;
                 httpSession.setAttribute("username", nameKey);
                 redisOperate.set(nameKey, username, 60 * 60);
+
+               //edit by pxl for adminRole  16.5.13
+                int userGroup = adminService.getUserGroup(username);
+                Cookie cookie_env = new Cookie("gateway_env",appConfig.env+"");
+                Cookie cookie_role = new Cookie("gateway_role",userGroup+"");
+                Cookie cookie_username = new Cookie("gateway_username",username);
+                cookie_env.setPath("/");
+                cookie_role.setPath("/");
+                cookie_username.setPath("/");
+                response.addCookie(cookie_env);
+                response.addCookie(cookie_role);
+                response.addCookie(cookie_username);
+                /////////////////////////////////////////////////////////
+
                 objectMap.put("to", "/apilist");
                 objectMap.put("result", true);
                 return JSON.toJSONString(objectMap);
