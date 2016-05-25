@@ -1,5 +1,7 @@
 package com.zitech.gateway;
 
+import com.alibaba.fastjson.JSONObject;
+
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.ClassPathResource;
