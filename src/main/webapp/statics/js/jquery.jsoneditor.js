@@ -102,7 +102,7 @@
                 }) : $('<select>', {
                     'class': 'type form-control'
                 }),
-                typeValue = isEditeing ? '' : $('<option value="INT">INT</option><option value="STRING">STRING</option><option value="BOOL">BOOL</option><option value="OBJECT">OBJECT</option><option value="ARRAY">ARRAY</option>'),
+                typeValue = isEditeing ? '' : $('<option value="INT">INT</option><option value="FLOAT">FLOAT</option><option value="STRING">STRING</option><option value="BOOL">BOOL</option><option value="OBJECT">OBJECT</option><option value="ARRAY">ARRAY</option>'),
                 requireCheckBox = isEditeing ? $('<input>', {
                     'class': 'type',
                     'readonly': 'true'
@@ -123,7 +123,6 @@
             typeSelect.append(typeValue).val(json[key].type);
             item.append(property).append(descInput).append(requireCheckBox).append(typeSelect);
             root.append(item);
-
             typeSelect.change(typeChanged(jsonObj));
             requireCheckBox.change(requireChanged(jsonObj));
             descInput.change(descChanged(jsonObj));
@@ -215,12 +214,21 @@
         return Object.prototype.toString.call(o) == '[object String]';
     }
 
+    function isFloat(o){
+        if(Object.prototype.toString.call(o) == '[object String]') return false;
+        if(/^(-?\d+\.\d+)?$/.test(o)){
+            return true;
+        }
+        return false;
+    }
+
     function assignType(val) {
         var typeName = 'null';
         if (isObject(val)) typeName = 'OBJECT';
         else if (isArray(val)) typeName = 'ARRAY';
         else if (isBoolean(val)) typeName = 'BOOL';
         else if (isString(val)) typeName = 'STRING';
+        else if (isFloat(val)) typeName = 'FLOAT';
         else if (isNumber(val)) typeName = 'INT';
         return typeName;
     }
