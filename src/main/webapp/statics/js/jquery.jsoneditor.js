@@ -44,7 +44,7 @@
             if (!json.hasOwnProperty(key)) continue;
             if (oldJson[key] != undefined) {
                 json[key].require = oldJson[key].require != undefined ? oldJson[key].require : json[key].require;
-                json[key].type = oldJson[key].type ? oldJson[key].type : json[key].type;
+                json[key].type = json[key].type ? json[key].type : oldJson[key].type;
                 json[key].des = oldJson[key].des ? oldJson[key].des : json[key].des;
                 if (isArray(json[key])) {
                     getTreeJsonByOldTreeJson(json[key]['fields'][0], oldJson[key]['fields'][0]);
