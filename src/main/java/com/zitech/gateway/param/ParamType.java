@@ -9,7 +9,8 @@ public enum ParamType {
     STRING,
     OBJECT,
     ARRAY,
-    BOOL;
+    BOOL,
+    FLOAT;
 
     public static ParamType from(String type) {
         ParamType[] values = ParamType.values();

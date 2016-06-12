@@ -131,6 +131,8 @@ public class ParamHelper {
                 return new ObjectValidator();
             case BOOL:
                 return new BoolValidator();
+            case FLOAT:
+                return new FloatValidator();
         }
 
         throw new LogicalException(Constants.Code.UNKNOWN_PARAM_TYPE,

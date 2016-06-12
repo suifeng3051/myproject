@@ -4,7 +4,7 @@ public final class OAuthConstants {
 
     // for oauth description
     public class OAuthDescription {
-        public static final String INVALID_CLIENT_DESCRIPTION = "校验团队信息失败";
+        public static final String INVALID_CLIENT_DESCRIPTION = "团队校验失败";
         public static final String INVALID_GRANT_TYPE = "非法授权类型";
         public static final String INVALID_REDIRECT_URI = "跳转链接不正确";
         public static final String INVALID_REDIRECT_URI_NOT_FOUND = "授权时需要提供跳转链接";

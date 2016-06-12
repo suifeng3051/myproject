@@ -1,5 +1,7 @@
 package com.zitech.gateway.gateway.pipes.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zitech.gateway.apiconfig.model.Serve;
 import com.zitech.gateway.common.RequestType;
 import com.zitech.gateway.gateway.Constants;
@@ -69,13 +71,13 @@ public class ServePipe extends AbstractPipe {
             httpPost.setEntity(entity);
             headerList.forEach(httpPost::setHeader);
             httpPost.setHeader("Content-Type", contentType);
-            HttpAsyncClient.client.execute(httpPost, new HttpAsyncCallback(event));
+            HttpAsyncClient.client.execute(httpPost, new HttpAsyncCallback(event, requestUrl));
         } else if (event.getRequestType() == RequestType.GET) {
             HttpGet httpGet = new HttpGet();
             httpGet.setURI(new URI(requestUrl));
             headerList.forEach(httpGet::setHeader);
             httpGet.setHeader("Content-Type", contentType);
-            HttpAsyncClient.client.execute(httpGet, new HttpAsyncCallback(event));
+            HttpAsyncClient.client.execute(httpGet, new HttpAsyncCallback(event, requestUrl));
         }
     }
 
@@ -92,10 +94,12 @@ public class ServePipe extends AbstractPipe {
 
     private class HttpAsyncCallback implements FutureCallback<HttpResponse> {
         private RequestEvent event;
+        private String requestUrl;
 
-        public HttpAsyncCallback(RequestEvent event) {
+        public HttpAsyncCallback(RequestEvent event, String requestUrl) {
             requestNum.incrementAndGet();
             this.event = event;
+            this.requestUrl = requestUrl;
             this.event.getTicTac().tic(Constants.ST_CALL);
         }
 
@@ -105,10 +109,40 @@ public class ServePipe extends AbstractPipe {
             this.event.getTicTac().tac(Constants.ST_CALL);
             try {
                 int code = result.getStatusLine().getStatusCode();
+
+                String fmtMsg = null;
+                Integer errorCode = null;
                 if (code >= HttpStatus.SC_BAD_REQUEST && code < HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-                    event.setException(new ServeException(5210, "serve not found: " + code));
+                    fmtMsg = "serve not found(%s): %s";
+                    errorCode = 5210;
                 } else if (code >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-                    event.setException(new ServeException(5211, "serve internal error: " + code));
+                    fmtMsg = "internal serve error(%s): %s";
+                    errorCode = 5211;
+                }
+
+                if(fmtMsg != null) {
+                    HttpEntity entity = result.getEntity();
+                    JSONObject jsonObject = null;
+                    if (entity != null) {
+                        String resultStr = EntityUtils.toString(entity);
+                        try {
+                            jsonObject = JSON.parseObject(resultStr);
+                        } catch (Exception ignore) {
+                        }
+                    }
+
+                    String specialMsg = null;
+                    if(jsonObject != null) {
+                        specialMsg = jsonObject.getString("data");
+                    }
+
+                    String msg;
+                    if (specialMsg != null) {
+                        msg = String.format(fmtMsg, code, specialMsg);
+                    } else {
+                        msg = String.format(fmtMsg, code, requestUrl);
+                    }
+                    event.setException(new ServeException(errorCode, msg));
                 } else {
                     HttpEntity entity = result.getEntity();
                     if (entity != null) {
