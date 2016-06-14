@@ -8,6 +8,8 @@ public interface AccountDAO {
 
     Account getUserByName(String name);
 
+    Account getUserByOpenId(String openId);
+
     Account getUserByMobile(String mobile);
 
     Account getUserByMail(String mail);

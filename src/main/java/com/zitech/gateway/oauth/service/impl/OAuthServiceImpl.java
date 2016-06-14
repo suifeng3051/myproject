@@ -6,13 +6,11 @@ import com.zitech.gateway.cache.RedisOperate;
 import com.zitech.gateway.oauth.Constants;
 import com.zitech.gateway.oauth.dao.user.AccountDAO;
 import com.zitech.gateway.oauth.exception.OAuthException;
+import com.zitech.gateway.oauth.model.*;
 import com.zitech.gateway.oauth.oauthex.OAuthConstants;
 import com.zitech.gateway.oauth.service.OAuthService;
 import com.zitech.gateway.utils.AppUtils;
 import com.zitech.gateway.utils.SpringContext;
-
-import com.zitech.gateway.oauth.model.*;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.oltu.oauth2.common.utils.OAuthUtils;
 import org.slf4j.Logger;
@@ -21,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @Service
@@ -206,21 +202,29 @@ public class OAuthServiceImpl implements OAuthService {
                          HttpServletRequest request) throws OAuthException {
 
         Account oauthUser;
-
-        if (StringUtils.isNotEmpty(oAuthAuthzParameters.getLoginName())) {
+        String password="";
+        if (StringUtils.isNotEmpty(oAuthAuthzParameters.getLoginName())&&!oAuthAuthzParameters.getLoginName().equals("openId")) {
             oauthUser = accountDAO.getUserByName(oAuthAuthzParameters.getLoginName());
+            password = AppUtils.enCodePassword(oAuthAuthzParameters.getPassword());
         } else if (StringUtils.isNotEmpty(oAuthAuthzParameters.getLoginPhone())) {
             oauthUser = accountDAO.getUserByMobile(oAuthAuthzParameters.getLoginPhone());
-        } else {
+            password = AppUtils.enCodePassword(oAuthAuthzParameters.getPassword());
+        } else if(oAuthAuthzParameters.getLoginName().equals("openId")){
+            //通过openId登陆
+            oauthUser = accountDAO.getUserByOpenId(oAuthAuthzParameters.getPassword());
+            oAuthAuthzParameters.setPassword(oauthUser.getPassword());
+            password = oAuthAuthzParameters.getPassword();
+            oAuthAuthzParameters.setLoginName(oauthUser.getLoginName());
+        }else {
             oauthUser = accountDAO.getUserByMail(oAuthAuthzParameters.getLoginMail());
+            password = AppUtils.enCodePassword(oAuthAuthzParameters.getPassword());
         }
+
 
         if (oauthUser == null) {
             throw new OAuthException(
                     OAuthConstants.OAuthResponse.INVALID_USER, "用户不存在");
         }
-
-        String password = AppUtils.enCodePassword(oAuthAuthzParameters.getPassword());
 
         if (!StringUtils.equalsIgnoreCase(oauthUser.getPassword(), password)) {
             throw new OAuthException(

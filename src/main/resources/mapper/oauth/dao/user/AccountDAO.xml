@@ -28,6 +28,14 @@
 		from account
 	    where login_name=#{name,jdbcType=VARCHAR} and status=1 and deleted = 0
 	</select>
+	<!--openId登陆-->
+	<select id="getUserByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		a.id, a.login_name, a.login_phone,a.login_email,a.password,a.role,a.create_time,a.update_time
+		from account a
+		left join parent_info p ON p.parent_id=a.id
+		where p.open_id=#{openId,jdbcType=VARCHAR} and a.status=1 and a.deleted = 0
+	</select>
 	<!--手机号登录-->
 	<select id="getUserByMobile" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select
