@@ -31,9 +31,7 @@ public class PipeHelper {
 
     public static HttpHeaders getHeaders(RequestEvent event) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        if (!appConfig.isPrdMode()) {
-            httpHeaders.add(Constants.PARAMS_EVENT_ID, event.uuid.toString());
-        }
+        httpHeaders.add(Constants.PARAMS_EVENT_ID, event.uuid.toString());
         return httpHeaders;
     }
 
