@@ -153,6 +153,7 @@ public class ServePipe extends AbstractPipe {
                         Pipeline.getInstance().process(event);
                     }
                 }
+
                 Pipeline.getInstance().process(event);
             } catch (Exception e) {
                 event.setException(e);
