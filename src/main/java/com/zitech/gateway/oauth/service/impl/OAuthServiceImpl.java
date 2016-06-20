@@ -209,7 +209,7 @@ public class OAuthServiceImpl implements OAuthService {
         } else if (StringUtils.isNotEmpty(oAuthAuthzParameters.getLoginPhone())) {
             oauthUser = accountDAO.getUserByMobile(oAuthAuthzParameters.getLoginPhone());
             password = AppUtils.enCodePassword(oAuthAuthzParameters.getPassword());
-        } else if(oAuthAuthzParameters.getLoginName().equals("openId")){
+        } else if("openId".equals(oAuthAuthzParameters.getLoginName())){
             //通过openId登陆
             oauthUser = accountDAO.getUserByOpenId(oAuthAuthzParameters.getPassword());
             oAuthAuthzParameters.setPassword(oauthUser.getPassword());
