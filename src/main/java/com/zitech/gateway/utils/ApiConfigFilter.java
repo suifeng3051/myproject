@@ -26,8 +26,6 @@ import com.zitech.gateway.cache.RedisOperateImp;
 public class ApiConfigFilter implements Filter {
 
 
-
-
     private AppConfig appConfig = SpringContext.getBean(AppConfig.class);
 
     private static final Logger logger = LoggerFactory.getLogger(ApiConfigFilter.class);
