@@ -7,7 +7,7 @@ package com.zitech.gateway.monitor.entity;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-@Document
+@Document(collection = "gateway")
 public class Gateway {
     private String api;
     private String host;
