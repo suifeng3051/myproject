@@ -75,10 +75,9 @@ public class AccessTokenServiceImpl extends BaseService implements AccessTokenSe
     }
 
     @Override
-    public void saveAccessTokenToMongoDb(List<Integer> idList) {
-        for(Integer i:idList)
+    public void saveAccessTokenToMongoDb(List<AccessToken> tokensList) {
+        for(AccessToken accessToken:tokensList)
         {
-            AccessToken accessToken = accessTokenDAO.selectByPrimaryKey(i);
             Map<String, Object> map = new HashMap<>();
             map.put("id",accessToken.getId());
             map.put("access_token",accessToken.getAccessToken());

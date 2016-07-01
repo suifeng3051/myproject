@@ -427,9 +427,8 @@ public class OAuthServiceImpl implements OAuthService {
         List<RefreshToken> refreshTokensList = refreshTokenService
                 .getByAccessTokens(tkList);
 
-        accessTokenService.saveAccessTokenToMongoDb(idList);
+        accessTokenService.saveAccessTokenToMongoDb(tokensList);
         accessTokenService.deleteByIds(idList);
-        refreshTokenService.saveRefreshTokenToMongoDb(tkList);
         refreshTokenService.deleteByAccessTokens(tkList);
 
         refreshTokensList.forEach(e -> {
