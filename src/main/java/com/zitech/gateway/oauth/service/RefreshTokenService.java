@@ -23,4 +23,5 @@ public interface RefreshTokenService {
 
     void update(RefreshToken openOauthRefreshTokens);
 
+    void saveRefreshTokenToMongoDb(List<String> tkList);
 }

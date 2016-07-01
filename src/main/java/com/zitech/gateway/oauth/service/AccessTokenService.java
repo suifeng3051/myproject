@@ -25,4 +25,5 @@ public interface AccessTokenService {
 
     void update(AccessToken openOauthAccessTokens);
 
+    void saveAccessTokenToMongoDb(List<Integer> idList);
 }
