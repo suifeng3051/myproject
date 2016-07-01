@@ -87,8 +87,8 @@ public class AccessTokenServiceImpl extends BaseService implements AccessTokenSe
             map.put("expires",accessToken.getExpires());
             map.put("scope",accessToken.getScope());
             mongoTemplate.insert(map,"access_token");
-            logger.info("access_token: {}, be saved to mongodb.",accessToken.getAccessToken());
+
+            logger.debug("access_token: {}, be saved to mongodb.", accessToken.getAccessToken());
         }
-        logger.info("finish save access_token to mongodb.");
     }
 }
