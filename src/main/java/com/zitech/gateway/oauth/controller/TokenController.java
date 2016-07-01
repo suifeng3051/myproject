@@ -576,16 +576,15 @@ public class TokenController {
                 oAuthAuthzParameters.setScope(openOauthClients.getDefaultScope());
             }
 
+            oAuthService.saveAccessToken(accessToken, oAuthAuthzParameters);
+            oAuthService.saveRefreshToken(refreshToken, accessToken, oAuthAuthzParameters);
+
             /**
              * limit client access token number
              */
             int limitNum = openOauthClients.getClientNum();
-            limitNum = limitNum > 0 ? limitNum - 1 : limitNum;
             oAuthService.limitAccessToken(oAuthAuthzParameters.getClientId(),
-                    oAuthAuthzParameters.getUserId(), limitNum);
-
-            oAuthService.saveAccessToken(accessToken, oAuthAuthzParameters);
-            oAuthService.saveRefreshToken(refreshToken, accessToken, oAuthAuthzParameters);
+                        oAuthAuthzParameters.getUserId(), limitNum);
 
             OAuthResponse response = OAuthASResponseEx
                     .tokenResponse(HttpServletResponse.SC_OK)

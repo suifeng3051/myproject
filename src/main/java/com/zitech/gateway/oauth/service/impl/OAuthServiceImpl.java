@@ -428,6 +428,7 @@ public class OAuthServiceImpl implements OAuthService {
                 .getByAccessTokens(tkList);
 
         accessTokenService.saveAccessTokenToMongoDb(tokensList);
+
         accessTokenService.deleteByIds(idList);
         refreshTokenService.deleteByAccessTokens(tkList);
 
