@@ -140,11 +140,35 @@
                                 <div class="col-sm-6">
                                     <!--<input type="text" class="form-control required"  name="version" id="version" placeholder="version(example:1.0)" value="$!results.get('api').version">-->
                                     <select name="version" class="form-control" id="version">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
+                                        #if($!results.get('api').version == 1)
+                                            <option value="1" selected>1</option>
+                                        #else
+                                            <option value="1">1</option>
+                                        #end
+
+                                        #if($!results.get('api').version == 2)
+                                            <option value="2" selected>2</option>
+                                        #else
+                                            <option value="2">2</option>
+                                        #end
+
+                                        #if($!results.get('api').version == 3)
+                                            <option value="3" selected>3</option>
+                                        #else
+                                            <option value="3">3</option>
+                                        #end
+
+                                        #if($!results.get('api').version == 4)
+                                            <option value="4" selected>4</option>
+                                        #else
+                                            <option value="4">4</option>
+                                        #end
+
+                                        #if($!results.get('api').version == 5)
+                                            <option value="5" selected>5</option>
+                                        #else
+                                            <option value="5">5</option>
+                                        #end
                                     </select>
                                 </div>
                                 <!--<span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="margin-top:10px;" class="needTip" data-toggle="tooltip" data-placement="top" title="版本号格式x.x.x"></span>-->
