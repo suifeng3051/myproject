@@ -32,8 +32,10 @@ public class AccessTokenCache implements ILocalCache {
         try {
             return cache.get(accessToken, () -> {
                 AccessToken token = oAuthService.getAccessToken(accessToken);
-                if (token == null)
+                if (token == null) {
+                    logger.info("5214, 非法访问码, accessToken: "+ accessToken);
                     throw new CacheException(5214, "非法访问码");
+                }
                 return token;
             });
         } catch (ExecutionException e) {
