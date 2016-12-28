@@ -1,25 +1,16 @@
 package com.zitech.gateway.oauth.controller;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
+import com.zitech.gateway.oauth.Constants;
+import com.zitech.gateway.oauth.exception.PrivilegeException;
 import com.zitech.gateway.oauth.model.Account;
 import com.zitech.gateway.oauth.model.Client;
 import com.zitech.gateway.oauth.service.impl.ClientServiceImpl;
+import com.zitech.gateway.oauth.service.impl.OAuthServiceImpl;
 import com.zitech.gateway.utils.AppUtils;
-import com.zitech.gateway.oauth.Constants;
-import com.zitech.gateway.oauth.exception.PrivilegeException;
+import com.zitech.gateway.utils.CaptchaUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +22,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.fastjson.JSON;
-import com.zitech.gateway.oauth.service.impl.OAuthServiceImpl;
-import com.zitech.gateway.utils.CaptchaUtils;
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class LoginController extends BaseController {

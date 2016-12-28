@@ -3,7 +3,6 @@ package com.zitech.gateway.oauth.oauthex;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
 import org.apache.oltu.oauth2.common.error.OAuthError;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class OAuthASResponseEx extends OAuthASResponse {

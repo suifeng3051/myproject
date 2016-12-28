@@ -5,15 +5,13 @@ import com.zitech.gateway.apiconfig.dao.gateway.AdminDAO;
 import com.zitech.gateway.apiconfig.model.Admin;
 import com.zitech.gateway.apiconfig.service.AdminService;
 import com.zitech.gateway.cache.RedisOperate;
-
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Created by chenyun on 15/8/27.

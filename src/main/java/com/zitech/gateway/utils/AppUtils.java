@@ -2,7 +2,6 @@ package com.zitech.gateway.utils;
 
 import org.apache.commons.lang.StringUtils;
 
-import javax.swing.tree.TreeNode;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;

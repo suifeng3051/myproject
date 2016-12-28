@@ -6,16 +6,14 @@ import com.zitech.gateway.apiconfig.service.GroupService;
 import com.zitech.gateway.utils.AppUtils;
 import com.zitech.gateway.utils.TreeHelper;
 import com.zitech.gateway.utils.TreeNode;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Resource;
 
 
 @Service

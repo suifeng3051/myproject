@@ -403,7 +403,7 @@
 <script src="/statics/js/apiconfig.js"></script>
 <footer style="margin-top:50px;">
     <hr>
-    <p class="text-muted text-center">© zitech.com</p>
+    <p class="text-muted text-center">© Copyright.com</p>
 </footer>
 </body>
 </html>

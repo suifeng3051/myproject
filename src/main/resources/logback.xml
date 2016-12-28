@@ -45,7 +45,7 @@
             <level>WARN</level>
         </filter>
     </appender>
-
+<!--
     <appender name="kafkaAppender" class="com.github.danielwegener.logback.kafka.KafkaAppender">
         <encoder class="com.github.danielwegener.logback.kafka.encoding.PatternLayoutKafkaMessageEncoder">
             <layout class="ch.qos.logback.classic.PatternLayout">
@@ -71,13 +71,13 @@
         <appender-ref ref="allFileAppender"/>
         <appender-ref ref="kafkaAppender"/>
     </logger>
-
+-->
     <root>
         <level value="${log.level}"/>
         <appender-ref ref="consoleAppender"/>
         <appender-ref ref="allFileAppender"/>
         <appender-ref ref="errFileAppender"/>
-        <appender-ref ref="kafkaAppender"/>
+        <!--<appender-ref ref="kafkaAppender"/>-->
     </root>
 
 </configuration>

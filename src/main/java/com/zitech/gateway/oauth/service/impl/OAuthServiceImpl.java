@@ -275,8 +275,7 @@ public class OAuthServiceImpl implements OAuthService {
      * @param token
      * @param parameters
      */
-    public void putOAuthAuthzParameters(String token,
-                                        OAuthAuthzParameters parameters) {
+    public void putOAuthAuthzParameters(String token, OAuthAuthzParameters parameters) {
         String key = String.format(Constants.CACHE_TOKEN_KEY_PATTERN, token);
         redis.set(key, JSON.toJSONString(parameters), 10 * 60);
     }

@@ -218,6 +218,7 @@ public class TokenController {
                     .setAccessToken(accessToken)
                     .setRefreshToken(refreshToken)
                     .setExpiresIn(String.valueOf(appConfig.tokenAccessExpire))
+
                     .setScope(oAuthAuthzParameters.getScope())
                     .buildJSONMessage();
 

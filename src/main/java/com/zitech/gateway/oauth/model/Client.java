@@ -1,7 +1,5 @@
 package com.zitech.gateway.oauth.model;
 
-import com.zitech.gateway.gateway.Constants;
-
 import java.io.Serializable;
 
 public class Client implements Serializable {
